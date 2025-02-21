@@ -3,6 +3,7 @@
 use App\Http\Controllers\Dashboard\AdminController;
 use App\Http\Controllers\Dashboard\AllTransactionController;
 use App\Http\Controllers\Dashboard\CampaignController;
+use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\DealerController;
@@ -11,9 +12,12 @@ use App\Http\Controllers\Dashboard\InfluencerController;
 use App\Http\Controllers\Dashboard\OrderController;
 use App\Http\Controllers\Dashboard\PaymentPolicyController;
 use App\Http\Controllers\Dashboard\ProductController;
+use App\Http\Controllers\Dashboard\ProductTypeController;
 use App\Http\Controllers\Dashboard\ProjectController;
 use App\Http\Controllers\Dashboard\PublicSettingController;
 use App\Http\Controllers\Dashboard\RepresentativeController;
+use App\Http\Controllers\Dashboard\SubCategoryController;
+use App\Http\Controllers\Dashboard\VendorController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +46,10 @@ Route::name('dashboard.')
         // ------------------------------------------
         Route::resource('admins', AdminController::class)->only(['index']);
 
+        // Vendors Routes :
+        // ------------------------------------------
+        Route::resource('vendors', VendorController::class)->only(['index']);
+
         // Products Routes :
         // ------------------------------------------
         Route::resource('products', ProductController::class)->only(['index']);
@@ -61,6 +69,18 @@ Route::name('dashboard.')
         // Representaives Routes :
         // ------------------------------------------
         Route::resource('representatives', RepresentativeController::class)->only(['index']);
+
+        // Categories Routes :
+        // ------------------------------------------
+        Route::resource('categories', CategoryController::class)->only(['index']);
+
+        // Sub Categories Routes :
+        // ------------------------------------------
+        Route::resource('sub-categories', SubCategoryController::class)->only(['index']);
+
+        // Product Type Routes :
+        // ------------------------------------------
+        Route::resource('product-types', ProductTypeController::class)->only(['index']);
     });
 
 // Profile Routes

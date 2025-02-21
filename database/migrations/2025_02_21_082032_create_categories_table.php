@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('dealers', function (Blueprint $table) {
-            $table->longText('resale_certificate')->nullable()->after('company_name');
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('slug')->nullable();
+            $table->string('image')->nullable();
+            $table->boolean('status')->default(1);
+            $table->timestamps();
         });
     }
 
@@ -21,8 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('dealers', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('categories');
     }
 };

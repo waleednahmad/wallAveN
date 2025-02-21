@@ -46,6 +46,19 @@
                     </a>
                 </li>
 
+                {{-- -------------------- Vendors -------------------- --}}
+                <li class="nav-item">
+                    <a href="{{ route('dashboard.vendors.index') }}" @class([
+                        'nav-link',
+                        'active' => request()->routeIs('dashboard.vendors.*'),
+                    ])>
+                        <i class="nav-icon fas fa-store-alt"></i>
+                        <p>
+                            Vendors
+                        </p>
+                    </a>
+                </li>
+
                 {{-- -------------------- Products -------------------- --}}
                 <li class="nav-item">
                     <a href="{{ route('dashboard.products.index') }}" @class([
@@ -70,6 +83,70 @@
                             Dealers
                         </p>
                     </a>
+                </li>
+
+                <li @class([
+                    'nav-item',
+                    'menu-open' =>
+                        request()->routeIs('dashboard.categories.*') ||
+                        request()->routeIs('dashboard.sub-categories.*') ||
+                        request()->routeIs('dashboard.product-types.*'),
+                ])>
+                    <a href="#" @class([
+                        'nav-link',
+                        'active' =>
+                            request()->routeIs('dashboard.categories.*') ||
+                            request()->routeIs('dashboard.sub-categories.*') ||
+                            request()->routeIs('dashboard.product-types.*'),
+                    ])>
+                        <i class="nav-icon fas fa-th-list"></i>
+                        <p>
+                            Categories
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+                        {{-- Categories --}}
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.categories.index') }}" @class([
+                                'nav-link',
+                                'active' => request()->routeIs('dashboard.categories.*'),
+                            ])>
+                                <i class="far fa-circle nav-icon"></i>
+
+                                <p>
+                                    Categories
+                                </p>
+                            </a>
+                        </li>
+                        {{-- Sub Categories --}}
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.sub-categories.index') }}" @class([
+                                'nav-link',
+                                'active' => request()->routeIs('dashboard.sub-categories.*'),
+                            ])>
+                                <i class="far fa-circle nav-icon"></i>
+
+                                <p>
+                                    Sub Categories
+                                </p>
+                            </a>
+                        </li>
+                        {{-- Product Type --}}
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.product-types.index') }}" @class([
+                                'nav-link',
+                                'active' => request()->routeIs('dashboard.product-types.*'),
+                            ])>
+                                <i class="far fa-circle nav-icon"></i>
+
+                                <p>
+                                    Product Type
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 {{-- -------------------- Orders -------------------- --}}

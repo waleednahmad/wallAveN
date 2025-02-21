@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('cart_temps', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('dealer_id')->nullable()->index();
+            $table->unsignedBigInteger('representative_id')->nullable()->index();
             $table->unsignedBigInteger('product_id')->nullable()->index();;
             $table->string('variant_sku')->nullable();
             $table->string('variant_image')->nullable();

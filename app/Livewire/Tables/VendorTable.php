@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Tables;
 
-use App\Models\Representative;
+use App\Models\Vendor;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\On;
@@ -13,14 +13,12 @@ use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 
-final class RepresentativeTable extends PowerGridComponent
+final class VendorTable extends PowerGridComponent
 {
-    public string $tableName = 'representative-table-lquyl7-table';
+    public string $tableName = 'vendor-table-dwz3lp-table';
 
     public function setUp(): array
     {
-
-
         return [
             PowerGrid::header()
                 ->showSearchInput(),
@@ -33,10 +31,10 @@ final class RepresentativeTable extends PowerGridComponent
         ];
     }
 
-    #[On('reloadRepresentatives')]
+    #[On('reloadVendors')]
     public function datasource(): Builder
     {
-        return Representative::query();
+        return Vendor::query();
     }
 
     public function relationSearch(): array
@@ -61,17 +59,13 @@ final class RepresentativeTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('Id', 'id'),
             Column::make('Name', 'name')
-                ->searchable()
-                ->sortable(),
-            Column::make('Email', 'email')
-                ->searchable()
-                ->sortable(),
-            Column::make('Phone', 'phone')
-                ->searchable()
-                ->sortable(),
+                ->sortable()
+                ->searchable(),
+
+
             Column::make('Status', 'status'),
+
             Column::make('Created at', 'created_at')
                 ->sortable()
                 ->searchable(),
@@ -82,49 +76,37 @@ final class RepresentativeTable extends PowerGridComponent
 
     public function filters(): array
     {
-        return [
-            Filter::datepicker('created_at', 'created_at'),
-
-            Filter::boolean('status')
-                ->label('active', 'inactive')
-        ];
+        return [];
     }
 
+    #[\Livewire\Attributes\On('edit')]
+    public function edit($rowId): void
+    {
+        $vendor = Vendor::find($rowId);
+        $this->dispatch('openEditOffcanvas', ['vendor' => $vendor]);
+    }
 
     #[\Livewire\Attributes\On('toggleStatus')]
     public function toggleStatus($rowId): void
     {
-        $row = Representative::find($rowId);
-        $row->status = !$row->status;
-        $row->save();
-        $this->js('toastr.success("Status changed successfully")');
+        $vendor = Vendor::find($rowId);
+        $vendor->status = !$vendor->status;
+        $vendor->save();
+        $this->dispatch('success', 'Vendor status updated successfully');
     }
 
-    #[\Livewire\Attributes\On('updatePassword')]
-    public function updatePassword($rowId): void
-    {
-        $representative = Representative::find($rowId);
-        $this->dispatch('openUpdatePasswordOffcanvas', ['representative' => $representative]);
-    }
-
-    public function actions(Representative $row): array
+    public function actions(Vendor $row): array
     {
         return [
+            Button::add('edit')
+                ->slot('<i class="fas fa-edit"></i>')
+                ->class('btn btn-primary btn-sm rounded')
+                ->dispatch('edit', ['rowId' => $row->id]),
 
             Button::add('toggleStatus')
                 ->slot($row->status == 1 ? '<i class="fas fa-toggle-on"></i>' : '<i class="fas fa-toggle-off"></i>')
                 ->class('btn btn-info btn-sm rounded')
                 ->dispatch('toggleStatus', ['rowId' => $row->id]),
-
-            Button::add('updatePassword')
-                ->slot('<i class="fas fa-key"></i>')
-                ->class('btn btn-warning btn-sm rounded')
-                ->dispatch('updatePassword', ['rowId' => $row->id]),
-
-            Button::add('show')
-                ->slot('<i class="fas fa-eye"></i>')
-                ->class('btn btn-primary btn-sm rounded')
-                ->dispatch('show', ['rowId' => $row->id]),
         ];
     }
 

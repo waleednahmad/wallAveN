@@ -23,7 +23,10 @@ final class PublicSettingTable extends PowerGridComponent
             PowerGrid::header()
                 ->showSearchInput(),
             PowerGrid::footer()
-                ->showPerPage()
+                ->showPerPage(
+                    $perPage = 25,
+                    $perPageValues = [10, 25, 50, 100, 0]
+                )
                 ->showRecordCount(),
         ];
     }

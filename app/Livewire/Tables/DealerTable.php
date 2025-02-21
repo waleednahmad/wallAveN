@@ -28,8 +28,8 @@ final class DealerTable extends PowerGridComponent
                 ->showSearchInput(),
             PowerGrid::footer()
                 ->showPerPage(
-                    $perPage = 20,
-                    $perPageValues = [10, 20, 50, 100, 0]
+                    $perPage = 25,
+                    $perPageValues = [10, 25, 50, 100, 0]
                 )
                 ->showRecordCount(),
         ];

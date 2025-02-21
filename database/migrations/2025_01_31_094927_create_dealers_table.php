@@ -32,6 +32,8 @@ return new class extends Migration
             $table->text('rejection_reason')->nullable();
             $table->string('password')->nullable();
             $table->boolean('status')->default(true);
+            $table->longText('resale_certificate')->nullable();
+            $table->string('referal_id')->nullable()->index()->comment('the representative id of the dealer');
             $table->timestamps();
         });
     }

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('representatives', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('buying_for_id')->nullable()->index()->comment('The id of the dealer that the representative is buying for');
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
