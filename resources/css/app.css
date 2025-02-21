@@ -1,0 +1,18 @@
+@import "../../node_modules/tom-select/dist/css/tom-select.bootstrap5.min.css";
+@import "../../node_modules/flatpickr/dist/flatpickr.min.css";
+
+.table-responsive .form-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+.table-responsive .form-check-input {
+    position: static !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}

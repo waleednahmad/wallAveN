@@ -1,0 +1,75 @@
+@import "../../../node_modules/@splidejs/splide/dist/css/splide.min.css";
+
+#main-carousel .splide__slide {
+    display: flex   ;
+    justify-content: center;
+    align-items: center;
+}
+#main-carousel .splide__slide img {
+    height: 100%;
+    object-fit: cover !important;
+}
+#main-carousel .splide__track  {
+    border: 1px solid #eeeeee;
+    height: 550px;
+    border-radius: 10px;
+}
+@media screen and (max-width: 768px) {
+    #main-carousel .splide__track  {
+        height: 300px;
+    }
+
+    #main-carousel .splide__slide img {
+        width: 100%;
+        object-fit: contain !important;
+    }
+    
+}
+
+
+
+
+.thumbnails {
+    display: flex;
+    margin: 1rem auto 0;
+    padding: 0;
+    justify-content: center;
+}
+
+.thumbnail {
+    width: 70px;
+    height: 70px;
+    overflow: hidden;
+    list-style: none;
+    margin: 0 0.2rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.thumbnail img {
+    object-fit: cover;
+}
+
+.thumbnail {
+    opacity: 0.3;
+}
+
+.thumbnail.is-active {
+    opacity: 1;
+    border: 2px solid #eeeeee;
+    border-radius: 5px;
+
+}
+
+.nice-select {
+    height: 38px !important;
+}
+
+
+.pagination-area .pagination-button li:hover {
+    color: #000;
+    cursor: pointer;
+}
