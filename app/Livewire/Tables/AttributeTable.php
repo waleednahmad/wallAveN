@@ -2,9 +2,10 @@
 
 namespace App\Livewire\Tables;
 
-use App\Models\Product;
+use App\Models\Attribute;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
@@ -12,29 +13,25 @@ use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 
-final class ProductTable extends PowerGridComponent
+final class AttributeTable extends PowerGridComponent
 {
-    public string $tableName = 'product-table-0ykt8i-table';
+    public string $tableName = 'attribute-table-3j4iqq-table';
 
     public function setUp(): array
     {
-        // $this->showCheckBox();
-
         return [
             PowerGrid::header()
                 ->showSearchInput(),
             PowerGrid::footer()
-                ->showPerPage(
-                    $perPage = 25,
-                    $perPageValues = [10, 25, 50, 100, 0]
-                )
+                ->showPerPage()
                 ->showRecordCount(),
         ];
     }
 
+    #[On('refrsehAttributesList')]
     public function datasource(): Builder
     {
-        return Product::query();
+        return Attribute::with('values')->withCount('values');
     }
 
     public function relationSearch(): array
@@ -44,23 +41,36 @@ final class ProductTable extends PowerGridComponent
 
     public function fields(): PowerGridFields
     {
-        return PowerGrid::fields();
+        return PowerGrid::fields()
+            ->add('values_count')
+            ->add('name')
+            ->add('values', function (Attribute $model) {
+                $values = '<ul style="display: flex; flex-wrap: wrap;">';
+                foreach ($model->values as $value) {
+                    $values .= "<li class='mb-2 table-li-item' >{$value->value}</li>";
+                }
+                $values .= '</ul>';
+                return $values;
+            })
+            ->add('created_at');
     }
 
     public function columns(): array
     {
         return [
-            Column::make('name', 'name')
+            Column::make('Name', 'name')
                 ->sortable()
                 ->searchable(),
 
-            Column::make('SKU', 'sku')
+            Column::make('Values count', 'values_count'),
+
+            Column::make('values', 'values'),
+
+            Column::make('Created at', 'created_at')
                 ->sortable()
                 ->searchable(),
 
-            Column::make('image', 'image'),
-
-            // Column::action('Action')
+            Column::action('Action')
         ];
     }
 
@@ -72,18 +82,18 @@ final class ProductTable extends PowerGridComponent
     #[\Livewire\Attributes\On('edit')]
     public function edit($rowId): void
     {
-        $this->js('alert(' . $rowId . ')');
+        $this->dispatch('openEditModal', ['attribute' => $rowId]);
     }
 
-    // public function actions(Product $row): array
-    // {
-    //     return [
-    //         Button::add('edit')
-    //             ->slot('Edit: ' . $row->id)
-    //             ->class('pg-btn-white dark:ring-pg-primary-600 dark:border-pg-primary-600 dark:hover:bg-pg-primary-700 dark:ring-offset-pg-primary-800 dark:text-pg-primary-300 dark:bg-pg-primary-700')
-    //             ->dispatch('edit', ['rowId' => $row->id])
-    //     ];
-    // }
+    public function actions(Attribute $row): array
+    {
+        return [
+            Button::add('edit')
+                ->slot('<i class="fas fa-edit"></i>')
+                ->class('btn btn-primary btn-sm rounded')
+                ->dispatch('edit', ['rowId' => $row->id]),
+        ];
+    }
 
     /*
     public function actionRules($row): array

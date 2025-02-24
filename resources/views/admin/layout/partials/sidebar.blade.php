@@ -85,6 +85,7 @@
                     </a>
                 </li>
 
+                {{-- -------------------- Categories -------------------- --}}
                 <li @class([
                     'nav-item',
                     'menu-open' =>
@@ -148,6 +149,20 @@
                         </li>
                     </ul>
                 </li>
+
+                {{-- -------------------- Attributes -------------------- --}}
+                <li class="nav-item">
+                    <a href="{{ route('dashboard.attributes.index') }}" @class([
+                        'nav-link',
+                        'active' => request()->routeIs('dashboard.attributes.*'),
+                    ])>
+                        <i class="nav-icon fas fa-tags"></i>
+                        <p>
+                            Attributes
+                        </p>
+                    </a>
+                </li>
+
 
                 {{-- -------------------- Orders -------------------- --}}
                 <li class="nav-item">

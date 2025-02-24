@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Dashboard\AdminController;
 use App\Http\Controllers\Dashboard\AllTransactionController;
+use App\Http\Controllers\Dashboard\AttributeController;
 use App\Http\Controllers\Dashboard\CampaignController;
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\ClientController;
@@ -52,7 +53,7 @@ Route::name('dashboard.')
 
         // Products Routes :
         // ------------------------------------------
-        Route::resource('products', ProductController::class)->only(['index']);
+        Route::resource('products', ProductController::class)->only(['index', 'create', 'edit']);
 
         // Dealers Routes :
         // ------------------------------------------
@@ -81,6 +82,10 @@ Route::name('dashboard.')
         // Product Type Routes :
         // ------------------------------------------
         Route::resource('product-types', ProductTypeController::class)->only(['index']);
+
+        // Attributes Routes :
+        // ---------------------
+        Route::resource('attributes', AttributeController::class)->only(['index']);
     });
 
 // Profile Routes

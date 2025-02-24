@@ -6,18 +6,21 @@ use Illuminate\Support\Facades\Log;
 
 trait GenerateSlugsTrait
 {
-    public function generateUniqueSlug($object, $title_en,  $col_name = 'slug')
+    public function generateUniqueSlug($model, $title_en,  $col_name = 'alias_name_en')
     {
+        // Generate slug from title
         $slug = trim(strtolower(str_replace(array(' ', '"', '>', '<', '#', '%', '|', '/'), '-', trim($title_en))));
+        // Remove duplicate hyphens
+        $slug = preg_replace('/-+/', '-', $slug);
 
-        if ($object) {
+        if ($model) {
             // Check if the current slug is the same as the existing one
-            if ($object->$col_name === $slug) {
+            if ($model->$col_name === $slug) {
                 return $slug;
             }
 
             $count = 0;
-            $query = $object::where($col_name, $slug)->where('id', '!=', $object->id);
+            $query = $model::where($col_name, $slug)->where('id', '!=', $model->id);
 
             $query->first();
 
@@ -27,18 +30,18 @@ trait GenerateSlugsTrait
                     $count = $max + 1;
                 }
             }
-            return $this->slugChecker($object, $slug, $count, $col_name);
+            return $this->slugChecker($model, $slug, $count, $col_name);
         }
     }
 
-    public function slugChecker($object, $slug, $count, $col_name)
+    public function slugChecker($model, $slug, $count, $col_name)
     {
         if ($count > 0) {
             $new_slug = $slug . '-' . $count;
-            $query = $object::where($col_name, $new_slug)->first();
+            $query = $model::where($col_name, $new_slug)->first();
             if ($query) {
                 $count++;
-                return $this->slugChecker($object, $slug, $count, $col_name);
+                return $this->slugChecker($model, $slug, $count, $col_name);
             } else {
                 return $new_slug;
             }
