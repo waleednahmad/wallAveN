@@ -2,17 +2,18 @@
 
 namespace App\Livewire\Dashboard\Products;
 
-use App\Models\Category;
-use App\Models\Product;
-use App\Models\SubCategory;
 use App\Models\Vendor;
-use App\Traits\GenerateSlugsTrait;
+use App\Models\Product;
+use Livewire\Component;
+use App\Models\Category;
+use App\Models\Attribute;
+use App\Models\SubCategory;
+use Livewire\WithFileUploads;
 use App\Traits\UploadImageTrait;
+use Livewire\Attributes\Computed;
+use App\Traits\GenerateSlugsTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Livewire\Attributes\Computed;
-use Livewire\Component;
-use Livewire\WithFileUploads;
 
 class CreateProductForm extends Component
 {
@@ -22,13 +23,13 @@ class CreateProductForm extends Component
     public $description;
     public $image;
     public $sku;
-    public $barcode;
     public $status = 1;
     public $vendor_id;
 
     public $selectedCategories = [];
     public $selectedSubCategories = [];
     public $selectedProductTypes = [];
+    public $selectedAttributes = [];
 
     public $categories = [];
     public $subCategories = [];
@@ -45,6 +46,12 @@ class CreateProductForm extends Component
     public function vendors()
     {
         return Vendor::active()->orderBy('name')->get();
+    }
+
+    #[Computed()]
+    public function productAttributes()
+    {
+        return Attribute::orderBy('name')->get();
     }
 
 
@@ -77,13 +84,34 @@ class CreateProductForm extends Component
         }
     }
 
+    public function toggleAttribute($attributeId)
+    {
+        if (in_array($attributeId, $this->selectedAttributes)) {
+            $this->selectedAttributes = array_diff($this->selectedAttributes, [$attributeId]);
+        } else {
+            $this->selectedAttributes[] = $attributeId;
+        }
+    }
+
     public function save()
     {
-        $this->validate([
-            'name' => 'required',
-            'sku' => 'required',
-            'vendor_id' => 'required',
-        ]);
+        $this->validate(
+            [
+                'name' => 'required',
+                'sku' => 'required|unique:products,sku',
+                'vendor_id' => 'required|exists:vendors,id',
+                'selectedCategories' => 'required|array|min:1',
+                'selectedAttributes' => 'required|array|min:1',
+            ],
+            [
+                'name.required' => 'Product name is required.',
+                'sku.required' => 'SKU is required.',
+                'sku.unique' => 'SKU must be unique.',
+                'vendor_id.required' => 'Vendor is required.',
+                'selectedCategories.required' => 'You must select at least one category.',
+                'selectedAttributes.required' => 'You must select at least one attribute.',
+            ]
+        );
 
         DB::beginTransaction();
         try {
@@ -92,20 +120,18 @@ class CreateProductForm extends Component
                 'description' => $this->description,
                 'image' => $this->image ? $this->saveImage($this->image, 'products') : null,
                 'sku' => $this->sku,
-                'barcode' => $this->barcode,
                 'vendor_id' => $this->vendor_id,
                 'status' => $this->status,
                 'slug' => $this->generateUniqueSlug(new Product(), $this->name, 'slug'),
             ]);
 
-            if ($product) {
-                $product->categories()->sync($this->selectedCategories);
-                $product->subCategories()->sync($this->selectedSubCategories);
-                $product->productTypes()->sync($this->selectedProductTypes);
+            $product->categories()->sync($this->selectedCategories);
+            $product->subCategories()->sync($this->selectedSubCategories);
+            $product->productTypes()->sync($this->selectedProductTypes);
+            $product->attributes()->sync($this->selectedAttributes);
 
-                DB::commit();
-                return redirect()->route('dashboard.products.index')->with('success', "Product created successfully.");
-            }
+            DB::commit();
+            return redirect()->route('dashboard.products.index')->with('success', "Product created successfully.");
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error creating product: ' . $e->getMessage());

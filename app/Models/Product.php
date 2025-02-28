@@ -23,12 +23,22 @@ class Product extends Model
 
     public function subCategories()
     {
-        return $this->belongsToMany(SubCategory::class ,'sub_category_product');
+        return $this->belongsToMany(SubCategory::class, 'sub_category_product');
     }
 
     public function productTypes()
     {
-        return $this->belongsToMany(ProductType::class ,'product_type_product');
+        return $this->belongsToMany(ProductType::class, 'product_type_product');
+    }
+
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
+    public function attributes()
+    {
+        return $this->belongsToMany(Attribute::class);
     }
 
 

@@ -16,9 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id')->index()->nullable();
             $table->string('sku')->index()->nullable();
             $table->string('barcode')->index()->nullable();
-            $table->decimal('full_price', 10, 2)->nullable();
+            $table->decimal('price', 10, 2)->nullable();
+            $table->decimal('compare_at_price', 10, 2)->nullable();
             $table->decimal('cost_price', 10, 2)->nullable();
-            $table->decimal('discount_price', 10, 2)->nullable();
             $table->longText('description')->nullable();
             $table->timestamps();
         });

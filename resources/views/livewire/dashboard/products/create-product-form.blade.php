@@ -47,23 +47,6 @@
                             </div>
                         </div>
 
-                        {{-- Barcode --}}
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="barcode">Barcode
-                                    <span class="text-danger">
-                                        *
-                                    </span>
-                                </label>
-                                <input type="text" @class(['form-control', 'is-invalid' => $errors->has('barcode')]) id="barcode" name="barcode"
-                                    required value="{{ old('barcode') }}" wire:model="barcode">
-                                @error('barcode')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                        </div>
 
                         {{-- Status --}}
                         <div class="col-md-6">
@@ -136,13 +119,16 @@
                 </div>
             </div>
         </div>
-        {{-- -------------------- Main Product Categories -------------------- --}}
+        {{-- =============== --}}
+        {{-- RIGHT SIDE --}}
+        {{-- =============== --}}
         <div class="col-md-6">
+            {{-- -------------------- Main Product Categories -------------------- --}}
             <div class="card">
                 {{-- Name --}}
                 <div class="card-header">
                     <h6>
-                        Main Product Categories
+                        Product Categories
                     </h6>
                 </div>
                 <div class="card-body">
@@ -239,8 +225,40 @@
                     @endif
                 </div>
             </div>
+            {{-- -------------------- Main Product Attributes -------------------- --}}
+            <div class="card">
+                {{-- Name --}}
+                <div class="card-header">
+                    <h6>
+                        Product Attributes
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {{-- Main Categories --}}
+                    <h5 class="d-flex align-items-center justify-content-between">
+                        <span>
+                            Attributes
+                            <small>
+                                ({{ count($this->selectedAttributes) . '/' . $this->productAttributes->count() }})
+                            </small>
+                        </span>
+                    </h5>
+                    <div class="category-container">
+                        @forelse ($this->productAttributes as $attribute)
+                            <div wire:click="toggleAttribute({{ $attribute->id }})" @class([
+                                'category-card ',
+                                'active' => in_array($attribute->id, $this->selectedAttributes),
+                            ])>
+                                <p>
+                                    {{ $attribute->name }}
+                                </p>
+                            </div>
+                        @empty
+                        @endforelse
+                    </div>
+                </div>
+            </div>
         </div>
-
     </div>
 
     {{-- submit btn (in the center) --}}
@@ -253,5 +271,17 @@
             <span wire:loading.remove>
                 Save
             </span>
+        </button>
     </div>
+
+    {{-- Print all errors if exists --}}
+    @if ($errors->any())
+        <div class="mt-3 alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 </form>

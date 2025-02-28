@@ -54,6 +54,9 @@ Route::name('dashboard.')
         // Products Routes :
         // ------------------------------------------
         Route::resource('products', ProductController::class)->only(['index', 'create', 'edit']);
+        route::controller(ProductController::class)->group(function () {
+            Route::get('products/{id}/create-variant', 'createVariant')->name('products.create-variant');
+        });
 
         // Dealers Routes :
         // ------------------------------------------

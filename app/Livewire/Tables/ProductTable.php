@@ -60,7 +60,7 @@ final class ProductTable extends PowerGridComponent
 
             Column::make('image', 'image'),
 
-            // Column::action('Action')
+            Column::action('Action')
         ];
     }
 
@@ -75,15 +75,21 @@ final class ProductTable extends PowerGridComponent
         $this->js('alert(' . $rowId . ')');
     }
 
-    // public function actions(Product $row): array
-    // {
-    //     return [
-    //         Button::add('edit')
-    //             ->slot('Edit: ' . $row->id)
-    //             ->class('pg-btn-white dark:ring-pg-primary-600 dark:border-pg-primary-600 dark:hover:bg-pg-primary-700 dark:ring-offset-pg-primary-800 dark:text-pg-primary-300 dark:bg-pg-primary-700')
-    //             ->dispatch('edit', ['rowId' => $row->id])
-    //     ];
-    // }
+    #[\Livewire\Attributes\On('addVariant')]
+    public function addVariant($rowId): void
+    {
+        $this->redirect(route('dashboard.products.create-variant', $rowId));
+    }
+
+    public function actions(Product $row): array
+    {
+        return [
+            Button::add('add-variant')
+                ->slot('Add Variant')
+                ->class('btn btn-primary btn-sm rounded')
+                ->dispatch('addVariant', ['rowId' => $row->id]),
+        ];
+    }
 
     /*
     public function actionRules($row): array
