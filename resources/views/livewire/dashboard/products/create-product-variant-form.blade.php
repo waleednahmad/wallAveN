@@ -86,6 +86,32 @@
             </div>
         </div>
 
+        {{-- Image --}}
+        {{-- Image --}}
+        <div class="col-12">
+            <div class="form-group">
+                <label for="image">Image
+                    <span class="text-danger">
+                        *
+                    </span>
+                </label>
+                <input type="file" @class(['form-control', 'is-invalid' => $errors->has('image')]) id="image" name="image" required
+                    value="{{ old('image') }}" wire:model="image" accept="image/*">
+                @error('image')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+
+                @if ($image)
+                    <img src="{{ $image->temporaryUrl() }}" alt="Image" class="mt-2 img-fluid img-thumbnail"
+                        style="max-height: 200px;">
+                @endif
+
+            </div>
+        </div>
+
+
 
         {{-- Description --}}
         <div class="col-12" wire:ignore>

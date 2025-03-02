@@ -3,12 +3,16 @@
 namespace App\Livewire\Dashboard\Products;
 
 use App\Models\ProductVariant;
+use App\Traits\UploadImageTrait;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class CreateProductVariantForm extends Component
 {
+    use UploadImageTrait,  WithFileUploads;
+
     public $product;
     #[Validate('required|string|max:255|min:3')]
     public $sku;
@@ -22,6 +26,8 @@ class CreateProductVariantForm extends Component
     public $price;
     #[Validate('nullable|string')]
     public $description;
+    #[Validate('nullable|image')]
+    public $image;
 
     public $productAttributesWithValues = [];
     public $selectedAttributeValues = [];
@@ -50,6 +56,13 @@ class CreateProductVariantForm extends Component
         $this->selectedAttributeValues[$attributeId] = $valueId;
     }
 
+    protected function rules()
+    {
+        return [
+            'barcode' => 'nullable|string|max:255|min:3|unique:product_variants,barcode',
+        ];
+    }
+
     public function save()
     {
         $this->validate();
@@ -59,22 +72,36 @@ class CreateProductVariantForm extends Component
             return;
         }
 
-        if ($this->isDuplicate('barcode', $this->barcode)) {
-            $this->dispatch('error', 'Product variant with this barcode already exists.');
-            return;
-        }
 
         if (!$this->isValidSku()) {
-            $this->dispatch('error', 'Variant SKU must contain the product SKU.');
+            $this->dispatch('error', "The SKU must be: 1) unique, 2) contain the product's SKU, and 3) longer than the product's SKU.");
             return;
         }
 
-        $this->createProductVariant();
+        DB::beginTransaction();
+        try {
+            $variant = $this->product->variants()->create([
+                'sku' => $this->sku,
+                'barcode' => $this->barcode,
+                'compare_at_price' => $this->compare_at_price,
+                'cost_price' => $this->cost_price,
+                'price' => $this->price,
+                'description' => $this->description,
+                'image' => $this->image ? $this->saveImage($this->image, "products/" . $this->product->id) : null,
 
-        $this->resetForm();
+            ]);
 
-        return redirect()->route('dashboard.products.create-variant', $this->product->id)
-            ->with('success', 'Product variant created successfully.');
+            // Sync attribute values only
+            $variant->attributeValues()->sync($this->selectedAttributeValues);
+            $variant->save();
+            DB::commit();
+            $this->resetForm();
+            return redirect()->route('dashboard.products.create-variant', $this->product->id)
+                ->with('success', 'Product variant created successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $this->dispatch('error', $e->getMessage());
+        }
     }
 
     private function isDuplicate($field, $value)
@@ -87,28 +114,6 @@ class CreateProductVariantForm extends Component
         return str_contains($this->sku, $this->product->sku);
     }
 
-    private function createProductVariant()
-    {
-        DB::beginTransaction();
-        try {
-            $variant = $this->product->variants()->create([
-                'sku' => $this->sku,
-                'barcode' => $this->barcode,
-                'compare_at_price' => $this->compare_at_price,
-                'cost_price' => $this->cost_price,
-                'price' => $this->price,
-                'description' => $this->description,
-            ]);
-
-            // Sync attribute values only
-            $variant->attributeValues()->sync($this->selectedAttributeValues);
-            $variant->save();
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollBack();
-            $this->dispatch('error', 'An error occurred while creating the product variant.');
-        }
-    }
 
     private function resetForm()
     {

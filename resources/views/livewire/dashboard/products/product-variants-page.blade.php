@@ -13,15 +13,15 @@
                     <table class="table table-bordered">
                         <tr>
                             <th>Name</th>
-                            <td>{{ $product->name }}</td>
+                            <td>{{ $product->name ?? '-' }}</td>
                         </tr>
                         <tr>
                             <th>SKU</th>
-                            <td>{{ $product->sku }}</td>
+                            <td>{{ $product->sku ?? '-' }}</td>
                         </tr>
                         <tr>
                             <th>Barcode</th>
-                            <td>{{ $product->barcode }}</td>
+                            <td>{{ $product->barcode ?? '-' }}</td>
                         </tr>
                         <tr>
                             <th>Status</th>
@@ -71,6 +71,7 @@
 
                         <tr>
                             <th>SKU</th>
+                            <th>Image</th>
                             <th>Barcode</th>
                             <th>Compare-at Price</th>
                             <th>Cost Price</th>
@@ -82,6 +83,15 @@
                         @forelse ($product->variants as $variant)
                             <tr>
                                 <td>{{ $variant->sku }}</td>
+                                <td>
+                                    @if ($variant->image && file_exists($variant->image))
+                                        <img src="{{ asset($variant->image) }}" alt="Variant Image"
+                                            class="img-thumbnail"
+                                            style="width: 90px; height: 90px;background-color: #f8f9fa;">
+                                    @else
+                                        <span class="badge badge-danger">No image</span>
+                                    @endif
+                                </td>
                                 <td>{{ $variant->barcode }}</td>
                                 <td>{{ $variant->compare_at_price ?? '-' }}</td>
                                 <td>{{ $variant->cost_price ?? '-' }}</td>

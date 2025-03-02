@@ -11,15 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_variants', function (Blueprint $table) {
+        Schema::create('product_images', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id')->index()->nullable();
-            $table->string('sku')->index()->nullable();
-            $table->string('barcode')->index()->nullable();
-            $table->decimal('price', 10, 2)->nullable();
-            $table->decimal('compare_at_price', 10, 2)->nullable();
-            $table->decimal('cost_price', 10, 2)->nullable();
-            $table->longText('description')->nullable();
             $table->longText('image')->nullable();
             $table->timestamps();
         });
@@ -30,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_variants');
+        Schema::dropIfExists('product_images');
     }
 };

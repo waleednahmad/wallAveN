@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Log;
 class CreateProductForm extends Component
 {
     use UploadImageTrait, GenerateSlugsTrait, WithFileUploads;
+
     // ========== Public Properties ==========
     public $name;
     public $description;
@@ -39,8 +40,6 @@ class CreateProductForm extends Component
     public $searchSubCategory = '';
     public $searchProductType = '';
 
-
-
     // ========= Computed Properties =========
     #[Computed()]
     public function vendors()
@@ -54,43 +53,47 @@ class CreateProductForm extends Component
         return Attribute::orderBy('name')->get();
     }
 
-
-
     // ========== Public Methods ==========
+    public function toggleSelection(&$selectionArray, $id)
+    {
+        if (in_array($id, $selectionArray)) {
+            $selectionArray = array_diff($selectionArray, [$id]);
+        } else {
+            $selectionArray[] = $id;
+        }
+    }
+
     public function toggleCategory($categoryId)
     {
-        if (in_array($categoryId, $this->selectedCategories)) {
-            $this->selectedCategories = array_diff($this->selectedCategories, [$categoryId]);
-        } else {
-            $this->selectedCategories[] = $categoryId;
-        }
+        $this->toggleSelection($this->selectedCategories, $categoryId);
+
+        // reset subcategories and product types
+        $this->selectedSubCategories = [];
+        $this->selectedProductTypes = [];
+        $this->searchSubCategory = '';
+        $this->searchProductType = '';
+        $this->subCategories = [];
+        $this->productTypes = [];
     }
 
     public function toggleSubCategory($subCategoryId)
     {
-        if (in_array($subCategoryId, $this->selectedSubCategories)) {
-            $this->selectedSubCategories = array_diff($this->selectedSubCategories, [$subCategoryId]);
-        } else {
-            $this->selectedSubCategories[] = $subCategoryId;
-        }
+        $this->toggleSelection($this->selectedSubCategories, $subCategoryId);
+
+        // reset product types
+        $this->selectedProductTypes = [];
+        $this->searchProductType = '';
+        $this->productTypes = [];
     }
 
     public function toggleProductType($productTypeId)
     {
-        if (in_array($productTypeId, $this->selectedProductTypes)) {
-            $this->selectedProductTypes = array_diff($this->selectedProductTypes, [$productTypeId]);
-        } else {
-            $this->selectedProductTypes[] = $productTypeId;
-        }
+        $this->toggleSelection($this->selectedProductTypes, $productTypeId);
     }
 
     public function toggleAttribute($attributeId)
     {
-        if (in_array($attributeId, $this->selectedAttributes)) {
-            $this->selectedAttributes = array_diff($this->selectedAttributes, [$attributeId]);
-        } else {
-            $this->selectedAttributes[] = $attributeId;
-        }
+        $this->toggleSelection($this->selectedAttributes, $attributeId);
     }
 
     public function save()

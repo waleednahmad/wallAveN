@@ -24,6 +24,14 @@ class ProductController extends Controller
         return view('admin.products.create');
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Product $product)
+    {
+        return view('admin.products.edit', compact('product'));
+    }
+
 
     public function createVariant($id)
     {
