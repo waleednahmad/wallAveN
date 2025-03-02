@@ -59,18 +59,7 @@
                     </a>
                 </li>
 
-                {{-- -------------------- Products -------------------- --}}
-                <li class="nav-item">
-                    <a href="{{ route('dashboard.products.index') }}" @class([
-                        'nav-link',
-                        'active' => request()->routeIs('dashboard.products.*'),
-                    ])>
-                        <i class="nav-icon fas fa-box"></i>
-                        <p>
-                            Products
-                        </p>
-                    </a>
-                </li>
+
 
                 {{-- -------------------- Dealers -------------------- --}}
                 <li class="nav-item">
@@ -159,6 +148,19 @@
                         <i class="nav-icon fas fa-tags"></i>
                         <p>
                             Attributes
+                        </p>
+                    </a>
+                </li>
+
+                {{-- -------------------- Products -------------------- --}}
+                <li class="nav-item">
+                    <a href="{{ route('dashboard.products.index') }}" @class([
+                        'nav-link',
+                        'active' => request()->routeIs('dashboard.products.*'),
+                    ])>
+                        <i class="nav-icon fas fa-box"></i>
+                        <p>
+                            Products
                         </p>
                     </a>
                 </li>

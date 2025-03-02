@@ -4,8 +4,7 @@
 <script src="{{ asset('dashboard/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('dashboard/js/bootstrap.min.js') }}"></script>
 
-<script src="{{ asset('dashboard/plugins/popper/popper.js') }}"></script>
-<script src="{{ asset('dashboard/plugins/popper/esm/popper.min.js') }}"></script>
+
 <script src="{{ asset('dashboard/plugins/popper/umd/popper.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('dashboard/dist/js/adminlte.min.js') }}"></script>
@@ -13,7 +12,6 @@
 
 {{-- toastr --}}
 <script src="{{ asset('assets/js/toastr.min.js') }}"></script>
-<script src="{{ asset('assets/js/intlTelInput.js') }}"></script>
 
 {{-- Select2 --}}
 <script src="{{ asset('dashboard/plugins/select2/js/select2.full.min.js') }}"></script>

@@ -15,7 +15,7 @@ Route::controller(FrontController::class)
         function () {
             Route::get('/', 'index')->name('frontend.home');
             Route::get('/shop', 'shop')->name('frontend.shop');
-            Route::get('/product/{handle}', 'showProduct')->name('frontend.product');
+            Route::get('/product/{slug}', 'showProduct')->name('frontend.product');
 
             Route::middleware([
                 CheckIsDealerLoggedIn::class

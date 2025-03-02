@@ -236,44 +236,8 @@
                             <div class="swiper-wrapper">
                                 @foreach ($products as $product)
                                     <div class="swiper-slide">
-                                        <div class="auction-card general-art">
-                                            <div class="auction-card-img-wrap"
-                                                style="height: 200px; overflow: hidden; border-radius: 10px;">
-                                                <a href="{{ route('frontend.product', $product->handle) }}"
-                                                    class="card-img">
-                                                    <img src="{{ $product->image_src }}" loading="lazy"
-                                                        style="object-fit: contain; width: 100%; height: 100%;"
-                                                        alt="{{ $product->image_alt_text ?? $product->title }}">
-                                                </a>
-                                            </div>
-                                            <div class="auction-card-content">
-                                                <h6>
-                                                    <a href="{{ route('frontend.product', $product->handle) }}">
-                                                        {{ $product->title }}
-                                                    </a>
-                                                </h6>
-                                                <ul>
-                                                    <li>
-                                                        <span>
-                                                            Vendor :
-                                                        </span>
-                                                        {{ $product->vendor }}
-                                                    </li>
-                                                    @auth('dealer')
-                                                        <li><span>Price : </span>
-                                                            <strong>${{ $product->variant_price }}</strong>
-                                                        </li>
-                                                    @endauth
-                                                </ul>
-                                                <a href="{{ route('frontend.product', $product->handle) }}"
-                                                    class="bid-btn btn-hover">
-                                                    <span>
-                                                        View Details
-                                                    </span>
-                                                    <strong></strong>
-                                                </a>
-                                            </div>
-                                        </div>
+                                        <livewire:frontend.components.product-card-component :product="$product"
+                                            :key="$product->id" />
                                     </div>
                                 @endforeach
                             </div>
