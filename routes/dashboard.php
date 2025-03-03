@@ -21,6 +21,7 @@ use App\Http\Controllers\Dashboard\SubCategoryController;
 use App\Http\Controllers\Dashboard\VendorController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Livewire\Livewire;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,9 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
+Livewire::setUpdateRoute(function ($handle) {
+    return Route::post('demo/public/livewire/update', $handle);
+}); 
 
 // Dashboard Routes
 // ---------------------
