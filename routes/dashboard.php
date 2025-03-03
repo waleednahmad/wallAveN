@@ -31,69 +31,74 @@ use Livewire\Livewire;
 
 Livewire::setUpdateRoute(function ($handle) {
     return Route::post('demo/public/livewire/update', $handle);
-}); 
+});
 
-// Dashboard Routes
-// ---------------------
-Route::controller(DashboardController::class)
-    ->middleware('auth:web')
+Route::prefix('super_admin')
     ->group(function () {
-        Route::get('/', 'index')->name('dashboard');
-        Route::get('logout', 'logout')->name('logout');
-    });
 
-// Dashboard Routes
-// ==============================================================================
-Route::name('dashboard.')
-    ->middleware('auth:web')
-    ->group(function () {
-        // Admins Routes :
-        // ------------------------------------------
-        Route::resource('admins', AdminController::class)->only(['index']);
-
-        // Vendors Routes :
-        // ------------------------------------------
-        Route::resource('vendors', VendorController::class)->only(['index']);
-
-        // Products Routes :
-        // ------------------------------------------
-        Route::resource('products', ProductController::class)->only(['index', 'create', 'edit']);
-        route::controller(ProductController::class)->group(function () {
-            Route::get('products/{id}/create-variant', 'createVariant')->name('products.create-variant');
-        });
-
-        // Dealers Routes :
-        // ------------------------------------------
-        Route::resource('dealers', DealerController::class)->only(['index']);
-
-        //  Orders Routes :
-        // ------------------------------------------
-        Route::resource('orders', OrderController::class)->only(['index']);
-
-        // Public Settings Routes :
-        // ------------------------------------------
-        Route::resource('public-settings', PublicSettingController::class)->only(['index']);
-
-        // Representaives Routes :
-        // ------------------------------------------
-        Route::resource('representatives', RepresentativeController::class)->only(['index']);
-
-        // Categories Routes :
-        // ------------------------------------------
-        Route::resource('categories', CategoryController::class)->only(['index']);
-
-        // Sub Categories Routes :
-        // ------------------------------------------
-        Route::resource('sub-categories', SubCategoryController::class)->only(['index']);
-
-        // Product Type Routes :
-        // ------------------------------------------
-        Route::resource('product-types', ProductTypeController::class)->only(['index']);
-
-        // Attributes Routes :
+        // Dashboard Routes
         // ---------------------
-        Route::resource('attributes', AttributeController::class)->only(['index']);
+        Route::controller(DashboardController::class)
+            ->middleware('auth:web')
+            ->group(function () {
+                Route::get('/', 'index')->name('dashboard');
+                Route::get('logout', 'logout')->name('logout');
+            });
+
+        // Dashboard Routes
+        // ==============================================================================
+        Route::name('dashboard.')
+            ->middleware('auth:web')
+            ->group(function () {
+                // Admins Routes :
+                // ------------------------------------------
+                Route::resource('admins', AdminController::class)->only(['index']);
+
+                // Vendors Routes :
+                // ------------------------------------------
+                Route::resource('vendors', VendorController::class)->only(['index']);
+
+                // Products Routes :
+                // ------------------------------------------
+                Route::resource('products', ProductController::class)->only(['index', 'create', 'edit']);
+                route::controller(ProductController::class)->group(function () {
+                    Route::get('products/{id}/create-variant', 'createVariant')->name('products.create-variant');
+                });
+
+                // Dealers Routes :
+                // ------------------------------------------
+                Route::resource('dealers', DealerController::class)->only(['index']);
+
+                //  Orders Routes :
+                // ------------------------------------------
+                Route::resource('orders', OrderController::class)->only(['index']);
+
+                // Public Settings Routes :
+                // ------------------------------------------
+                Route::resource('public-settings', PublicSettingController::class)->only(['index']);
+
+                // Representaives Routes :
+                // ------------------------------------------
+                Route::resource('representatives', RepresentativeController::class)->only(['index']);
+
+                // Categories Routes :
+                // ------------------------------------------
+                Route::resource('categories', CategoryController::class)->only(['index']);
+
+                // Sub Categories Routes :
+                // ------------------------------------------
+                Route::resource('sub-categories', SubCategoryController::class)->only(['index']);
+
+                // Product Type Routes :
+                // ------------------------------------------
+                Route::resource('product-types', ProductTypeController::class)->only(['index']);
+
+                // Attributes Routes :
+                // ---------------------
+                Route::resource('attributes', AttributeController::class)->only(['index']);
+            });
     });
+
 
 // Profile Routes
 // by : Ahmad Alsakhen

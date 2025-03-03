@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         then: function () {
             Route::middleware('web')
-                ->prefix('super_admin')
+                // ->prefix('super_admin')
                 ->group(base_path('routes/dashboard.php'));
 
             Route::middleware('web')
