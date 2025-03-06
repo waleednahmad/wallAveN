@@ -42,6 +42,7 @@ class EditVariantAttributeValuesForm extends Component
 
         $this->dispatch('closeEditVariantAttributesOffcanvas');
         $this->dispatch('refreshProductVariantsTable');
+        $this->dispatch('success', 'Variant attribute values updated successfully.');
     }
 
 
