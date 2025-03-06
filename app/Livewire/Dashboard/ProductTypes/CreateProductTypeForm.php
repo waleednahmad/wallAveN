@@ -5,13 +5,16 @@ namespace App\Livewire\Dashboard\ProductTypes;
 use App\Models\ProductType;
 use App\Models\SubCategory;
 use App\Traits\GenerateSlugsTrait;
+use App\Traits\UploadImageTrait;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class CreateProductTypeForm extends Component
 {
-    use GenerateSlugsTrait;
+    use UploadImageTrait, GenerateSlugsTrait, WithFileUploads;
+
 
     #[Validate(['required', 'string', 'max:255'])]
     public $name;
@@ -21,6 +24,9 @@ class CreateProductTypeForm extends Component
 
     #[Validate(['required', 'exists:sub_categories,id'])]
     public $sub_category_id;
+
+    #[Validate(['nullable', 'image'])]
+    public $image;
 
     // =============================
     // ========= COMPUTED =========
@@ -41,6 +47,8 @@ class CreateProductTypeForm extends Component
             'slug' => $this->generateUniqueSlug(new ProductType(), $this->name),
             'status' => $this->status,
             'sub_category_id' => $this->sub_category_id,
+            'image' => $this->image ? $this->saveImage($this->image, 'product-types') : null,
+
         ]);
 
         $this->reset(['name', 'status', 'sub_category_id']);

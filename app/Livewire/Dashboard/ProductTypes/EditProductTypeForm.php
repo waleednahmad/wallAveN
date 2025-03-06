@@ -5,14 +5,17 @@ namespace App\Livewire\Dashboard\ProductTypes;
 use App\Models\ProductType;
 use App\Models\SubCategory;
 use App\Traits\GenerateSlugsTrait;
+use App\Traits\UploadImageTrait;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class EditProductTypeForm extends Component
 {
-    use GenerateSlugsTrait;
+    use GenerateSlugsTrait, WithFileUploads, UploadImageTrait;
+
 
     public $productType;
     #[Validate(['required', 'string', 'max:255'])]
@@ -24,6 +27,8 @@ class EditProductTypeForm extends Component
     #[Validate(['required', 'exists:sub_categories,id'])]
     public $sub_category_id;
 
+    #[Validate(['nullable', 'image'])]
+    public $image;
 
     #[On('editProductType')]
     public function editProductType(ProductType $productType)
@@ -47,12 +52,24 @@ class EditProductTypeForm extends Component
     {
         $this->validate();
 
+        $old_iamge = $this->productType->image;
+
         $this->productType->update([
             'name' => $this->name,
-            'slug' => $this->generateUniqueSlug($this->productType, $this->name),
+            'slug' => $this->generateUniqueSlug($this->productType, $this->name, 'slug'),
             'status' => $this->status,
             'sub_category_id' => $this->sub_category_id,
         ]);
+
+        if ($this->image) {
+            $this->productType->update([
+                'image' => $this->saveImage($this->image, 'product-types'),
+            ]);
+
+            if ($old_iamge && file_exists(public_path($old_iamge))) {
+                unlink(public_path($old_iamge));
+            }
+        }
 
         $this->reset(['name', 'status', 'sub_category_id']);
         $this->dispatch('success', 'Product type updated successfully.');

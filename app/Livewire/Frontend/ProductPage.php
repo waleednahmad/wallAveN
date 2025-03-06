@@ -12,6 +12,14 @@ class ProductPage extends Component
 {
 
     public $product;
+    public $name, $description, $image, $sku;
+    public $groupedAttributes = [];
+
+    public $selectedAttributeValues = [];
+
+
+
+
     public $option1Name;
     public $option1Values = [];
     public $option2Name;
@@ -19,16 +27,12 @@ class ProductPage extends Component
     public $option3Name;
     public $option3Values = [];
     public $selectedSku;
-    public $image;
     public $title;
     public $vendor;
     public $bodyHtml;
     public $price;
 
-    public $selectedOption1Value;
-    public $selectedOption2Value;
-    public $selectedOption3Value;
-    public $sku;
+
     public $imagesGallery = [];
     public $relatedProducts = [];
 
@@ -36,7 +40,7 @@ class ProductPage extends Component
 
     public function mount($product)
     {
-        $this->product = $product;
+        $this->product = $product->load("variants.attributeValues.attribute");
         $this->initializeProductDetails($product);
         $this->initializeOptions($product);
         $this->setDefaultOptionValues();
@@ -46,46 +50,75 @@ class ProductPage extends Component
 
     private function initializeProductDetails($product)
     {
+        $groupedAttributes = [];
+
+        foreach ($product->variants as $variant) {
+            foreach ($variant->attributeValues as $attributeValue) {
+                $attributeName = $attributeValue->attribute->name;
+                $attributeId = $attributeValue->attribute->id;
+                $attributeValueValue = $attributeValue->value;
+                $attributeValueId = $attributeValue->id;
+
+                if (!isset($groupedAttributes[$attributeName])) {
+                    $groupedAttributes[$attributeName] = [
+                        'id' => $attributeId,
+                        'values' => []
+                    ];
+                }
+
+                if (!in_array($attributeValueValue, array_column($groupedAttributes[$attributeName]['values'], 'value'))) {
+                    $groupedAttributes[$attributeName]['values'][] = [
+                        'id' => $attributeValueId,
+                        'value' => $attributeValueValue
+                    ];
+                }
+            }
+        }
+        $this->groupedAttributes = $groupedAttributes;
+
+
         $this->sku = $product->sku;
         $this->selectedSku = $product->variant_sku;
         $this->image = $product->variant_image ?? $product->image_src;
         $this->title = $product->title;
-        $this->vendor = $product->vendor;
-        $this->bodyHtml = $product->body_html;
+        $this->vendor = $product->vendor ? $product->vendor->name : null;
+        $this->description = $product->description;
         $this->price = $product->variant_price ?? 0;
-        $this->imagesGallery = Product::where('sku', $product->sku)
-            ->whereNotNull('Image Src')
-            ->select('Image Src')
-            ->get()
-            ->pluck('Image Src')
-            ->unique();
+        // $this->imagesGallery = Product::where('sku', $product->sku)
+        //     ->whereNotNull('Image Src')
+        //     ->select('Image Src')
+        //     ->get()
+        //     ->pluck('Image Src')
+        //     ->unique();
     }
 
     private function initializeOptions($product)
     {
-        $this->option1Name = $product->option1_name;
-        $this->option2Name = $product->option2_name;
-        $this->option3Name = $product->option3_name;
+        // $this->option1Name = $product->option1_name;
+        // $this->option2Name = $product->option2_name;
+        // $this->option3Name = $product->option3_name;
 
-        $options = Product::where('sku', $product->sku)
-            ->select('Option1 Value', 'Option2 Value', 'Option3 Value')
-            ->get();
+        // $options = Product::where('sku', $product->sku)
+        //     ->select('Option1 Value', 'Option2 Value', 'Option3 Value')
+        //     ->get();
 
-        $this->option1Values = $options->pluck('Option1 Value')->filter()->unique()->values()->toArray();
-        $this->option2Values = $options->pluck('Option2 Value')->filter()->unique()->values()->toArray();
-        $this->option3Values = $options->pluck('Option3 Value')->filter()->unique()->values()->toArray();
+        // $this->option1Values = $options->pluck('Option1 Value')->filter()->unique()->values()->toArray();
+        // $this->option2Values = $options->pluck('Option2 Value')->filter()->unique()->values()->toArray();
+        // $this->option3Values = $options->pluck('Option3 Value')->filter()->unique()->values()->toArray();
     }
 
     private function setRelatedProducts()
     {
-        $this->relatedProducts = Product::where('vendor', $this->vendor)
-            ->where('sku', '!=', $this->sku)
-            ->whereNotNull('tags')
-            ->whereNotNull('title')
-            ->where('tags', 'like', '%' . $this->product->tags . '%')
-            ->take(6)
-            ->inRandomOrder()
-            ->get();
+        $this->relatedProducts = [];
+
+        // Product::where('vendor', $this->vendor)
+        //     ->where('sku', '!=', $this->sku)
+        //     ->whereNotNull('tags')
+        //     ->whereNotNull('title')
+        //     ->where('tags', 'like', '%' . $this->product->tags . '%')
+        //     ->take(6)
+        //     ->inRandomOrder()
+        //     ->get();
     }
 
     private function setDefaultOptionValues()
@@ -120,13 +153,13 @@ class ProductPage extends Component
 
         $variantSku = "{$productMaterial}-{$this->sku}-{$productSize}";
         // dd($variantSku);
-        $product = Product::where('Variant SKU', $variantSku)->first();
+        // $product = Product::where('Variant SKU', $variantSku)->first();
 
-        if ($product) {
-            $this->product = $product;
-            $this->image = $product->variant_image ?? $this->product->image_src;
-            $this->selectedSku = $product->variant_sku;
-            $this->price = $product->variant_price;
+        if (true) {
+            $this->product = new Product();
+            $this->image = $this->product->variant_image ?? $this->product->image_src;
+            $this->selectedSku = $this->product->variant_sku;
+            $this->price = $this->product->variant_price;
         } else {
             $this->resetToDefaultVariant();
             $this->dispatch('error', 'This variant is not available');
@@ -137,8 +170,6 @@ class ProductPage extends Component
 
     private function resetToDefaultVariant()
     {
-        $this->selectedOption2Value = $this->option2Values[0] ?? null;
-        $this->selectedOption3Value = $this->option3Values[0] ?? null;
         $this->product = Product::where('sku', $this->sku)->whereNotNull('title')->first();
         $this->selectedSku = $this->product->variant_sku;
         $this->image = $this->product->variant_image ?? $this->product->image;
@@ -147,20 +178,6 @@ class ProductPage extends Component
         $this->quantity = 1;
     }
 
-    public function increaseQuantity()
-    {
-        $this->quantity++;
-    }
-
-    public function decreaseQuantity()
-    {
-        if ($this->quantity > 1) {
-            $this->quantity--;
-        } else {
-            $this->quantity = 1;
-            $this->dispatch('error', 'Quantity cannot be less than 1');
-        }
-    }
 
     public function addToCart()
     {
@@ -211,6 +228,32 @@ class ProductPage extends Component
         $this->dispatch('openCartOffcanva');
         $this->resetToDefaultVariant();
     }
+
+    // ============================
+    // Public Methods ✅
+    // ============================
+    public function increaseQuantity()
+    {
+        $this->quantity++;
+    }
+
+    public function decreaseQuantity()
+    {
+        if ($this->quantity > 1) {
+            $this->quantity--;
+        } else {
+            $this->quantity = 1;
+            $this->dispatch('error', 'Quantity cannot be less than 1');
+        }
+    }
+
+    public function selectAttributeValue($attributeId, $valueId)
+    {
+        $this->selectedAttributeValues[$attributeId] = $valueId;
+        // $this->updateProductVariant();
+    }
+
+
 
 
 

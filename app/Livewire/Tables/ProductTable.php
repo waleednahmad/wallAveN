@@ -48,10 +48,10 @@ final class ProductTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('image', fn($model) => $model->image ? '<img src="' . asset($model->image) . '" alt="Product Image" 
-                class="img-thumbnail"   
-                style="height:90px; object-fit:contain; width:90px;background-color: #f8f9fa; border-radius: 0.25rem;"
-                
-                >' : 'No Image')
+        class="img-thumbnail"   
+        style="height:90px; object-fit:contain; width:90px;background-color: #f8f9fa; border-radius: 0.25rem;"
+        
+        >' : '<span class="badge badge-danger">No Image</span>')
 
         ;
     }

@@ -38,6 +38,18 @@
         </div>
     </div>
 
+    <div class="offcanvas offcanvas-end" id="editVariant" aria-labelledby="editVariantLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="editVariantLabel">
+                Edit Variant
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <livewire:dashboard.products.edit-product-variant-form :product="$product" />
+        </div>
+    </div>
+
     {{-- Variant Attribut Values --}}
     <div class="offcanvas offcanvas-end" id="variantAttributes" aria-labelledby="variantAttributesLabel">
         <div class="offcanvas-header">
@@ -79,6 +91,21 @@
             // ============== Close Offcanvas ==============
             Livewire.on('closeEditVariantAttributesOffcanvas', (event) => {
                 bootstrap.Offcanvas.getInstance(document.getElementById('variantAttributes')).hide();
+            });
+
+
+            // ============= Open Edit Offcanvas ==============
+            Livewire.on('openEditVariantOffcanvas', (event) => {
+                let offcanvas = new bootstrap.Offcanvas(document.getElementById('editVariant'));
+                offcanvas.show();
+
+                let variant = event[0]
+                Livewire.dispatch('setVariant', variant);
+            });
+
+            // ============= Close Edit Offcanvas ==============
+            Livewire.on('closeEditVariantOffcanvas', (event) => {
+                bootstrap.Offcanvas.getInstance(document.getElementById('editVariant')).hide();
             });
         });
 

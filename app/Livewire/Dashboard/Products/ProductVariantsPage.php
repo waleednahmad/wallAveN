@@ -18,6 +18,11 @@ class ProductVariantsPage extends Component
         $this->dispatch('openCreateVariantOffcanvas');
     }
 
+    public function editVariant($variant)
+    {
+        $this->dispatch('openEditVariantOffcanvas', ['variant' => $variant]);
+    }
+
     public function editVariantAttributes($variant)
     {
         $this->dispatch('openEditVariantAttributesOffcanvas', ['variant' => $variant]);

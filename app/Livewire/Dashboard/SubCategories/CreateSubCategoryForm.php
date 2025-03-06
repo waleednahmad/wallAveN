@@ -5,13 +5,16 @@ namespace App\Livewire\Dashboard\SubCategories;
 use App\Models\Category;
 use App\Models\SubCategory;
 use App\Traits\GenerateSlugsTrait;
+use App\Traits\UploadImageTrait;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class CreateSubCategoryForm extends Component
 {
-    use GenerateSlugsTrait;
+    use UploadImageTrait, GenerateSlugsTrait, WithFileUploads;
+
 
     #[Validate(['required', 'string', 'max:255'])]
     public $name;
@@ -21,6 +24,9 @@ class CreateSubCategoryForm extends Component
 
     #[Validate(['required', 'exists:categories,id'])]
     public $category_id;
+
+    #[Validate(['nullable', 'image'])]
+    public $image;
 
     // =============================
     // ========= COMPUTED =========
@@ -40,6 +46,8 @@ class CreateSubCategoryForm extends Component
             'slug' => $this->generateUniqueSlug(new SubCategory(), $this->name),
             'status' => $this->status,
             'category_id' => $this->category_id,
+            'image' => $this->image ? $this->saveImage($this->image, 'sub-categories') : null,
+
         ]);
 
         $this->reset(['name', 'status', 'category_id']);
@@ -48,7 +56,7 @@ class CreateSubCategoryForm extends Component
         $this->dispatch('closeCreateForm');
     }
 
-    
+
     public function render()
     {
         return view('livewire.dashboard.sub-categories.create-sub-category-form');

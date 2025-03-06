@@ -24,9 +24,9 @@ class FrontController extends Controller
         return view('frontend.shop');
     }
 
-    public function showProduct($handle)
+    public function showProduct($slug)
     {
-        $product = Product::where('handle', $handle)->whereNotNull('title')->first();
+        $product = Product::where('slug', $slug)->first();
         if (!$product) {
             return redirect()->route('frontend.home')->with('error', 'Product not found.');
         }

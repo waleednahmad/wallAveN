@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Log;
 
 trait GenerateSlugsTrait
 {
-    public function generateUniqueSlug($model, $title_en,  $col_name = 'alias_name_en')
+    public function generateUniqueSlug($model, $title_en,  $col_name = 'slug')
     {
         // Generate slug from title
         $slug = trim(strtolower(str_replace(array(' ', '"', '>', '<', '#', '%', '|', '/'), '-', trim($title_en))));

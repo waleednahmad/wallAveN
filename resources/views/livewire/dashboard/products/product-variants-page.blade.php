@@ -92,7 +92,7 @@
                                         <span class="badge badge-danger">No image</span>
                                     @endif
                                 </td>
-                                <td>{{ $variant->barcode }}</td>
+                                <td>{{ $variant->barcode ?? '-' }}</td>
                                 <td>{{ $variant->compare_at_price ?? '-' }}</td>
                                 <td>{{ $variant->cost_price ?? '-' }}</td>
                                 <td>{{ $variant->price ?? '-' }}</td>

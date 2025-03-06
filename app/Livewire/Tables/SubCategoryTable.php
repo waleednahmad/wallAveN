@@ -60,6 +60,11 @@ final class SubCategoryTable extends PowerGridComponent
                     return "<span class='badge badge-danger'>inactive</span>";
                 }
             })
+            ->add('image', fn($model) => $model->image ? '<img src="' . asset($model->image) . '" alt="Product Image" 
+            class="img-thumbnail"   
+            style="height:90px; object-fit:contain; width:90px;background-color: #f8f9fa; border-radius: 0.25rem;"
+            
+            >' : '<span class="badge badge-danger">No Image</span>')
             ->add('category_id', function ($row) {
                 return $row->category ? $row->category->name : '';
             })
@@ -72,6 +77,9 @@ final class SubCategoryTable extends PowerGridComponent
             Column::make('Name', 'name')
                 ->sortable()
                 ->searchable(),
+
+            Column::make('Image', 'image'),
+
 
             Column::make('Status', 'status'),
 

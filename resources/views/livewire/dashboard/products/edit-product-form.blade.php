@@ -88,7 +88,24 @@
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
-                                @enderror.
+                                @enderror
+                            </div>
+                        </div>
+
+                        {{-- Decsription --}}
+                        <div class="col-md-12">
+                            <div class="form-group" wire:ignore>
+                                <label for="description">Description
+                                    <span class="text-danger">
+                                        *
+                                    </span>
+                                </label>
+                                <textarea id="description" @class(['form-control', 'is-invalid' => $errors->has('description')]) name="description" required wire:model="description"></textarea>
+                                @error('description')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                             </div>
                         </div>
 
@@ -287,3 +304,27 @@
         </div>
     @endif
 </form>
+
+
+@script
+    <script>
+        $(document).ready(function() {
+            // ------ Description ar ------
+            let desc = document.querySelector('#description');
+            // console.log('loaded');
+            if (desc) {
+                let textEditor = ClassicEditor
+                    .create(desc, {})
+                    .then((editor) => {
+                        editor.model.document.on('change:data', () => {
+                            const data = editor.getData();
+                            @this.set('description', data);
+                        });
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+        });
+    </script>
+@endscript

@@ -49,13 +49,13 @@
                                     Shop
                                 </a>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a href="#">
-                                    {{ $product->tags }}
+                                    {{ $product->categories->first()->name }}
                                 </a>
-                            </li>
+                            </li> --}}
                             <li>
-                                {{ $product->title }}
+                                {{ $product->name }}
                             </li>
                         </ul>
                     </div>

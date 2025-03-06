@@ -35,77 +35,59 @@
                             {{ $vendor }}
                             <br>
                             <br>
-                            SKU <span>#{{ $selectedSku }}</span>
+                            SKU <span>#{{ $sku }}</span>
                         </h6>
                     </div>
                     <h3 class="my-3">
-                        {{ $title }}
+                        {{ $product->name }}
                     </h3>
-                    @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check())
-                        <ul class="artist-info">
-                            <li><span>Price :</span> ${{ $price }}</li>
-                        </ul>
-                    @endif
-                    @if ($option1Name)
+                    {{-- @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check()) --}}
+                    <ul class="artist-info">
+                        <li><span>Price :</span> ${{ $price }}</li>
+                    </ul>
+                    {{-- @endif --}}
+
+                    @if (isset($groupedAttributes) && count($groupedAttributes))
                         <div class="quantity-area">
-                            <h6>{{ $option1Name }}</h6>
-                            <div class="values-container">
-                                @forelse($option1Values as $option1Value)
-                                    <span @class(['active' => $selectedOption1Value == $option1Value])
-                                        wire:click='setSelectedOption1Value("{{ $option1Value }}")'>{{ $option1Value }}</span>
-                                @empty
-                                    <p>No values found</p>
-                                @endforelse
-                            </div>
+                            @foreach ($groupedAttributes as $attribute => $values)
+                                @php
+                                    $attribute_id = $values['id'];
+                                    $values = $values['values'];
+                                @endphp
+
+                                <h6 class="mb-0">{{ $attribute }}</h6>
+                                <div class="mb-3 values-container">
+                                    @forelse($values as $value)
+                                        <span @class(['active' => in_array($value['id'], $selectedAttributeValues)])
+                                            wire:click='selectAttributeValue("{{ $attribute_id }}", "{{ $value['id'] }}")'>
+                                            {{ $value['value'] }}
+                                        </span>
+                                    @empty
+                                        <p>No values found</p>
+                                    @endforelse
+                                </div>
+                            @endforeach
                         </div>
                     @endif
 
-                    @if ($option2Name)
-                        <div class="quantity-area">
-                            <h6>{{ $option2Name }}</h6>
-                            <div class="values-container">
-                                @forelse($option2Values as $option2Value)
-                                    <span @class(['active' => $selectedOption2Value == $option2Value])
-                                        wire:click="setSelectedOption2Value('{{ $option2Value }}')">{{ $option2Value }}</span>
-                                @empty
-                                    <p>No values found</p>
-                                @endforelse
-                            </div>
+                    {{-- @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check()) --}}
+                    {{-- ========== Add To Cart ========= --}}
+                    <div class="add-to-cart">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <button class="btn" wire:click="decreaseQuantity"
+                                style="background-color: #f5f5f5; color: #000;">-</button>
+                            <input type="number" style="min-width: max-content; padding: 5px; border: none"
+                                wire:model="quantity" min="1">
+                            <button class="btn" wire:click="increaseQuantity"
+                                style="background-color: #f5f5f5; color: #000;">+</button>
                         </div>
-                    @endif
-
-                    @if ($option3Name)
-                        <div class="quantity-area">
-                            <h6>{{ $option3Name }}</h6>
-                            <div class="values-container">
-                                @forelse($option3Values as $option3Value)
-                                    <span @class(['active' => $selectedOption3Value == $option3Value])
-                                        wire:click="setSelectedOption3Value('{{ $option3Value }}')">{{ $option3Value }}</span>
-                                @empty
-                                    <p>No values found</p>
-                                @endforelse
-                            </div>
-                        </div>
-                    @endif
-
-                    @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check())
-                        {{-- ========== Add To Cart ========= --}}
-                        <div class="add-to-cart">
-                            <div style="display: flex; gap: 10px; align-items: center;">
-                                <button class="btn" wire:click="decreaseQuantity"
-                                    style="background-color: #f5f5f5; color: #000;">-</button>
-                                <input type="number" style="min-width: max-content; padding: 5px; border: none"
-                                    wire:model="quantity" min="1">
-                                <button class="btn" wire:click="increaseQuantity"
-                                    style="background-color: #f5f5f5; color: #000;">+</button>
-                            </div>
-                            <button class="mt-3 btn" wire:click="addToCart"
-                                style="background-color: #000; color: #fff; max-width: fit-content; padding: 10px 20px;">
-                                Add to Cart
-                            </button>
-                        </div>
-                        {{-- ========== End Add To Cart ========= --}}
-                    @endif
+                        <button class="mt-3 btn" wire:click="addToCart"
+                            style="background-color: #000; color: #fff; max-width: fit-content; padding: 10px 20px;">
+                            Add to Cart
+                        </button>
+                    </div>
+                    {{-- ========== End Add To Cart ========= --}}
+                    {{-- @endif --}}
 
                 </div>
             </div>
@@ -114,7 +96,7 @@
             {!! str_replace(
                 'ðŸ‡ºðŸ‡',
                 '<img src="' . asset('assets/america-flag.webp') . '" alt="" style="height: 30px; object-fit: contain;">',
-                $bodyHtml,
+                $description,
             ) !!}
         </div>
     </div>

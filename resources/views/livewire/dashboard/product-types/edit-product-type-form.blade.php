@@ -19,6 +19,33 @@
                 </div>
             </div>
 
+            {{-- Image --}}
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="e_image">Image
+
+                    </label>
+                    <input type="file" @class(['form-control', 'is-invalid' => $errors->has('image')]) id="e_image" name="image" accept="image/*"
+                        wire:model="image">
+                    @error('image')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                    @if ($image)
+                        <div class="mt-2">
+                            <img src="{{ $image->temporaryUrl() }}" alt="Image Preview" class="img-thumbnail"
+                                style="max-width: 200px;">
+                        </div>
+                    @elseif($productType?->image && file_exists(public_path($productType?->image)))
+                        <div class="mt-2">
+                            <img src="{{ asset($productType->image) }}" alt="Image Preview" class="img-thumbnail"
+                                style="max-width: 200px;">
+                        </div>
+                    @endif
+                </div>
+            </div>
+
             {{-- Status --}}
             <div class="col-12">
                 <div class="form-group">

@@ -23,10 +23,10 @@ final class CategoryTable extends PowerGridComponent
             PowerGrid::header()
                 ->showSearchInput(),
             PowerGrid::footer()
-            ->showPerPage(
-                $perPage = 20,
-                $perPageValues = [10, 25, 50, 100, 0]
-            )
+                ->showPerPage(
+                    $perPage = 20,
+                    $perPageValues = [10, 25, 50, 100, 0]
+                )
                 ->showRecordCount(),
         ];
     }
@@ -53,6 +53,11 @@ final class CategoryTable extends PowerGridComponent
                     return "<span class='badge badge-danger'>inactive</span>";
                 }
             })
+            ->add('image', fn($model) => $model->image ? '<img src="' . asset($model->image) . '" alt="Product Image" 
+            class="img-thumbnail"   
+            style="height:90px; object-fit:contain; width:90px;background-color: #f8f9fa; border-radius: 0.25rem;"
+            
+            >' : '<span class="badge badge-danger">No Image</span>')
             ->add('created_at');
     }
 
@@ -62,6 +67,8 @@ final class CategoryTable extends PowerGridComponent
             Column::make('Name', 'name')
                 ->sortable()
                 ->searchable(),
+
+            Column::make('Image', 'image'),
 
             Column::make('Status', 'status'),
 
@@ -77,7 +84,7 @@ final class CategoryTable extends PowerGridComponent
     {
         return [
             Filter::datepicker('created_at', 'created_at'),
-            
+
             Filter::boolean('status')
                 ->label('active', 'inactive'),
         ];
