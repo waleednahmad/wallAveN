@@ -7,6 +7,7 @@ use App\Models\Product;
 use Livewire\Component;
 use App\Models\Category;
 use App\Models\Attribute;
+use App\Models\ProductType;
 use App\Models\SubCategory;
 use Livewire\WithFileUploads;
 use App\Traits\UploadImageTrait;
@@ -161,11 +162,11 @@ class CreateProductForm extends Component
             ->with('productTypes')->get();
 
         // ------------ set product types ------------
-        $this->productTypes = SubCategory::whereIn('id', $this->selectedSubCategories)
+        $this->productTypes = ProductType::whereIn('sub_category_id', $this->selectedSubCategories)
             ->when($this->searchProductType, function ($query) {
                 $query->where('name', 'like', '%' . $this->searchProductType . '%');
             })
-            ->with('productTypes')->get();
+            ->get();
 
         return view('livewire.dashboard.products.create-product-form');
     }

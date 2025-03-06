@@ -5,6 +5,7 @@ namespace App\Livewire\Dashboard\Products;
 use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductType;
 use App\Models\SubCategory;
 use App\Models\Vendor;
 use App\Traits\GenerateSlugsTrait;
@@ -214,10 +215,10 @@ class EditProductForm extends Component
 
     private function getProductTypes()
     {
-        return SubCategory::whereIn('id', $this->selectedSubCategories)
+        return ProductType::whereIn('sub_category_id', $this->selectedSubCategories)
             ->when($this->searchProductType, function ($query) {
                 $query->where('name', 'like', '%' . $this->searchProductType . '%');
             })
-            ->with('productTypes')->get();
+            ->get();
     }
 }
