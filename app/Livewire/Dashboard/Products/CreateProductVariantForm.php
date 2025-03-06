@@ -65,7 +65,6 @@ class CreateProductVariantForm extends Component
 
     public function save()
     {
-        dd($this->selectedAttributeValues);
         $this->validate();
 
         if ($this->isDuplicate('sku', $this->sku)) {
