@@ -90,6 +90,11 @@ class EditProductVariantForm extends Component
             return;
         }
 
+        if (count($this->selectedAttributeValues) !== $this->product->attributes->count()) {
+            $this->dispatch('error', 'Please select all attribute values.');
+            return;
+        }
+
         DB::beginTransaction();
         try {
             $this->variant->update([

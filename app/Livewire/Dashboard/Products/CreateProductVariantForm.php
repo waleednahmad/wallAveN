@@ -67,6 +67,12 @@ class CreateProductVariantForm extends Component
     {
         $this->validate();
 
+        // Make sure the selectedAttributeValues must be equal to the product's attributes count
+        if (count($this->selectedAttributeValues) !== $this->product->attributes->count()) {
+            $this->dispatch('error', 'Please select all attribute values.');
+            return;
+        }
+
         if ($this->isDuplicate('sku', $this->sku)) {
             $this->dispatch('error', 'Product variant with this SKU already exists.');
             return;
