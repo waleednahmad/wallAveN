@@ -36,7 +36,7 @@ final class ProductTable extends PowerGridComponent
     #[On('refreshProductTable')]
     public function datasource(): Builder
     {
-        return Product::withCount('images');
+        return Product::withCount(['images', 'variants']);
     }
 
     public function relationSearch(): array
@@ -73,8 +73,10 @@ final class ProductTable extends PowerGridComponent
 
 
             Column::make('Images Count', 'images_count')
-                ->sortable()
-                ->searchable(),
+                ->sortable(),
+
+            Column::make('Variants Count', 'variants_count')
+                ->sortable(),
 
             Column::action('Action')
         ];

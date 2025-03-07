@@ -4,55 +4,42 @@ namespace App\Livewire\Frontend;
 
 use App\Models\CartTemp;
 use App\Models\Product;
-use Illuminate\Container\Attributes\Log;
-use Illuminate\Support\Facades\Log as FacadesLog;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class ProductPage extends Component
 {
-
     public $product;
-    public $name, $description, $image, $sku;
+    public $name, $description, $image;
+    public $defaultVariant;
     public $groupedAttributes = [];
-
+    public $price;
     public $selectedAttributeValues = [];
-
-
-
-
-    public $option1Name;
-    public $option1Values = [];
-    public $option2Name;
-    public $option2Values = [];
-    public $option3Name;
-    public $option3Values = [];
+    public $option1Name, $option1Values = [];
+    public $option2Name, $option2Values = [];
+    public $option3Name, $option3Values = [];
     public $selectedSku;
     public $title;
     public $vendor;
     public $bodyHtml;
-    public $price;
-
-
     public $imagesGallery = [];
     public $relatedProducts = [];
-
     public $quantity = 1;
+    public $variantNotFound = false;
 
     public function mount($product)
     {
         $this->product = $product->load("variants.attributeValues.attribute");
-        $this->initializeProductDetails($product);
-        $this->initializeOptions($product);
-        $this->setDefaultOptionValues();
+        $this->initializeProductDetails();
+        $this->setDefaultAttributeValues();
         $this->updateProductVariant();
-        $this->setRelatedProducts();
     }
 
-    private function initializeProductDetails($product)
+    private function initializeProductDetails()
     {
         $groupedAttributes = [];
 
-        foreach ($product->variants as $variant) {
+        foreach ($this->product->variants as $variant) {
             foreach ($variant->attributeValues as $attributeValue) {
                 $attributeName = $attributeValue->attribute->name;
                 $attributeId = $attributeValue->attribute->id;
@@ -74,164 +61,60 @@ class ProductPage extends Component
                 }
             }
         }
+
         $this->groupedAttributes = $groupedAttributes;
-
-
-        $this->sku = $product->sku;
-        $this->selectedSku = $product->variant_sku;
-        $this->image = $product->variant_image ?? $product->image_src;
-        $this->title = $product->title;
-        $this->vendor = $product->vendor ? $product->vendor->name : null;
-        $this->description = $product->description;
-        $this->price = $product->variant_price ?? 0;
-        // $this->imagesGallery = Product::where('sku', $product->sku)
-        //     ->whereNotNull('Image Src')
-        //     ->select('Image Src')
-        //     ->get()
-        //     ->pluck('Image Src')
-        //     ->unique();
+        $this->vendor = $this->product->vendor ? $this->product->vendor->name : null;
+        $this->description = $this->product->description;
+        $this->imagesGallery = $this->product->images;
     }
 
-    private function initializeOptions($product)
+    public function setDefaultAttributeValues()
     {
-        // $this->option1Name = $product->option1_name;
-        // $this->option2Name = $product->option2_name;
-        // $this->option3Name = $product->option3_name;
+        $firstVariant = $this->product->variants->first();
+        if ($firstVariant) {
+            foreach ($firstVariant->attributeValues as $attributeValue) {
+                $attributeId = $attributeValue->attribute->id;
+                $this->selectedAttributeValues[$attributeId] = $attributeValue->id;
+            }
 
-        // $options = Product::where('sku', $product->sku)
-        //     ->select('Option1 Value', 'Option2 Value', 'Option3 Value')
-        //     ->get();
-
-        // $this->option1Values = $options->pluck('Option1 Value')->filter()->unique()->values()->toArray();
-        // $this->option2Values = $options->pluck('Option2 Value')->filter()->unique()->values()->toArray();
-        // $this->option3Values = $options->pluck('Option3 Value')->filter()->unique()->values()->toArray();
-    }
-
-    private function setRelatedProducts()
-    {
-        $this->relatedProducts = [];
-
-        // Product::where('vendor', $this->vendor)
-        //     ->where('sku', '!=', $this->sku)
-        //     ->whereNotNull('tags')
-        //     ->whereNotNull('title')
-        //     ->where('tags', 'like', '%' . $this->product->tags . '%')
-        //     ->take(6)
-        //     ->inRandomOrder()
-        //     ->get();
-    }
-
-    private function setDefaultOptionValues()
-    {
-        $this->selectedOption1Value = $this->option1Values[0] ?? null;
-        $this->selectedOption2Value = $this->option2Values[0] ?? null;
-        $this->selectedOption3Value = $this->option3Values[0] ?? null;
-    }
-
-    public function setSelectedOption1Value($value)
-    {
-        $this->selectedOption1Value = $value;
-        $this->updateProductVariant();
-    }
-
-    public function setSelectedOption2Value($value)
-    {
-        $this->selectedOption2Value = $value;
-        $this->updateProductVariant();
-    }
-
-    public function setSelectedOption3Value($value)
-    {
-        $this->selectedOption3Value = $value;
-        $this->updateProductVariant();
+            $this->defaultVariant = $firstVariant;
+            $this->selectedSku = $firstVariant->sku;
+            $this->price = $firstVariant->price;
+            $this->variantNotFound = false;
+        }
     }
 
     private function updateProductVariant()
     {
-        $productSize = str_replace(['"', ' ', 'x'], '', $this->selectedOption2Value);
-        $productMaterial = strtoupper(substr($this->selectedOption3Value, 0, 2));
+        $variant = $this->product->variants->first(function ($variant) {
+            return collect($this->selectedAttributeValues)->every(function ($value, $key) use ($variant) {
+                return in_array($value, $variant->attributeValues->pluck('id')->toArray());
+            });
+        });
 
-        $variantSku = "{$productMaterial}-{$this->sku}-{$productSize}";
-        // dd($variantSku);
-        // $product = Product::where('Variant SKU', $variantSku)->first();
-
-        if (true) {
-            $this->product = new Product();
-            $this->image = $this->product->variant_image ?? $this->product->image_src;
-            $this->selectedSku = $this->product->variant_sku;
-            $this->price = $this->product->variant_price;
+        if ($variant) {
+            $this->selectedSku = $variant->sku;
+            $this->image = $variant->image ?? $this->product->image;
+            $this->price = $variant->price;
+            $this->variantNotFound = false;
         } else {
-            $this->resetToDefaultVariant();
-            $this->dispatch('error', 'This variant is not available');
+            $this->variantNotFound = true;
         }
+    }
 
-        $this->quantity = 1;
+    public function resetDefaultVariant()
+    {
+        $this->selectedAttributeValues = [];
+        $this->setDefaultAttributeValues();
+        $this->updateProductVariant();
     }
 
     private function resetToDefaultVariant()
     {
-        $this->product = Product::where('sku', $this->sku)->whereNotNull('title')->first();
-        $this->selectedSku = $this->product->variant_sku;
-        $this->image = $this->product->variant_image ?? $this->product->image;
-        $this->price = $this->product->variant_price;
-
-        $this->quantity = 1;
+        $this->resetDefaultVariant();
+        $this->dispatch('error', 'No variant found for the selected attributes');
     }
 
-
-    public function addToCart()
-    {
-        if (!auth('dealer')->check() && !auth('representative')->check()) {
-            return redirect()->route('login')->with('error', 'Please login to add item to cart');
-        }
-
-        if (auth('representative')->check() && !auth('representative')->user()->buyingFor()->exists()) {
-            $this->dispatch('error', 'You need to select a dealer to add item to cart');
-            $this->dispatch('openDealerSelectionModal');
-            return;
-        }
-
-        $item = CartTemp::where('product_id', $this->product->id)
-            ->where('variant_sku', $this->selectedSku)
-            ->where('option1_value', $this->selectedOption1Value)
-            ->where('option2_value', $this->selectedOption2Value)
-            ->where('option3_value', $this->selectedOption3Value)
-            ->first();
-
-        if ($item) {
-            $item->quantity += $this->quantity;
-            $item->total = $item->quantity * $item->price;
-            $item->save();
-        } else {
-            CartTemp::create([
-                'dealer_id' => auth('dealer')->id() ?? null,
-                'representative_id' => auth('representative')->id() ?? null,
-                'product_id' => $this->product->id,
-                'variant_sku' => $this->selectedSku,
-                'variant_image' => $this->image,
-                'title' => $this->title,
-                'vendor' => $this->vendor,
-                'option1_name' => $this->option1Name,
-                'option1_value' => $this->selectedOption1Value,
-                'option2_name' => $this->option2Name,
-                'option2_value' => $this->selectedOption2Value,
-                'option3_name' => $this->option3Name,
-                'option3_value' => $this->selectedOption3Value,
-                'sku' => $this->sku,
-                'quantity' => $this->quantity,
-                'price' => $this->product->variant_price,
-                'total' => $this->quantity * $this->product->variant_price,
-            ]);
-        }
-
-        $this->dispatch('success', 'Item added to cart');
-        $this->dispatch('openCartOffcanva');
-        $this->resetToDefaultVariant();
-    }
-
-    // ============================
-    // Public Methods ✅
-    // ============================
     public function increaseQuantity()
     {
         $this->quantity++;
@@ -250,15 +133,13 @@ class ProductPage extends Component
     public function selectAttributeValue($attributeId, $valueId)
     {
         $this->selectedAttributeValues[$attributeId] = $valueId;
-        // $this->updateProductVariant();
+        $this->updateProductVariant();
     }
-
-
-
-
 
     public function render()
     {
-        return view('livewire.frontend.product-page');
+        return view('livewire.frontend.product-page', [
+            'variantNotFound' => $this->variantNotFound,
+        ]);
     }
 }

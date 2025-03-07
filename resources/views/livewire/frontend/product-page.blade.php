@@ -10,7 +10,7 @@
                             <ul class="splide__list">
                                 @foreach ($imagesGallery as $galleryItem)
                                     <li class="splide__slide" data-splide-interval="3000">
-                                        <img src="{{ $galleryItem }}" alt="" loading="lazy">
+                                        <img src="{{ asset($galleryItem->image) }}" alt="" loading="lazy">
                                     </li>
                                 @endforeach
                             </ul>
@@ -20,7 +20,7 @@
                         <ul id="thumbnails" class="thumbnails">
                             @foreach ($imagesGallery as $galleryItem)
                                 <li class="thumbnail">
-                                    <img src="{{ $galleryItem }}" alt="" loading="lazy">
+                                    <img src="{{ asset($galleryItem->image) }}" alt="" loading="lazy">
                                 </li>
                             @endforeach
                         </ul>
@@ -35,17 +35,17 @@
                             {{ $vendor }}
                             <br>
                             <br>
-                            SKU <span>#{{ $sku }}</span>
+                            SKU <span>#{{ $selectedSku }}</span>
                         </h6>
                     </div>
                     <h3 class="my-3">
                         {{ $product->name }}
                     </h3>
-                    {{-- @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check()) --}}
-                    <ul class="artist-info">
-                        <li><span>Price :</span> ${{ $price }}</li>
-                    </ul>
-                    {{-- @endif --}}
+                    @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check())
+                        <ul class="artist-info">
+                            <li><span>Price :</span> ${{ $price }}</li>
+                        </ul>
+                    @endif
 
                     @if (isset($groupedAttributes) && count($groupedAttributes))
                         <div class="quantity-area">
@@ -70,24 +70,36 @@
                         </div>
                     @endif
 
-                    {{-- @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check()) --}}
-                    {{-- ========== Add To Cart ========= --}}
-                    <div class="add-to-cart">
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <button class="btn" wire:click="decreaseQuantity"
-                                style="background-color: #f5f5f5; color: #000;">-</button>
-                            <input type="number" style="min-width: max-content; padding: 5px; border: none"
-                                wire:model="quantity" min="1">
-                            <button class="btn" wire:click="increaseQuantity"
-                                style="background-color: #f5f5f5; color: #000;">+</button>
+                    @if ($variantNotFound)
+                        <div class="alert alert-warning" style="text-align: center;" wire:tranistion>
+                            No variant found for the selected attributes. Please try different combinations.
+                            <br>
+                            <button wire:click="setDefaultAttributeValues" class="mt-2 btn btn-sm btn-secondary">
+                                Reset
+                            </button>
                         </div>
-                        <button class="mt-3 btn" wire:click="addToCart"
-                            style="background-color: #000; color: #fff; max-width: fit-content; padding: 10px 20px;">
-                            Add to Cart
-                        </button>
-                    </div>
-                    {{-- ========== End Add To Cart ========= --}}
-                    {{-- @endif --}}
+                    @endif
+
+                    @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check())
+                        {{-- ========== Add To Cart ========= --}}
+                        <div class="add-to-cart">
+                            @if (!$variantNotFound)
+                                <div style="display: flex; gap: 10px; align-items: center;" wire:tranistion>
+                                    <button class="btn" wire:click="decreaseQuantity"
+                                        style="background-color: #f5f5f5; color: #000;">-</button>
+                                    <input type="number" style="min-width: max-content; padding: 5px; border: none"
+                                        wire:model="quantity" min="1">
+                                    <button class="btn" wire:click="increaseQuantity"
+                                        style="background-color: #f5f5f5; color: #000;">+</button>
+                                </div>
+                            @endif
+                            <button class="mt-3 btn" wire:click="addToCart" @disabled($variantNotFound)
+                                style="background-color: #000; color: #fff; max-width: fit-content; padding: 10px 20px;">
+                                Add to Cart
+                            </button>
+                        </div>
+                        {{-- ========== End Add To Cart ========= --}}
+                    @endif
 
                 </div>
             </div>

@@ -10,7 +10,7 @@ class EditVariantAttributeValuesForm extends Component
 {
 
 
-    public $variant;
+    public $variant, $product;
     public $productAttributesWithValues = [];
     public $selectedAttributeValues = [];
 
@@ -19,6 +19,7 @@ class EditVariantAttributeValuesForm extends Component
     public function setVariant(ProductVariant $variant)
     {
         $this->variant = $variant;
+        $this->product = $variant->product;
 
         $this->productAttributesWithValues = $this->variant->product->attributes ? $this->variant->product->attributes->map(function ($attribute) {
             return [
@@ -37,7 +38,15 @@ class EditVariantAttributeValuesForm extends Component
     }
 
 
-    public function save(){
+    public function save()
+    {
+        if (count($this->selectedAttributeValues) !== $this->product->attributes->count()) {
+            $this->dispatch('error', 'Please select all attribute values.');
+            return;
+        }
+
+
+
         $this->variant->attributeValues()->sync($this->selectedAttributeValues);
 
         $this->dispatch('closeEditVariantAttributesOffcanvas');
