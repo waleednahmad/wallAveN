@@ -45,6 +45,12 @@ class EditVariantAttributeValuesForm extends Component
             return;
         }
 
+        if ($this->checkOnExistVaraintWithSameAttributeValues()) {
+            $this->dispatch('error', 'Product variant with this attribute values already exists.');
+            return;
+        }
+
+
 
 
         $this->variant->attributeValues()->sync($this->selectedAttributeValues);
@@ -58,6 +64,26 @@ class EditVariantAttributeValuesForm extends Component
     public function selectAttributeValue($attributeId, $valueId)
     {
         $this->selectedAttributeValues[$attributeId] = $valueId;
+    }
+
+    private function checkOnExistVaraintWithSameAttributeValues()
+    {
+        $existingVariants = ProductVariant::where('product_id', $this->product->id)
+            ->where('id', '!=', $this->variant->id)
+            ->get();
+
+        foreach ($existingVariants as $variant) {
+            $variantAttributeValues = $variant->attributeValues->pluck('id')->toArray();
+            sort($variantAttributeValues);
+            $selectedAttributeValues = $this->selectedAttributeValues;
+            sort($selectedAttributeValues);
+
+            if ($variantAttributeValues == $selectedAttributeValues) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 

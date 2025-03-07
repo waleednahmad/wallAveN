@@ -95,6 +95,12 @@ class EditProductVariantForm extends Component
             return;
         }
 
+        if ($this->checkOnExistVaraintWithSameAttributeValues()) {
+            $this->dispatch('error', 'Product variant with this attribute values already exists.');
+            return;
+        }
+
+
         DB::beginTransaction();
         try {
             $this->variant->update([
@@ -122,6 +128,27 @@ class EditProductVariantForm extends Component
     private function isValidSku()
     {
         return str_contains($this->sku, $this->product->sku);
+    }
+
+
+    private function checkOnExistVaraintWithSameAttributeValues()
+    {
+        $existingVariants = ProductVariant::where('product_id', $this->product->id)
+            ->where('id', '!=', $this->variant->id)
+            ->get();
+
+        foreach ($existingVariants as $variant) {
+            $variantAttributeValues = $variant->attributeValues->pluck('id')->toArray();
+            sort($variantAttributeValues);
+            $selectedAttributeValues = $this->selectedAttributeValues;
+            sort($selectedAttributeValues);
+
+            if ($variantAttributeValues == $selectedAttributeValues) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function resetForm()
