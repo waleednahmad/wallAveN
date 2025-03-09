@@ -135,7 +135,7 @@ class CreateProductForm extends Component
             $product->attributes()->sync($this->selectedAttributes);
 
             DB::commit();
-            return redirect()->route('dashboard.products.index')->with('success', "Product created successfully.");
+            return redirect()->route('dashboard.products.create-variant', $product->id)->with('success', "Product created successfully.");
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error creating product: ' . $e->getMessage());
