@@ -80,23 +80,58 @@
 .filter-container-label {
     padding: 3px 8px;
     margin-bottom: 0;
-    border: 1px solid #d3d3d3;
-    width: 100%;
     border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .filter-container-label:hover {
+    cursor: pointer;
+}
+
+.filter-container-label span.check-icon {
+
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border: 1px solid #d3d3d3;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.filter-container-label span.check-icon .filter-container-label:hover {
     background: #f5f5f5;
     border: 1px solid #000;
     cursor: pointer;
 }
 
-.filter-container-label.active {
+/* .filter-container-label.active {
     background: #000;
     color: #fff;
     border: 1px solid #000;
-}
+} */
 
 .sidebar-area .single-widgets .checkbox-container ul li {
     margin-bottom: 5px;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px rgb(161, 142, 142);
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgb(77, 76, 76);
+    border-radius: 10px;
 }

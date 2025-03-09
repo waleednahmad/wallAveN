@@ -95,6 +95,16 @@ class ShopPage extends Component
         }
     }
 
+    public function clearAllFilters()
+    {
+        $this->search = '';
+        $this->selectedCategories = [];
+        $this->selectedSubCategories = [];
+        $this->selectedProductTypes = [];
+        $this->productTypes = [];
+        $this->subCategories = [];
+    }
+
     #[Computed()]
     public function categories()
     {

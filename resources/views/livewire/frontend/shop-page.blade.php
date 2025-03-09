@@ -19,7 +19,25 @@
                             </div>
                         </form>
                     </div>
-                    <div class="single-widgets mb-50" style="max-height: 450px; overflow-y: auto; overflow-x: hidden;">
+                    <div class="single-widgets mb-50"
+                        style="max-height: 450px; overflow-y: auto; overflow-x: hidden; position: relative;">
+                        {{-- $this->search = '';
+                        $this->selectedCategories = [];
+                        $this->selectedSubCategories = [];
+                        $this->selectedProductTypes = [];
+                        $this->productTypes = [];
+                        $this->subCategories = []; --}}
+                        @if (
+                            (isset($search) && $search != '') ||
+                                (isset($selectedCategories) && count($selectedCategories) > 0) ||
+                                (isset($selectedSubCategories) && count($selectedSubCategories) > 0) ||
+                                (isset($selectedProductTypes) && count($selectedProductTypes) > 0))
+                            <button class="btn btn-danger btn-sm" wire:click="clearAllFilters()" wire:tranisition
+                                title="Clear All Filters"
+                                style="position: absolute; top: 0; right: 10px; z-index: 1000;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        @endif
                         <div class="widget-title">
                             <h5>Categories</h5>
                         </div>
@@ -32,6 +50,11 @@
                                             'active' => in_array($category->id, $selectedCategories),
                                         ])
                                             wire:click="setProperty('selectedCategories', '{{ $category->id }}')">
+                                            <span class="check-icon">
+                                                @if (in_array($category->id, $selectedCategories))
+                                                    <i class="fas fa-check"></i>
+                                                @endif
+                                            </span>
 
                                             <span>{{ $category->name }} </span>
                                         </label>
@@ -53,6 +76,11 @@
                                                 'active' => in_array($subCategory->id, $selectedSubCategories),
                                             ])
                                                 wire:click="setProperty('selectedSubCategories', '{{ $subCategory->id }}')">
+                                                <span class="check-icon">
+                                                    @if (in_array($subCategory->id, $selectedSubCategories))
+                                                        <i class="fas fa-check"></i>
+                                                    @endif
+                                                </span>
 
                                                 <span>
                                                     {{ $subCategory->name }}
@@ -78,6 +106,11 @@
                                                 'active' => in_array($productType->id, $selectedProductTypes),
                                             ])
                                                 wire:click="setProperty('selectedProductTypes', '{{ $productType->id }}')">
+                                                <span class="check-icon">
+                                                    @if (in_array($productType->id, $selectedProductTypes))
+                                                        <i class="fas fa-check"></i>
+                                                    @endif
+                                                </span>
                                                 <span>
                                                     {{ $productType->name }}
                                                 </span>
