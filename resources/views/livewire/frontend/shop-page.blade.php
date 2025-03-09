@@ -20,26 +20,6 @@
                         </form>
                     </div>
                     <div class="single-widgets mb-50" style="max-height: 450px; overflow-y: auto; overflow-x: hidden;">
-                        {{-- <div class="widget-title">
-                            <h5>Types</h5>
-                        </div>
-                        <div class="checkbox-container">
-                            <ul>
-                                @foreach ($this->productTypes as $productType)
-                                    <li>
-                                        <label class="containerss">
-                                            <input type="checkbox" wire:model="selectedType" value="{{ $productType }}"
-                                                wire:change='setProperty("types", "{{ $productType }}")'
-                                                {{ in_array($productType, $properties['types']) ? 'checked' : '' }}>
-                                            <span class="checkmark"></span>
-                                            <span>{{ $productType }}</span>
-                                        </label>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        <hr> --}}
-
                         <div class="widget-title">
                             <h5>Categories</h5>
                         </div>
@@ -47,19 +27,20 @@
                             <ul>
                                 @foreach ($this->categories as $category)
                                     <li>
-                                        <label class="containerss">
-                                            <input type="checkbox" wire:model="selectedType" value="{{ $category->id }}"
-                                                wire:change='setProperty("categories", "{{ $category->id }}")'
-                                                {{ in_array($category->id, $properties['categories']) ? 'checked' : '' }}>
-                                            <span class="checkmark"></span>
-                                            <span>{{ $category->name }} ({{ $category->products_count }})</span>
+                                        <label @class([
+                                            'filter-container-label',
+                                            'active' => in_array($category->id, $selectedCategories),
+                                        ])
+                                            wire:click="setProperty('selectedCategories', '{{ $category->id }}')">
+
+                                            <span>{{ $category->name }} </span>
                                         </label>
                                     </li>
                                 @endforeach
                             </ul>
                         </div>
                         <hr>
-                        {{-- @if (isset($subCategories) && count($subCategories) > 0)
+                        @if (isset($subCategories) && count($subCategories) > 0)
                             <div class="widget-title">
                                 <h5>Sub Categories</h5>
                             </div>
@@ -67,14 +48,14 @@
                                 <ul>
                                     @foreach ($this->subCategories as $subCategory)
                                         <li>
-                                            <label class="containerss">
-                                                <input type="checkbox" wire:model="selectedType"
-                                                    value="{{ $subCategory->id }}"
-                                                    wire:change='setProperty("subCategories", "{{ $subCategory->id }}")'
-                                                    {{ in_array($subCategory->id, $properties['subCategories']) ? 'checked' : '' }}>
-                                                <span class="checkmark"></span>
-                                                <span>{{ $subCategory->name }}
-                                                    ({{ $subCategory->products_count }})
+                                            <label @class([
+                                                'filter-container-label',
+                                                'active' => in_array($subCategory->id, $selectedSubCategories),
+                                            ])
+                                                wire:click="setProperty('selectedSubCategories', '{{ $subCategory->id }}')">
+
+                                                <span>
+                                                    {{ $subCategory->name }}
                                                 </span>
                                             </label>
                                         </li>
@@ -82,7 +63,31 @@
                                 </ul>
                             </div>
                             <hr>
-                        @endif --}}
+                        @endif
+                        @if (isset($productTypes) && count($productTypes) > 0)
+
+                            <div class="widget-title">
+                                <h5>Product Types</h5>
+                            </div>
+                            <div class="checkbox-container">
+                                <ul>
+                                    @foreach ($this->productTypes as $productType)
+                                        <li>
+                                            <label @class([
+                                                'filter-container-label',
+                                                'active' => in_array($productType->id, $selectedProductTypes),
+                                            ])
+                                                wire:click="setProperty('selectedProductTypes', '{{ $productType->id }}')">
+                                                <span>
+                                                    {{ $productType->name }}
+                                                </span>
+                                            </label>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            <hr>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -138,10 +143,10 @@
                 </div>
                 <div class="list-grid-product-wrap">
                     <div class="row gy-4">
-                        @forelse ($products as $product)
-                            <div class="col-lg-4 col-md-6 item ">
-                                <livewire:frontend.components.product-card-component :product="$product"
-                                    wire:key="item-{{ $product->id }}-card" />
+                        @forelse ($products as $productItem)
+                            <div class="col-lg-4 col-md-6 item" wire:key="{{ $productItem->id }}-card">
+                                <livewire:frontend.components.product-card-component :product="$productItem"
+                                    :key="$productItem->id" />
                             </div>
                         @empty
                             <div class="col-lg-12">

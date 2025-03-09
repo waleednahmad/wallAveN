@@ -13,7 +13,7 @@
         "laravel/breeze": "^2.3",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
-        "livewire/livewire": "^3.5",
+        "livewire/livewire": "*",
         "power-components/livewire-powergrid": "^6.1"
     },
     "require-dev": {

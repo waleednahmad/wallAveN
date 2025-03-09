@@ -3,14 +3,17 @@
 
         <div class="auction-card-img-wrap" style="height: 200px; overflow: hidden; border-radius: 10px;">
             <a href="{{ route('frontend.product', $product->slug) }}" class="card-img">
-                <img src="{{ asset($product->image) }}" loading="lazy" style="object-fit: contain; width: 100%; height: 100%;"
-                    alt="{{ $product->name }}">
+                <img src="{{ asset($product->image) }}" loading="lazy"
+                    style="object-fit: contain; width: 100%; height: 100%;" alt="{{ $product->name }}">
             </a>
         </div>
         <div class="auction-card-content">
             <h6>
                 <a href="{{ route('frontend.product', $product->slug) }}">
                     {{ $product->name }}
+                    <span wire:loading>
+                        loading <i class="fas fa-spinner fa-spin"></i>
+                    </span>
                 </a>
             </h6>
             <ul>

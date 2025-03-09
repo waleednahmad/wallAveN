@@ -26,18 +26,6 @@
 <script src="{{ asset('assets/js/main.js') }}"></script>
 
 
-<script type="speculationrules">
-    {
-        "prerender" : [
-            {
-                "urls" : [
-                    "/" ,"/shop" ,"/login" ,"/register", "representative/register"
-                ],
-                "eagrness" : "moderate"
-            }
-        ]
-    }
-  </script>
 
 <script>
     // ========== Toaster Mssages ==========
