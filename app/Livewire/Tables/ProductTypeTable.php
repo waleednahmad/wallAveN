@@ -71,24 +71,19 @@ final class ProductTypeTable extends PowerGridComponent
         return [
             Column::make('#', 'row_num'),
 
+            Column::make('Image', 'image'),
             Column::make('Name', 'name')
                 ->sortable()
                 ->searchable(),
-            Column::make('Image', 'image'),
 
-
+            Column::make('SubCategory', 'sub_category_id'),
+            
             Column::make('status', 'status')
                 ->toggleable(
                     hasPermission: auth()->check(),
                     trueLabel: '<span class="text-green-500">Yes</span>',
                     falseLabel: '<span class="text-red-500">No</span>',
                 ),
-
-            Column::make('SubCategory', 'sub_category_id'),
-
-
-
-
             Column::action('Action')
         ];
     }
@@ -148,7 +143,7 @@ final class ProductTypeTable extends PowerGridComponent
         ]);
         $this->dispatch('success', 'Status updated successfully');
     }
-     public function getRowNum($row): int
+    public function getRowNum($row): int
     {
         return $this->datasource()->pluck('id')->search($row->id) + 1;
     }

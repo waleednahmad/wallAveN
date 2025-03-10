@@ -97,15 +97,15 @@ final class DealerTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
+
+            Column::make('Resale Certificate', 'resale_certificate'),
+
             Column::make('status', 'status')
                 ->toggleable(
                     hasPermission: auth()->check(),
                     trueLabel: '<span class="text-green-500">Yes</span>',
                     falseLabel: '<span class="text-red-500">No</span>',
                 ),
-
-            Column::make('Resale Certificate', 'resale_certificate'),
-
 
             Column::action('Action')
         ];
@@ -211,7 +211,7 @@ final class DealerTable extends PowerGridComponent
         $this->dispatch('success', 'Status updated successfully');
     }
 
-     public function getRowNum($row): int
+    public function getRowNum($row): int
     {
         return $this->datasource()->pluck('id')->search($row->id) + 1;
     }

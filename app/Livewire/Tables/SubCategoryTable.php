@@ -73,13 +73,17 @@ final class SubCategoryTable extends PowerGridComponent
         return [
             Column::make('#', 'row_num'),
 
+            Column::make('Image', 'image'),
+
             Column::make('Name', 'name')
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Image', 'image'),
 
 
+
+
+            Column::make('Category', 'category_id'),
 
             Column::make('status', 'status')
                 ->toggleable(
@@ -87,8 +91,6 @@ final class SubCategoryTable extends PowerGridComponent
                     trueLabel: '<span class="text-green-500">Yes</span>',
                     falseLabel: '<span class="text-red-500">No</span>',
                 ),
-
-            Column::make('Category', 'category_id'),
 
             Column::action('Action')
         ];
@@ -148,7 +150,7 @@ final class SubCategoryTable extends PowerGridComponent
     }
 
 
-     public function getRowNum($row): int
+    public function getRowNum($row): int
     {
         return $this->datasource()->pluck('id')->search($row->id) + 1;
     }
