@@ -48,7 +48,7 @@
                     @endif
 
                     @if (isset($groupedAttributes) && count($groupedAttributes))
-                        <div class="quantity-area">
+                        <div class="quantity-area position-relative">
                             @foreach ($groupedAttributes as $attribute => $values)
                                 @php
                                     $attribute_id = $values['id'];
@@ -67,6 +67,15 @@
                                     @endforelse
                                 </div>
                             @endforeach
+                            {{-- loading spinner --}}
+                            <div wire:loading>
+                                <div class="loading-spinner"
+                                    style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center; background-color: rgba(255, 255, 255, 0.8);">
+                                    <div class="spinner-border text-secondary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     @endif
 

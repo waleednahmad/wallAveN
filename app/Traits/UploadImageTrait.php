@@ -70,9 +70,42 @@ trait  UploadImageTrait
         $file_decoded = base64_decode($file_base_64);
         $imagejpg = imagecreatefromstring($file_decoded);
 
+        // Get original image dimensions
+        $original_width = imagesx($imagejpg);
+        $original_height = imagesy($imagejpg);
+
+        // Check if width exceeds 2000px
+        if ($original_width > 2000) {
+            // Calculate new height maintaining aspect ratio
+            $new_width = 2000;
+            $new_height = ($original_height * $new_width) / $original_width;
+
+            // Create a new image with resized dimensions
+            $resized_image = imagecreatetruecolor($new_width, $new_height);
+            imagecopyresampled(
+                $resized_image,
+                $imagejpg,
+                0,
+                0,
+                0,
+                0,
+                $new_width,
+                $new_height,
+                $original_width,
+                $original_height
+            );
+
+            // Replace the original image with resized one
+            imagedestroy($imagejpg);
+            $imagejpg = $resized_image;
+        }
+
         $file_path = $folder . '/' . $file_name . '.webp';
         imagepalettetotruecolor($imagejpg);
         $image = imagewebp($imagejpg, $file_path);
+
+        // Clean up memory
+        imagedestroy($imagejpg);
 
         return $file_path;
     }

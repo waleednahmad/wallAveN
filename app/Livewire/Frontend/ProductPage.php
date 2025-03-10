@@ -98,6 +98,8 @@ class ProductPage extends Component
             $this->price = $variant->price;
             $this->variantNotFound = false;
         } else {
+            $this->selectedSku = "---";
+            $this->price = "---";
             $this->variantNotFound = true;
         }
     }

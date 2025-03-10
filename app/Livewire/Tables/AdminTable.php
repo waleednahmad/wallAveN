@@ -49,13 +49,16 @@ final class AdminTable extends PowerGridComponent
             ->add('id')
             ->add('name')
             ->add('email')
+            ->add('row_num', function ($row) {
+                return $this->getRowNum($row);
+            })
             ->add('created_at');
     }
 
     public function columns(): array
     {
         return [
-            Column::make('Id', 'id'),
+            Column::make('#', 'row_num'),
             Column::make('Name', 'name')
                 ->sortable()
                 ->searchable(),
@@ -126,6 +129,11 @@ final class AdminTable extends PowerGridComponent
             //     ->class('btn btn-info btn-sm rounded')
             //     ->dispatch('toggleStatus', ['rowId' => $row->id]),
         ];
+    }
+
+    public function getRowNum($row): int
+    {
+        return $this->datasource()->pluck('id')->search($row->id) + 1;
     }
 
     public function actionRules($row): array

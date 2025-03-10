@@ -46,12 +46,8 @@ final class VendorTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('status', function ($row) {
-                if ($row->status) {
-                    return "<span class='badge badge-success'>active</span>";
-                } else {
-                    return "<span class='badge badge-danger'>inactive</span>";
-                }
+            ->add('row_num', function ($row) {
+                return $this->getRowNum($row);
             })
             ->add('created_at');
     }
@@ -59,16 +55,21 @@ final class VendorTable extends PowerGridComponent
     public function columns(): array
     {
         return [
+            Column::make('#', 'row_num'),
+
             Column::make('Name', 'name')
                 ->sortable()
                 ->searchable(),
 
 
-            Column::make('Status', 'status'),
 
-            Column::make('Created at', 'created_at')
-                ->sortable()
-                ->searchable(),
+            Column::make('status', 'status')
+                ->toggleable(
+                    hasPermission: auth()->check(),
+                    trueLabel: '<span class="text-green-500">Yes</span>',
+                    falseLabel: '<span class="text-red-500">No</span>',
+                ),
+
 
             Column::action('Action')
         ];
@@ -103,11 +104,24 @@ final class VendorTable extends PowerGridComponent
                 ->class('btn btn-primary btn-sm rounded')
                 ->dispatch('edit', ['rowId' => $row->id]),
 
-            Button::add('toggleStatus')
-                ->slot($row->status == 1 ? '<i class="fas fa-toggle-on"></i>' : '<i class="fas fa-toggle-off"></i>')
-                ->class('btn btn-info btn-sm rounded')
-                ->dispatch('toggleStatus', ['rowId' => $row->id]),
+            // Button::add('toggleStatus')
+            //     ->slot($row->status == 1 ? '<i class="fas fa-toggle-on"></i>' : '<i class="fas fa-toggle-off"></i>')
+            //     ->class('btn btn-info btn-sm rounded')
+            //     ->dispatch('toggleStatus', ['rowId' => $row->id]),
         ];
+    }
+
+    public function onUpdatedToggleable($id, $field, $value): void
+    {
+        Vendor::query()->find($id)->update([
+            $field => $value,
+        ]);
+        $this->dispatch('success', 'Status updated successfully');
+    }
+
+    public function getRowNum($row): int
+    {
+        return $this->datasource()->pluck('id')->search($row->id) + 1;
     }
 
     /*
