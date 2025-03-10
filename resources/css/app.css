@@ -48,8 +48,9 @@
     text-align: center;
     transition: all 0.3s ease;
 }
+
 .category-card p {
-    margin: 0;   
+    margin: 0;
 }
 
 .category-card:hover {
@@ -69,4 +70,61 @@
 .form-check-input:checked {
     background-color: #28a745;
     border-color: #28a745;
+}
+
+.image-preview-container {
+    display: grid;
+    grid-template-columns: 200px auto;
+    gap: 5px;
+    align-items: start;
+}
+
+.main-image-card {
+    position: relative;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    overflow: hidden;
+    width: 200px !important;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+.other-images-container {
+    margin-top: 5px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 5px;
+    max-height: 220px;
+    overflow: auto;
+}
+
+.single-file-card {
+    height: 100px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+}
+
+.single-file-card.active {
+    background: rgba(98, 149, 197, 0.616);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.single-file-card:hover {
+    background: rgba(146, 146, 146, 0.616);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.other-images-container>div {
+    background: rgba(208, 208, 208, 0.466);
+    border-radius: 5px;
+    overflow: hidden;
 }

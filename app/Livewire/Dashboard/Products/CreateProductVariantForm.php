@@ -5,6 +5,7 @@ namespace App\Livewire\Dashboard\Products;
 use App\Models\ProductVariant;
 use App\Traits\UploadImageTrait;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -26,8 +27,11 @@ class CreateProductVariantForm extends Component
     public $price;
     #[Validate('nullable|string')]
     public $description;
-    #[Validate('nullable|image')]
+    #[Validate('nullable')]
     public $image;
+
+    public $productImages = [];
+    public $selectedImageId;
 
     public $productAttributesWithValues = [];
     public $selectedAttributeValues = [];
@@ -35,6 +39,12 @@ class CreateProductVariantForm extends Component
     public function mount($product)
     {
         $this->product = $product;
+        $this->productImages = $this->product->images ? $this->product->images->map(function ($image) {
+            return [
+                'id' => $image->id,
+                'image' => $image->image,
+            ];
+        }) : [];
         $this->sku = $this->product->sku;
         $this->productAttributesWithValues = $this->product->attributes ? $this->product->attributes->map(function ($attribute) {
             return [
@@ -98,7 +108,7 @@ class CreateProductVariantForm extends Component
                 'cost_price' => $this->cost_price,
                 'price' => $this->price,
                 'description' => $this->description,
-                'image' => $this->image ? $this->saveImage($this->image, "products/" . $this->product->id) : null,
+                'image' => $this->image ?? null,
 
             ]);
 
@@ -153,6 +163,29 @@ class CreateProductVariantForm extends Component
             'price',
             'description',
         ]);
+    }
+
+    public function setMainImage($newMainIndex)
+    {
+        // Convert the string index to an integer
+        $newMainIndex = (int) $newMainIndex;
+        Log::info('New main image index: ' . $newMainIndex);
+
+        // Validate the new index
+        if ($newMainIndex < 0 ) {
+            $this->dispatch('error', 'Invalid image index.');
+            return;
+        }
+
+        // Set the selected image ID
+        $selectedImage = $this->productImages->where('id', $newMainIndex)->first();
+        if (!$selectedImage) {
+            $this->dispatch('error', 'Image not found.');
+            return;
+        }
+        $this->image = $selectedImage['image'];
+        $this->selectedImageId = $selectedImage['id'];
+        $this->dispatch('success', 'Main image set successfully.');
     }
 
     public function render()

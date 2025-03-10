@@ -84,6 +84,7 @@
                             <tr>
                                 <td>{{ $variant->sku }}</td>
                                 <td>
+                                    {{ $variant->image }}
                                     @if ($variant->image && file_exists($variant->image))
                                         <img src="{{ asset($variant->image) }}" alt="Variant Image"
                                             class="img-thumbnail"

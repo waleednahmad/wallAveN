@@ -80,7 +80,7 @@
             </div>
         </div>
 
-        {{-- Image --}}
+
         {{-- Image --}}
         <div class="col-12">
             <div class="form-group">
@@ -94,10 +94,27 @@
                     </div>
                 @enderror
 
-                @if ($image)
+                @if (isset($productImages) && count($productImages))
+                    <div class="other-images-container">
+                        @foreach ($productImages as $prImage)
+                            <!-- Skip the current main image -->
+                            <div style="background: rgba(208, 208, 208, 0.466); width: 100px; height: 100px;">
+                                <div @class([
+                                    'single-file-card',
+                                    'active' => $prImage['id'] == $selectedImageId,
+                                ]) wire:click="setMainImage({{ $prImage['id'] }})">
+                                    <img src="{{ asset($prImage['image']) }}" class="img-fluid" alt="file"
+                                        style="height: 100%; width: 100%; object-fit: contain;">
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+
+                {{-- @if ($image)
                     <img src="{{ $image->temporaryUrl() }}" alt="Image" class="mt-2 img-fluid img-thumbnail"
                         style="max-height: 200px;">
-                @endif
+                @endif --}}
 
             </div>
         </div>

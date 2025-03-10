@@ -41,6 +41,10 @@ class CreateProductForm extends Component
     public $searchSubCategory = '';
     public $searchProductType = '';
 
+    // === Gallery Handler
+    public $uploadedImages = [];
+    public $mainImageIndex = 0;
+
     // ========= Computed Properties =========
     #[Computed()]
     public function vendors()
@@ -122,12 +126,35 @@ class CreateProductForm extends Component
             $product = Product::create([
                 'name' => $this->name,
                 'description' => $this->description,
-                'image' => $this->image ? $this->saveImage($this->image, 'products') : null,
                 'sku' => $this->sku,
                 'vendor_id' => $this->vendor_id,
                 'status' => $this->status,
                 'slug' => $this->generateUniqueSlug(new Product(), $this->name, 'slug'),
             ]);
+
+            // Store the uploaded images
+            if ($this->uploadedImages && count($this->uploadedImages) > 0) {
+                $imagePaths = [];
+
+                // Store all images and track their paths
+                foreach ($this->uploadedImages as $index => $image) {
+                    $imagePath = $this->saveImage($image, 'products/' . $product->id);
+                    $imagePaths[$index] = $imagePath;
+
+                    // Create record in the images relationship
+                    $product->images()->create([
+                        'image' => $imagePath,
+                    ]);
+                }
+
+                // Update the product's main image if a main image index is set
+                if (isset($imagePaths[$this->mainImageIndex])) {
+                    $product->update(['image' => $imagePaths[$this->mainImageIndex]]);
+                } else {
+                    // Fallback to the first image if mainImageIndex is invalid
+                    $product->update(['image' => $imagePaths[0] ?? null]);
+                }
+            }
 
             $product->categories()->sync($this->selectedCategories);
             $product->subCategories()->sync($this->selectedSubCategories);
@@ -141,6 +168,39 @@ class CreateProductForm extends Component
             Log::error('Error creating product: ' . $e->getMessage());
             $this->dispatch('error', 'Something went wrong. Please try again.');
         }
+    }
+
+
+    // ============ Gallery handlers ============
+    public function setMainImage($newMainIndex)
+    {
+        // Convert the string index to an integer
+        $newMainIndex = (int) $newMainIndex;
+
+        // Validate the new index
+        if (!isset($this->uploadedImages[$newMainIndex])) {
+            return; // Exit if the index is invalid
+        }
+
+        // If the new main image is not already the first, reorder the array
+        if ($newMainIndex !== $this->mainImageIndex) {
+            // Get the new main image
+            $newMainImage = $this->uploadedImages[$newMainIndex];
+
+            // Create a new array without the new main image at its current position
+            $remainingImages = array_values(array_filter($this->uploadedImages, function ($key) use ($newMainIndex) {
+                return $key !== $newMainIndex;
+            }, ARRAY_FILTER_USE_KEY));
+
+            // Rebuild the array with the new main image at the beginning
+            $this->uploadedImages = array_merge([$newMainImage], $remainingImages);
+
+            // Update the main image index
+            $this->mainImageIndex = 0;
+        }
+
+        // Optionally, update $this->image if you need it elsewhere (as a URL)
+        $this->image = $this->uploadedImages[$this->mainImageIndex]->temporaryUrl();
     }
 
     public function render()

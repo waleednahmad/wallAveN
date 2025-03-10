@@ -110,7 +110,7 @@ class EditProductVariantForm extends Component
                 'cost_price' => $this->cost_price,
                 'price' => $this->price,
                 'description' => $this->description,
-                'image' => $this->image ? $this->saveImage($this->image, "products/" . $this->product->id) : $this->variant->image,
+                // 'image' => $this->image ? $this->saveImage($this->image, "products/" . $this->product->id) : $this->variant->image,
             ]);
 
             // Sync attribute values only

@@ -108,25 +108,55 @@
                         </div>
 
                         {{-- Image --}}
-                        <div class="col-md-6">
+                        <div class="col-12">
                             <div class="form-group">
-                                <label for="image">Image
-                                    <span class="text-danger">
-                                        *
-                                    </span>
-                                </label>
-                                <input type="file" @class(['form-control', 'is-invalid' => $errors->has('image')]) id="image" name="image"
-                                    required value="{{ old('image') }}" wire:model="image" accept="image/*">
-                                @error('image')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
+                                <div class="form-group">
+                                    <label for="images">Upload images</label>
+                                    <input type="file" class="form-control" id="images"
+                                        wire:model="uploadedImages" accept="image/*" multiple>
+                                    @error('uploadedImages.*')
+                                        <span class="error">{{ $message }}</span>
+                                    @enderror
+                                </div>
 
-                                @if ($image)
+                                <!-- Preview the images -->
+                                @if (isset($uploadedImages) && count($uploadedImages))
+                                    <div class="image-preview-container">
+                                        <!-- Main image -->
+                                        @if (count($uploadedImages) > 0)
+                                            <div class="main-image-card"
+                                                style="background: rgba(208, 208, 208, 0.466); width: 100px; height: 210px;">
+                                                <div class="single-file-card">
+                                                    <img src="{{ $uploadedImages[$mainImageIndex]->temporaryUrl() }}"
+                                                        class="img-fluid" alt="main file"
+                                                        style="height: 100%; width: 100%; object-fit: contain;">
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                        <!-- Other images -->
+                                        <div class="other-images-container">
+                                            @foreach ($uploadedImages as $index => $imageItem)
+                                                @if ($index !== $mainImageIndex)
+                                                    <!-- Skip the current main image -->
+                                                    <div
+                                                        style="background: rgba(208, 208, 208, 0.466); width: 100px; height: 100px;">
+                                                        <div class="single-file-card"
+                                                            wire:click="setMainImage({{ $index }})">
+                                                            <img src="{{ $imageItem->temporaryUrl() }}"
+                                                                class="img-fluid" alt="file"
+                                                                style="height: 100%; width: 100%; object-fit: contain;">
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+                                {{-- @if ($image)
                                     <img src="{{ $image->temporaryUrl() }}" alt="Image"
                                         class="mt-2 img-fluid img-thumbnail" style="max-height: 200px;">
-                                @endif
+                                @endif --}}
 
                             </div>
                         </div>
