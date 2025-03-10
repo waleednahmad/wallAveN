@@ -73,8 +73,8 @@ class EditProductVariantForm extends Component
         return [
             'sku' => 'required|string|max:255|min:3|unique:product_variants,sku,' . $this->variant?->id,
             'barcode' => 'nullable|string|max:255|min:3|unique:product_variants,barcode,' . $this->variant?->id,
-            'compare_at_price' => 'required|numeric',
-            'cost_price' => 'required|numeric',
+            'compare_at_price' => 'nullable|numeric',
+            'cost_price' => 'nullable|numeric',
             'price' => 'required|numeric',
             'description' => 'nullable|string',
             'image' => 'nullable|image',

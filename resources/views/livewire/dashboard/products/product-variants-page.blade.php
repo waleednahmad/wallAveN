@@ -89,7 +89,9 @@
                                             class="img-thumbnail"
                                             style="width: 90px; height: 90px;background-color: #f8f9fa;">
                                     @else
-                                        <span class="badge badge-danger">No image</span>
+                                        <img src="{{ asset('dashboard/images/default.webp') }}" alt="Variant Image"
+                                            class="img-thumbnail"
+                                            style="width: 90px; height: 90px;background-color: #f8f9fa;">
                                     @endif
                                 </td>
                                 <td>{{ $variant->barcode ?? '-' }}</td>

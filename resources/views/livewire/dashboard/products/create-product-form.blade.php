@@ -95,8 +95,8 @@
                         {{-- Description --}}
                         <div class="col-md-12">
                             <div class="form-group" wire:ignore>
-                                <label for="description">Description
-
+                                <label for="description">
+                                    Description
                                 </label>
                                 <textarea @class(['form-control', 'is-invalid' => $errors->has('description')]) id="description" name="description" wire:model="description"></textarea>
                                 @error('description')

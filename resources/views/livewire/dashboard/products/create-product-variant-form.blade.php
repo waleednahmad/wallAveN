@@ -52,15 +52,12 @@
         <div class="col-12">
             <div class="form-group">
                 <label for="compare_at_price">Compare-at Price
-                    <span class="text-danger">
-                        *
-                    </span>
                 </label>
                 <input type="number" @class([
                     'form-control',
                     'is-invalid' => $errors->has('compare_at_price'),
                 ]) id="compare_at_price" name="compare_at_price"
-                    required wire:model="compare_at_price" value="{{ old('compare_at_price') }}">
+                    wire:model="compare_at_price" value="{{ old('compare_at_price') }}">
                 @error('compare_at_price')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -72,11 +69,8 @@
         <div class="col-12">
             <div class="form-group">
                 <label for="cost_price">Cost Price
-                    <span class="text-danger">
-                        *
-                    </span>
                 </label>
-                <input type="number" @class(['form-control', 'is-invalid' => $errors->has('cost_price')]) id="cost_price" name="cost_price" required
+                <input type="number" @class(['form-control', 'is-invalid' => $errors->has('cost_price')]) id="cost_price" name="cost_price"
                     wire:model="cost_price" value="{{ old('cost_price') }}">
                 @error('cost_price')
                     <div class="invalid-feedback">
@@ -91,11 +85,8 @@
         <div class="col-12">
             <div class="form-group">
                 <label for="image">Image
-                    <span class="text-danger">
-                        *
-                    </span>
                 </label>
-                <input type="file" @class(['form-control', 'is-invalid' => $errors->has('image')]) id="image" name="image" required
+                <input type="file" @class(['form-control', 'is-invalid' => $errors->has('image')]) id="image" name="image"
                     value="{{ old('image') }}" wire:model="image" accept="image/*">
                 @error('image')
                     <div class="invalid-feedback">
@@ -117,11 +108,8 @@
         <div class="col-12" wire:ignore>
             <div class="form-group">
                 <label for="description">Description
-                    <span class="text-danger">
-                        *
-                    </span>
                 </label>
-                <textarea @class(['form-control', 'is-invalid' => $errors->has('description')]) id="description" name="description" required wire:model="description">{{ old('description') }}</textarea>
+                <textarea @class(['form-control', 'is-invalid' => $errors->has('description')]) id="description" name="description" wire:model="description">{{ old('description') }}</textarea>
                 @error('description')
                     <div class="invalid-feedback">
                         {{ $message }}

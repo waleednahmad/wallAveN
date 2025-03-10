@@ -52,15 +52,13 @@
         <div class="col-12">
             <div class="form-group">
                 <label for="e_compare_at_price">Compare-at Price
-                    <span class="text-danger">
-                        *
-                    </span>
+
                 </label>
                 <input type="number" @class([
                     'form-control',
                     'is-invalid' => $errors->has('compare_at_price'),
                 ]) id="e_compare_at_price" name="compare_at_price"
-                    required wire:model="compare_at_price" value="{{ old('compare_at_price') }}">
+                    wire:model="compare_at_price" value="{{ old('compare_at_price') }}">
                 @error('compare_at_price')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -71,12 +69,10 @@
         {{-- Cost Price --}}
         <div class="col-12">
             <div class="form-group">
-                <label for="e_cost_price">Cost Price
-                    <span class="text-danger">
-                        *
-                    </span>
+                <label for="e_cost_price">
+                    Cost Price
                 </label>
-                <input type="number" @class(['form-control', 'is-invalid' => $errors->has('cost_price')]) id="e_cost_price" name="cost_price" required
+                <input type="number" @class(['form-control', 'is-invalid' => $errors->has('cost_price')]) id="e_cost_price" name="cost_price"
                     wire:model="cost_price" value="{{ old('cost_price') }}">
                 @error('cost_price')
                     <div class="invalid-feedback">
@@ -113,11 +109,9 @@
         <div class="col-12" wire:ignore>
             <div class="form-group">
                 <label for="e_description">Description
-                    <span class="text-danger">
-                        *
-                    </span>
+
                 </label>
-                <textarea @class(['form-control']) id="e_description" name="description" required wire:model="description"></textarea>
+                <textarea @class(['form-control']) id="e_description" name="description" wire:model="description"></textarea>
                 @error('description')
                     <div class="invalid-feedback">
                         {{ $message }}
