@@ -119,7 +119,7 @@ final class VendorTable extends PowerGridComponent
         $this->dispatch('success', 'Status updated successfully');
     }
 
-    public function getRowNum($row): int
+     public function getRowNum($row): int
     {
         return $this->datasource()->pluck('id')->search($row->id) + 1;
     }

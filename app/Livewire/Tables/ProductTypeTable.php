@@ -51,20 +51,17 @@ final class ProductTypeTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('status', function ($row) {
-                if ($row->status) {
-                    return "<span class='badge badge-success'>active</span>";
-                } else {
-                    return "<span class='badge badge-danger'>inactive</span>";
+            ->add('image', function ($value) {
+                if (file_exists($value->image) && $value->image != null) {
+                    return '<img src="' . asset($value->image) . '" alt=" Image" style="width: 90px; height: 90px; object-fit: contain;" loading="lazy" class="img-thumbnail">';
                 }
+                return '<img src="' . asset('dashboard/images/default.webp') . '" alt=" Image" style="width: 90px; height: 90px; object-fit: contain;" loading="lazy" class="img-thumbnail">';
             })
-            ->add('image', fn($model) => $model->image ? '<img src="' . asset($model->image) . '" alt="Product Image" 
-            class="img-thumbnail"   
-            style="height:90px; object-fit:contain; width:90px;background-color: #f8f9fa; border-radius: 0.25rem;"
-            
-            >' : '<span class="badge badge-danger">No Image</span>')
+            ->add('row_num', function ($row) {
+                return $this->getRowNum($row);
+            })
             ->add('sub_category_id', function ($row) {
-                return $row->subCategory ? $row->subCategory->name : '';
+                return $row->subCategory ? $row->subCategory->name : '-';
             })
             ->add('created_at');
     }
@@ -72,19 +69,24 @@ final class ProductTypeTable extends PowerGridComponent
     public function columns(): array
     {
         return [
+            Column::make('#', 'row_num'),
+
             Column::make('Name', 'name')
                 ->sortable()
                 ->searchable(),
             Column::make('Image', 'image'),
 
 
-            Column::make('Status', 'status'),
+            Column::make('status', 'status')
+                ->toggleable(
+                    hasPermission: auth()->check(),
+                    trueLabel: '<span class="text-green-500">Yes</span>',
+                    falseLabel: '<span class="text-red-500">No</span>',
+                ),
 
             Column::make('SubCategory', 'sub_category_id'),
 
-            Column::make('Created at', 'created_at')
-                ->sortable()
-                ->searchable(),
+
 
 
             Column::action('Action')
@@ -130,11 +132,25 @@ final class ProductTypeTable extends PowerGridComponent
                 ->class('btn btn-primary btn-sm rounded')
                 ->dispatch('edit', ['rowId' => $row->id]),
 
-            Button::add('toggleStatus')
-                ->slot($row->status == 1 ? '<i class="fas fa-toggle-on"></i>' : '<i class="fas fa-toggle-off"></i>')
-                ->class('btn btn-info btn-sm rounded')
-                ->dispatch('toggleStatus', ['rowId' => $row->id]),
+            // Button::add('toggleStatus')
+            //     ->slot($row->status == 1 ? '<i class="fas fa-toggle-on"></i>' : '<i class="fas fa-toggle-off"></i>')
+            //     ->class('btn btn-info btn-sm rounded')
+            //     ->dispatch('toggleStatus', ['rowId' => $row->id]),
         ];
+    }
+
+
+
+    public function onUpdatedToggleable($id, $field, $value): void
+    {
+        ProductType::query()->find($id)->update([
+            $field => $value,
+        ]);
+        $this->dispatch('success', 'Status updated successfully');
+    }
+     public function getRowNum($row): int
+    {
+        return $this->datasource()->pluck('id')->search($row->id) + 1;
     }
 
     /*

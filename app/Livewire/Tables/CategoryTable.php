@@ -24,7 +24,7 @@ final class CategoryTable extends PowerGridComponent
                 ->showSearchInput(),
             PowerGrid::footer()
                 ->showPerPage(
-                    $perPage = 20,
+                    $perPage = 25,
                     $perPageValues = [10, 25, 50, 100, 0]
                 )
                 ->showRecordCount(),

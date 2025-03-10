@@ -48,12 +48,8 @@ final class RepresentativeTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('status', function ($row) {
-                if ($row->status) {
-                    return "<span class='badge badge-success'>active</span>";
-                } else {
-                    return "<span class='badge badge-danger'>inactive</span>";
-                }
+            ->add('row_num', function ($row) {
+                return $this->getRowNum($row);
             })
             ->add('created_at');
     }
@@ -61,7 +57,7 @@ final class RepresentativeTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('Id', 'id'),
+            Column::make('#', 'row_num'),
             Column::make('Name', 'name')
                 ->searchable()
                 ->sortable(),
@@ -71,10 +67,12 @@ final class RepresentativeTable extends PowerGridComponent
             Column::make('Phone', 'phone')
                 ->searchable()
                 ->sortable(),
-            Column::make('Status', 'status'),
-            Column::make('Created at', 'created_at')
-                ->sortable()
-                ->searchable(),
+            Column::make('status', 'status')
+                ->toggleable(
+                    hasPermission: auth()->check(),
+                    trueLabel: '<span class="text-green-500">Yes</span>',
+                    falseLabel: '<span class="text-red-500">No</span>',
+                ),
 
             Column::action('Action')
         ];
@@ -110,11 +108,10 @@ final class RepresentativeTable extends PowerGridComponent
     public function actions(Representative $row): array
     {
         return [
-
-            Button::add('toggleStatus')
-                ->slot($row->status == 1 ? '<i class="fas fa-toggle-on"></i>' : '<i class="fas fa-toggle-off"></i>')
-                ->class('btn btn-info btn-sm rounded')
-                ->dispatch('toggleStatus', ['rowId' => $row->id]),
+            // Button::add('toggleStatus')
+            //     ->slot($row->status == 1 ? '<i class="fas fa-toggle-on"></i>' : '<i class="fas fa-toggle-off"></i>')
+            //     ->class('btn btn-info btn-sm rounded')
+            //     ->dispatch('toggleStatus', ['rowId' => $row->id]),
 
             Button::add('updatePassword')
                 ->slot('<i class="fas fa-key"></i>')
@@ -127,6 +124,21 @@ final class RepresentativeTable extends PowerGridComponent
                 ->dispatch('show', ['rowId' => $row->id]),
         ];
     }
+
+
+    public function getRowNum($row): int
+    {
+        return $this->datasource()->pluck('id')->search($row->id) + 1;
+    }
+
+    public function onUpdatedToggleable($id, $field, $value): void
+    {
+        Representative::query()->find($id)->update([
+            $field => $value,
+        ]);
+        $this->dispatch('success', 'Status updated successfully');
+    }
+
 
     /*
     public function actionRules($row): array

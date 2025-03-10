@@ -52,12 +52,17 @@ final class AttributeTable extends PowerGridComponent
                 $values .= '</ul>';
                 return $values;
             })
+            ->add('row_num', function ($row) {
+                return $this->getRowNum($row);
+            })
             ->add('created_at');
     }
 
     public function columns(): array
     {
         return [
+            Column::make('#', 'row_num'),
+
             Column::make('Name', 'name')
                 ->sortable()
                 ->searchable(),
@@ -65,10 +70,6 @@ final class AttributeTable extends PowerGridComponent
             Column::make('Values count', 'values_count'),
 
             Column::make('values', 'values'),
-
-            Column::make('Created at', 'created_at')
-                ->sortable()
-                ->searchable(),
 
             Column::action('Action')
         ];
@@ -93,6 +94,11 @@ final class AttributeTable extends PowerGridComponent
                 ->class('btn btn-primary btn-sm rounded')
                 ->dispatch('edit', ['rowId' => $row->id]),
         ];
+    }
+
+    public function getRowNum($row): int
+    {
+        return $this->datasource()->pluck('id')->search($row->id) + 1;
     }
 
     /*

@@ -47,11 +47,15 @@ final class ProductTable extends PowerGridComponent
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
-            ->add('image', fn($model) => $model->image ? '<img src="' . asset($model->image) . '" alt="Product Image" 
-        class="img-thumbnail"   
-        style="height:90px; object-fit:contain; width:90px;background-color: #f8f9fa; border-radius: 0.25rem;"
-        
-        >' : '<span class="badge badge-danger">No Image</span>')
+            ->add('image', function ($value) {
+                if (file_exists($value->image) && $value->image != null) {
+                    return '<img src="' . asset($value->image) . '" alt=" Image" style="width: 90px; height: 90px; object-fit: contain;" loading="lazy" class="img-thumbnail">';
+                }
+                return '<img src="' . asset('dashboard/images/default.webp') . '" alt=" Image" style="width: 90px; height: 90px; object-fit: contain;" loading="lazy" class="img-thumbnail">';
+            })
+            ->add('row_num', function ($row) {
+                return $this->getRowNum($row);
+            })
 
         ;
     }
@@ -59,7 +63,8 @@ final class ProductTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('ID', 'id'),
+            Column::make('#', 'row_num'),
+
 
             Column::make('image', 'image'),
 
@@ -78,13 +83,24 @@ final class ProductTable extends PowerGridComponent
             Column::make('Variants Count', 'variants_count')
                 ->sortable(),
 
+            Column::make('status', 'status')
+                ->toggleable(
+                    hasPermission: auth()->check(),
+                    trueLabel: '<span class="text-green-500">Yes</span>',
+                    falseLabel: '<span class="text-red-500">No</span>',
+                ),
+
             Column::action('Action')
         ];
     }
 
     public function filters(): array
     {
-        return [];
+        return [
+
+            Filter::boolean('status')
+                ->label('active', 'inactive'),
+        ];
     }
 
     #[\Livewire\Attributes\On('addVariant')]
@@ -120,6 +136,18 @@ final class ProductTable extends PowerGridComponent
         ];
     }
 
+    public function getRowNum($row): int
+    {
+        return $this->datasource()->pluck('id')->search($row->id) + 1;
+    }
+
+    public function onUpdatedToggleable($id, $field, $value): void
+    {
+        Product::query()->find($id)->update([
+            $field => $value,
+        ]);
+        $this->dispatch('success', 'Status updated successfully');
+    }
     /*
     public function actionRules($row): array
     {

@@ -52,18 +52,12 @@ final class DealerTable extends PowerGridComponent
             ->add('id')
             ->add('is_approved', function ($row) {
                 if ($row->is_approved) {
-                    return "<span class='badge badge-success'>yes</span>";
+                    return "<span class='badge badge-success'>Yes</span>";
                 } else {
-                    return "<span class='badge badge-danger'>no</span>";
+                    return "<span class='badge badge-danger'>No</span>";
                 }
             })
-            ->add('status', function ($row) {
-                if ($row->status) {
-                    return "<span class='badge badge-success'>active</span>";
-                } else {
-                    return "<span class='badge badge-danger'>inactive</span>";
-                }
-            })
+
 
             ->add('resale_certificate', function ($row) {
                 if ($row->resale_certificate && file_exists(public_path($row->resale_certificate))) {
@@ -72,7 +66,9 @@ final class DealerTable extends PowerGridComponent
                     return '-';
                 }
             })
-
+            ->add('row_num', function ($row) {
+                return $this->getRowNum($row);
+            })
             ->add('approved_at', fn($row) => $row->approved_at ? Carbon::parse($row->approved_at)->format('Y-m-d') : '-')
             ->add('created_at');
     }
@@ -80,7 +76,8 @@ final class DealerTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('Id', 'id'),
+            Column::make('#', 'row_num'),
+
 
             Column::make('Name', 'name')
                 ->sortable()
@@ -100,13 +97,15 @@ final class DealerTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Status', 'status'),
+            Column::make('status', 'status')
+                ->toggleable(
+                    hasPermission: auth()->check(),
+                    trueLabel: '<span class="text-green-500">Yes</span>',
+                    falseLabel: '<span class="text-red-500">No</span>',
+                ),
 
             Column::make('Resale Certificate', 'resale_certificate'),
 
-            Column::make('Created at', 'created_at')
-                ->sortable()
-                ->searchable(),
 
             Column::action('Action')
         ];
@@ -186,10 +185,10 @@ final class DealerTable extends PowerGridComponent
                 ->class('btn btn-success btn-sm rounded')
                 ->dispatch('approve', ['rowId' => $row->id]),
 
-            Button::add('toggleStatus')
-                ->slot($row->status == 1 ? '<i class="fas fa-toggle-on"></i>' : '<i class="fas fa-toggle-off"></i>')
-                ->class('btn btn-info btn-sm rounded')
-                ->dispatch('toggleStatus', ['rowId' => $row->id]),
+            // Button::add('toggleStatus')
+            //     ->slot($row->status == 1 ? '<i class="fas fa-toggle-on"></i>' : '<i class="fas fa-toggle-off"></i>')
+            //     ->class('btn btn-info btn-sm rounded')
+            //     ->dispatch('toggleStatus', ['rowId' => $row->id]),
 
 
             Button::add('updatePassword')
@@ -202,6 +201,19 @@ final class DealerTable extends PowerGridComponent
                 ->class('btn btn-primary btn-sm rounded')
                 ->dispatch('show', ['rowId' => $row->id]),
         ];
+    }
+
+    public function onUpdatedToggleable($id, $field, $value): void
+    {
+        Dealer::query()->find($id)->update([
+            $field => $value,
+        ]);
+        $this->dispatch('success', 'Status updated successfully');
+    }
+
+     public function getRowNum($row): int
+    {
+        return $this->datasource()->pluck('id')->search($row->id) + 1;
     }
 
     public function actionRules($row): array
