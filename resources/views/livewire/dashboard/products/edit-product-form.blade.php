@@ -95,12 +95,10 @@
                         {{-- Decsription --}}
                         <div class="col-md-12">
                             <div class="form-group" wire:ignore>
-                                <label for="description">Description
-                                    <span class="text-danger">
-                                        *
-                                    </span>
+                                <label for="description">
+                                    Description
                                 </label>
-                                <textarea id="description" @class(['form-control', 'is-invalid' => $errors->has('description')]) name="description" required wire:model="description"></textarea>
+                                <textarea id="description" @class(['form-control', 'is-invalid' => $errors->has('description')]) name="description" wire:model="description"></textarea>
                                 @error('description')
                                     <div class="invalid-feedback">
                                         {{ $message }}

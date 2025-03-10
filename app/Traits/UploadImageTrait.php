@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
@@ -60,19 +61,54 @@ trait  UploadImageTrait
         $file_extension = strtolower($file->getClientOriginalExtension());
         $file_name = time() . rand();
 
+        // Handle SVG separately
         if ($file_extension === 'svg') {
             $folder = preg_replace('/^storage\//', '', rtrim($folder, '/'));
             $file_path = $file->storeAs($folder, $file_name . '.svg', ['disk' => 'public']);
             return "storage/$file_path";
         }
 
-        $file_base_64 = base64_encode(file_get_contents($file->path()));
-        $file_decoded = base64_decode($file_base_64);
-        $imagejpg = imagecreatefromstring($file_decoded);
+        // Get image info
+        $image_info = getimagesize($file->path());
+        if ($image_info === false) {
+            throw new Exception('Invalid image file');
+        }
 
-        // Get original image dimensions
-        $original_width = imagesx($imagejpg);
-        $original_height = imagesy($imagejpg);
+        // Create image resource based on file type
+        switch ($image_info[2]) { // mime type identifier
+            case IMAGETYPE_JPEG:
+            case IMAGETYPE_JPEG2000: // Adding JPEG2000
+                $image = imagecreatefromjpeg($file->path());
+                break;
+            case IMAGETYPE_PNG:
+                $image = imagecreatefrompng($file->path());
+                break;
+            case IMAGETYPE_GIF:
+                $image = imagecreatefromgif($file->path());
+                break;
+            case IMAGETYPE_BMP:
+                $image = imagecreatefrombmp($file->path());
+                break;
+            case IMAGETYPE_WEBP:
+                $image = imagecreatefromwebp($file->path());
+                break;
+            case IMAGETYPE_WBMP: // Wireless Bitmap
+                $image = imagecreatefromwbmp($file->path());
+                break;
+            case IMAGETYPE_XBM: // X Bitmap
+                $image = imagecreatefromxbm($file->path());
+                break;
+            default:
+                throw new Exception('Unsupported image format: ' . $image_info['mime']);
+        }
+
+        if ($image === false) {
+            throw new Exception('Failed to create image resource');
+        }
+
+        // Get original dimensions
+        $original_width = imagesx($image);
+        $original_height = imagesy($image);
 
         // Check if width exceeds 2000px
         if ($original_width > 2000) {
@@ -82,9 +118,16 @@ trait  UploadImageTrait
 
             // Create a new image with resized dimensions
             $resized_image = imagecreatetruecolor($new_width, $new_height);
+
+            // Preserve transparency for applicable formats
+            if (in_array($image_info[2], [IMAGETYPE_PNG, IMAGETYPE_WEBP, IMAGETYPE_GIF])) {
+                imagealphablending($resized_image, false);
+                imagesavealpha($resized_image, true);
+            }
+
             imagecopyresampled(
                 $resized_image,
-                $imagejpg,
+                $image,
                 0,
                 0,
                 0,
@@ -96,16 +139,22 @@ trait  UploadImageTrait
             );
 
             // Replace the original image with resized one
-            imagedestroy($imagejpg);
-            $imagejpg = $resized_image;
+            imagedestroy($image);
+            $image = $resized_image;
         }
 
         $file_path = $folder . '/' . $file_name . '.webp';
-        imagepalettetotruecolor($imagejpg);
-        $image = imagewebp($imagejpg, $file_path);
+        imagepalettetotruecolor($image);
+
+        // Save as WebP with quality setting
+        $success = imagewebp($image, $file_path, 80); // 80 is quality (0-100)
 
         // Clean up memory
-        imagedestroy($imagejpg);
+        imagedestroy($image);
+
+        if (!$success) {
+            throw new Exception('Failed to save image as WebP');
+        }
 
         return $file_path;
     }

@@ -96,11 +96,9 @@
                         <div class="col-md-12">
                             <div class="form-group" wire:ignore>
                                 <label for="description">Description
-                                    <span class="text-danger">
-                                        *
-                                    </span>
+
                                 </label>
-                                <textarea @class(['form-control', 'is-invalid' => $errors->has('description')]) id="description" name="description" required wire:model="description"></textarea>
+                                <textarea @class(['form-control', 'is-invalid' => $errors->has('description')]) id="description" name="description" wire:model="description"></textarea>
                                 @error('description')
                                     <div class="invalid-feedback">
                                         {{ $message }}
