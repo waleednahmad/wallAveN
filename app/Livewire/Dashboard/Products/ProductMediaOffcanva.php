@@ -69,7 +69,12 @@ class ProductMediaOffcanva extends Component
             $image->update(['order' => $order]);
         }
 
+        $this->product->update([
+            'image' => $this->product->images()->orderBy('order')->first()->image,
+        ]);
+
         $this->dispatch('refreshProductFiles');
+        $this->dispatch('refreshProductTable');
     }
 
     #[On('refreshProductFiles')]
