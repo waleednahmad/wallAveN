@@ -164,7 +164,6 @@ class CreateProductVariantForm extends Component
     {
         // Convert the string index to an integer
         $newMainIndex = (int) $newMainIndex;
-        Log::info('New main image index: ' . $newMainIndex);
 
         // Validate the new index
         if ($newMainIndex < 0) {
