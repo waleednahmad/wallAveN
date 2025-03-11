@@ -120,42 +120,37 @@
                                 </div>
 
                                 <!-- Preview the images -->
-                                @if (isset($uploadedImages) && count($uploadedImages))
-                                    <div class="image-preview-container">
-                                        <!-- Main image -->
-                                        @if (count($uploadedImages) > 0)
-                                            <div class="main-image-card"
-                                                style="background: rgba(208, 208, 208, 0.466); width: 100px; height: 210px;">
-                                                <div class="single-file-card">
-                                                    <img src="{{ $uploadedImages[$mainImageIndex]->temporaryUrl() }}"
-                                                        class="img-fluid" alt="main file"
-                                                        style="height: 100%; width: 100%; object-fit: contain;">
-                                                </div>
-                                            </div>
-                                        @endif
 
-                                        <!-- Other images -->
-                                        <div class="other-images-container">
-                                            @foreach ($uploadedImages as $index => $imageItem)
-                                                @if ($index !== $mainImageIndex)
-                                                    <!-- Skip the current main image -->
-                                                    <div
-                                                        style="background: rgba(208, 208, 208, 0.466); width: 100px; height: 100px;">
-                                                        <div class="single-file-card"
-                                                            wire:click="setMainImage({{ $index }})">
-                                                            <img src="{{ $imageItem->temporaryUrl() }}"
-                                                                class="img-fluid" alt="file"
-                                                                style="height: 100%; width: 100%; object-fit: contain;">
-                                                        </div>
+                                @if (isset($imagesWithOrders) && count($imagesWithOrders))
+                                    @php
+                                        $imagesWithOrders = collect($imagesWithOrders)
+                                            ->sortBy('order')
+                                            ->values()
+                                            ->all();
+                                    @endphp
+
+                                    <div class="image-preview-container">
+                                        <div class="images-container" wire:sortable="updateImagesOrder"
+                                            wire:sortable.options="{ animation: 300 ,removeCloneOnHide: true}">
+                                            @foreach ($imagesWithOrders as $index => $imageItem)
+                                                <!-- Skip the current main image -->
+                                                <div style="background: rgba(208, 208, 208, 0.466); width: 100px; height: 100px;"
+                                                    wire:sortable.item="{{ $imageItem['order'] }}"
+                                                    wire:key="task-{{ $imageItem['order'] }}" wire:sortable.handle>
+                                                    <div @class(['single-file-card', 'active' => $loop->first])>
+
+                                                        <img src="{{ $imageItem['file']->temporaryUrl() }}"
+                                                            class="img-fluid" alt="file"
+                                                            style="height: 100%; width: 100%; object-fit: contain;">
                                                     </div>
-                                                @endif
+                                                </div>
                                             @endforeach
                                         </div>
                                     </div>
                                 @endif
                                 {{-- @if ($image)
-                                    <img src="{{ $image->temporaryUrl() }}" alt="Image"
-                                        class="mt-2 img-fluid img-thumbnail" style="max-height: 200px;">
+                                <img src="{{ $image->temporaryUrl() }}" alt="Image" class="mt-2 img-fluid img-thumbnail"
+                                    style="max-height: 200px;">
                                 @endif --}}
 
                             </div>

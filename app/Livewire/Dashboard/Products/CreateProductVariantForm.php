@@ -39,12 +39,7 @@ class CreateProductVariantForm extends Component
     public function mount($product)
     {
         $this->product = $product;
-        $this->productImages = $this->product->images ? $this->product->images->map(function ($image) {
-            return [
-                'id' => $image->id,
-                'image' => $image->image,
-            ];
-        }) : [];
+        $this->productImages = $this->product->images ? $this->product->images->sortBy('order') : [];
         $this->sku = $this->product->sku;
         $this->productAttributesWithValues = $this->product->attributes ? $this->product->attributes->map(function ($attribute) {
             return [
@@ -172,7 +167,7 @@ class CreateProductVariantForm extends Component
         Log::info('New main image index: ' . $newMainIndex);
 
         // Validate the new index
-        if ($newMainIndex < 0 ) {
+        if ($newMainIndex < 0) {
             $this->dispatch('error', 'Invalid image index.');
             return;
         }

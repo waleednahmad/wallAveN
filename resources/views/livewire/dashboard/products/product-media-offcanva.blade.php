@@ -30,11 +30,14 @@
         <hr>
         @if (isset($images) && count($images))
             <h3>images</h3>
-            <div class="row">
+            <div class="row" wire:sortable="updateImagesOrder"
+                wire:sortable.options="{ animation: 300 ,removeCloneOnHide: true}">
                 @foreach ($images as $image)
-                    <div class="col-6">
+                    <div class="col-6 " wire:sortable.item="{{ $image['id'] }}"
+                        wire:key="image-item-{{ $image['id'] }}" wire:sortable.handle>
                         <div class="card" style="background: rgba(208, 208, 208, 0.466)">
-                            <div class="card-body single-file-card">
+                            <div class="card-body d-flex flex-column align-items-center">
+                                {{-- image preview --}}
                                 <img src="{{ asset($image['image']) }}" class="img-fluid" alt="file"
                                     style="height: 100px; width: 100%;object-fit: contain;">
 

@@ -95,7 +95,7 @@
                 @enderror
 
                 @if (isset($productImages) && count($productImages))
-                    <div class="other-images-container">
+                    <div class="images-container">
                         @foreach ($productImages as $prImage)
                             <!-- Skip the current main image -->
                             <div style="background: rgba(208, 208, 208, 0.466); width: 100px; height: 100px;">

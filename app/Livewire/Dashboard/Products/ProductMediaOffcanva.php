@@ -3,6 +3,7 @@
 namespace App\Livewire\Dashboard\Products;
 
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Traits\UploadImageTrait;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -11,6 +12,7 @@ use Livewire\WithFileUploads;
 class ProductMediaOffcanva extends Component
 {
     use WithFileUploads, UploadImageTrait;
+
     public $product;
     public $uploadedImages = [];
     public $images = [];
@@ -19,7 +21,7 @@ class ProductMediaOffcanva extends Component
     public function setProductFiles($product)
     {
         $this->product = Product::with('images')->findOrFail($product);
-        $this->images = $this->product->images->toArray();
+        $this->loadProductImages();
     }
 
     public function save()
@@ -51,7 +53,6 @@ class ProductMediaOffcanva extends Component
         $this->refreshProductData();
     }
 
-
     public function refreshProductData()
     {
         $this->product->load('images');
@@ -59,10 +60,27 @@ class ProductMediaOffcanva extends Component
         $this->dispatch('refreshProductFiles');
     }
 
+    public function updateImagesOrder($imagesOrder)
+    {
+        foreach ($imagesOrder as $newOrder) {
+            $imageId = $newOrder['value'];
+            $order = $newOrder['order'];
+            $image = ProductImage::findOrFail($imageId);
+            $image->update(['order' => $order]);
+        }
+
+        $this->dispatch('refreshProductFiles');
+    }
+
     #[On('refreshProductFiles')]
     public function refreshProductFiles()
     {
-        $this->images = $this->product->images->toArray();
+        $this->loadProductImages();
+    }
+
+    private function loadProductImages()
+    {
+        $this->images = $this->product->images->sortBy('order');
     }
 
     public function render()

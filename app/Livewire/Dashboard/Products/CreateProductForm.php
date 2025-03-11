@@ -15,6 +15,7 @@ use Livewire\Attributes\Computed;
 use App\Traits\GenerateSlugsTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\On;
 
 class CreateProductForm extends Component
 {
@@ -43,6 +44,7 @@ class CreateProductForm extends Component
 
     // === Gallery Handler
     public $uploadedImages = [];
+    public $imagesWithOrders = []; // New property to store images with orders
     public $mainImageIndex = 0;
 
     // ========= Computed Properties =========
@@ -132,27 +134,28 @@ class CreateProductForm extends Component
                 'slug' => $this->generateUniqueSlug(new Product(), $this->name, 'slug'),
             ]);
 
-            // Store the uploaded images
-            if ($this->uploadedImages && count($this->uploadedImages) > 0) {
+            // Store the uploaded images from $imagesWithOrders
+            if ($this->imagesWithOrders && count($this->imagesWithOrders) > 0) {
                 $imagePaths = [];
 
                 // Store all images and track their paths
-                foreach ($this->uploadedImages as $index => $image) {
-                    $imagePath = $this->saveImage($image, 'products/' . $product->id);
-                    $imagePaths[$index] = $imagePath;
+                foreach ($this->imagesWithOrders as $imageItem) {
+                    $imagePath = $this->saveImage($imageItem['file'], 'products/' . $product->id);
+                    $imagePaths[$imageItem['order']] = $imagePath;
 
                     // Create record in the images relationship
                     $product->images()->create([
                         'image' => $imagePath,
+                        'order' => $imageItem['order'],
                     ]);
                 }
 
-                // Update the product's main image if a main image index is set
-                if (isset($imagePaths[$this->mainImageIndex])) {
-                    $product->update(['image' => $imagePaths[$this->mainImageIndex]]);
+                // Update the product's main image with the path of the image with order 1
+                if (isset($imagePaths[1])) {
+                    $product->update(['image' => $imagePaths[1]]);
                 } else {
-                    // Fallback to the first image if mainImageIndex is invalid
-                    $product->update(['image' => $imagePaths[0] ?? null]);
+                    // Fallback to the first image if order 1 is not found
+                    $product->update(['image' => reset($imagePaths) ?? null]);
                 }
             }
 
@@ -203,8 +206,55 @@ class CreateProductForm extends Component
         $this->image = $this->uploadedImages[$this->mainImageIndex]->temporaryUrl();
     }
 
+    public function updateImagesOrder($imagesOrder)
+    {
+        // Create a temporary array to hold the reordered items
+        $reorderedImages = [];
+        $reorderedUploadedImages = [];
+
+        // Map the new order based on the original 'value'
+        foreach ($imagesOrder as $item) {
+            $newPosition = $item['order'] - 1; // Convert to 0-based index
+            $originalOrder = (int) $item['value']; // Original order (cast to int)
+
+            // Find the image with the matching original order in $imagesWithOrders
+            foreach ($this->imagesWithOrders as $imageItem) {
+                if ($imageItem['order'] === $originalOrder) {
+                    $reorderedImages[$newPosition] = [
+                        'file' => $imageItem['file'],
+                        'order' => $newPosition + 1, // Assign new order (1-based)
+                        'name' => $imageItem['name'],
+                    ];
+                    $reorderedUploadedImages[$newPosition] = $imageItem['file']; // Reorder uploadedImages
+                    break;
+                }
+            }
+        }
+
+        // Update $imagesWithOrders and $uploadedImages with the reordered arrays
+        $this->imagesWithOrders = array_values($reorderedImages); // Re-index the array
+        $this->uploadedImages = array_values($reorderedUploadedImages); // Re-index the array
+        $this->dispatch('rerender');
+    }
+
+
+    #[On('rerender')]
     public function render()
     {
+        // If is there any uploaded images, add order foreach one start from 1
+        if ($this->uploadedImages && count($this->uploadedImages) > 0) {
+            $this->imagesWithOrders = []; // Reset the array
+            if (count($this->imagesWithOrders)  == 0) {
+                foreach ($this->uploadedImages as $index => $image) {
+                    $this->imagesWithOrders[$index] = [
+                        'file' => $image, // Store the TemporaryUploadedFile object
+                        'order' => $index + 1, // Add the order
+                        'name' => $image->getClientOriginalName(), // Optional: store file name
+                    ];
+                }
+            }
+        }
+
         // ------------ set Categories ------------
         $this->categories = Category::active()
             ->when($this->searchCategory, function ($query) {

@@ -72,14 +72,14 @@
     border-color: #28a745;
 }
 
-.image-preview-container {
+/* .image-preview-container {
     display: grid;
     grid-template-columns: 200px auto;
     gap: 5px;
     align-items: start;
-}
+} */
 
-.main-image-card {
+/* .main-image-card {
     position: relative;
     border: 2px solid #007bff;
     border-radius: 5px;
@@ -89,11 +89,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-}
+} */
 
 
 
-.other-images-container {
+.images-container {
     margin-top: 5px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
@@ -110,6 +110,8 @@
     justify-content: center;
     padding: 5px;
 }
+
+/* add active style for the first element with class single-file-card */
 
 .single-file-card.active {
     background: rgba(98, 149, 197, 0.616);
