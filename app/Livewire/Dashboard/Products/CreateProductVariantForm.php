@@ -96,7 +96,8 @@ class CreateProductVariantForm extends Component
 
         DB::beginTransaction();
         try {
-            $variant = $this->product->variants()->create([
+            $variant = ProductVariant::create([
+                'product_id' => $this->product->id,
                 'sku' => $this->sku,
                 'barcode' => $this->barcode,
                 'compare_at_price' => $this->compare_at_price,
@@ -104,7 +105,6 @@ class CreateProductVariantForm extends Component
                 'price' => $this->price,
                 'description' => $this->description,
                 'image' => $this->image ?? null,
-
             ]);
 
             // Sync attribute values only

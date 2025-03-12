@@ -73,11 +73,8 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="vendor_id">Vendor
-                                    <span class="text-danger">
-                                        *
-                                    </span>
                                 </label>
-                                <select @class(['form-control', 'is-invalid' => $errors->has('vendor_id')]) id="vendor_id" name="vendor_id" required
+                                <select @class(['form-control', 'is-invalid' => $errors->has('vendor_id')]) id="vendor_id" name="vendor_id"
                                     wire:model="vendor_id">
                                     <option value="">Select Vendor</option>
                                     @foreach ($this->vendors as $vendor)

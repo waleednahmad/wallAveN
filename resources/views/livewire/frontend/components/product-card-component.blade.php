@@ -17,12 +17,17 @@
                 </a>
             </h6>
             <ul>
-                <li>
-                    <span>
-                        Vendor :
-                    </span>
-                    {{ $product->vendor->name }}
-                </li>
+                @if ($product->vendor)
+                    <li>
+                        <span>
+                            Vendor :
+                        </span>
+                        {{ $product->vendor ? $product->vendor->name : '-' }}
+                    </li>
+                @else
+                    <li class="d-block" style="height: 25px">
+                    </li>
+                @endif
                 @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check())
                     <li><span>Price : </span>
                         <strong>${{ $product->variant_price }}</strong>

@@ -73,11 +73,8 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="vendor_id">Vendor
-                                    <span class="text-danger">
-                                        *
-                                    </span>
                                 </label>
-                                <select @class(['form-control', 'is-invalid' => $errors->has('vendor_id')]) id="vendor_id" name="vendor_id" required
+                                <select @class(['form-control', 'is-invalid' => $errors->has('vendor_id')]) id="vendor_id" name="vendor_id"
                                     wire:model="vendor_id">
                                     <option value="">Select Vendor</option>
                                     @foreach ($this->vendors as $vendor)
@@ -107,54 +104,7 @@
                             </div>
                         </div>
 
-                        {{-- Image --}}
-                        <div class="col-12">
-                            <div class="form-group">
-                                <div class="form-group">
-                                    <label for="images">Upload images</label>
-                                    <input type="file" class="form-control" id="images"
-                                        wire:model="uploadedImages" accept="image/*" multiple>
-                                    @error('uploadedImages.*')
-                                        <span class="error">{{ $message }}</span>
-                                    @enderror
-                                </div>
 
-                                <!-- Preview the images -->
-
-                                @if (isset($imagesWithOrders) && count($imagesWithOrders))
-                                    @php
-                                        $imagesWithOrders = collect($imagesWithOrders)
-                                            ->sortBy('order')
-                                            ->values()
-                                            ->all();
-                                    @endphp
-
-                                    <div class="image-preview-container">
-                                        <div class="images-container" wire:sortable="updateImagesOrder"
-                                            wire:sortable.options="{ animation: 300 ,removeCloneOnHide: true}">
-                                            @foreach ($imagesWithOrders as $index => $imageItem)
-                                                <!-- Skip the current main image -->
-                                                <div style="background: rgba(208, 208, 208, 0.466); width: 100px; height: 100px;"
-                                                    wire:sortable.item="{{ $imageItem['order'] }}"
-                                                    wire:key="task-{{ $imageItem['order'] }}" wire:sortable.handle>
-                                                    <div @class(['single-file-card', 'active' => $loop->first])>
-
-                                                        <img src="{{ $imageItem['file']->temporaryUrl() }}"
-                                                            class="img-fluid" alt="file"
-                                                            style="height: 100%; width: 100%; object-fit: contain;">
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                @endif
-                                {{-- @if ($image)
-                                <img src="{{ $image->temporaryUrl() }}" alt="Image" class="mt-2 img-fluid img-thumbnail"
-                                    style="max-height: 200px;">
-                                @endif --}}
-
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -295,6 +245,61 @@
                             </div>
                         @empty
                         @endforelse
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h6>
+                        Product Images
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {{-- Image --}}
+                    <div class="col-12">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="images">Upload images</label>
+                                <input type="file" class="form-control" id="images" wire:model="uploadedImages"
+                                    accept="image/*" multiple>
+                                @error('uploadedImages.*')
+                                    <span class="error">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <!-- Preview the images -->
+
+                            @if (isset($imagesWithOrders) && count($imagesWithOrders))
+                                @php
+                                    $imagesWithOrders = collect($imagesWithOrders)->sortBy('order')->values()->all();
+                                @endphp
+
+                                <div class="image-preview-container">
+                                    <div class="images-container" wire:sortable="updateImagesOrder"
+                                        wire:sortable.options="{ animation: 300 ,removeCloneOnHide: true}">
+                                        @foreach ($imagesWithOrders as $index => $imageItem)
+                                            <!-- Skip the current main image -->
+                                            <div wire:sortable.item="{{ $imageItem['order'] }}"
+                                                @class(['single-file-card', 'active' => $loop->first]) wire:key="task-{{ $imageItem['order'] }}"
+                                                wire:sortable.handle>
+
+                                                <img src="{{ $imageItem['file']->temporaryUrl() }}" class="img-fluid"
+                                                    alt="file"
+                                                    style="height: 100%; width: 100%; object-fit: contain;">
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+                            {{-- @if ($image)
+                                <img src="{{ $image->temporaryUrl() }}" alt="Image" class="mt-2 img-fluid img-thumbnail"
+                                    style="max-height: 200px;">
+                                @endif --}}
+
+                        </div>
                     </div>
                 </div>
             </div>

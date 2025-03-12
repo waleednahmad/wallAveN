@@ -19,9 +19,9 @@ class EditProductVariantForm extends Component
     public $sku;
     #[Validate('nullable|string|max:255|min:3')]
     public $barcode;
-    #[Validate('required|numeric')]
+    #[Validate('nullable|numeric')]
     public $compare_at_price;
-    #[Validate('required|numeric')]
+    #[Validate('nullable|numeric')]
     public $cost_price;
     #[Validate('required|numeric')]
     public $price;

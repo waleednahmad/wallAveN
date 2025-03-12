@@ -117,7 +117,7 @@ class EditProductForm extends Component
             [
                 'name' => 'required',
                 'sku' => 'required|unique:products,sku,' . $this->product->id,
-                'vendor_id' => 'required|exists:vendors,id',
+                'vendor_id' => 'nullable|exists:vendors,id',
                 'selectedCategories' => 'required|array|min:1',
                 'selectedAttributes' => 'required|array|min:1',
             ],

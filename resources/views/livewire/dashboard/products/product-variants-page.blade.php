@@ -70,11 +70,11 @@
                     <thead>
 
                         <tr>
-                            <th>SKU</th>
+                            <th>#</th>
                             <th>Image</th>
-                            <th>Barcode</th>
-                            <th>Compare-at Price</th>
-                            <th>Cost Price</th>
+                            <th>SKU</th>
+                            <th>Attributes</th>
+                            {{-- <th>Barcode</th> --}}
                             <th>Price</th>
                             <th>Action</th>
                         </tr>
@@ -82,9 +82,8 @@
                     <tbody>
                         @forelse ($product->variants as $variant)
                             <tr>
-                                <td>{{ $variant->sku }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>
-                                    {{ $variant->image }}
                                     @if ($variant->image && file_exists($variant->image))
                                         <img src="{{ asset($variant->image) }}" alt="Variant Image"
                                             class="img-thumbnail"
@@ -95,10 +94,35 @@
                                             style="width: 90px; height: 90px;background-color: #f8f9fa;">
                                     @endif
                                 </td>
-                                <td>{{ $variant->barcode ?? '-' }}</td>
-                                <td>{{ $variant->compare_at_price ?? '-' }}</td>
-                                <td>{{ $variant->cost_price ?? '-' }}</td>
-                                <td>{{ $variant->price ?? '-' }}</td>
+                                <td>{{ $variant->sku }}</td>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        @php
+                                            $groupedAttributes = [];
+                                            foreach ($variant->attributeValues as $attributeValue) {
+                                                $attributeName = $attributeValue->attribute->name;
+                                                $attributeValueValue = $attributeValue->value;
+
+                                                if (!isset($groupedAttributes[$attributeName])) {
+                                                    $groupedAttributes[$attributeName] = [];
+                                                }
+
+                                                if (!in_array($attributeValueValue, $groupedAttributes[$attributeName])) {
+                                                    $groupedAttributes[$attributeName][] = $attributeValueValue;
+                                                }
+                                            }
+                                        @endphp
+                                        @forelse ($groupedAttributes as $attributeName => $attributeValues)
+                                            <li>
+                                                <strong>{{ $attributeName }}:</strong> {{ implode(', ', $attributeValues) }}
+                                            </li>
+                                        @empty
+                                            <li>No attributes found</li>
+                                        @endforelse
+                                    </ul>
+                                </td>
+                                {{-- <td>{{ $variant->barcode ?? '-' }}</td> --}}
+                                <td>${{ $variant->price ?? '-' }}</td>
                                 <td>
                                     {{-- Edit --}}
                                     <button class="btn btn-sm btn-primary"

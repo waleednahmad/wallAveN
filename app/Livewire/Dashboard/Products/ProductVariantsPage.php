@@ -11,7 +11,7 @@ class ProductVariantsPage extends Component
 
     public function mount($product)
     {
-        $this->product = $product;
+        $this->product = $product->load('variants.attributeValues.attribute');
     }
     public function addVariant()
     {
