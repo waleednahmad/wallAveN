@@ -44,6 +44,18 @@
                                 @endforelse
                             </td>
                         </tr>
+
+                        <tr>
+                            <th>
+                                Actions
+                            </th>
+                            <td>
+                                <a class="btn btn-sm btn-info" title="Preview"
+                                    href="{{ route('frontend.product', $product->slug) }}" target="_blank">
+                                    <i class="fas fa-eye "></i>
+                                </a>
+                            </td>
+                        </tr>
                     </table>
                 </div>
             </div>
@@ -107,14 +119,17 @@
                                                     $groupedAttributes[$attributeName] = [];
                                                 }
 
-                                                if (!in_array($attributeValueValue, $groupedAttributes[$attributeName])) {
+                                                if (
+                                                    !in_array($attributeValueValue, $groupedAttributes[$attributeName])
+                                                ) {
                                                     $groupedAttributes[$attributeName][] = $attributeValueValue;
                                                 }
                                             }
                                         @endphp
                                         @forelse ($groupedAttributes as $attributeName => $attributeValues)
                                             <li>
-                                                <strong>{{ $attributeName }}:</strong> {{ implode(', ', $attributeValues) }}
+                                                <strong>{{ $attributeName }}:</strong>
+                                                {{ implode(', ', $attributeValues) }}
                                             </li>
                                         @empty
                                             <li>No attributes found</li>
@@ -131,10 +146,12 @@
                                     </button>
 
                                     {{-- Attributes --}}
-                                    <button class="btn btn-sm btn-secondary" title="Edit Attributes"
+                                    {{-- <button class="btn btn-sm btn-secondary" title="Edit Attributes"
                                         wire:click="editVariantAttributes({{ $variant->id }})">
                                         <i class="fas fa-cogs"></i>
-                                    </button>
+                                    </button> --}}
+
+
                                 </td>
                             </tr>
                         @empty

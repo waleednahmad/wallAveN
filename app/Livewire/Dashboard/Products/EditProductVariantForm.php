@@ -15,6 +15,7 @@ class EditProductVariantForm extends Component
     use UploadImageTrait, WithFileUploads;
 
     public $product, $variant;
+    public $main_sku;
     #[Validate('required|string|max:255|min:3')]
     public $sku;
     #[Validate('nullable|string|max:255|min:3')]
@@ -38,7 +39,8 @@ class EditProductVariantForm extends Component
     {
         $this->variant = $variant;
         $this->product = $variant->product;
-        $this->sku = $variant->sku;
+        $this->sku = strtoupper($variant->sku);
+        $this->main_sku = strtoupper($variant->sku);
         $this->barcode = $variant->barcode;
         $this->compare_at_price = $variant->compare_at_price;
         $this->cost_price = $variant->cost_price;
@@ -66,6 +68,28 @@ class EditProductVariantForm extends Component
     public function selectAttributeValue($attributeId, $valueId)
     {
         $this->selectedAttributeValues[$attributeId] = $valueId;
+        $this->regenerateSku();
+    }
+
+    public function regenerateSku()
+    {
+        $selectedAttributeValues = $this->productAttributesWithValues->map(function ($attribute) {
+            return [
+                'id' => $attribute['id'],
+                'value' => $this->selectedAttributeValues[$attribute['id']] ?? null,
+            ];
+        })->filter(function ($attribute) {
+            return !is_null($attribute['value']);
+        });
+
+        $newSku = $this->main_sku;
+        foreach ($selectedAttributeValues as $attribute) {
+            $attributeValue = $this->productAttributesWithValues->firstWhere('id', $attribute['id'])['values']->firstWhere('id', $attribute['value']);
+            if ($attributeValue) {
+                $newSku .= '-' . $attributeValue['value'];
+            }
+        }
+        $this->sku =    strtoupper(str_replace(' ', '', $newSku));
     }
 
     protected function rules()
@@ -127,7 +151,7 @@ class EditProductVariantForm extends Component
 
     private function isValidSku()
     {
-        return str_contains($this->sku, $this->product->sku);
+        return str_contains($this->sku, strtoupper($this->product->sku));
     }
 
 

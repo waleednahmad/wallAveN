@@ -289,6 +289,13 @@
                                                 <img src="{{ $imageItem['file']->temporaryUrl() }}" class="img-fluid"
                                                     alt="file"
                                                     style="height: 100%; width: 100%; object-fit: contain;">
+
+                                                @if ($loop->first)
+                                                    {{-- Checked icon --}}
+                                                    <div class="checked-icon">
+                                                        <i class="fas fa-check"></i>
+                                                    </div>
+                                                @endif
                                             </div>
                                         @endforeach
                                     </div>

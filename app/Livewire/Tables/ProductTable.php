@@ -118,6 +118,12 @@ final class ProductTable extends PowerGridComponent
     public function actions(Product $row): array
     {
         return [
+
+            Button::add('view')
+                ->slot('<i class="fas fa-eye"></i>')
+                ->class('btn btn-info btn-sm rounded')
+                ->route('frontend.product', ['slug' => $row->slug], '_blank'),
+
             Button::add('edit')
                 ->slot('<i class="fas fa-edit"></i>')
                 ->class('btn btn-primary btn-sm rounded')

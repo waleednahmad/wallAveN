@@ -15,6 +15,7 @@ class CreateProductVariantForm extends Component
     use UploadImageTrait,  WithFileUploads;
 
     public $product;
+    public $main_sku;
     #[Validate('required|string|max:255|min:3')]
     public $sku;
     #[Validate('nullable|string|max:255|min:3')]
@@ -40,7 +41,8 @@ class CreateProductVariantForm extends Component
     {
         $this->product = $product;
         $this->productImages = $this->product->images ? $this->product->images->sortBy('order') : [];
-        $this->sku = $this->product->sku;
+        $this->sku = strtoupper($this->product->sku);
+        $this->main_sku = strtoupper($this->product->sku);
         $this->productAttributesWithValues = $this->product->attributes ? $this->product->attributes->map(function ($attribute) {
             return [
                 'id' => $attribute->id,
@@ -59,6 +61,28 @@ class CreateProductVariantForm extends Component
     public function selectAttributeValue($attributeId, $valueId)
     {
         $this->selectedAttributeValues[$attributeId] = $valueId;
+        $this->regenerateSku();
+    }
+
+    public function regenerateSku()
+    {
+        $selectedAttributeValues = $this->productAttributesWithValues->map(function ($attribute) {
+            return [
+                'id' => $attribute['id'],
+                'value' => $this->selectedAttributeValues[$attribute['id']] ?? null,
+            ];
+        })->filter(function ($attribute) {
+            return !is_null($attribute['value']);
+        });
+
+        $newSku = $this->main_sku;
+        foreach ($selectedAttributeValues as $attribute) {
+            $attributeValue = $this->productAttributesWithValues->firstWhere('id', $attribute['id'])['values']->firstWhere('id', $attribute['value']);
+            if ($attributeValue) {
+                $newSku .= '-' . $attributeValue['value'];
+            }
+        }
+        $this->sku =    strtoupper(str_replace(' ', '', $newSku));
     }
 
     protected function rules()
@@ -127,7 +151,8 @@ class CreateProductVariantForm extends Component
 
     private function isValidSku()
     {
-        return str_contains($this->sku, $this->product->sku);
+
+        return str_contains($this->sku, strtoupper($this->product->sku));
     }
 
     private function checkOnExistVaraintWithSameAttributeValues()

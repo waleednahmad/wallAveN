@@ -9,13 +9,14 @@ use Illuminate\Support\Facades\Route;
 
 
 
+Route::get('/product/{slug}', [FrontController::class, 'showProduct'])->name('frontend.product');
+
 Route::controller(FrontController::class)
     ->middleware('guest:web')
     ->group(
         function () {
             Route::get('/', 'index')->name('frontend.home');
             Route::get('/shop', 'shop')->name('frontend.shop');
-            Route::get('/product/{slug}', 'showProduct')->name('frontend.product');
 
             Route::middleware([
                 CheckIsDealerLoggedIn::class

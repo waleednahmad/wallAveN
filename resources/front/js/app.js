@@ -2,11 +2,11 @@ import Splide from "@splidejs/splide";
 
 var splide = new Splide("#main-carousel", {
     arrows: false,
-    type: 'loop',
+    type: "loop",
     perPage: 1,
     cover: false,
-    height: '100%',
-    autoplay: true,
+    height: "100%",
+    autoplay: false,
 });
 
 var thumbnails = document.getElementsByClassName("thumbnail");
