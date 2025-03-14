@@ -6,7 +6,27 @@
         </h6>
         <div class="mb-3">
             <label for="value" class="form-label">Value</label>
-            <input type="text" class="form-control" id="value" wire:model="value">
+
+            @if ($type == 'select')
+                <select class="form-control" id="value" wire:model="value">
+                    <option value="1">active</option>
+                    <option value="0">inactive</option>
+                </select>
+            @elseif($type == 'image')
+                <input type="file" class="form-control" id="value" wire:model="image" accept="image/*">
+                @if ($image)
+                    <img src="{{ $image->temporaryUrl() }}" alt="Image Preview" class="mt-2 img-thumbnail"
+                        width="100">
+                @elseif($value && public_path($value))
+                    <img src="{{ asset($value) }}" alt="Image Preview" class="mt-2 img-thumbnail" width="100">
+                @endif
+
+                @error('image')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            @else
+                <input type="number" class="form-control" id="value" wire:model="value">
+            @endif
             @error('value')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
@@ -17,6 +37,12 @@
             @error('description')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
+        </div>
+        <div class="mb-3">
+            @if ($type == 'image')
+                {{-- reset main image --}}
+                <button type="button" class="btn btn-danger" wire:click="resetImage">Reset Image</button>
+            @endif
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
     </form>

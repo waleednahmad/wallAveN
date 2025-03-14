@@ -1,7 +1,10 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{ route('dashboard') }}" class="brand-link d-flex flex-column justify-items-center align-items-center">
-        <img src="{{ asset('assets/img/header-logo-white.svg') }}" alt="">
+        <img src="{{ getMainImage() }}" alt=""
+            style="width: 75%; object-fit: contain;"
+        >
+
     </a>
 
     <!-- Sidebar -->

@@ -5,6 +5,7 @@
                 <div class="auction-details-img d-flex justify-content-center align-items-center flex-column"
                     wire:ignore>
 
+
                     <section id="main-carousel" class="splide" aria-label="My Awesome Gallery">
                         <div class="splide__track">
                             <ul class="splide__list">
@@ -32,10 +33,14 @@
                 <div class="auction-details-content">
                     <div class="batch">
                         <h6>
-                            {{ $vendor }}
-                            <br>
-                            <br>
-                            SKU <span>#{{ $selectedSku }}</span>
+                            @if (isVendorActivated())
+                                {{ $vendor }}
+                                <br>
+                                <br>
+                            @endif
+                            <span style="font-size: 14px; font-weight: 400">
+                                SKU: <strong>{{ $selectedSku }}</strong>
+                            </span>
                         </h6>
                     </div>
                     <h3 class="my-3">
@@ -48,14 +53,14 @@
                     @endif
 
                     @if (isset($groupedAttributes) && count($groupedAttributes))
-                        <div class="quantity-area position-relative">
+                        <div class="mt-3 quantity-area position-relative">
                             @foreach ($groupedAttributes as $attribute => $values)
                                 @php
                                     $attribute_id = $values['id'];
                                     $values = $values['values'];
                                 @endphp
 
-                                <h6 class="mb-0">{{ $attribute }}</h6>
+                                <h6 class="mt-4 mb-0">{{ $attribute }}</h6>
                                 <div class="mb-3 values-container">
                                     @forelse($values as $value)
                                         <span @class(['active' => in_array($value['id'], $selectedAttributeValues)])

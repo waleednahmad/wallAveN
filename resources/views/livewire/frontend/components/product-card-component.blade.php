@@ -2,7 +2,7 @@
     <div class="auction-details-section mb-120">
 
         <div class="auction-card-img-wrap" style="height: 200px; overflow: hidden; border-radius: 10px;">
-            <a href="{{ route('frontend.product', $product->slug) }}" class="card-img">
+            <a href="{{ route('frontend.product', $product->slug) }}" class="card-img h-100">
                 <img src="{{ asset($product->image) }}" loading="lazy"
                     style="object-fit: contain; width: 100%; height: 100%;" alt="{{ $product->name }}">
             </a>
@@ -17,16 +17,18 @@
                 </a>
             </h6>
             <ul>
-                @if ($product->vendor)
-                    <li>
-                        <span>
-                            Vendor :
-                        </span>
-                        {{ $product->vendor ? $product->vendor->name : '-' }}
-                    </li>
-                @else
-                    <li class="d-block" style="height: 25px">
-                    </li>
+                @if (isVendorActivated())
+                    @if ($product->vendor)
+                        <li>
+                            <span>
+                                Vendor :
+                            </span>
+                            {{ $product->vendor ? $product->vendor->name : '-' }}
+                        </li>
+                    @else
+                        <li class="d-block" style="height: 25px">
+                        </li>
+                    @endif
                 @endif
                 @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check())
                     <li><span>Price : </span>

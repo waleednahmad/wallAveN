@@ -82,7 +82,8 @@ class CreateProductVariantForm extends Component
                 $newSku .= '-' . $attributeValue['value'];
             }
         }
-        $this->sku =    strtoupper(str_replace(' ', '', $newSku));
+        // Remove any character that is not a number, letter, or hyphen
+        $this->sku = strtoupper(preg_replace('/[^A-Za-z0-9-]/', '', str_replace(' ', '', $newSku)));
     }
 
     protected function rules()

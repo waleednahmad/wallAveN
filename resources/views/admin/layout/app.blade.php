@@ -11,7 +11,7 @@
 <body class="hold-transition sidebar-mini">
     {{-- Loading Screen --}}
     <div class="preloader flex-column justify-content-center align-items-center">
-        <img class="animation__shake" src="{{ asset('assets/img/header-logo.svg') }}" alt="WallAve" width="350">
+        <img class="animation__shake" src="{{ getMainImage() }}" alt="Golden Ruggs" width="200">
     </div>
     {{-- @minifyhtml --}}
     <div class="wrapper">

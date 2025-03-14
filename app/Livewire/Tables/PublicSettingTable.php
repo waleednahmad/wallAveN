@@ -46,6 +46,15 @@ final class PublicSettingTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
+            ->add('value', function ($value) {
+                if ($value->key == 'activate vendor') {
+                    return $value->value == 1 ? "<span class='badge badge-success'>Active</span>" : "<span class='badge badge-danger'>Inactive</span>";
+                } elseif ($value->key == "main logo") {
+                    return "<img src='" . asset($value->value) . "' alt='Logo' class='img-thumbnail' style='width: 90px;'>";
+                } else {
+                    return $value->value;
+                }
+            })
             ->add('created_at');
     }
 

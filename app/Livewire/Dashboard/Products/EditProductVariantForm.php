@@ -68,28 +68,6 @@ class EditProductVariantForm extends Component
     public function selectAttributeValue($attributeId, $valueId)
     {
         $this->selectedAttributeValues[$attributeId] = $valueId;
-        $this->regenerateSku();
-    }
-
-    public function regenerateSku()
-    {
-        $selectedAttributeValues = $this->productAttributesWithValues->map(function ($attribute) {
-            return [
-                'id' => $attribute['id'],
-                'value' => $this->selectedAttributeValues[$attribute['id']] ?? null,
-            ];
-        })->filter(function ($attribute) {
-            return !is_null($attribute['value']);
-        });
-
-        $newSku = $this->main_sku;
-        foreach ($selectedAttributeValues as $attribute) {
-            $attributeValue = $this->productAttributesWithValues->firstWhere('id', $attribute['id'])['values']->firstWhere('id', $attribute['value']);
-            if ($attributeValue) {
-                $newSku .= '-' . $attributeValue['value'];
-            }
-        }
-        $this->sku =    strtoupper(str_replace(' ', '', $newSku));
     }
 
     protected function rules()

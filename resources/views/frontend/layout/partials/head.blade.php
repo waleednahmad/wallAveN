@@ -25,7 +25,7 @@
 
 <link rel="stylesheet" href="{{ asset('dashboard/plugins/fontawesome-free/css/all.min.css') }}">
 <!-- Title -->
-<title>WallAve</title>
+<title>Golden Ruggs</title>
 <link rel="icon" href="{{ asset('assets/img/favicon.png') }}" type="image/gif" sizes="20x20">
 
 <!-- Google tag (gtag.js) -->

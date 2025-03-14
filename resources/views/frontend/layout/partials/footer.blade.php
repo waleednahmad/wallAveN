@@ -5,7 +5,8 @@
                 <div class="col-lg-4 col-md-6 col-sm-8">
                     <div class="footer-content-area">
                         <a href="{{ route('frontend.home') }}" class="footer-logo">
-                            <img src="{{ asset('assets/img/footer-logo.svg') }}" alt="">
+                            <img alt="image" class="img-fluid dark" src="{{ getMainImage() }}"
+                            style="width: 150px;">
                         </a>
                         <p>An Art Action Company typically operates in the space of live art, performance, and social
                             practice, often combining elements of activism and community engagement.</p>
@@ -97,7 +98,7 @@
                     @php
                         echo date('Y');
                     @endphp
-                    <a href="#">WallAve</a>
+                    <a href="#">Golden Ruggs</a>
                 </p>
             </div>
             <div class="footer-bottom-right">

@@ -29,7 +29,20 @@ class PublicValuesSeeder extends Seeder
                 'value' => 1000,
                 'type' => 'number',
                 'description' => "Minimum price to checkout",
+            ],
+            [
+                'key' => 'activate vendor',
+                'value' => 0,
+                'type' => 'select',
+                'description' => "To display the vendor in the front pages",
+            ],
+            [
+                'key' => 'main logo',
+                'value' => asset('assets/img/logo.webp'),
+                'type' => 'image',
+                'description' => "Main logo of the website",
             ]
+
         ];
 
         foreach ($values as $value) {

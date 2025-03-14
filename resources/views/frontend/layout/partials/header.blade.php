@@ -3,8 +3,12 @@
         <div class="topbar-wrap">
             <div class="header-logo">
                 <a href="{{ route('frontend.home') }}">
-                    <img alt="image" class="img-fluid light" src="{{ asset('assets/img/header-logo.svg') }}">
-                    <img alt="image" class="img-fluid dark" src="{{ asset('assets/img/header-logo-white.svg') }}">
+                    <img alt="image" class="img-fluid light" src="{{ getMainImage() }}"
+                        style="width: 150px;">
+                    <img alt="image" class="img-fluid dark" src="{{ getMainImage() }}"
+                        style="width: 150px;">
+                    {{-- <img alt="image" class="img-fluid light" src="{{ asset('assets/img/header-logo.svg') }}"> --}}
+                    {{-- <img alt="image" class="img-fluid dark" src="{{ asset('assets/img/header-logo-white.svg') }}"> --}}
                 </a>
             </div>
             <div class="search-area">

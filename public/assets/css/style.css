@@ -4340,11 +4340,7 @@ header.style-2 .mobile-logo-area .menu-close-btn:hover i {
 .auction-card .auction-card-img-wrap {
   position: relative;
 }
-.auction-card .auction-card-img-wrap .card-img {
-  position: relative;
-  overflow: hidden;
-  display: block;
-}
+
 .auction-card .auction-card-img-wrap .card-img img {
   transition: all 0.5s ease-out;
 }
