@@ -151,6 +151,12 @@
                                         <i class="fas fa-cogs"></i>
                                     </button> --}}
 
+                                    {{-- Delete --}}
+                                    <button class="btn btn-sm btn-danger" title="Delete"
+                                        wire:click="deleteVariant({{ $variant->id }})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+
 
                                 </td>
                             </tr>

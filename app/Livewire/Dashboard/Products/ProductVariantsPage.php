@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard\Products;
 
+use App\Models\ProductVariant;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -26,6 +27,16 @@ class ProductVariantsPage extends Component
     public function editVariantAttributes($variant)
     {
         $this->dispatch('openEditVariantAttributesOffcanvas', ['variant' => $variant]);
+    }
+
+
+    public function deleteVariant(ProductVariant $variant)
+    {
+        $variant->delete();
+        $variant->attributeValues()->detach();
+
+        return redirect()->route('dashboard.products.create-variant', $this->product->id)
+            ->with('success', 'Product variant deleted successfully.');
     }
 
     #[On('refreshProductVariantsTable')]
