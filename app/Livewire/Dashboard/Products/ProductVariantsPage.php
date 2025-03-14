@@ -32,11 +32,11 @@ class ProductVariantsPage extends Component
 
     public function deleteVariant(ProductVariant $variant)
     {
-        $variant->delete();
-        $variant->attributeValues()->detach();
 
-        return redirect()->route('dashboard.products.create-variant', $this->product->id)
-            ->with('success', 'Product variant deleted successfully.');
+        $this->dispatch('confirmDeleteVariant', [
+            'variant' => $variant,
+        ]);
+
     }
 
     #[On('refreshProductVariantsTable')]

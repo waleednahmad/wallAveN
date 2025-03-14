@@ -62,8 +62,23 @@
             <livewire:dashboard.products.edit-variant-attribute-values-form :product="$product" />
         </div>
     </div>
-@endsection
 
+    {{-- Preview Delete Modal --}}
+    <div class="modal fade" id="confirmDeleteVariant" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="confirmDeleteVariantLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteVariantLabel">
+                        Confirm Delete Variant
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <livewire:dashboard.product-variants.confirm-delete-modal />
+            </div>
+        </div>
+    </div>
+@endsection
 
 @push('scripts')
     <script>
@@ -106,6 +121,13 @@
             // ============= Close Edit Offcanvas ==============
             Livewire.on('closeEditVariantOffcanvas', (event) => {
                 bootstrap.Offcanvas.getInstance(document.getElementById('editVariant')).hide();
+            });
+
+            // ============== showConfirmDeleteVariantModal ==============
+            Livewire.on('confirmDeleteVariant', (event) => {
+                new bootstrap.Modal(document.getElementById('confirmDeleteVariant')).show();
+                console.log(event)
+                Livewire.dispatch('setVariant', event[0]);
             });
         });
 
