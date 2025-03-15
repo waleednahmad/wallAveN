@@ -315,14 +315,21 @@
 
     {{-- submit btn (in the center) --}}
     <div class="d-flex justify-content-center">
-        <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
+        <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" @disabled(count($imagesWithOrders) < 1)>
             {{-- loading spinner --}}
             <span wire:loading>
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             </span>
-            <span wire:loading.remove>
-                Save
-            </span>
+            @if (count($imagesWithOrders) < 1)
+                <span>
+                    Please upload at least one image
+                </span>
+            @endif
+            @if (count($imagesWithOrders) >= 1)
+                <span wire:loading.remove>
+                    Save
+                </span>
+            @endif
         </button>
     </div>
 

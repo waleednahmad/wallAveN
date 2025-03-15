@@ -299,7 +299,6 @@
                                                             wire:click="removeImage('{{ $imageItem['id'] }}')">
                                                             <i class="fas fa-trash"></i>
                                                         </button>
-                                                        {{ $imageItem['order'] }}
                                                     </div>
                                                 </div>
                                             </div>

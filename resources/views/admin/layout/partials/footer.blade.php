@@ -5,7 +5,7 @@
     </div>
     <!-- Default to the left -->
     <strong>Copyright &copy;{{ date('Y') }}
-        <a href="#" target="_blank">Golden Ruggs</a>.
+        <a href="#" target="_blank">Golden Rugs</a>.
     </strong> All rights
     reserved.
 </footer>

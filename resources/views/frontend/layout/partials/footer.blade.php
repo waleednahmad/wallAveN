@@ -98,7 +98,7 @@
                     @php
                         echo date('Y');
                     @endphp
-                    <a href="#">Golden Ruggs</a>
+                    <a href="#">Golden Rugs</a>
                 </p>
             </div>
             <div class="footer-bottom-right">

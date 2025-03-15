@@ -3,7 +3,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <title>
-    Golden Ruggs Dashboard
+    Golden Rugs Dashboard
 </title>
 
 <!-- Google Font: Source Sans Pro -->
