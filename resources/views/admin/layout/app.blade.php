@@ -3,7 +3,7 @@
 
 <head>
     @include('admin.layout.partials.head')
-    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    {{-- <script src="https://unpkg.com/@popperjs/core@2"></script> --}}
 
     @stack('styles')
 </head>

@@ -5,9 +5,10 @@
 <script src="{{ asset('dashboard/js/bootstrap.min.js') }}"></script>
 
 
-<script src="{{ asset('dashboard/plugins/popper/umd/popper.min.js') }}"></script>
+{{-- <script src="{{ asset('dashboard/plugins/popper/umd/popper.min.js') }}"></script> --}}
 <!-- AdminLTE App -->
 <script src="{{ asset('dashboard/dist/js/adminlte.min.js') }}"></script>
+<script src="{{ asset('assets/js/popper.min.js') }}"></script>
 
 
 {{-- toastr --}}
@@ -17,8 +18,8 @@
 <script src="{{ asset('dashboard/plugins/select2/js/select2.full.min.js') }}"></script>
 
 {{-- ChartJs --}}
-<script src="{{asset('dashboard/plugins/chart.js/Chart.js')}}"></script>
-<script src="{{asset('dashboard/plugins/chart.js/Chart.bundle.js')}}"></script>
+<script src="{{ asset('dashboard/plugins/chart.js/Chart.js') }}"></script>
+<script src="{{ asset('dashboard/plugins/chart.js/Chart.bundle.js') }}"></script>
 
 
 {{-- Texe Editor --}}

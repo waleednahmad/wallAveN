@@ -37,6 +37,7 @@ class EditAttributeModal extends Component
         $this->values = $attribute->values->map(function ($value) {
             return [
                 'value' => $value->value,
+                'id' => $value->id,
             ];
         })->toArray();
     }
@@ -47,30 +48,51 @@ class EditAttributeModal extends Component
     public function save()
     {
         $this->validate();
+        if (!$this->checkOnValuesDuplicates()) {
+            return;
+        }
         DB::beginTransaction();
         try {
-            // Create the attribute
+            // Update the attribute
             $this->attribute->update([
                 'name' => $this->name,
             ]);
 
-            // Delete existing attribute values
-            $this->attribute->values()->delete();
+            // Get existing values
+            $existingValues = $this->attribute->values->keyBy('id')->toArray();
 
-            // Create new attribute values if any
-            if (count($this->values)) {
-                $this->attribute->values()->createMany($this->values);
+            // Update or create new values
+            foreach ($this->values as $value) {
+                if (isset($value['id']) && isset($existingValues[$value['id']])) {
+                    // Check if the value has changed
+                    if ($existingValues[$value['id']]['value'] !== $value['value']) {
+                        // Update existing value
+                        $this->attribute->values()->where('id', $value['id'])->update([
+                            'value' => $value['value'],
+                        ]);
+                    }
+                    unset($existingValues[$value['id']]);
+                } else {
+                    // Create new value
+                    $this->attribute->values()->create([
+                        'value' => $value['value'],
+                    ]);
+                }
             }
 
+            // Delete values that are no longer present
+            foreach ($existingValues as $value) {
+                $this->attribute->values()->where('id', $value['id'])->delete();
+            }
 
             DB::commit();
             $this->dispatch('success', 'Attribute updated successfully');
-            $this->dispatch('refrsehAttributesList');
+            $this->dispatch('refreshAttributesList');
             $this->dispatch('closeEditModal');
             $this->reset();
         } catch (\Exception $e) {
             DB::rollBack();
-            $this->dispatch('error', 'Failed to create attribute: ' . $e->getMessage());
+            $this->dispatch('error', 'Failed to update attribute: ' . $e->getMessage());
         }
     }
 
@@ -91,6 +113,18 @@ class EditAttributeModal extends Component
         $this->values = array_values($this->values);
         $this->dispatch('success', 'Value removed successfully');
     }
+
+    public function checkOnValuesDuplicates()
+    {
+        $values = array_column($this->values, 'value');
+        $duplicates = array_unique(array_diff_assoc($values, array_unique($values)));
+        if (count($duplicates) > 0) {
+            $this->dispatch('error', 'Duplicate values found: ' . implode(', ', $duplicates));
+            return false;
+        }
+        return true;
+    }
+
 
 
     public function render()
