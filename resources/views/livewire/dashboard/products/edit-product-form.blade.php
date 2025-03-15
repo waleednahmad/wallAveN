@@ -104,31 +104,7 @@
                             </div>
                         </div>
 
-                        {{-- Image --}}
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="image">Image
 
-                                </label>
-                                <input type="file" @class(['form-control', 'is-invalid' => $errors->has('image')]) id="image" name="image"
-                                    value="{{ old('image') }}" wire:model="image" accept="image/*">
-                                @error('image')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-
-                                @if ($image)
-                                    <img src="{{ $image->temporaryUrl() }}" alt="Image"
-                                        class="mt-2 img-fluid img-thumbnail" style="max-height: 200px;">
-                                @elseif(file_exists($product->image))
-                                    <img src="{{ asset($product->image) }}" alt="Image"
-                                        class="mt-2 img-fluid img-thumbnail" style="max-height: 200px;">
-                                @endif
-
-
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -269,6 +245,96 @@
                             </div>
                         @empty
                         @endforelse
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h6>
+                        Product Images
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {{-- Image --}}
+                    <div class="col-12">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="images">Upload images</label>
+                                <input type="file" class="form-control" id="images" wire:model="uploadedImages"
+                                    accept="image/*" multiple>
+                                @error('uploadedImages.*')
+                                    <span class="error">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <!-- Preview the images -->
+
+                            @if (isset($images) && count($images))
+                                <h3>images</h3>
+                                <div class="image-preview-container">
+                                    <div class="images-container" wire:sortable="updateImagesOrder"
+                                        wire:sortable.options="{ animation: 300 ,removeCloneOnHide: true}">
+                                        @foreach ($images as $imageItem)
+                                            <div wire:sortable.item="{{ $imageItem['id'] }}"
+                                                @class(['single-file-card', 'active' => $loop->first]) wire:key="task-{{ $imageItem['id'] }}"
+                                                wire:sortable.handle>
+                                                <div class="card-body d-flex flex-column align-items-center">
+                                                    {{-- image preview --}}
+                                                    <img src="{{ asset($imageItem['image']) }}" class="img-fluid"
+                                                        alt="file"
+                                                        style="height: 100px; width: 100%;object-fit: contain;">
+
+                                                    <div class="mt-1 d-flex" style="gap: 5px">
+                                                        {{-- preview icon span --}}
+                                                        <a href="{{ asset($imageItem['image']) }}" target="_blank"
+                                                            class="btn btn-primary btn-sm preview-btn">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
+                                                        {{-- delete icon span --}}
+                                                        <button class="btn btn-danger btn-sm delete-btn"
+                                                            wire:loading.attr="disabled" type="button"
+                                                            wire:click="removeImage('{{ $imageItem['id'] }}')">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                        {{ $imageItem['order'] }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if (isset($imagesWithOrders) && count($imagesWithOrders))
+                            <hr>
+                            <h4>new images</h4>
+
+                                @php
+                                    $imagesWithOrders = collect($imagesWithOrders)->sortBy('order')->values()->all();
+                                @endphp
+
+                                <div class="image-preview-container">
+                                    <div class="images-container" wire:sortable="updateNewImagesOrder"
+                                        wire:sortable.options="{ animation: 300 ,removeCloneOnHide: true}">
+                                        @foreach ($imagesWithOrders as $index => $imageItem)
+                                            <!-- Skip the current main image -->
+                                            <div wire:sortable.item="{{ $imageItem['order'] }}"
+                                                @class(['single-file-card'])
+                                                wire:key="task-{{ $imageItem['order'] }}" wire:sortable.handle>
+
+                                                <img src="{{ $imageItem['file']->temporaryUrl() }}" class="img-fluid"
+                                                    alt="file"
+                                                    style="height: 100%; width: 100%; object-fit: contain;">
+
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

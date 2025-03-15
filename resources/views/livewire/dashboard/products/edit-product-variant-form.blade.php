@@ -14,10 +14,32 @@
                     </div>
                 @enderror
 
-                @if ($image)
+                @if (isset($productImages) && count($productImages))
+                    <div class="images-container variant">
+                        @foreach ($productImages as $prImage)
+                            <!-- Skip the current main image -->
+                            <div @class([
+                                'single-file-card',
+                                'active' => $prImage['id'] == $selectedImageId,
+                            ]) wire:click="setMainImage({{ $prImage['id'] }})">
+                                <img src="{{ asset($prImage['image']) }}" class="img-fluid" alt="file"
+                                    style="height: 100%; width: 100%; object-fit: contain;">
+
+                                @if ($prImage['id'] == $selectedImageId)
+                                    {{-- Checked icon --}}
+                                    <div class="checked-icon">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+
+                {{-- @if ($image)
                     <img src="{{ $image->temporaryUrl() }}" alt="Image" class="mt-2 img-fluid img-thumbnail"
                         style="max-height: 200px;">
-                @endif
+                @endif --}}
 
             </div>
         </div>
@@ -91,7 +113,7 @@
                         *
                     </span>
                 </label>
-                <input type="number" @class(['form-control', 'is-invalid' => $errors->has('price')]) id="e_price" name="price" required
+                <input type="text" @class(['form-control', 'is-invalid' => $errors->has('price')]) id="e_price" name="price" required
                     wire:model="price" value="{{ old('price') }}">
                 @error('price')
                     <div class="invalid-feedback">
@@ -106,7 +128,7 @@
                 <label for="e_compare_at_price">Compare-at Price
 
                 </label>
-                <input type="number" @class([
+                <input type="text" @class([
                     'form-control',
                     'is-invalid' => $errors->has('compare_at_price'),
                 ]) id="e_compare_at_price" name="compare_at_price"
@@ -124,7 +146,7 @@
                 <label for="e_cost_price">
                     Cost Price
                 </label>
-                <input type="number" @class(['form-control', 'is-invalid' => $errors->has('cost_price')]) id="e_cost_price" name="cost_price"
+                <input type="text" @class(['form-control', 'is-invalid' => $errors->has('cost_price')]) id="e_cost_price" name="cost_price"
                     wire:model="cost_price" value="{{ old('cost_price') }}">
                 @error('cost_price')
                     <div class="invalid-feedback">
@@ -202,6 +224,18 @@
                         console.error(error);
                     });
             }
+
+            // make those inputs ['price', 'compare_at_price', 'cost_price']  aaccept only positiive numbers without any symbol or text
+            let priceInputs = ['e_price', 'e_compare_at_price', 'e_cost_price'];
+            priceInputs.forEach(input => {
+                let inputElement = document.querySelector(`#${input}`);
+                if (inputElement) {
+                    inputElement.addEventListener('input', function() {
+                        this.value = this.value.replace(/[^0-9.]/g, '');
+                    });
+                }
+            });
+
         });
     </script>
 @endscript

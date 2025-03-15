@@ -114,7 +114,7 @@
                         *
                     </span>
                 </label>
-                <input type="number" @class(['form-control', 'is-invalid' => $errors->has('price')]) id="price" name="price" required
+                <input type="text" @class(['form-control', 'is-invalid' => $errors->has('price')]) id="price" name="price" required
                     wire:model="price" value="{{ old('price') }}">
                 @error('price')
                     <div class="invalid-feedback">
@@ -128,7 +128,7 @@
             <div class="form-group">
                 <label for="compare_at_price">Compare-at Price
                 </label>
-                <input type="number" @class([
+                <input type="text" @class([
                     'form-control',
                     'is-invalid' => $errors->has('compare_at_price'),
                 ]) id="compare_at_price" name="compare_at_price"
@@ -145,7 +145,7 @@
             <div class="form-group">
                 <label for="cost_price">Cost Price
                 </label>
-                <input type="number" @class(['form-control', 'is-invalid' => $errors->has('cost_price')]) id="cost_price" name="cost_price"
+                <input type="text" @class(['form-control', 'is-invalid' => $errors->has('cost_price')]) id="cost_price" name="cost_price"
                     wire:model="cost_price" value="{{ old('cost_price') }}">
                 @error('cost_price')
                     <div class="invalid-feedback">
@@ -205,6 +205,17 @@
                         console.error(error);
                     });
             }
+
+            // make those inputs ['price', 'compare_at_price', 'cost_price']  aaccept only positiive numbers without any symbol or text
+            let priceInputs = ['price', 'compare_at_price', 'cost_price'];
+            priceInputs.forEach(input => {
+                let inputElement = document.querySelector(`#${input}`);
+                if (inputElement) {
+                    inputElement.addEventListener('input', function() {
+                        this.value = this.value.replace(/[^0-9.]/g, '');
+                    });
+                }
+            });
         });
     </script>
 @endscript

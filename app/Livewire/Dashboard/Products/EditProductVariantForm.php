@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard\Products;
 
+use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Traits\UploadImageTrait;
 use Illuminate\Support\Facades\DB;
@@ -34,6 +35,10 @@ class EditProductVariantForm extends Component
     public $productAttributesWithValues = [];
     public $selectedAttributeValues = [];
 
+    public $productImages = [];
+    public $selectedImageId;
+    
+
     #[On('setVariant')]
     public function setVariant(ProductVariant $variant)
     {
@@ -62,8 +67,42 @@ class EditProductVariantForm extends Component
             return [$value->attribute_id => $value->id];
         })->toArray();
 
+
+        $this->productImages = $this->product->images ? $this->product->images->sortBy('order') : [];
+        $this->selectedImageId = ProductImage::where('product_id', $this->product->id)
+            ->where('image', $variant->image)
+            ->first()
+            ?->id;
         $this->dispatch('setVariantData');
     }
+
+    public function setMainImage($newMainIndex)
+    {
+        // Convert the string index to an integer
+        $newMainIndex = (int) $newMainIndex;
+
+        // Validate the new index
+        if ($newMainIndex < 0) {
+            $this->dispatch('error', 'Invalid image index.');
+            return;
+        }
+
+        // Set the selected image ID
+        $selectedImage = $this->productImages->where('id', $newMainIndex)->first();
+        if (!$selectedImage) {
+            $this->dispatch('error', 'Image not found.');
+            return;
+        }
+        // update the main image
+        $this->variant->update([
+            'image' => $selectedImage['image'],
+        ]);
+        $this->image = $selectedImage['image'];
+        $this->selectedImageId = $selectedImage['id'];
+        $this->dispatch('success', 'Main image set successfully.');
+        $this->dispatch('refreshProductVariantsTable');
+    }
+
 
     public function selectAttributeValue($attributeId, $valueId)
     {

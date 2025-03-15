@@ -34,7 +34,7 @@ class EditAttributeModal extends Component
     {
         $this->attribute = $attribute;
         $this->name = $attribute->name;
-        $this->values = $attribute->values->map(function ($value) {
+        $this->values = $attribute->values->sortBy('value')->map(function ($value) {
             return [
                 'value' => $value->value,
                 'id' => $value->id,

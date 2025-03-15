@@ -5,6 +5,7 @@ namespace App\Livewire\Dashboard\Products;
 use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\ProductType;
 use App\Models\SubCategory;
 use App\Models\Vendor;
@@ -13,6 +14,7 @@ use App\Traits\UploadImageTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -42,6 +44,14 @@ class EditProductForm extends Component
     public $searchSubCategory = '';
     public $searchProductType = '';
 
+    public $images = [];
+    public $uploadedImages = [];
+    public $imagesWithOrders = [];
+    public $newImageStartOrder = 0;
+
+
+    
+
     // ========== Lifecycle Hooks ==========
     public function mount(Product $product)
     {
@@ -55,6 +65,71 @@ class EditProductForm extends Component
         $this->selectedSubCategories = $product->subCategories->pluck('id')->toArray();
         $this->selectedProductTypes = $product->productTypes->pluck('id')->toArray();
         $this->selectedAttributes = $product->attributes->pluck('id')->toArray();
+        $this->images = $product->images()->orderBy('order')->get();
+        $this->newImageStartOrder = $this->images->count() + 1;
+    }
+
+
+    public function updateImagesOrder($imagesOrder)
+    {
+        DB::transaction(function () use ($imagesOrder) {
+            foreach ($imagesOrder as $newOrder) {
+                $imageId = $newOrder['value'];
+                $order = $newOrder['order'];
+                ProductImage::findOrFail($imageId)->update(['order' => $order]);
+            }
+
+            $this->product->update([
+                'image' => $this->product->images()->orderBy('order')->first()->image,
+            ]);
+        });
+
+        $this->dispatch('success', 'Images order updated successfully.');
+        $this->dispatch('refreshProductFiles');
+        $this->dispatch('refreshProductTable');
+    }
+
+    public function updateNewImagesOrder($imagesOrder)
+    {
+        // Create a temporary array to hold the reordered items
+        $reorderedImages = [];
+        $reorderedUploadedImages = [];
+
+        // Map the new order based on the original 'value'
+        foreach ($imagesOrder as $item) {
+            $newPosition = $item['order'] - 1; // Convert to 0-based index
+            $originalOrder = (int) $item['value']; // Original order (cast to int)
+
+            // Find the image with the matching original order in $imagesWithOrders
+            foreach ($this->imagesWithOrders as $imageItem) {
+                if ($imageItem['order'] === $originalOrder) {
+                    $reorderedImages[$newPosition] = [
+                        'file' => $imageItem['file'],
+                        'order' => $newPosition + 1, // Assign new order (1-based)
+                        'name' => $imageItem['name'],
+                    ];
+                    $reorderedUploadedImages[$newPosition] = $imageItem['file']; // Reorder uploadedImages
+                    break;
+                }
+            }
+        }
+
+        // Update $imagesWithOrders and $uploadedImages with the reordered arrays
+        $this->imagesWithOrders = array_values($reorderedImages); // Re-index the array
+        $this->uploadedImages = array_values($reorderedUploadedImages); // Re-index the array
+        $this->dispatch('rerender');
+    }
+
+
+    #[On('refreshProductFiles')]
+    public function refreshProductFiles()
+    {
+        $this->loadProductImages();
+    }
+
+    private function loadProductImages()
+    {
+        $this->images = $this->product->images->sortBy('order');
     }
 
     // ========= Computed Properties =========
@@ -143,13 +218,25 @@ class EditProductForm extends Component
                 'slug' => $this->generateUniqueSlug($this->product, $this->name, 'slug'),
             ]);
 
-            if ($this->image) {
-                $this->product->update([
-                    'image' => $this->saveImage($this->image, 'products'),
-                ]);
+    
+            // Store the uploaded images from $imagesWithOrders
+            if ($this->imagesWithOrders && count($this->imagesWithOrders) > 0) {
+                $imagePaths = [];
+                // the new order for new image will start from the last image order +1
+                $newImageStartOrder = $this->images->count() + 1;
+                $n = $newImageStartOrder;
 
-                if (file_exists($old_image) && $old_image) {
-                    unlink($old_image);
+                // Store all images and track their paths
+                foreach ($this->imagesWithOrders as $imageItem) {
+                    $newOrder =  $n++;
+                    $imagePath = $this->saveImage($imageItem['file'], 'products/' . $this->product->id);
+                    $imagePaths[$imageItem['order']] = $imagePath;
+
+                    // Create record in the images relationship
+                    $this->product->images()->create([
+                        'image' => $imagePath,
+                        'order' => $newOrder,
+                    ]);
                 }
             }
 
@@ -159,7 +246,7 @@ class EditProductForm extends Component
             $this->product->attributes()->sync($this->selectedAttributes);
 
             DB::commit();
-            return redirect()->route('dashboard.products.index')->with('success', "Product updated successfully.");
+            return redirect()->route('dashboard.products.edit', $this->product->id)->with('success', "Product updated successfully.");
         } catch (\Exception $e) {
             DB::rollBack();
             $this->dispatch('error', $e->getMessage());
@@ -168,6 +255,20 @@ class EditProductForm extends Component
 
     public function render()
     {
+        // If is there any uploaded images, add order foreach one start from 1
+        if ($this->uploadedImages && count($this->uploadedImages) > 0) {
+            $this->imagesWithOrders = []; // Reset the array
+            if (count($this->imagesWithOrders)  == 0) {
+                foreach ($this->uploadedImages as $index => $image) {
+                    $this->imagesWithOrders[$index] = [
+                        'file' => $image, // Store the TemporaryUploadedFile object
+                        'order' => $this->newImageStartOrder + $index, // Set the order
+                        'name' => $image->getClientOriginalName(), // Optional: store file name
+                    ];
+                }
+            }
+        }
+
         $this->categories = $this->getCategories();
         $this->subCategories = $this->getSubCategories();
         $this->productTypes = $this->getProductTypes();
