@@ -126,11 +126,6 @@ class EditProductVariantForm extends Component
     {
         $this->validate();
 
-        if (!$this->isValidSku()) {
-            $this->dispatch('error', "The SKU must be: 1) unique, 2) contain the product's SKU, and 3) longer than the product's SKU.");
-            return;
-        }
-
         if (count($this->selectedAttributeValues) !== $this->product->attributes->count()) {
             $this->dispatch('error', 'Please select all attribute values.');
             return;
@@ -165,12 +160,6 @@ class EditProductVariantForm extends Component
             $this->dispatch('error', $e->getMessage());
         }
     }
-
-    private function isValidSku()
-    {
-        return str_contains($this->sku, strtoupper($this->product->sku));
-    }
-
 
     private function checkOnExistVaraintWithSameAttributeValues()
     {

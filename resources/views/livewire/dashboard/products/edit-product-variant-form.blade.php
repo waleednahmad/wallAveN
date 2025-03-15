@@ -236,6 +236,13 @@
                 }
             });
 
+            let skuField = document.querySelector('#e_sku');
+            if (skuField) {
+                skuField.addEventListener('input', function() {
+                    this.value = this.value.toUpperCase();
+                });
+            }
+
         });
     </script>
 @endscript

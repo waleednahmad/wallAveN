@@ -108,12 +108,6 @@ class CreateProductVariantForm extends Component
             return;
         }
 
-
-        if (!$this->isValidSku()) {
-            $this->dispatch('error', "The SKU must be: 1) unique, 2) contain the product's SKU, and 3) longer than the product's SKU.");
-            return;
-        }
-
         if ($this->checkOnExistVaraintWithSameAttributeValues()) {
             $this->dispatch('error', 'Product variant with this attribute values already exists.');
             return;
@@ -148,12 +142,6 @@ class CreateProductVariantForm extends Component
     private function isDuplicate($field, $value)
     {
         return ProductVariant::where($field, $value)->exists();
-    }
-
-    private function isValidSku()
-    {
-
-        return str_contains($this->sku, strtoupper($this->product->sku));
     }
 
     private function checkOnExistVaraintWithSameAttributeValues()
