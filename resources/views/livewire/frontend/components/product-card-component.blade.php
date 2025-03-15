@@ -1,5 +1,5 @@
 <div class="auction-card general-art">
-    <div class="auction-details-section mb-120">
+    <div class="auction-details-section">
 
         <div class="auction-card-img-wrap" style="height: 200px; overflow: hidden; border-radius: 10px;">
             <a href="{{ route('frontend.product', $product->slug) }}" class="card-img h-100">
