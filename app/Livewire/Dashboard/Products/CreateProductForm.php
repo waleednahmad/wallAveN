@@ -112,6 +112,8 @@ class CreateProductForm extends Component
                 'vendor_id' => 'nullable|exists:vendors,id',
                 'selectedCategories' => 'required|array|min:1',
                 'selectedAttributes' => 'required|array|min:1',
+                'uploadedImages' => 'required|array|min:1|max:15',
+                'uploadedImages.*' => 'image',
             ],
             [
                 'name.required' => 'Product name is required.',

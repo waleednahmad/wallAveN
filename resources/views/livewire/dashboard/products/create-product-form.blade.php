@@ -260,7 +260,7 @@
             <div class="card">
                 <div class="card-header">
                     <h6>
-                        Product Images 
+                        Product Images
                     </h6>
                 </div>
                 <div class="card-body">
@@ -269,10 +269,16 @@
                         <div class="form-group">
                             <div class="form-group">
                                 <label for="images">Upload images</label>
-                                <input type="file" class="form-control" id="images"
+                                <input type="file" @class([
+                                    'form-control',
+                                    'is-invalid' => $errors->has('uploadedImages'),
+                                ]) id="images"
                                     wire:model="uploadedImages" accept="image/*" multiple>
-                                @error('uploadedImages.*')
-                                    <span class="error">{{ $message }}</span>
+
+                                @error('uploadedImages')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
                                 @enderror
                             </div>
 
@@ -289,8 +295,8 @@
                                         @foreach ($imagesWithOrders as $index => $imageItem)
                                             <!-- Skip the current main image -->
                                             <div wire:sortable.item="{{ $imageItem['order'] }}"
-                                                @class(['single-file-card', 'active' => $loop->first]) wire:key="task-{{ $imageItem['order'] }}"
-                                                wire:sortable.handle>
+                                                @class(['single-file-card', 'active' => $loop->first])
+                                                wire:key="task-{{ $imageItem['order'] }}" wire:sortable.handle>
 
                                                 <img src="{{ $imageItem['file']->temporaryUrl() }}" class="img-fluid"
                                                     alt="file"
