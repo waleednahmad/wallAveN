@@ -1,4 +1,5 @@
-<form wire:submit="save">
+<form wire:submit="save" enctype="multipart/form-data">
+    @csrf
     <div class="row">
         {{-- -------------------- Main Product Info -------------------- --}}
         <div class="col-md-6">
@@ -250,11 +251,16 @@
             </div>
         </div>
 
-        <div class="col-12">
+        <div class="col-12" x-data="{ uploading: false, progress: 0, isUploading: false, isUploadingStart: false, errMessage: '', isError: false }"
+            x-on:livewire-upload-start="isUploading = true; isUploadingStart = true"
+            x-on:livewire-upload-finish="isUploading = false" x-on:livewire-upload-cancel="isUploading = false"
+            x-on:livewire-upload-error="isUploading = false; errMessage = $event.detail.message; isError = true"
+            x-on:livewire-upload-progress="progress = $event.detail.progress">
+            {{-- -------------------- Product Images -------------------- --}}
             <div class="card">
                 <div class="card-header">
                     <h6>
-                        Product Images
+                        Product Images <span x-text='isUploading'></span>
                     </h6>
                 </div>
                 <div class="card-body">
@@ -263,8 +269,8 @@
                         <div class="form-group">
                             <div class="form-group">
                                 <label for="images">Upload images</label>
-                                <input type="file" class="form-control" id="images" wire:model="uploadedImages"
-                                    accept="image/*" multiple>
+                                <input type="file" class="form-control" id="images"
+                                    wire:model="uploadedImages" accept="image/*" multiple>
                                 @error('uploadedImages.*')
                                     <span class="error">{{ $message }}</span>
                                 @enderror
@@ -301,37 +307,41 @@
                                     </div>
                                 </div>
                             @endif
-                            {{-- @if ($image)
-                                <img src="{{ $image->temporaryUrl() }}" alt="Image" class="mt-2 img-fluid img-thumbnail"
-                                    style="max-height: 200px;">
-                                @endif --}}
 
+                            <div x-show="isUploading">
+                                <span max="100" x-text="progress"></span>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" :style="`width: ${progress}%`"
+                                        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary" wire:loading.attr="disabled"
+                    wire:target="save, uploadedImages" x-bind:disabled="isUploading"
+                    x-bind:class="{ 'btn-secondary': isUploading }" x-text="isUploading ? 'Uploading...' : 'Save'">
+                    {{-- loading spinner --}}
+                    <span wire:loading>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    </span>
+
+                    <span wire:loading.remove>
+                        Save
+                    </span>
+                </button>
+                <p x-show="isError" class="alert alert-danger ms-2" x-text="errMessage">
+                    an error occured while uploading, please try again
+                </p>
             </div>
         </div>
     </div>
 
     {{-- submit btn (in the center) --}}
-    <div class="d-flex justify-content-center">
-        <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" @disabled(count($imagesWithOrders) < 1)>
-            {{-- loading spinner --}}
-            <span wire:loading>
-                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            </span>
-            @if (count($imagesWithOrders) < 1)
-                <span>
-                    Please upload at least one image
-                </span>
-            @endif
-            @if (count($imagesWithOrders) >= 1)
-                <span wire:loading.remove>
-                    Save
-                </span>
-            @endif
-        </button>
-    </div>
+
 
     {{-- Print all errors if exists --}}
     @if ($errors->any())
@@ -365,6 +375,12 @@
                         console.error(error);
                     });
             }
+
+
         });
+
+        function fileUpload() {
+            return
+        }
     </script>
 @endscript
