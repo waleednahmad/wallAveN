@@ -130,10 +130,10 @@ final class ProductTable extends PowerGridComponent
                 ->route('dashboard.products.edit', ['product' => $row->id]),
 
             // Media
-            Button::add('media')
-                ->slot('<i class="fas fa-images"></i>')
-                ->class('btn btn-secondary btn-sm rounded')
-                ->dispatch('media', ['rowId' => $row->id]),
+            // Button::add('media')
+            //     ->slot('<i class="fas fa-images"></i>')
+            //     ->class('btn btn-secondary btn-sm rounded')
+            //     ->dispatch('media', ['rowId' => $row->id]),
 
             Button::add('add-variant')
                 ->slot('Variants')

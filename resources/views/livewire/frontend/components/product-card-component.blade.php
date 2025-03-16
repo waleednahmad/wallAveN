@@ -31,30 +31,36 @@
                     @endif
                 @endif
                 @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check())
-                    <li><span>Price : </span>
-                        <strong>${{ $product->variant_price }}</strong>
+                    <li>
+                        @if ($hasManyVariants)
+                            <span>From </span>
+                        @endif
+                        @if ($compare_at_price && $compare_at_price < $price)
+                            <span style="text-decoration: line-through; color: #999999">
+                                ${{ $price }}
+                            </span>
+                            <strong>${{ $compare_at_price }}</strong>
+                        @else
+                            <strong>${{ $price }}</strong>
+                        @endif
                     </li>
                 @endif
             </ul>
             <div class="d-flex align-items-center" style="gap: 10px;">
                 {{-- Details --}}
-                <a href="{{ route('frontend.product', $product->slug) }}"
-                    class="px-3 py-2 text-center bid-btn btn-hover w-100 d-flex align-items-center justify-content-center">
-                    <span style="font-size: 14px; font-weight: 400">
+                <a href="{{ route('frontend.product', $product->slug) }}" class="custom-white-btn">
+                    <span>
                         View Details
                     </span>
-                    <strong></strong>
                 </a>
                 @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check())
                     {{-- + Quick add --}}
-                    <a href="javascript:void(0)" wire:click='openProductOptions()'
-                        class="px-3 py-2 text-center primary-btn2 btn-hover w-100 d-flex align-items-center justify-content-center"
+                    <button wire:click='openProductOptions()' class="custom-black-btn" wire:loading.attr="disabled"
                         {{-- wire:click="$emit('openModal', 'frontend.add-to-cart-modal', {{ json_encode(['product' => $product]) }})" --}}>
-                        <span style="font-size: 14px; font-weight: 400">
+                        <span>
                             <i class="fas fa-plus"></i> Quick Add
                         </span>
-                        <strong></strong>
-                    </a>
+                    </button>
                 @endif
             </div>
         </div>

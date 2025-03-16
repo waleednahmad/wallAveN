@@ -96,16 +96,17 @@
 .images-container {
     margin-top: 5px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 5px;
+    margin: 40px auto;
 }
 
 .images-container.variant {
-    max-height: 150px !important;
+    max-height: 250px !important;
     overflow-y: auto !important;
 }
 
-.single-file-card {
+.images-container  .single-file-card {
     background: rgba(208, 208, 208, 0.466);
     height: 130px;
     width: 100%;

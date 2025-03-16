@@ -60,7 +60,7 @@ class FrontController extends Controller
             'years_in_business' => ['required', 'numeric', 'min:1'],
             'website' => ['nullable', 'string'],
             'business_type' => ['required', 'string'],
-            'message' => ['required', 'string'],
+            'message' => ['nullable', 'string'],
             'resale_certificate' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png,pdf'],
             'ref' => ['nullable', 'string', 'exists:representatives,code'],
         ], [
@@ -86,7 +86,7 @@ class FrontController extends Controller
             $data['resale_certificate'] = "storage/" . $file;
         }
         $data['address'] = explode(',', $request->address)[0];
-        $data['name'] = strtolower(ucfirst($request->name));
+        $data['name'] = ucwords(strtolower($request->name));
         $data['email'] = strtolower($request->email);
 
         // Check on referal code
