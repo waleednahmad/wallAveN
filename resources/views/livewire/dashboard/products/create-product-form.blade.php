@@ -309,7 +309,7 @@
                             @endif
 
                             <div x-show="isUploading">
-                                <span max="100" x-text="progress"></span>
+                                <span max="100" x-text="`${progress}%`"></span>
                                 <div class="progress">
                                     <div class="progress-bar" role="progressbar" :style="`width: ${progress}%`"
                                         aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
