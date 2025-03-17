@@ -11,9 +11,7 @@
             <h6>
                 <a href="{{ route('frontend.product', $product->slug) }}">
                     {{ $product->name }}
-                    <span wire:loading>
-                        loading <i class="fas fa-spinner fa-spin"></i>
-                    </span>
+
                 </a>
             </h6>
             <ul>
@@ -54,10 +52,12 @@
                     </span>
                 </a>
                 @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check())
-                    {{-- + Quick add --}}
-                    <button wire:click='openProductOptions()' class="custom-black-btn" wire:loading.attr="disabled"
-                        {{-- wire:click="$emit('openModal', 'frontend.add-to-cart-modal', {{ json_encode(['product' => $product]) }})" --}}>
-                        <span>
+                    <button wire:click='openProductOptions()' class="custom-black-btn" wire:loading.attr="disabled">
+                        <span wire:loading>
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </span>
+
+                        <span wire:loading.remove>
                             <i class="fas fa-plus"></i> Quick Add
                         </span>
                     </button>

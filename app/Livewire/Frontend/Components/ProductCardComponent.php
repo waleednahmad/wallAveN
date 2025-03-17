@@ -14,7 +14,7 @@ class ProductCardComponent extends Component
     public function mount($product)
     {
         $this->product = $product;
-        $firstVariant = $product->variants()->first();
+        $firstVariant = $product->firstVariant;
         $this->price = $firstVariant->price;
         $this->compare_at_price = $firstVariant->compare_at_price;
 
@@ -27,7 +27,7 @@ class ProductCardComponent extends Component
     public function openProductOptions()
     {
 
-        $this->dispatch('openProductOptions', [
+        $this->dispatch('openQuickAdd', [
             'product' => $this->product->id,
         ]);
     }

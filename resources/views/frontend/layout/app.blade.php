@@ -47,6 +47,18 @@
             <livewire:frontend.cart-offcanva />
         </div>
     </div>
+    {{-- quick add --}}
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="quickAddOffcanva" aria-labelledby="quickAddOffcanva">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="quickAddOffcanva">
+                Quick Add
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <livewire:frontend.offcanvas.quick-add-off-canva />
+        </div>
+    </div>
 
 
     {{-- =============== MODALS =============== --}}
@@ -120,6 +132,14 @@
             // ============== Close Dealer Selection Modal =================
             Livewire.on('closeDealerSelectionModal', (event) => {
                 bootstrap.Modal.getInstance(document.getElementById('DealerSelection')).hide();
+            });
+
+            // ============== Open Quick Add Offcanvas ==============
+            Livewire.on('openQuickAdd', (event) => {
+                let offcanvas = new bootstrap.Offcanvas(document.getElementById('quickAddOffcanva'));
+                offcanvas.show();
+
+                Livewire.dispatch('setProductQuickAdd', event[0])
             });
         });
     </script>

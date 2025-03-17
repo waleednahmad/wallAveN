@@ -14,8 +14,12 @@ class FrontController extends Controller
 {
     public function index()
     {
-        // get only 12 product
-        $products = Product::with(['vendor'])->active()->take(12)->inRandomOrder()->get();
+        $products = Product::with(['vendor', 'firstVariant'])
+            ->whereHas('variants')
+            ->active()
+            ->take(12)
+            ->inRandomOrder()
+            ->get();
         return view('frontend.index', compact('products'));
     }
 
