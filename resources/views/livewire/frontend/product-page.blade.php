@@ -46,9 +46,18 @@
                     <h3 class="my-3">
                         {{ $product->name }}
                     </h3>
-                    @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check())
+                    @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check() || auth('web')->check())
                         <ul class="artist-info">
-                            <li><span>Price :</span> ${{ $price }}</li>
+                            <li><span>Price :</span>
+                                @if ($compare_at_price && $compare_at_price < $price && $compare_at_price > 0)
+                                    <span style="text-decoration: line-through; color: #999999">
+                                        ${{ $price }}
+                                    </span>
+                                    <strong>${{ $compare_at_price }}</strong>
+                                @else
+                                    <strong>${{ $price }}</strong>
+                                @endif
+                            </li>
                         </ul>
                     @endif
 
@@ -94,7 +103,7 @@
                         </div>
                     @endif
 
-                    @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check())
+                    @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check() || auth('web')->check())
                         {{-- ========== Add To Cart ========= --}}
                         <div class="add-to-cart">
                             @if (!$variantNotFound)
@@ -106,11 +115,11 @@
                                     <button class="btn" wire:click="increaseQuantity"
                                         style="background-color: #f5f5f5; color: #000;">+</button>
                                 </div>
+                                <button class="mt-3 btn" wire:click="addToCart" @disabled($variantNotFound)
+                                    style="background-color: #000; color: #fff; max-width: fit-content; padding: 10px 20px;">
+                                    Add to Cart
+                                </button>
                             @endif
-                            <button class="mt-3 btn" wire:click="addToCart" @disabled($variantNotFound)
-                                style="background-color: #000; color: #fff; max-width: fit-content; padding: 10px 20px;">
-                                Add to Cart
-                            </button>
                         </div>
                         {{-- ========== End Add To Cart ========= --}}
                     @endif
