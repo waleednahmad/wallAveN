@@ -26,6 +26,7 @@ class QuickAddOffCanva extends Component
     #[On('setProductQuickAdd')]
     public function setProductQuickAdd(Product $product)
     {
+        $this->reset();
         $this->product = $product->load("variants.attributeValues.attribute");
         $this->initializeProductDetails();
         $this->setDefaultAttributeValues();

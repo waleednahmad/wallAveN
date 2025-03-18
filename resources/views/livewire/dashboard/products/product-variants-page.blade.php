@@ -109,41 +109,47 @@
                                 <td>{{ $variant->sku }}</td>
                                 <td>
                                     <table class="table table-sm table-bordered mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>Attribute</th>
-                                                <th>Value</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @php
-                                                $groupedAttributes = [];
-                                                foreach ($variant->attributeValues as $attributeValue) {
-                                                    $attributeName = $attributeValue->attribute->name;
-                                                    $attributeValueValue = $attributeValue->value;
+                                        @php
+                                            $groupedAttributes = [];
+                                            foreach ($variant->attributeValues as $attributeValue) {
+                                                $attributeName = $attributeValue->attribute->name;
+                                                $attributeValueValue = $attributeValue->value;
 
-                                                    if (!isset($groupedAttributes[$attributeName])) {
-                                                        $groupedAttributes[$attributeName] = [];
-                                                    }
-
-                                                    if (
-                                                        !in_array($attributeValueValue, $groupedAttributes[$attributeName])
-                                                    ) {
-                                                        $groupedAttributes[$attributeName][] = $attributeValueValue;
-                                                    }
+                                                if (!isset($groupedAttributes[$attributeName])) {
+                                                    $groupedAttributes[$attributeName] = [];
                                                 }
-                                            @endphp
-                                            @forelse ($groupedAttributes as $attributeName => $attributeValues)
+
+                                                if (
+                                                    !in_array($attributeValueValue, $groupedAttributes[$attributeName])
+                                                ) {
+                                                    $groupedAttributes[$attributeName][] = $attributeValueValue;
+                                                }
+                                            }
+                                        @endphp
+                                        @if (!empty($groupedAttributes))
+                                            <thead>
                                                 <tr>
-                                                    <td>{{ $attributeName }}</td>
-                                                    <td>{{ implode(', ', $attributeValues) }}</td>
+                                                    @foreach ($groupedAttributes as $attributeName => $attributeValues)
+                                                        <th>{{ $attributeName }}</th>
+                                                    @endforeach
                                                 </tr>
-                                            @empty
+                                            </thead>
+                                            <tbody>
                                                 <tr>
-                                                    <td colspan="2" class="text-center">No attributes found</td>
+                                                    @foreach ($groupedAttributes as $attributeValues)
+                                                        <td>
+                                                            @foreach ($attributeValues as $value)
+                                                                {{ $value }}
+                                                            @endforeach
+                                                        </td>
+                                                    @endforeach
                                                 </tr>
-                                            @endforelse
-                                        </tbody>
+                                            </tbody>
+                                        @else
+                                            <tr>
+                                                <td colspan="2" class="text-center">No attributes found</td>
+                                            </tr>
+                                        @endif
                                     </table>
                                 </td>
                                 {{-- <td>{{ $variant->barcode ?? '-' }}</td> --}}
