@@ -8,14 +8,15 @@
         {{-- dealers preview --}}
 
         <div class="row">
+            @php
+                $dealer = auth('representative')->user()?->buyingFor ?? auth('web')->user()?->buyingFor;
+                $dealerId = $dealer ? $dealer->id : null;
+            @endphp
             @forelse ($dealers as $dealerItem)
                 <div class="col-md-4">
                     <div @class([
                         'card',
-                        'shadow  border-danger' =>
-                            auth('representative')->user()->buyingFor != null
-                                ? $dealerItem->id == auth('representative')->user()->buyingFor->id
-                                : false,
+                        'shadow  border-danger' => $dealerItem->id == $dealerId ? true : false,
                     ])>
                         <div class="card-body">
                             <h5 class="card-title">{{ $dealerItem->name }}</h5>
@@ -42,7 +43,7 @@
             @endforelse
         </div>
     </div>
-    @if (auth('representative')->user()->buyingFor != null)
+    @if ($dealer)
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" wire:click='removeDealer'>
                 Remove Selection

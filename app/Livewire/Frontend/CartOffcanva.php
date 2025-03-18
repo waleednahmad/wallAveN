@@ -23,6 +23,9 @@ class CartOffcanva extends Component
         } elseif (auth('representative')->check()) {
             $cartTemps = CartTemp::where('representative_id', auth('representative')->user()->id)->get();
             $total = $cartTemps->sum('total');
+        } elseif (auth('web')->check()) { // admin check
+            $cartTemps = CartTemp::where('admin_id', auth('web')->user()->id)->get();
+            $total = $cartTemps->sum('total');
         } else {
             $cartTemps = [];
             $total = 0;
@@ -50,6 +53,9 @@ class CartOffcanva extends Component
             $total = $cartTemps->sum('total');
         } elseif (auth('representative')->check()) {
             $cartTemps = CartTemp::where('representative_id', auth('representative')->user()->id)->get();
+            $total = $cartTemps->sum('total');
+        } elseif (auth('web')->check()) { // admin check
+            $cartTemps = CartTemp::where('admin_id', auth('web')->user()->id)->get();
             $total = $cartTemps->sum('total');
         } else {
             $cartTemps = [];

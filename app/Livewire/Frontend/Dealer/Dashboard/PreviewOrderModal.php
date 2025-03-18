@@ -14,7 +14,7 @@ class PreviewOrderModal extends Component
     #[On('setOrder')]
     public function setOrder(Order $order)
     {
-        $this->order = $order->load('items');
+        $this->order = $order->load('orderItems');
     }
 
     public function render()

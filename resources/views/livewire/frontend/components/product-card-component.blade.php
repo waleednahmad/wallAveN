@@ -28,7 +28,7 @@
                         </li>
                     @endif
                 @endif
-                @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check())
+                @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check() || auth('web')->check())
                     <li>
                         @if ($hasManyVariants)
                             <span>From </span>
@@ -51,7 +51,7 @@
                         View Details
                     </span>
                 </a>
-                @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check())
+                @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check() || auth('web')->check())
                     <button wire:click='openProductOptions()' class="custom-black-btn" wire:loading.attr="disabled">
                         <span wire:loading>
                             <i class="fas fa-spinner fa-spin"></i>

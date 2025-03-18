@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::controller(FrontController::class)->group(function () {
+    Route::get('/', 'index')->name('frontend.home');
     Route::get('/product/{slug}', 'showProduct')->name('frontend.product');
     Route::get('/shop', 'shop')->name('frontend.shop');
 });
@@ -18,7 +19,6 @@ Route::controller(FrontController::class)
     ->middleware('guest:web')
     ->group(
         function () {
-            Route::get('/', 'index')->name('frontend.home');
 
             Route::middleware([
                 CheckIsDealerLoggedIn::class

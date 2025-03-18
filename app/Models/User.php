@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'buying_for_id'
     ];
 
     /**
@@ -44,5 +45,24 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+
+    // ==================
+    // Relationships
+    // ==================
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'admin_id');
+    }
+
+    public function cartTemps()
+    {
+        return $this->hasMany(CartTemp::class, 'admin_id');
+    }
+
+    public function buyingFor()
+    {
+        return $this->belongsTo(Dealer::class, 'buying_for_id');
     }
 }

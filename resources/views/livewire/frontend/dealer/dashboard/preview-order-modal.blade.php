@@ -35,19 +35,22 @@
 
             <!-- Table row -->
 
-            @if (isset($order) && $order->items)
+            @if (isset($order) && $order->orderItems)
                 <div class="row" wire:loading.remove>
                     <div class="col-12 table-responsive">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>SKU</th>
-                                    <th>Name</th>
                                     <th>
                                         Image
                                     </th>
+                                    <th>SKU</th>
+                                    <th>Name</th>
                                     <th>Qty</th>
+                                    <th>
+                                        Attributes
+                                    </th>
                                     <th>
                                         Price/Unit
                                     </th>
@@ -57,27 +60,53 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($order?->items as $item)
+                                @foreach ($order?->orderItems as $item)
                                     <tr>
                                         <td>
                                             {{ $loop->iteration }}
                                         </td>
-                                        <td style="max-width: fit-content">
-                                            {{ $item->variant_sku ?? '---' }}
-                                        </td>
-                                        <td style="max-width: 110px; text-wrap: pretty;">
-                                            {{ $item->title ?? '---' }}
-                                        </td>
                                         <td>
-                                            @if ($item->variant_image)
-                                                <img src="{{ $item->variant_image }}" alt="{{ $item->title }}"
+                                            @if ($item->image && file_exists($item->image))
+                                                <img src="{{ asset($item->image) }}" alt="{{ $item->name }}"
                                                     class="img-thumbnail" style="width: 90px; height: 90px;">
                                             @else
-                                                ---
+                                                <img src="{{ asset('dashboard/images/default.webp') }}"
+                                                    alt="{{ $item->name }}" class="img-thumbnail"
+                                                    style="width: 90px; height: 90px;">
                                             @endif
                                         </td>
+                                        <td style="max-width: fit-content">
+                                            {{ $item->sku ?? '---' }}
+                                        </td>
+                                        <td style="max-width: 110px; text-wrap: pretty;">
+                                            {{ $item->name ?? '---' }}
+                                        </td>
+
                                         <td>
                                             {{ $item->quantity }}
+                                        </td>
+                                        <td>
+                                            @if ($item->item_type == 'variant')
+                                                @php
+                                                    $attributes = json_decode($item->attributes, true);
+                                                @endphp
+                                                <table class="table table-bordered table-sm mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            @foreach (array_keys($attributes) as $key)
+                                                                <th>{{ ucfirst($key) }}</th>
+                                                            @endforeach
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            @foreach (array_values($attributes) as $value)
+                                                                <td>{{ ucfirst(strtolower($value)) }}</td>
+                                                            @endforeach
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            @endif
                                         </td>
                                         <td>
                                             <b>$</b> {{ $item->price ?? '---' }}
@@ -89,7 +118,7 @@
                                 @endforeach
 
                                 <tr>
-                                    <td colspan="5"></td>
+                                    <td colspan="6"></td>
                                     <td>
                                         <b>Total</b>
                                     </td>

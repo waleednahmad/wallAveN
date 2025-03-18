@@ -108,36 +108,55 @@
                                 </td>
                                 <td>{{ $variant->sku }}</td>
                                 <td>
-                                    <ul class="list-unstyled">
-                                        @php
-                                            $groupedAttributes = [];
-                                            foreach ($variant->attributeValues as $attributeValue) {
-                                                $attributeName = $attributeValue->attribute->name;
-                                                $attributeValueValue = $attributeValue->value;
+                                    <table class="table table-sm table-bordered mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Attribute</th>
+                                                <th>Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $groupedAttributes = [];
+                                                foreach ($variant->attributeValues as $attributeValue) {
+                                                    $attributeName = $attributeValue->attribute->name;
+                                                    $attributeValueValue = $attributeValue->value;
 
-                                                if (!isset($groupedAttributes[$attributeName])) {
-                                                    $groupedAttributes[$attributeName] = [];
-                                                }
+                                                    if (!isset($groupedAttributes[$attributeName])) {
+                                                        $groupedAttributes[$attributeName] = [];
+                                                    }
 
-                                                if (
-                                                    !in_array($attributeValueValue, $groupedAttributes[$attributeName])
-                                                ) {
-                                                    $groupedAttributes[$attributeName][] = $attributeValueValue;
+                                                    if (
+                                                        !in_array($attributeValueValue, $groupedAttributes[$attributeName])
+                                                    ) {
+                                                        $groupedAttributes[$attributeName][] = $attributeValueValue;
+                                                    }
                                                 }
-                                            }
-                                        @endphp
-                                        @forelse ($groupedAttributes as $attributeName => $attributeValues)
-                                            <li>
-                                                <strong>{{ $attributeName }}:</strong>
-                                                {{ implode(', ', $attributeValues) }}
-                                            </li>
-                                        @empty
-                                            <li>No attributes found</li>
-                                        @endforelse
-                                    </ul>
+                                            @endphp
+                                            @forelse ($groupedAttributes as $attributeName => $attributeValues)
+                                                <tr>
+                                                    <td>{{ $attributeName }}</td>
+                                                    <td>{{ implode(', ', $attributeValues) }}</td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="2" class="text-center">No attributes found</td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
                                 </td>
                                 {{-- <td>{{ $variant->barcode ?? '-' }}</td> --}}
-                                <td>${{ $variant->price ?? '-' }}</td>
+                                <td>
+                                    @if ($variant->compare_at_price && $variant->compare_at_price < $variant->price)
+                                        <span style="text-decoration: line-through; color: #999999">
+                                            ${{ $variant->price }}
+                                        </span>
+                                        <strong>${{ $variant->compare_at_price }}</strong>
+                                    @else
+                                        <strong>${{ $variant->price }}</strong>
+                                    @endif
+                                </td>
                                 <td>
                                     {{-- Edit --}}
                                     <button class="btn btn-sm btn-primary"

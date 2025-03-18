@@ -308,8 +308,8 @@
                             @endif
 
                             @if (isset($imagesWithOrders) && count($imagesWithOrders))
-                            <hr>
-                            <h4>new images</h4>
+                                <hr>
+                                <h4>new images</h4>
 
                                 @php
                                     $imagesWithOrders = collect($imagesWithOrders)->sortBy('order')->values()->all();

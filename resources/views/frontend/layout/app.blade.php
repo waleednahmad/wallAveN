@@ -74,7 +74,7 @@
         </div>
     </div>
 
-    @auth('representative')
+    @if (auth('representative')->check() || auth('web')->check())
         <div class="modal fade" id="DealerSelection" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="DealerSelectionLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
@@ -89,7 +89,8 @@
                 </div>
             </div>
         </div>
-    @endauth
+    @endif
+
 
 
 
@@ -140,6 +141,12 @@
                 offcanvas.show();
 
                 Livewire.dispatch('setProductQuickAdd', event[0])
+            });
+
+
+            // ============== Close Product Options Offcanvas ==============
+            Livewire.on('closeQuickAdd', (event) => {
+                bootstrap.Offcanvas.getInstance(document.getElementById('quickAddOffcanva')).hide();
             });
         });
     </script>

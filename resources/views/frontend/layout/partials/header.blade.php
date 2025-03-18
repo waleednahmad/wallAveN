@@ -3,10 +3,8 @@
         <div class="topbar-wrap">
             <div class="header-logo">
                 <a href="{{ route('frontend.home') }}">
-                    <img alt="image" class="img-fluid light" src="{{ getMainImage() }}"
-                        style="width: 150px;">
-                    <img alt="image" class="img-fluid dark" src="{{ getMainImage() }}"
-                        style="width: 150px;">
+                    <img alt="image" class="img-fluid light" src="{{ getMainImage() }}" style="width: 150px;">
+                    <img alt="image" class="img-fluid dark" src="{{ getMainImage() }}" style="width: 150px;">
                     {{-- <img alt="image" class="img-fluid light" src="{{ asset('assets/img/header-logo.svg') }}"> --}}
                     {{-- <img alt="image" class="img-fluid dark" src="{{ asset('assets/img/header-logo-white.svg') }}"> --}}
                 </a>
@@ -36,17 +34,23 @@
                 </a>
 
                 <a @auth('dealer')
-                href="{{ route('dealer.dashboard') }}"
-                @endauth
+                        href="{{ route('dealer.dashboard') }}"
+                    @endauth
                     @auth('representative')
-                href="{{ route('representative.dashboard') }}"
-                @endauth
+                        href="{{ route('representative.dashboard') }}"
+                    @endauth
+                    @auth('web')
+                        href="{{ route('dashboard') }}"
+                    @endauth
                     @guest('dealer')
-                href="{{ route('login') }}"
-                @endguest
+                        href="{{ route('login') }}"
+                    @endguest
                     @guest('representative')
-                href="{{ route('login') }}"
-                @endguest
+                        href="{{ route('login') }}"
+                    @endguest
+                    @guest('web')
+                        href="{{ route('login') }}"
+                    @endguest
                     class="header-btn btn-hover">
                     <svg width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
                         <g>
@@ -55,8 +59,12 @@
                         </g>
                     </svg>
                     <span>
-                        @if (auth('dealer')->check() || auth('representative')->check())
-                            My Account
+                        @if (auth('dealer')->check() || auth('representative')->check() || auth('web')->check())
+                            @if (auth('web')->check())
+                                Dashboard
+                            @else
+                                My Account
+                            @endif
                         @else
                             Login
                         @endif
@@ -86,18 +94,31 @@
             <ul class="menu-list">
                 <li><a href="{{ route('frontend.home') }}">Home</a></li>
                 <li><a href="{{ route('frontend.shop') }}">Shop</a></li>
-                @if (auth('dealer')->check() || auth('representative')->check())
+                @if (auth('dealer')->check() || auth('representative')->check() || auth('web')->check())
                     {{-- Dashboard --}}
                     <li>
-                        <a
-                            href="{{ route(auth('dealer')->check() ? 'dealer.dashboard' : 'representative.dashboard') }}">
+                        @php
+                            $path = null;
+                            $logoutPath = null;
+                            if (auth('dealer')->check()) {
+                                $path = 'dealer.dashboard';
+                                $logoutPath = 'frontend.logout';
+                            } elseif (auth('representative')->check()) {
+                                $path = 'representative.dashboard';
+                                $logoutPath = 'representative.logout';
+                            } else {
+                                $path = 'dashboard';
+                                $logoutPath = 'logout';
+                            }
+                        @endphp
+                        <a href="{{ route($path) }}">
                             Dashboard
                         </a>
                     </li>
 
                     {{-- Logout --}}
                     <li>
-                        <a href="{{ route(auth('dealer')->check() ? 'frontend.logout' : 'representative.logout') }}">
+                        <a href="{{ route($logoutPath) }}">
                             Logout
                         </a>
                     </li>
@@ -144,15 +165,19 @@
             </div>
         </div>
     </div>
-    @auth('representative')
+    @if (auth('representative')->check() || auth('web')->check())
         <div class="container alert alert-info alert-dismissible show d-block" role="alert">
             <div class="alert-body">
-                @if (auth('representative')->user()->buyingFor()->exists())
+                @php
+                    $dealer = auth('representative')->user()?->buyingFor ?? auth('web')->user()?->buyingFor;
+                    $dealerName = $dealer ? $dealer->name : 'No dealer selected';
+                @endphp
+                @if ($dealer)
                     <div class="d-flex justify-content-between align-items-center">
                         <p>
                             You are shopping as
                             <b>
-                                {{ auth('representative')->user()->buyingFor->name }}
+                                {{ $dealerName }}
                             </b>
                         </p>
 
@@ -175,8 +200,7 @@
                         </button>
                     </div>
                 @endif
-                {{-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> --}}
             </div>
         </div>
-    @endauth
+    @endif
 </header>

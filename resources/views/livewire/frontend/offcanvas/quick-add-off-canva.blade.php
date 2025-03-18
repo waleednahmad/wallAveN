@@ -37,8 +37,8 @@
         <h3 class="my-3">
             {{ $product?->name }}
         </h3>
-        @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check())
-            @if ($compare_at_price && $compare_at_price < $price)
+        @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check() || auth('web')->check())
+            @if ($compare_at_price && $compare_at_price < $price && $compare_at_price > 0)
                 <span style="text-decoration: line-through; color: #999999">
                     ${{ $price }}
                 </span>
@@ -47,6 +47,7 @@
                 <strong>${{ $price }}</strong>
             @endif
         @endif
+        {{-- {{ $compare_at_price }} : {{ $price }} --}}
 
         @if (isset($groupedAttributes) && count($groupedAttributes))
             <div class="mt-3 quantity-area position-relative">
@@ -90,7 +91,7 @@
             </div>
         @endif
 
-        @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check())
+        @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check() || auth('web')->check())
             {{-- ========== Add To Cart ========= --}}
             <div class="add-to-cart">
                 @if (!$variantNotFound)
@@ -103,10 +104,35 @@
                             style="background-color: #f5f5f5; color: #000;">+</button>
                     </div>
                 @endif
-                {{-- <button class="mt-3 btn" wire:click="addToCart" @disabled($variantNotFound)
+                <!-- Notification message (hidden by default) -->
+                <div x-data="{ showNotification: false }"
+                    x-on:notify.window="showNotification = true; setTimeout(() => showNotification = false, 4000);"
+                    x-show="showNotification" style="display: none;"
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 transform translate-y-4"
+                    x-transition:enter-end="opacity-100 transform translate-y-0"
+                    x-transition:leave="transition ease-in duration-300"
+                    x-transition:leave-start="opacity-100 transform translate-y-0"
+                    x-transition:leave-end="opacity-0 transform translate-y-4"
+                    class="bottom-0 p-3 m-3 text-white rounded shadow bg-success position-relative">
+                    <span>
+                        Item added to cart!
+                    </span>
+                    <br>
+                    <a href="javascript:void(0)" wire:click='previewCart()'>
+                        <span style="color: #fff; text-decoration: underline">
+                            View Cart
+                        </span>
+                    </a>
+                    <button @click="showNotification = false" class="btn"
+                        style="background: none; border: none; color: white; font-size: 1.2em; position: absolute; top: 10px; right: 10px;">
+                        x
+                    </button>
+                </div>
+                <button class="mt-3 btn" wire:click="addToCart" @disabled($variantNotFound)
                     style="background-color: #000; color: #fff; max-width: fit-content; padding: 10px 20px;">
                     Add to Cart
-                </button> --}}
+                </button>
             </div>
             {{-- ========== End Add To Cart ========= --}}
         @endif

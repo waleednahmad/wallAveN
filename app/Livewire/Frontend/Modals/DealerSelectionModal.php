@@ -24,6 +24,10 @@ class DealerSelectionModal extends Component
             auth('representative')->user()->update([
                 'buying_for_id' => $dealer->id
             ]);
+        } elseif (auth('web')->check()) {
+            auth('web')->user()->update([
+                'buying_for_id' => $dealer->id
+            ]);
         }
 
         // get the previous url from the web browser
@@ -37,6 +41,10 @@ class DealerSelectionModal extends Component
             auth('representative')->user()->update([
                 'buying_for_id' => null
             ]);
+        } elseif (auth('web')->check()) {
+            auth('web')->user()->update([
+                'buying_for_id' => null
+            ]);
         }
 
         // get the previous url from the web browser
@@ -46,12 +54,20 @@ class DealerSelectionModal extends Component
 
     public function render()
     {
-        $dealers = Dealer::where('is_approved', true)
-            ->where('status', true)
-            ->where('referal_id', auth('representative')->user()->id)
-            ->when($this->search, function ($query) {
-                return $query->where('name', 'like', '%' . $this->search . '%');
-            });;
+        if (auth('representative')->check()) {
+            $dealers = Dealer::where('is_approved', true)
+                ->where('status', true)
+                ->where('referal_id', auth('representative')->user()->id)
+                ->when($this->search, function ($query) {
+                    return $query->where('name', 'like', '%' . $this->search . '%');
+                });
+        } elseif (auth('web')->check()) {
+            $dealers = Dealer::where('is_approved', true)
+                ->where('status', true)
+                ->when($this->search, function ($query) {
+                    return $query->where('name', 'like', '%' . $this->search . '%');
+                });
+        }
 
         return view('livewire.frontend.modals.dealer-selection-modal')->with([
             'dealers' => $dealers->get()

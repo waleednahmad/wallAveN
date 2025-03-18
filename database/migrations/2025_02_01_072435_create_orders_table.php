@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('order_number')->nullable();
             $table->unsignedBigInteger('dealer_id')->nullable()->index();
             $table->unsignedBigInteger('representative_id')->nullable()->index();
+            $table->unsignedBigInteger('admin_id')->nullable()->index();
             $table->enum('status', ['pending', 'processing', 'completed', 'declined', 'canceled'])->default('pending');
             $table->decimal('total', 10, 2)->default(0);
             $table->decimal('shipping', 10, 2)->default(0);

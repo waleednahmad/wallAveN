@@ -15,21 +15,18 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('dealer_id')->nullable()->index();
             $table->unsignedBigInteger('representative_id')->nullable()->index();
+            $table->unsignedBigInteger('admin_id')->nullable()->index();
             $table->unsignedBigInteger('product_id')->nullable()->index();;
-            $table->string('variant_sku')->nullable();
-            $table->string('variant_image')->nullable();
-            $table->string('title')->nullable();
+            $table->unsignedBigInteger('variant_id')->index()->nullable();
+            $table->enum('item_type', ['product', 'variant'])->default('variant');
+            $table->string('name')->nullable();
+            $table->longText('image')->nullable();
             $table->string('vendor')->nullable();
-            $table->string('option1_name')->nullable();
-            $table->string('option1_value')->nullable();
-            $table->string('option2_name')->nullable();
-            $table->string('option2_value')->nullable();
-            $table->string('option3_name')->nullable();
-            $table->string('option3_value')->nullable();
             $table->string('sku')->nullable();
-            $table->integer('quantity')->nullable();
             $table->decimal('price', 10, 2)->nullable();
             $table->decimal('total', 10, 2)->nullable();
+            $table->integer('quantity')->nullable();
+            $table->json('attributes')->nullable();
             $table->timestamps();
         });
     }

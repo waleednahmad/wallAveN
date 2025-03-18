@@ -21,6 +21,9 @@ class ConformCheckoutModal extends Component
         } elseif (auth('representative')->check()) {
             $cartTemps = CartTemp::where('representative_id', auth('representative')->user()->id)->get();
             $this->total = $cartTemps->sum('total');
+        } elseif (auth('web')->check()) { // admin check
+            $cartTemps = CartTemp::where('admin_id', auth('web')->user()->id)->get();
+            $this->total = $cartTemps->sum('total');
         } else {
             $this->total = 0;
         }
@@ -30,15 +33,18 @@ class ConformCheckoutModal extends Component
     {
         // check if the user is logged in, then get the temp cart items and store them in the order and orfderItems and delete them
 
-        if (auth('dealer')->check() || auth('representative')->check()) {
+        if (auth('dealer')->check() || auth('representative')->check() || auth('web')->check()) {
             DB::beginTransaction();
             try {
-                $user = auth('dealer')->check() ? auth('dealer')->user() : auth('representative')->user();
-
                 if (auth('dealer')->check()) {
+                    $user = auth('dealer')->user();
                     $cartTemps = CartTemp::where('dealer_id', $user->id)->get();
-                } else {
+                } else if (auth('representative')->check()) {
+                    $user = auth('representative')->user();
                     $cartTemps = CartTemp::where('representative_id', $user->id)->get();
+                } elseif (auth('web')->check()) {
+                    $user = auth('web')->user();
+                    $cartTemps = CartTemp::where('admin_id', $user->id)->get();
                 }
 
                 if ($cartTemps->isEmpty()) {
@@ -62,27 +68,33 @@ class ConformCheckoutModal extends Component
                     $dealer = Dealer::find($buyingFor->id);
                     $orderData['representative_id'] = $user->id;
                     $order = $dealer->orders()->create($orderData);
+                } elseif (auth('web')->check()) { // admin check
+                    $buyingFor = $user->buyingFor;
+                    if (!$buyingFor) {
+                        $this->dispatch('error', 'You need to select a dealer to place an order');
+                        $this->dispatch('openDealerSelectionModal');
+                        return;
+                    }
+                    $dealer = Dealer::find($buyingFor->id);
+                    $orderData['admin_id'] = $user->id;
+                    $order = $dealer->orders()->create($orderData);
                 } else {
                     $order = $user->orders()->create($orderData);
                 }
 
                 foreach ($cartTemps as $cartTemp) {
-                    $order->items()->create([
+                    $order->orderItems()->create([
                         'product_id' => $cartTemp->product_id,
-                        'variant_sku' => $cartTemp->variant_sku,
-                        'variant_image' => $cartTemp->variant_image,
-                        'title' => $cartTemp->title,
+                        'variant_id' => $cartTemp->variant_id,
+                        'item_type' => $cartTemp->item_type,
+                        'name' => $cartTemp->name,
+                        'image' => $cartTemp->image,
                         'vendor' => $cartTemp->vendor,
-                        'option1_name' => $cartTemp->option1_name,
-                        'option1_value' => $cartTemp->option1_value,
-                        'option2_name' => $cartTemp->option2_name,
-                        'option2_value' => $cartTemp->option2_value,
-                        'option3_name' => $cartTemp->option3_name,
-                        'option3_value' => $cartTemp->option3_value,
                         'sku' => $cartTemp->sku,
-                        'quantity' => $cartTemp->quantity,
                         'price' => $cartTemp->price,
                         'total' => $cartTemp->total,
+                        'quantity' => $cartTemp->quantity,
+                        'attributes' => $cartTemp->attributes,
                     ]);
                 }
 
