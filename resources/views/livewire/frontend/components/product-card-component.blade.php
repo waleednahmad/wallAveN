@@ -33,11 +33,13 @@
                         @if ($hasManyVariants)
                             <span>From </span>
                         @endif
-                        @if ($compare_at_price && $compare_at_price < $price)
+                        @if ($compare_at_price && $compare_at_price > $price)
                             <span style="text-decoration: line-through; color: #999999">
-                                ${{ $price }}
+                                ${{ $compare_at_price }}
                             </span>
-                            <strong>${{ $compare_at_price }}</strong>
+                            <strong>
+                                ${{ $price }}
+                            </strong>
                         @else
                             <strong>${{ $price }}</strong>
                         @endif

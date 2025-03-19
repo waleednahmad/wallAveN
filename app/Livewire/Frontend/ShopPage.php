@@ -25,6 +25,13 @@ class ShopPage extends Component
     public $productTypes = [];
     public $subCategories = [];
 
+
+    public function mount(){
+        $this->selectedCategories = request()->input('categories', []);
+        $this->updateSubCategories();
+        $this->selectedSubCategories = request()->input('sub_categories', []);
+    }
+
     public function loadMore()
     {
         $this->perPage += 9;

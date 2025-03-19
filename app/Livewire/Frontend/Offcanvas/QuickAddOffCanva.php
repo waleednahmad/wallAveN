@@ -100,6 +100,7 @@ class QuickAddOffCanva extends Component
         } else {
             $this->selectedSku = "---";
             $this->price = "---";
+            $this->compare_at_price = null;
             $this->variantNotFound = true;
         }
     }
@@ -167,21 +168,12 @@ class QuickAddOffCanva extends Component
             return;
         }
 
-        // get the price for the variant
-        $compare_at_price = $variant->compare_at_price;
-        $price = $variant->price;
-        $variant_price = 0;
-        if ($variant->compare_at_price && $variant->compare_at_price < $variant->price && $variant->compare_at_price > 0) {
-            $variant_price = $compare_at_price;
-        } else {
-            $variant_price = $price;
-        }
 
         $item = CartTemp::where('variant_id', $variant->id)->first();
 
         if ($item) {
             $item->quantity += $this->quantity;
-            $item->total = $item->quantity * $variant_price;
+            $item->total = $item->quantity * $variant->price;
             $item->save();
         } else {
 
@@ -197,8 +189,8 @@ class QuickAddOffCanva extends Component
                 'image' => $variant->image ?? $this->product->image,
                 'vendor' => $this->product->vendor ? $this->product->vendor->name : null,
                 'sku' => $variant->sku,
-                'price' => $variant_price,
-                'total' => $this->quantity * $variant_price,
+                'price' => $variant->price,
+                'total' => $this->quantity * $variant->price,
                 'quantity' => $this->quantity,
                 'attributes' => $variant->attributeValues->pluck('value', 'attribute.name')->toJson(),
             ]);

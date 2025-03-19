@@ -25,11 +25,13 @@
                                     Shop
                                 </a>
                             </li>
-                            {{-- <li>
-                                <a href="#">
-                                    {{ $product->categories->first()->name }}
-                                </a>
-                            </li> --}}
+                            @if ($firstCategory)
+                                <li>
+                                    <a href="{{ route('frontend.shop', ['categories' => [$firstCategory->id]]) }}">
+                                        {{ $firstCategory->name }}
+                                    </a>
+                                </li>
+                            @endif
                             <li>
                                 {{ $product->name }}
                             </li>

@@ -17,19 +17,12 @@ class EditProductVariantForm extends Component
 
     public $product, $variant;
     public $main_sku;
-    #[Validate('required|string|max:255|min:3')]
     public $sku;
-    #[Validate('nullable|string|max:255|min:3')]
     public $barcode;
-    #[Validate('nullable|numeric|lt:price')]
     public $compare_at_price;
-    #[Validate('nullable|numeric')]
-    public $cost_price;
-    #[Validate('required|numeric|gte:compare_at_price')]
     public $price;
-    #[Validate('nullable|string')]
+    public $cost_price;
     public $description;
-    #[Validate('nullable|image')]
     public $image;
 
     public $productAttributesWithValues = [];
@@ -37,7 +30,19 @@ class EditProductVariantForm extends Component
 
     public $productImages = [];
     public $selectedImageId;
-    
+
+    protected function rules()
+    {
+        return [
+            'sku' => 'required|string|max:255|min:3|unique:product_variants,sku,' . $this->variant?->id,
+            'barcode' => 'nullable|string|max:255|min:3|unique:product_variants,barcode,' . $this->variant?->id,
+            'compare_at_price' => 'nullable|numeric|gt:price',
+            'cost_price' => 'nullable|numeric',
+            'price' => 'required|numeric|min:0',
+            'description' => 'nullable|string',
+        ];
+    }
+
 
     #[On('setVariant')]
     public function setVariant(ProductVariant $variant)
@@ -109,18 +114,7 @@ class EditProductVariantForm extends Component
         $this->selectedAttributeValues[$attributeId] = $valueId;
     }
 
-    protected function rules()
-    {
-        return [
-            'sku' => 'required|string|max:255|min:3|unique:product_variants,sku,' . $this->variant?->id,
-            'barcode' => 'nullable|string|max:255|min:3|unique:product_variants,barcode,' . $this->variant?->id,
-            'compare_at_price' => 'nullable|numeric',
-            'cost_price' => 'nullable|numeric',
-            'price' => 'required|numeric',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image',
-        ];
-    }
+
 
     public function save()
     {

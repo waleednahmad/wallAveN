@@ -31,10 +31,12 @@ class FrontController extends Controller
     public function showProduct($slug)
     {
         $product = Product::where('slug', $slug)->first();
+        $firstCategory = $product->categories->first();
+
         if (!$product) {
             return redirect()->route('frontend.home')->with('error', 'Product not found.');
         }
-        return view('frontend.product', compact('product'));
+        return view('frontend.product', compact('product', 'firstCategory'));
     }
 
 

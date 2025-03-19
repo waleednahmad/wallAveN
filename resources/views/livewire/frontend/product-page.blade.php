@@ -49,11 +49,13 @@
                     @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check() || auth('web')->check())
                         <ul class="artist-info">
                             <li><span>Price :</span>
-                                @if ($compare_at_price && $compare_at_price < $price && $compare_at_price > 0)
+                                @if ($compare_at_price && $compare_at_price > $price && $compare_at_price > 0)
                                     <span style="text-decoration: line-through; color: #999999">
-                                        ${{ $price }}
+                                        ${{ $compare_at_price }}
                                     </span>
-                                    <strong>${{ $compare_at_price }}</strong>
+                                    <strong>
+                                        ${{ $price }}
+                                    </strong>
                                 @else
                                     <strong>${{ $price }}</strong>
                                 @endif

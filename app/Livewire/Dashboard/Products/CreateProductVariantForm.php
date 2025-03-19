@@ -16,19 +16,12 @@ class CreateProductVariantForm extends Component
 
     public $product;
     public $main_sku;
-    #[Validate('required|string|max:255|min:3')]
     public $sku;
-    #[Validate('nullable|string|max:255|min:3')]
     public $barcode;
-    #[Validate('nullable|numeric|lt:price')]
     public $compare_at_price;
-    #[Validate('nullable|numeric')]
-    public $cost_price;
-    #[Validate('required|numeric|gte:compare_at_price')]
     public $price;
-    #[Validate('nullable|string')]
+    public $cost_price;
     public $description;
-    #[Validate('nullable')]
     public $image;
 
     public $productImages = [];
@@ -36,6 +29,20 @@ class CreateProductVariantForm extends Component
 
     public $productAttributesWithValues = [];
     public $selectedAttributeValues = [];
+
+    protected function rules()
+    {
+        return [
+            'sku' => 'required|string|max:255|min:3|unique:product_variants,sku',
+            'compare_at_price' => 'nullable|numeric|gt:price',
+            'cost_price' => 'nullable|numeric',
+            'price' => 'required|numeric|min:0',
+            'description' => 'nullable|string',
+            // 'image' => 'nullable|image|max:1024',
+            'barcode' => 'nullable|string|max:255|min:3|unique:product_variants,barcode',
+        ];
+    }
+
 
     public function mount($product)
     {
@@ -86,12 +93,7 @@ class CreateProductVariantForm extends Component
         $this->sku = strtoupper(preg_replace('/[^A-Za-z0-9-]/', '', str_replace(' ', '', $newSku)));
     }
 
-    protected function rules()
-    {
-        return [
-            'barcode' => 'nullable|string|max:255|min:3|unique:product_variants,barcode',
-        ];
-    }
+
 
     public function save()
     {

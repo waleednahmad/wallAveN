@@ -154,11 +154,13 @@
                                 </td>
                                 {{-- <td>{{ $variant->barcode ?? '-' }}</td> --}}
                                 <td>
-                                    @if ($variant->compare_at_price && $variant->compare_at_price < $variant->price)
+                                    @if ($variant->compare_at_price && $variant->compare_at_price > $variant->price)
                                         <span style="text-decoration: line-through; color: #999999">
-                                            ${{ $variant->price }}
+                                            ${{ $variant->compare_at_price }}
                                         </span>
-                                        <strong>${{ $variant->compare_at_price }}</strong>
+                                        <strong>
+                                            ${{ $variant->price }}
+                                        </strong>
                                     @else
                                         <strong>${{ $variant->price }}</strong>
                                     @endif
