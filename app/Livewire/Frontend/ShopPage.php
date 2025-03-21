@@ -46,6 +46,8 @@ class ShopPage extends Component
             case 'selectedCategories':
                 $this->toggleSelection($this->selectedCategories, $value);
                 $this->updateSubCategories();
+                $this->selectedProductTypes = [];
+                $this->selectedAttributeValues = [];
                 break;
 
             case 'selectedSubCategories':
