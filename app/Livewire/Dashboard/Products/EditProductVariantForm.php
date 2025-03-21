@@ -92,13 +92,21 @@ class EditProductVariantForm extends Component
             return;
         }
 
+        // Check if the selected image is already the main image
+        if ($this->selectedImageId === $newMainIndex) {
+            // Deselect the current main image
+            $this->deselectImage();
+            return;
+        }
+
         // Set the selected image ID
         $selectedImage = $this->productImages->where('id', $newMainIndex)->first();
         if (!$selectedImage) {
             $this->dispatch('error', 'Image not found.');
             return;
         }
-        // update the main image
+
+        // Update the main image
         $this->variant->update([
             'image' => $selectedImage['image'],
         ]);
@@ -106,6 +114,17 @@ class EditProductVariantForm extends Component
         $this->selectedImageId = $selectedImage['id'];
         $this->dispatch('success', 'Main image set successfully.');
         $this->dispatch('refreshProductVariantsTable');
+    }
+
+    public function deselectImage()
+    {
+        $this->image = null;
+        $this->selectedImageId = null;
+        $this->variant->update([
+            'image' => null,
+        ]);
+        $this->dispatch('refreshProductVariantsTable');
+        $this->dispatch('success', 'Main image deselected successfully.');
     }
 
 
