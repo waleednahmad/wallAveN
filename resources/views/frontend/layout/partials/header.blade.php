@@ -102,7 +102,7 @@
                         <ul class="sub-menu two" style="z-index: 9999;">
                             @foreach ($publicActiveCategories as $category)
                                 <li>
-                                    <a href="{{ route('frontend.shop', ['categories' => [$category->id]]) }}">
+                                    <a href="{{ route('frontend.shop', ['category' => $category->slug]) }}">
                                         {{ $category->name }}
                                     </a>
                                 </li>

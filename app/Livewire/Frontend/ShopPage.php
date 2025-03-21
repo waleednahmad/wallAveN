@@ -30,7 +30,15 @@ class ShopPage extends Component
 
     public function mount()
     {
-        $this->selectedCategories = request()->input('categories', []);
+        $category = request()->input('category', '');
+        if ($category) {
+            $category = Category::where('slug', $category)->first();
+            if ($category) {
+                $this->selectedCategories = [$category->id];
+            } else {
+                $this->selectedCategories = [];
+            }
+        }
         $this->updateSubCategories();
         $this->selectedSubCategories = request()->input('sub_categories', []);
     }
