@@ -90,7 +90,7 @@
                     <img alt="image" class="img-fluid dark" src="{{ getMainImage() }}">
                 </a>
             </div>
-   
+
             <ul class="menu-list">
                 <li><a href="{{ route('frontend.home') }}">Home</a></li>
                 <li><a href="{{ route('frontend.aboutUs') }}">About us</a></li>
@@ -140,7 +140,18 @@
                         </a>
                     </li>
                 @else
-                    <li><a href="{{ route('frontend.register') }}">Become A Dealer</a></li>
+                    <li>
+                        <a href="{{ route('frontend.register') }}">
+                            Become A Dealer
+                        </a>
+                    </li>
+                    @if (showBecomeARepInMenu())
+                        <li>
+                            <a href="{{ route('representative.register') }}">
+                                Become A Representative
+                            </a>
+                        </li>
+                    @endif
                     <li><a href="{{ route('login') }}">Login</a></li>
                 @endif
 

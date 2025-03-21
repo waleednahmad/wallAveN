@@ -37,6 +37,12 @@ class PublicValuesSeeder extends Seeder
                 'description' => "To display the vendor in the front pages",
             ],
             [
+                'key' => 'show become a rep in the menu',
+                'value' => 0,
+                'type' => 'select',
+                'description' => "To display the become a rep in the front pages menu header",
+            ],
+            [
                 'key' => 'main logo',
                 'value' => asset('assets/img/logo.webp'),
                 'type' => 'image',

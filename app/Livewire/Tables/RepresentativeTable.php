@@ -12,6 +12,8 @@ use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\Facades\Rule;
+
 
 final class RepresentativeTable extends PowerGridComponent
 {
@@ -51,6 +53,14 @@ final class RepresentativeTable extends PowerGridComponent
             ->add('row_num', function ($row) {
                 return $this->getRowNum($row);
             })
+            ->add('is_approved', function ($row) {
+                if ($row->is_approved) {
+                    return "<span class='badge badge-success'>Yes</span>";
+                } else {
+                    return "<span class='badge badge-danger'>No</span>";
+                }
+            })
+            ->add('approved_at', fn($row) => $row->approved_at ? Carbon::parse($row->approved_at)->format('Y-m-d') : '-')
             ->add('created_at');
     }
 
@@ -67,6 +77,11 @@ final class RepresentativeTable extends PowerGridComponent
             Column::make('Phone', 'phone')
                 ->searchable()
                 ->sortable(),
+            Column::make('is approved', 'is_approved'),
+
+            Column::make('Approved at', 'approved_at')
+                ->sortable()
+                ->searchable(),
             Column::make('status', 'status')
                 ->toggleable(
                     hasPermission: auth()->check(),
@@ -105,6 +120,23 @@ final class RepresentativeTable extends PowerGridComponent
         $this->dispatch('openUpdatePasswordOffcanvas', ['representative' => $representative]);
     }
 
+    #[\Livewire\Attributes\On('approve')]
+    public function approve($rowId): void
+    {
+        $representative = Representative::find($rowId);
+        if (!$representative) {
+            $this->js('toastr.error("representative not found")');
+            return;
+        }
+
+        $representative->update([
+            'is_approved' => true,
+            'approved_at' => now(),
+        ]);
+        $this->js('toastr.success("representative approved successfully")');
+        $this->refresh();
+    }
+
     public function actions(Representative $row): array
     {
         return [
@@ -112,6 +144,11 @@ final class RepresentativeTable extends PowerGridComponent
             //     ->slot($row->status == 1 ? '<i class="fas fa-toggle-on"></i>' : '<i class="fas fa-toggle-off"></i>')
             //     ->class('btn btn-info btn-sm rounded')
             //     ->dispatch('toggleStatus', ['rowId' => $row->id]),
+
+            Button::make('approve')
+                ->slot('<i class="fas fa-check"></i>')
+                ->class('btn btn-success btn-sm rounded')
+                ->dispatch('approve', ['rowId' => $row->id]),
 
             Button::add('updatePassword')
                 ->slot('<i class="fas fa-key"></i>')
@@ -139,16 +176,13 @@ final class RepresentativeTable extends PowerGridComponent
         $this->dispatch('success', 'Status updated successfully');
     }
 
-
-    /*
     public function actionRules($row): array
     {
-       return [
+        return [
             // Hide button edit for ID 1
-            Rule::button('edit')
-                ->when(fn($row) => $row->id === 1)
+            Rule::button('approve')
+                ->when(fn($row) => $row->is_approved)
                 ->hide(),
         ];
     }
-    */
 }

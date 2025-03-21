@@ -14,6 +14,7 @@ class RepresentativeController extends Controller
      */
     public function index(Request $request)
     {
+
         return view('admin.representatives.index');
     }
 
@@ -22,6 +23,9 @@ class RepresentativeController extends Controller
      */
     public function register()
     {
+        if (!showBecomeARepInMenu()) {
+            return redirect()->route('frontend.home')->with('error', 'This page is not available.');
+        }
         return view('representative.auth.register');
     }
 
@@ -67,7 +71,7 @@ class RepresentativeController extends Controller
         $reprensentative = Representative::create($data);
 
         // Login the user
-        auth()->guard('representative')->login($reprensentative);
+        // auth()->guard('representative')->login($reprensentative);
         return redirect()->route('frontend.home')->with('success', 'Your account has been created successfully, we will review your application and get back to you soon.');
     }
 
@@ -84,7 +88,7 @@ class RepresentativeController extends Controller
             ->get()
             ->pluck('count', 'status');
 
-            $referredDealersCount = auth('representative')->user()->referredDealers('approved')->count();
+        $referredDealersCount = auth('representative')->user()->referredDealers('approved')->count();
         return view('representative.dashboard', compact('ordersCountByStatus', 'referredDealersCount'));
     }
 

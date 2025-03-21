@@ -149,6 +149,19 @@ class FrontController extends Controller
         // Try representative guard
         $representative = Representative::where('email', $request->email)->first();
         if ($representative && Hash::check($request->password, $representative->password)) {
+
+            if (!$representative->is_approved) {
+                return back()->with('error', 'Your account is not approved yet.');
+            }
+
+            if (empty($representative->password)) {
+                return back()->with('error', 'Invalid representative credentials, please contact support.');
+            }
+
+            if (!$representative->status) {
+                return back()->with('error', 'Your account is disabled, please contact support.');
+            }
+
             Auth::guard('representative')->login($representative);
             return redirect()->route('representative.dashboard')->with('success', 'You have been logged in successfully.');
         }

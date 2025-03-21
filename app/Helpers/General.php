@@ -19,6 +19,11 @@ function isVendorActivated()
     return PublicSetting::where('key', 'activate vendor')->first()->value ?? 0;
 }
 
+function showBecomeARepInMenu()
+{
+    return PublicSetting::where('key', 'show become a rep in the menu')->first()->value ?? 0;
+}
+
 function getMainImage()
 {
     $value = PublicSetting::where('key', 'main logo')->first();
