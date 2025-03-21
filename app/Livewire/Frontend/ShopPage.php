@@ -144,7 +144,7 @@ class ShopPage extends Component
                     if (!empty($this->selectedCategories)) {
                         $query->whereIn('categories.id', $this->selectedCategories);
                     }
-                })->orderBy('name');
+                })->orderBy('value');
             }])->get();
         }
 
