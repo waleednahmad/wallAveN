@@ -263,7 +263,7 @@
                         <div class="form-group">
                             <div class="form-group">
                                 <label for="images">Upload images</label>
-                                <input type="file" class="form-control" id="images" wire:model="uploadedImages"
+                                <input type="file" class="form-control customized" id="images" wire:model="uploadedImages"
                                     accept="image/*" multiple>
                                 @error('uploadedImages.*')
                                     <span class="error">{{ $message }}</span>
@@ -327,6 +327,13 @@
                                                 <img src="{{ $imageItem['file']->temporaryUrl() }}" class="img-fluid"
                                                     alt="file"
                                                     style="height: 100%; width: 100%; object-fit: contain;">
+
+                                                {{-- bellete btn --}}
+                                                <button class="btn btn-sm btn-danger"
+                                                    style="position: absolute; top: 5px; right: 5px;"
+                                                    wire:click.prevent="removeImage({{ $index }})">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
 
                                             </div>
                                         @endforeach

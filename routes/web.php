@@ -13,6 +13,8 @@ Route::controller(FrontController::class)->group(function () {
     Route::get('/', 'index')->name('frontend.home');
     Route::get('/product/{slug}', 'showProduct')->name('frontend.product');
     Route::get('/shop', 'shop')->name('frontend.shop');
+    Route::get('/about-us', 'aboutUs')->name('frontend.aboutUs');
+    Route::get('/contact-us', 'contactUs')->name('frontend.contactUs');
 });
 
 Route::controller(FrontController::class)

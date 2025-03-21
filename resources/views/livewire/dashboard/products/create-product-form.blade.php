@@ -270,7 +270,7 @@
                             <div class="form-group">
                                 <label for="images">Upload images</label>
                                 <input type="file" @class([
-                                    'form-control',
+                                    'form-control customized',
                                     'is-invalid' => $errors->has('uploadedImages'),
                                 ]) id="images"
                                     wire:model="uploadedImages" accept="image/*" multiple>
@@ -308,6 +308,13 @@
                                                         <i class="fas fa-check"></i>
                                                     </div>
                                                 @endif
+
+                                                {{-- bellete btn --}}
+                                                <button class="btn btn-sm btn-danger"
+                                                style="position: absolute; top: 5px; right: 5px;"
+                                                    wire:click.prevent="removeImage({{ $index }})">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
                                             </div>
                                         @endforeach
                                     </div>

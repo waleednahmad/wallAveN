@@ -87,6 +87,8 @@ class EditProductForm extends Component
         $this->dispatch('success', 'Images order updated successfully.');
         $this->dispatch('refreshProductFiles');
         $this->dispatch('refreshProductTable');
+        $this->images = $this->product->images()->orderBy('order')->get();
+
     }
 
     public function updateNewImagesOrder($imagesOrder)
@@ -118,18 +120,6 @@ class EditProductForm extends Component
         $this->imagesWithOrders = array_values($reorderedImages); // Re-index the array
         $this->uploadedImages = array_values($reorderedUploadedImages); // Re-index the array
         $this->dispatch('rerender');
-    }
-
-
-    #[On('refreshProductFiles')]
-    public function refreshProductFiles()
-    {
-        $this->loadProductImages();
-    }
-
-    private function loadProductImages()
-    {
-        $this->images = $this->product->images->sortBy('order');
     }
 
     // ========= Computed Properties =========
@@ -251,6 +241,23 @@ class EditProductForm extends Component
             DB::rollBack();
             $this->dispatch('error', $e->getMessage());
         }
+    }
+
+    public function removeImage($index)
+    {
+        // Remove the image from the uploaded images array
+        unset($this->uploadedImages[$index]);
+
+        // Re-index the array to maintain order
+        $this->uploadedImages = array_values($this->uploadedImages);
+
+        // Remove the image from imagesWithOrders as well
+        unset($this->imagesWithOrders[$index]);
+        $this->imagesWithOrders = array_values($this->imagesWithOrders);
+
+
+        $this->dispatch('success', 'Image removed.');
+        $this->dispatch('rerender');
     }
 
     public function render()

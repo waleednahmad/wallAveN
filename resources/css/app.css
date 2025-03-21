@@ -96,9 +96,13 @@
 .images-container {
     margin-top: 5px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     gap: 5px;
-    margin: 40px auto;
+    margin: 20px auto;
+    border: 1px dashed black;
+    padding: 1.5em !important;
+    border-radius: 5px;
+    background-color: #fff !important;
 }
 
 .images-container.variant {
@@ -106,7 +110,7 @@
     overflow-y: auto !important;
 }
 
-.images-container  .single-file-card {
+.images-container .single-file-card {
     background: rgba(208, 208, 208, 0.466);
     height: 130px;
     width: 100%;
@@ -164,3 +168,32 @@ input[type="number"] {
     -moz-appearance: textfield;
     /* Firefox */
 }
+
+
+input[type="file"].customized {
+    margin: auto !important;
+    padding: 1.5em !important;
+    border: 2px dashed #bbb !important;
+    background-color: #fff !important;
+    transition: border-color .25s ease-in-out !important;
+    height: 4.5em !important;
+
+    &::file-selector-button {
+        border-width: 0 !important;
+        border-radius: 2em !important;
+        background-color: hsl(210 70% 30%) !important;
+        color: white !important;
+        transition: all .25s ease-in-out !important;
+        cursor: pointer !important;
+        margin-right: 1em !important;
+    }
+
+    &:hover {
+        border-color: #888 !important;
+
+        &::file-selector-button {
+            background-color: hsl(210 70% 40%) !important;
+        }
+    }
+}
+

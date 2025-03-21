@@ -239,6 +239,27 @@ class CreateProductForm extends Component
         $this->dispatch('rerender');
     }
 
+    public function removeImage($index)
+    {
+        // Remove the image from the uploaded images array
+        unset($this->uploadedImages[$index]);
+
+        // Re-index the array to maintain order
+        $this->uploadedImages = array_values($this->uploadedImages);
+
+        // Remove the image from imagesWithOrders as well
+        unset($this->imagesWithOrders[$index]);
+        $this->imagesWithOrders = array_values($this->imagesWithOrders);
+
+        // Optionally, you can also reset the main image index if it was removed
+        if ($this->mainImageIndex >= count($this->uploadedImages)) {
+            $this->mainImageIndex = 0;
+        }
+
+        $this->dispatch('success', 'Image removed.');
+        $this->dispatch('rerender');
+    }
+
 
     #[On('rerender')]
     public function render()

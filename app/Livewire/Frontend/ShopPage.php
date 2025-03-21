@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Frontend;
 
+use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\SubCategory;
@@ -22,11 +23,13 @@ class ShopPage extends Component
     public $selectedCategories = [];
     public $selectedSubCategories = [];
     public $selectedProductTypes = [];
+    public $selectedAttributeValues = [];
     public $productTypes = [];
     public $subCategories = [];
 
 
-    public function mount(){
+    public function mount()
+    {
         $this->selectedCategories = request()->input('categories', []);
         $this->updateSubCategories();
         $this->selectedSubCategories = request()->input('sub_categories', []);
@@ -52,6 +55,10 @@ class ShopPage extends Component
 
             case 'selectedProductTypes':
                 $this->toggleSelection($this->selectedProductTypes, $value);
+                break;
+
+            case 'selectedAttributeValues':
+                $this->toggleSelection($this->selectedAttributeValues, $value);
                 break;
         }
     }
@@ -108,6 +115,7 @@ class ShopPage extends Component
         $this->selectedCategories = [];
         $this->selectedSubCategories = [];
         $this->selectedProductTypes = [];
+        $this->selectedAttributeValues = [];
         $this->productTypes = [];
         $this->subCategories = [];
     }
@@ -120,6 +128,14 @@ class ShopPage extends Component
         })->withCount(['products' => function ($query) {
             $query->where('status', 1)->whereHas('variants');
         }])->orderBy('name')->get();
+    }
+    #[Computed()]
+    public function availableAttributes()
+    {
+        return                   Attribute::whereHas('values.productVariants')
+            ->with(['values' => function ($query) {
+                $query->whereHas('productVariants');
+            }])->get();
     }
 
     public function render()
@@ -150,6 +166,12 @@ class ShopPage extends Component
         if (!empty($this->selectedProductTypes)) {
             $productsQuery->whereHas('productTypes', function ($query) {
                 $query->whereIn('product_types.id', $this->selectedProductTypes);
+            });
+        }
+
+        if (!empty($this->selectedAttributeValues)) {
+            $productsQuery->whereHas('variants.attributeValues', function ($query) {
+                $query->whereIn('attribute_value_id', $this->selectedAttributeValues);
             });
         }
 

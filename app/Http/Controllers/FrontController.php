@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dealer;
+use App\Models\Page;
 use App\Models\Product;
 use App\Models\Representative;
 use App\Models\User;
@@ -14,13 +15,14 @@ class FrontController extends Controller
 {
     public function index()
     {
+        $page = Page::where('title', 'Home')->first();
         $products = Product::with(['vendor', 'firstVariant'])
             ->whereHas('variants')
             ->active()
             ->take(12)
             ->inRandomOrder()
             ->get();
-        return view('frontend.index', compact('products'));
+        return view('frontend.index', compact('products', 'page'));
     }
 
     public function shop()
@@ -160,5 +162,17 @@ class FrontController extends Controller
         Auth::guard('web')->logout();
         Auth::guard('dealer')->logout();
         return redirect()->route('frontend.home');
+    }
+
+
+    public function aboutUs()
+    {
+        $page = Page::where('title', 'About Us')->first();
+        return view('frontend.about-us', compact('page'));
+    }
+    public function contactUs()
+    {
+        $page = Page::where('title', 'Contact Us')->first();
+        return view('frontend.contact-us', compact('page'));
     }
 }

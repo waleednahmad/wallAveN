@@ -12,107 +12,164 @@
                             </div>
                         </form>
                     </div>
-                    <div class="single-widgets mb-50"
+                    <div class="single-widgets mb-50 position-relative"
                         style="max-height: 450px; overflow-y: auto; overflow-x: hidden; position: relative;">
-                        {{-- $this->search = '';
-                        $this->selectedCategories = [];
-                        $this->selectedSubCategories = [];
-                        $this->selectedProductTypes = [];
-                        $this->productTypes = [];
-                        $this->subCategories = []; --}}
                         @if (
                             (isset($search) && $search != '') ||
                                 (isset($selectedCategories) && count($selectedCategories) > 0) ||
                                 (isset($selectedSubCategories) && count($selectedSubCategories) > 0) ||
-                                (isset($selectedProductTypes) && count($selectedProductTypes) > 0))
+                                (isset($selectedProductTypes) && count($selectedProductTypes) > 0) ||
+                                (isset($selectedAttributeValues) && count($selectedAttributeValues) > 0))
                             <button class="btn btn-danger btn-sm" wire:click="clearAllFilters()" wire:tranisition
                                 title="Clear All Filters"
                                 style="position: absolute; top: 0; right: 10px; z-index: 1000;">
                                 <i class="fas fa-times"></i>
                             </button>
                         @endif
-                        <div class="widget-title">
-                            <h5>Categories</h5>
-                        </div>
-                        <div class="checkbox-container">
-                            <ul>
-                                @foreach ($this->categories as $category)
-                                    <li>
-                                        <label @class([
-                                            'filter-container-label',
-                                            'active' => in_array($category->id, $selectedCategories),
-                                        ])
-                                            wire:click="setProperty('selectedCategories', '{{ $category->id }}')">
-                                            <span class="check-icon">
-                                                @if (in_array($category->id, $selectedCategories))
-                                                    <i class="fas fa-check"></i>
-                                                @endif
-                                            </span>
+                        <div class="position-relative">
+                            <div class="widget-title">
+                                <h5>Categories</h5>
+                            </div>
+                            <div class="checkbox-container">
+                                <ul>
+                                    @foreach ($this->categories as $category)
+                                        <li>
+                                            <label @class([
+                                                'filter-container-label',
+                                                'active' => in_array($category->id, $selectedCategories),
+                                            ])
+                                                wire:click="setProperty('selectedCategories', '{{ $category->id }}')">
+                                                <span class="check-icon">
+                                                    @if (in_array($category->id, $selectedCategories))
+                                                        <i class="fas fa-check"></i>
+                                                    @endif
+                                                </span>
 
-                                            <span>{{ $category->name }} </span>
-                                        </label>
-                                    </li>
-                                @endforeach
-                            </ul>
+                                                <span>{{ $category->name }} </span>
+                                            </label>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            {{-- loading  screen --}}
+                            <div class="loading-screen" wire:loading>
+                            </div>
                         </div>
                         <hr>
                         @if (isset($subCategories) && count($subCategories) > 0)
-                            <div class="widget-title">
-                                <h5>Sub Categories</h5>
-                            </div>
-                            <div class="checkbox-container">
-                                <ul>
-                                    @foreach ($this->subCategories as $subCategory)
-                                        <li>
-                                            <label @class([
-                                                'filter-container-label',
-                                                'active' => in_array($subCategory->id, $selectedSubCategories),
-                                            ])
-                                                wire:click="setProperty('selectedSubCategories', '{{ $subCategory->id }}')">
-                                                <span class="check-icon">
-                                                    @if (in_array($subCategory->id, $selectedSubCategories))
-                                                        <i class="fas fa-check"></i>
-                                                    @endif
-                                                </span>
+                            <div class="position-relative">
+                                <div class="widget-title">
+                                    <h5>Sub Categories</h5>
+                                </div>
+                                <div class="checkbox-container">
+                                    <ul>
+                                        @foreach ($this->subCategories as $subCategory)
+                                            <li>
+                                                <label @class([
+                                                    'filter-container-label',
+                                                    'active' => in_array($subCategory->id, $selectedSubCategories),
+                                                ])
+                                                    wire:click="setProperty('selectedSubCategories', '{{ $subCategory->id }}')">
+                                                    <span class="check-icon">
+                                                        @if (in_array($subCategory->id, $selectedSubCategories))
+                                                            <i class="fas fa-check"></i>
+                                                        @endif
+                                                    </span>
 
-                                                <span>
-                                                    {{ $subCategory->name }}
-                                                </span>
-                                            </label>
-                                        </li>
-                                    @endforeach
-                                </ul>
+                                                    <span>
+                                                        {{ $subCategory->name }}
+                                                    </span>
+                                                </label>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                <hr>
+                                {{-- loading  screen --}}
+                                <div class="loading-screen" wire:loading>
+                                </div>
                             </div>
-                            <hr>
                         @endif
                         @if (isset($productTypes) && count($productTypes) > 0)
+                            <div class="position-relative">
+                                <div class="widget-title">
+                                    <h5>Product Types</h5>
+                                </div>
+                                <div class="checkbox-container">
+                                    <ul>
+                                        @foreach ($this->productTypes as $productType)
+                                            <li>
+                                                <label @class([
+                                                    'filter-container-label',
+                                                    'active' => in_array($productType->id, $selectedProductTypes),
+                                                ])
+                                                    wire:click="setProperty('selectedProductTypes', '{{ $productType->id }}')">
+                                                    <span class="check-icon">
+                                                        @if (in_array($productType->id, $selectedProductTypes))
+                                                            <i class="fas fa-check"></i>
+                                                        @endif
+                                                    </span>
+                                                    <span>
+                                                        {{ $productType->name }}
+                                                    </span>
+                                                </label>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                <hr>
+                                {{-- loading  screen --}}
+                                <div class="loading-screen" wire:loading>
+                                </div>
+                            </div>
+                        @endif
 
-                            <div class="widget-title">
-                                <h5>Product Types</h5>
-                            </div>
-                            <div class="checkbox-container">
-                                <ul>
-                                    @foreach ($this->productTypes as $productType)
-                                        <li>
-                                            <label @class([
-                                                'filter-container-label',
-                                                'active' => in_array($productType->id, $selectedProductTypes),
-                                            ])
-                                                wire:click="setProperty('selectedProductTypes', '{{ $productType->id }}')">
-                                                <span class="check-icon">
-                                                    @if (in_array($productType->id, $selectedProductTypes))
-                                                        <i class="fas fa-check"></i>
-                                                    @endif
-                                                </span>
-                                                <span>
-                                                    {{ $productType->name }}
-                                                </span>
-                                            </label>
-                                        </li>
+                        {{-- Attributes --}}
+                        @if (isset($this->availableAttributes) && count($this->availableAttributes) > 0)
+                            <div class="position-relative">
+
+                                <div class="widget-title">
+                                    <h5>
+                                        Attributes
+                                    </h5>
+                                </div>
+                                <div class="checkbox-container">
+                                    @foreach ($this->availableAttributes as $attributeValues)
+                                        <p class="pe-5 mb-2">
+                                            {{ $attributeValues->name }}
+
+                                            {{-- arrow icon --}}
+                                            <span class="float-end btn btn-sm btn-light">
+                                                <i class="fas fa-chevron-down"></i>
+                                            </span>
+                                        </p>
+                                        <ul class="checkbox-list mb-3">
+                                            @foreach ($attributeValues->values as $attributeValue)
+                                                <li>
+                                                    <label @class([
+                                                        'filter-container-label',
+                                                        'active' => in_array($attributeValue->id, $selectedAttributeValues),
+                                                    ])
+                                                        wire:click="setProperty('selectedAttributeValues', '{{ $attributeValue->id }}')">
+                                                        <span class="check-icon">
+                                                            @if (in_array($attributeValue->id, $selectedAttributeValues))
+                                                                <i class="fas fa-check"></i>
+                                                            @endif
+                                                        </span>
+                                                        <span>
+                                                            {{ $attributeValue->value }}
+                                                        </span>
+                                                    </label>
+                                                </li>
+                                            @endforeach
+                                        </ul>
                                     @endforeach
-                                </ul>
+                                </div>
+                                <hr>
+                                {{-- loading  screen --}}
+                                <div class="loading-screen" wire:loading>
+                                </div>
                             </div>
-                            <hr>
                         @endif
                     </div>
                 </div>
@@ -196,3 +253,20 @@
         </div>
     </div>
 </div>
+
+
+@script
+    <script>
+        $(document).ready(function() {
+            $('.float-end').on('click', function() {
+                const currentButton = $(this);
+                // Find the next .checkbox-list sibling after the parent <p> element
+                const checkboxList = currentButton.parent('p').next('.checkbox-list');
+
+                checkboxList.slideToggle(300); // Add animation for toggling
+                const icon = currentButton.find('i');
+                icon.toggleClass('fa-chevron-down fa-chevron-up');
+            });
+        });
+    </script>
+@endscript
