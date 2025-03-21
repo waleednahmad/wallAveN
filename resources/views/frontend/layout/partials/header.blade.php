@@ -148,7 +148,7 @@
                     @if (showBecomeARepInMenu())
                         <li>
                             <a href="{{ route('representative.register') }}">
-                                Become A Representative
+                                Become a Sales Rep
                             </a>
                         </li>
                     @endif
