@@ -12,8 +12,7 @@
                             </div>
                         </form>
                     </div>
-                    <div class="single-widgets mb-50 position-relative"
-                        style="max-height: 450px; overflow-y: auto; overflow-x: hidden; position: relative;">
+                    <div class="single-widgets mb-50 position-relative filteration-container">
                         @if (
                             (isset($search) && $search != '') ||
                                 (isset($selectedCategories) && count($selectedCategories) > 0) ||
@@ -127,22 +126,18 @@
                         {{-- Attributes --}}
                         @if (isset($this->availableAttributes) && count($this->availableAttributes) > 0)
                             <div class="position-relative">
-
-                                <div class="widget-title">
-                                    <h5>
-                                        Attributes
-                                    </h5>
-                                </div>
-                                <div class="checkbox-container">
-                                    @foreach ($this->availableAttributes as $attributeValues)
-                                        <p class="pe-5 mb-2">
+                                @foreach ($this->availableAttributes as $attributeValues)
+                                    <div class="widget-title pe-4 d-flex align-items-center justify-content-between">
+                                        <h5>
                                             {{ $attributeValues->name }}
+                                        </h5>
 
-                                            {{-- arrow icon --}}
-                                            <span class="float-end btn btn-sm btn-light">
-                                                <i class="fas fa-chevron-down"></i>
-                                            </span>
-                                        </p>
+                                        {{-- arrow icon --}}
+                                        <span class="float-end btn btn-sm btn-light">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </span>
+                                    </div>
+                                    <div class="checkbox-container">
                                         <ul class="checkbox-list mb-3">
                                             @foreach ($attributeValues->values as $attributeValue)
                                                 <li>
@@ -163,8 +158,8 @@
                                                 </li>
                                             @endforeach
                                         </ul>
-                                    @endforeach
-                                </div>
+                                    </div>
+                                @endforeach
                                 <hr>
                                 {{-- loading  screen --}}
                                 <div class="loading-screen" wire:loading>
@@ -261,7 +256,7 @@
             $('.float-end').on('click', function() {
                 const currentButton = $(this);
                 // Find the next .checkbox-list sibling after the parent <p> element
-                const checkboxList = currentButton.parent('p').next('.checkbox-list');
+                const checkboxList = currentButton.parent('div').next('.checkbox-container');
 
                 checkboxList.slideToggle(300); // Add animation for toggling
                 const icon = currentButton.find('i');

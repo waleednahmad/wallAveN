@@ -311,3 +311,15 @@
     align-items: center;
     justify-content: center;
 }
+
+.filteration-container {
+    max-height: 80vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+    .filteration-container {
+        max-height: 40vh;
+    }
+}

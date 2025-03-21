@@ -79,15 +79,15 @@
     <div class="container d-flex flex-nowrap align-items-center justify-content-between">
         <div class="header-logo d-lg-none d-block">
             <a href="{{ route('frontend.home') }}">
-                <img alt="image" class="img-fluid light" src="{{ asset('assets/img/header-logo.svg') }}">
-                <img alt="image" class="img-fluid dark" src="{{ asset('assets/img/header-logo-white.svg') }}">
+                <img alt="image" class="img-fluid light" src="{{ getMainImage() }}">
+                <img alt="image" class="img-fluid dark" src="{{ getMainImage() }}">
             </a>
         </div>
         <div class="main-menu">
             <div class="mobile-logo-area d-lg-none d-flex justify-content-center">
                 <a href="{{ route('frontend.home') }}" class="mobile-logo-wrap">
-                    <img alt="image" class="img-fluid light" src="{{ asset('assets/img/header-logo.svg') }}">
-                    <img alt="image" class="img-fluid dark" src="{{ asset('assets/img/header-logo-white.svg') }}">
+                    <img alt="image" class="img-fluid light" src="{{ getMainImage() }}">
+                    <img alt="image" class="img-fluid dark" src="{{ getMainImage() }}">
                 </a>
             </div>
    

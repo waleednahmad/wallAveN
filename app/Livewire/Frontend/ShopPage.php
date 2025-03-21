@@ -132,10 +132,27 @@ class ShopPage extends Component
     #[Computed()]
     public function availableAttributes()
     {
-        return                   Attribute::whereHas('values.productVariants')
-            ->with(['values' => function ($query) {
-                $query->whereHas('productVariants');
-            }])->get();
+        $query = Attribute::query();
+
+        if (!empty($this->selectedCategories)) {
+            $query->whereHas('values.productVariants.product.categories', function ($query) {
+                $query->whereIn('categories.id', $this->selectedCategories);
+            });
+        }
+
+        return $query->whereHas('values.productVariants')->with(['values' => function ($query) {
+            $query->whereHas('productVariants.product.categories', function ($query) {
+                if (!empty($this->selectedCategories)) {
+                    $query->whereIn('categories.id', $this->selectedCategories);
+                }
+            });
+        }])->get();
+
+
+        // Attribute::whereHas('values.productVariants')
+        // ->with(['values' => function ($query) {
+        //     $query->whereHas('productVariants');
+        // }])->get();
     }
 
     public function render()
