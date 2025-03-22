@@ -186,6 +186,7 @@
                                     results
                                 </h6>
                             </div>
+              
                             {{-- <div class="right-content">
                                 <div class="category-area d-lg-flex d-none active">
                                     <select>
@@ -221,6 +222,13 @@
                 </div>
                 <div class="list-grid-product-wrap">
                     <div class="row gy-4">
+                        <x-input-range :min="0" :max="50" wire:model.live="rangePrice">
+                            <x-slot:value>
+                                <span class="text-white text-sm">
+                                    <span x-text="$wire.rangePrice"></span>&euro;
+                                </span>
+                            </x-slot:value>
+                        </x-input-range>
                         @forelse ($products as $productItem)
                             <div class="col-lg-4 col-md-6 item" wire:key="{{ $productItem->id }}-card">
                                 <livewire:frontend.components.product-card-component :product="$productItem"

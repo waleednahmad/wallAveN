@@ -27,6 +27,11 @@ class ShopPage extends Component
     public $productTypes = [];
     public $subCategories = [];
 
+    public $rangePrice;
+    public $minValue;
+    public $maxValue;
+    
+
 
     public function mount()
     {

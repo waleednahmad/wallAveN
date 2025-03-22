@@ -94,21 +94,23 @@
             <ul class="menu-list">
                 <li><a href="{{ route('frontend.home') }}">Home</a></li>
                 <li><a href="{{ route('frontend.aboutUs') }}">About us</a></li>
-                <li><a href="{{ route('frontend.shop') }}">Shop</a></li>
-                @if (isset($publicActiveCategories) && $publicActiveCategories->count() > 0)
-                    <li class="menu-item-has-children">
-                        <a href="#" class="drop-down">Categories</a>
-                        <i class="bi bi-plus dropdown-icon"></i>
-                        <ul class="sub-menu two" style="z-index: 9999;">
-                            @foreach ($publicActiveCategories as $category)
-                                <li>
-                                    <a href="{{ route('frontend.shop', ['category' => $category->slug]) }}">
-                                        {{ $category->name }}
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </li>
+                @if (showCategoryAndShopPages())
+                    <li><a href="{{ route('frontend.shop') }}">Shop</a></li>
+                    @if (isset($publicActiveCategories) && $publicActiveCategories->count() > 0)
+                        <li class="menu-item-has-children">
+                            <a href="#" class="drop-down">Categories</a>
+                            <i class="bi bi-plus dropdown-icon"></i>
+                            <ul class="sub-menu two" style="z-index: 9999;">
+                                @foreach ($publicActiveCategories as $category)
+                                    <li>
+                                        <a href="{{ route('frontend.shop', ['category' => $category->slug]) }}">
+                                            {{ $category->name }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </li>
+                    @endif
                 @endif
                 <li><a href="{{ route('frontend.contactUs') }}">Contact us</a></li>
                 @if (auth('dealer')->check() || auth('representative')->check() || auth('web')->check())

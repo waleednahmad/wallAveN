@@ -29,17 +29,8 @@
 <link rel="icon" href="{{ asset('assets/img/favicon.png') }}" type="image/gif" sizes="20x20">
 
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-CVGZF5CQ6D"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
+{!! getGoogleAnalytics() !!}
 
-    function gtag() {
-        dataLayer.push(arguments);
-    }
-    gtag('js', new Date());
-
-    gtag('config', 'G-CVGZF5CQ6D');
-</script>
 
 <style>
     .text-container {

@@ -27,11 +27,18 @@ class FrontController extends Controller
 
     public function shop()
     {
+        if (!showCategoryAndShopPages()) {
+            return redirect()->route('frontend.home')->with('error', 'Shop page is disabled.');
+        }
         return view('frontend.shop');
     }
 
     public function showProduct($slug)
     {
+        if (!showCategoryAndShopPages()) {
+            return redirect()->route('frontend.home')->with('error', 'Product page is disabled.');
+        }
+
         $product = Product::where('slug', $slug)->first();
         $firstCategory = $product->categories->first();
 

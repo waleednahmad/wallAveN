@@ -25,6 +25,7 @@ class ProductPage extends Component
     public $relatedProducts = [];
     public $quantity = 1;
     public $variantNotFound = false;
+    public $selectedVariantImage = null;
 
 
     public function mount($product)
@@ -82,6 +83,8 @@ class ProductPage extends Component
             $this->price = $firstVariant->price;
             $this->compare_at_price = $firstVariant->compare_at_price;
             $this->variantNotFound = false;
+            $this->selectedVariantImage = $firstVariant->image ?? $this->product->image;
+            // dd($this->selectedVariantImage);
         }
     }
 
@@ -99,6 +102,7 @@ class ProductPage extends Component
             $this->price = $variant->price;
             $this->compare_at_price = $variant->compare_at_price;
             $this->variantNotFound = false;
+            $this->selectedVariantImage = $variant->image ?? $this->product->image;
         } else {
             $this->selectedSku = "---";
             $this->price = "---";
@@ -204,6 +208,7 @@ class ProductPage extends Component
     }
     public function render()
     {
+        $this->dispatch('activateVariantThumbnail', ['image' => $this->selectedVariantImage]);
         return view('livewire.frontend.product-page', [
             'variantNotFound' => $this->variantNotFound,
         ]);

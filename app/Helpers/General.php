@@ -24,6 +24,11 @@ function showBecomeARepInMenu()
     return PublicSetting::where('key', 'show become a rep in the menu')->first()->value ?? 0;
 }
 
+function showCategoryAndShopPages()
+{
+    return PublicSetting::where('key', 'toggle show category & shop pages')->first()->value ?? 0;
+}
+
 function getMainImage()
 {
     $value = PublicSetting::where('key', 'main logo')->first();
@@ -32,4 +37,9 @@ function getMainImage()
     } else {
         return asset('assets/img/logo.webp');
     }
+}
+
+function getGoogleAnalytics()
+{
+    return PublicSetting::where('key', 'google analytics')->first()->value ?? '';
 }

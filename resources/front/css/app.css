@@ -323,3 +323,22 @@
         max-height: 40vh;
     }
 }
+
+.btn-large-view {
+    background-color: rgba(255, 255, 255, 0.9);
+    bottom: 20px;
+    -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+    color: #1b1b1c;
+    display: block;
+    font-weight: 700;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    line-height: 22px;
+    padding: 10px 0;
+    position: absolute;
+    text-align: center;
+    width: 136px;
+}

@@ -9,7 +9,8 @@
 
 <body id="body">
 
-    <div class="tt-style-switch d-lg-flex d-none">
+    {{-- <div class="tt-style-switch d-lg-flex d-none"> --}}
+    <div class="tt-style-switch d-none">
         <span class="dark">Dark</span>
         <span class="light">Light</span>
     </div>

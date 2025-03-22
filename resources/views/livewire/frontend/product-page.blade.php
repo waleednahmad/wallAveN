@@ -8,25 +8,32 @@
 
                     <section id="main-carousel" class="splide" aria-label="My Awesome Gallery">
                         <div class="splide__track">
-                            <ul class="splide__list">
+                            <ul class="splide__list" id='thumb-gallery'>
                                 @foreach ($imagesGallery as $galleryItem)
-                                    <li class="splide__slide" data-splide-interval="3000">
+                                    <li class="splide__slide" data-splide-interval="3000"
+                                        data-mfp-src="{{ asset($galleryItem->image) }}">
                                         <img src="{{ asset($galleryItem->image) }}" alt="" loading="lazy">
                                     </li>
                                 @endforeach
+
+
                             </ul>
+                            <a href="#thumb-gallery" class="btn-large-view btn-danger btn-gallery-popup">
+                                View Larger
+                                <i class="fa fa-search-plus"></i>
+                            </a>
                         </div>
                     </section>
                     @if (count($imagesGallery) > 1)
                         <ul id="thumbnails" class="thumbnails">
                             @foreach ($imagesGallery as $galleryItem)
                                 <li class="thumbnail">
-                                    <img src="{{ asset($galleryItem->image) }}" alt="" loading="lazy">
+                                    <img src="{{ asset($galleryItem->image) }}" class="thumbnail-image" alt=""
+                                        loading="lazy">
                                 </li>
                             @endforeach
                         </ul>
                     @endif
-
                 </div>
             </div>
             <div class="col-md-3 wow animate fadeInRight" data-wow-delay="200ms" data-wow-duration="1500ms">
@@ -218,7 +225,13 @@
     {{-- @endif --}}
 </div>
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/magnific-popup.min.css') }}">
+@endpush
+
 @push('scripts')
+    <script src="{{ asset('assets/js/jquery.magnific-popup.min.js') }}"></script>
+
     <script>
         // make sure the qunatity is always a number and more than 1 with every keyup or change
         $(document).ready(function() {
@@ -227,6 +240,89 @@
                     $(this).val(1);
                 }
             });
+
+
+            // Magnific popup
+            var galleryBtnPopup = $(".btn-gallery-popup");
+            galleryBtnPopup.on('click', function(event) {
+                event.preventDefault();
+
+                var gallery = $(this).attr('href');
+                console.log(gallery);
+
+                $(gallery).magnificPopup({
+                    delegate: '[data-mfp-src]',
+                    type: 'image',
+                    closeOnContentClick: false,
+                    closeBtnInside: false,
+                    mainClass: 'ht-mfp zoom-animate mfp-img-mobile',
+                    removalDelay: 800,
+                    image: {
+                        verticalFit: true
+                    },
+                    gallery: {
+                        enabled: true
+                    }
+                }).magnificPopup('open');
+            });
         });
     </script>
 @endpush
+
+
+@script
+    <script>
+        let splide = new Splide("#main-carousel", {
+            arrows: false,
+            pagination: false,
+            type: "loop",
+            perPage: 1,
+            cover: false,
+            height: "100%",
+            autoplay: false,
+        });
+
+        let thumbnails = document.getElementsByClassName("thumbnail");
+        let current;
+
+        for (let i = 0; i < thumbnails.length; i++) {
+            initThumbnail(thumbnails[i], i);
+        }
+
+        function initThumbnail(thumbnail, index) {
+            thumbnail.addEventListener("click", function() {
+                splide.go(index);
+            });
+        }
+
+        splide.on("mounted move", function() {
+            let thumbnail = thumbnails[splide.index];
+
+            if (thumbnail) {
+                if (current) {
+                    current.classList.remove("is-active");
+                }
+
+                thumbnail.classList.add("is-active");
+                current = thumbnail;
+            }
+        });
+
+        splide.mount();
+
+        $wire.on('activateVariantThumbnail', (event) => {
+            let variantImage = event[0].image; // the image path of the selected variant
+            let variantImageSrc = "{{ asset('') }}" + variantImage; // the full image path
+
+            // Find the index of the variant image in the thumbnails
+            let variantIndex = Array.from(thumbnails).findIndex((thumbnail) => {
+                let thumbnailImage = thumbnail.querySelector('.thumbnail-image');
+                return thumbnailImage.src === variantImageSrc;
+            });
+
+            if (variantIndex !== -1) {
+                splide.go(variantIndex); // Move to the corresponding slide
+            }
+        });
+    </script>
+@endscript
