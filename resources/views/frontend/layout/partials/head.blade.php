@@ -28,6 +28,9 @@
 <title>Golden Rugs</title>
 <link rel="icon" href="{{ asset('assets/img/favicon.png') }}" type="image/gif" sizes="20x20">
 
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+
 <!-- Google tag (gtag.js) -->
 {!! getGoogleAnalytics() !!}
 
