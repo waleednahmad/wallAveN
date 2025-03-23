@@ -317,12 +317,8 @@
             // Find the index of the variant image in the thumbnails
             let variantIndex = Array.from(thumbnails).findIndex((thumbnail) => {
                 let thumbnailImage = thumbnail.querySelector('.thumbnail-image');
-                return thumbnailImage.src === variantImageSrc;
-            });
-            console.log({
-                variantImage,
-                variantImageSrc,
-                variantIndex,
+                return thumbnailImage.src.includes(
+                variantImage); // Check if the thumbnail image contains the variant image
             });
 
             if (variantIndex !== -1) {
