@@ -319,6 +319,11 @@
                 let thumbnailImage = thumbnail.querySelector('.thumbnail-image');
                 return thumbnailImage.src === variantImageSrc;
             });
+            console.log({
+                variantImage,
+                variantImageSrc,
+                variantIndex,
+            });
 
             if (variantIndex !== -1) {
                 splide.go(variantIndex); // Move to the corresponding slide
