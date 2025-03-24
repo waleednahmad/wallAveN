@@ -2,10 +2,13 @@
 
 namespace App\Livewire\Dashboard\Products;
 
+use App\Models\Attribute;
 use App\Models\ProductVariant;
 use App\Traits\UploadImageTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -52,14 +55,14 @@ class CreateProductVariantForm extends Component
         $this->main_sku = strtoupper($this->product->sku);
         $this->productAttributesWithValues = $this->product->attributes ? $this->product->attributes->map(function ($attribute) {
             return [
-                'id' => $attribute->id,
-                'name' => $attribute->name,
-                'values' => $attribute->values->map(function ($value) {
-                    return [
-                        'id' => $value->id,
-                        'value' => $value->value,
-                    ];
-                }),
+            'id' => $attribute->id,
+            'name' => ucfirst(strtolower($attribute->name)),
+            'values' => $attribute->values->sortBy('value')->map(function ($value) {
+                return [
+                'id' => $value->id,
+                'value' => $value->value,
+                ];
+            }),
             ];
         }) : [];
     }
@@ -97,7 +100,13 @@ class CreateProductVariantForm extends Component
 
     public function save()
     {
-        $this->validate();
+        try {
+            $this->validate();
+        } catch (ValidationException $e) {
+            $errors = $e->validator->errors()->all();
+            $this->dispatch('validationFailed', $errors);
+            return;
+        }
 
         // Make sure the selectedAttributeValues must be equal to the product's attributes count
         if (count($this->selectedAttributeValues) !== $this->product->attributes->count()) {
@@ -209,6 +218,38 @@ class CreateProductVariantForm extends Component
         $this->image = null;
         $this->selectedImageId = null;
         $this->dispatch('success', 'Main image deselected successfully.');
+    }
+
+
+    public function setAttribute($attributeId)
+    {
+        $attribute = Attribute::find($attributeId);
+        if (!$attribute) {
+            $this->dispatch('error', 'Attribute not found.');
+            return;
+        }
+
+        $this->dispatch('setAttributeValue', [
+            'attribute' => $attribute,
+        ]);
+    }
+
+
+    #[On('refreshAttributeValuesList')]
+    public function refreshAttributeValuesList()
+    {
+        $this->productAttributesWithValues = $this->product->attributes ? $this->product->attributes->map(function ($attribute) {
+            return [
+            'id' => $attribute->id,
+            'name' => ucfirst(strtolower($attribute->name)),
+            'values' => $attribute->values->sortBy('value')->map(function ($value) {
+                return [
+                'id' => $value->id,
+                'value' => $value->value,
+                ];
+            }),
+            ];
+        }) : [];
     }
 
     public function render()

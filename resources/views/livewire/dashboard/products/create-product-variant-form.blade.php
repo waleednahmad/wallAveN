@@ -54,7 +54,12 @@
             <div class="category-container d-flex flex-column">
                 @forelse ($this->productAttributesWithValues as $attribute)
                     <h6 class="mt-1 mb-0">
-                        {{ $attribute['name'] }}
+                        {{ $attribute['name'] }} 
+                        {{-- add new value button with modal --}}
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#addNewValueModal" wire:click="setAttribute({{ $attribute['id'] }})">
+                            <i class="fas fa-plus"></i>
+                        </button>
                     </h6>
                     {{-- values --}}
                     <div class="flex-wrap gap-2 d-flex">

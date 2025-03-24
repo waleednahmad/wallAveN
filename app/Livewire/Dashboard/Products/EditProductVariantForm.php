@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard\Products;
 
+use App\Models\Attribute;
 use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Traits\UploadImageTrait;
@@ -59,7 +60,7 @@ class EditProductVariantForm extends Component
         $this->productAttributesWithValues = $this->product->attributes ? $this->product->attributes->map(function ($attribute) {
             return [
                 'id' => $attribute->id,
-                'name' => $attribute->name,
+                'name' => ucfirst(strtolower($attribute->name)),
                 'values' => $attribute->values->map(function ($value) {
                     return [
                         'id' => $value->id,
@@ -207,6 +208,37 @@ class EditProductVariantForm extends Component
         ]);
     }
 
+
+    public function setEditAttribute($attributeId)
+    {
+        $attribute = Attribute::find($attributeId);
+        if (!$attribute) {
+            $this->dispatch('error', 'Attribute not found.');
+            return;
+        }
+
+        $this->dispatch('setAttributeValue', [
+            'attribute' => $attribute,
+        ]);
+    }
+
+
+    #[On('refreshAttributeValuesList')]
+    public function refreshAttributeValuesList()
+    {
+        $this->productAttributesWithValues = $this->product->attributes ? $this->product->attributes->map(function ($attribute) {
+            return [
+                'id' => $attribute->id,
+                'name' => ucfirst(strtolower($attribute->name)),
+                'values' => $attribute->values->sortBy('value')->map(function ($value) {
+                    return [
+                        'id' => $value->id,
+                        'value' => $value->value,
+                    ];
+                }),
+            ];
+        }) : [];
+    }
     public function render()
     {
         return view('livewire.dashboard.products.edit-product-variant-form');

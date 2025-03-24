@@ -39,11 +39,11 @@
         "newestOnTop": false,
         "progressBar": true,
         "positionClass": "toast-top-right",
-        "preventDuplicates": true,
+        "preventDuplicates": false,
         "onclick": null,
         "showDuration": "300",
         "hideDuration": "1000",
-        "timeOut": "5000",
+        "timeOut": "6000",
         "extendedTimeOut": "1000",
         "showEasing": "swing",
         "hideEasing": "linear",
@@ -85,6 +85,13 @@
         // Warning Message
         Livewire.on('warning', (event) => {
             toastr.warning(event[0]);
+        });
+
+        // Error Validation Message
+        Livewire.on('validationFailed', (event) => {
+            event[0].forEach((error) => {
+                toastr.error(error);
+            });
         });
     });
 </script>

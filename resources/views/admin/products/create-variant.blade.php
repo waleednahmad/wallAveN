@@ -78,6 +78,14 @@
             </div>
         </div>
     </div>
+
+    {{-- Preview Create AttrributeValues MOdal --}}
+    <div class="modal fade" id="addNewValueModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="addNewValueModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <livewire:dashboard.modals.attribute-values.add-new-attribute-value-modal />
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
@@ -128,6 +136,11 @@
                 new bootstrap.Modal(document.getElementById('confirmDeleteVariant')).show();
                 console.log(event)
                 Livewire.dispatch('setVariant', event[0]);
+            });
+
+            // ============== Close Add New Value Modal ==============
+            Livewire.on('closeAddNewAttributeValueModal', (event) => {
+                bootstrap.Modal.getInstance(document.getElementById('addNewValueModal')).hide();
             });
         });
 

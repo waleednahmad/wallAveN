@@ -3,7 +3,7 @@
 @section('content')
     {!! $page->content !!}
 
-    @if (showCategoryAndShopPages())
+    @if (showCategoryAndShopPages() || auth('dealer')->check() || auth('representative')->check() || auth('web')->check())
         <!-- Home1 General Art Section Start -->
         <div class="home1-general-art-slider-section mb-120">
             <div class="container">

@@ -94,7 +94,7 @@
             <ul class="menu-list">
                 <li><a href="{{ route('frontend.home') }}">Home</a></li>
                 <li><a href="{{ route('frontend.aboutUs') }}">About us</a></li>
-                @if (showCategoryAndShopPages())
+                @if (showCategoryAndShopPages() || auth('dealer')->check() || auth('representative')->check() || auth('web')->check())
                     <li><a href="{{ route('frontend.shop') }}">Shop</a></li>
                     @if (isset($publicActiveCategories) && $publicActiveCategories->count() > 0)
                         <li class="menu-item-has-children">

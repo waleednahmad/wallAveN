@@ -27,25 +27,25 @@ class FrontController extends Controller
 
     public function shop()
     {
-        if (!showCategoryAndShopPages()) {
-            return redirect()->route('frontend.home')->with('error', 'Shop page is disabled.');
+        if (showCategoryAndShopPages() || auth('dealer')->check() || auth('representative')->check() || auth('web')->check()) {
+            return view('frontend.shop');
         }
-        return view('frontend.shop');
+        return redirect()->route('frontend.home')->with('error', 'Shop page is disabled.');
     }
 
     public function showProduct($slug)
     {
-        if (!showCategoryAndShopPages()) {
-            return redirect()->route('frontend.home')->with('error', 'Product page is disabled.');
+        if (showCategoryAndShopPages() || auth('dealer')->check() || auth('representative')->check() || auth('web')->check()) {
+            $product = Product::where('slug', $slug)->first();
+            $firstCategory = $product->categories->first();
+            
+            if (!$product) {
+                return redirect()->route('frontend.home')->with('error', 'Product not found.');
+            }
+            return view('frontend.product', compact('product', 'firstCategory'));
         }
-
-        $product = Product::where('slug', $slug)->first();
-        $firstCategory = $product->categories->first();
-
-        if (!$product) {
-            return redirect()->route('frontend.home')->with('error', 'Product not found.');
-        }
-        return view('frontend.product', compact('product', 'firstCategory'));
+        
+        return redirect()->route('frontend.home')->with('error', 'Product page is disabled.');
     }
 
 

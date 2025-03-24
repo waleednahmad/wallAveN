@@ -13,6 +13,7 @@ use App\Traits\GenerateSlugsTrait;
 use App\Traits\UploadImageTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -50,7 +51,7 @@ class EditProductForm extends Component
     public $newImageStartOrder = 0;
 
 
-    
+
 
     // ========== Lifecycle Hooks ==========
     public function mount(Product $product)
@@ -88,7 +89,6 @@ class EditProductForm extends Component
         $this->dispatch('refreshProductFiles');
         $this->dispatch('refreshProductTable');
         $this->images = $this->product->images()->orderBy('order')->get();
-
     }
 
     public function updateNewImagesOrder($imagesOrder)
@@ -178,23 +178,32 @@ class EditProductForm extends Component
 
     public function save()
     {
-        $this->validate(
-            [
-                'name' => 'required',
-                'sku' => 'required|unique:products,sku,' . $this->product->id,
-                'vendor_id' => 'nullable|exists:vendors,id',
-                'selectedCategories' => 'required|array|min:1',
-                'selectedAttributes' => 'required|array|min:1',
-            ],
-            [
-                'name.required' => 'Product name is required.',
-                'sku.required' => 'SKU is required.',
-                'sku.unique' => 'SKU must be unique.',
-                'vendor_id.required' => 'Vendor is required.',
-                'selectedCategories.required' => 'You must select at least one category.',
-                'selectedAttributes.required' => 'You must select at least one attribute.',
-            ]
-        );
+
+
+        try {
+            $this->validate(
+                [
+                    'name' => 'required',
+                    'sku' => 'required|unique:products,sku,' . $this->product->id,
+                    'vendor_id' => 'nullable|exists:vendors,id',
+                    'selectedCategories' => 'required|array|min:1',
+                    'selectedAttributes' => 'required|array|min:1',
+                ],
+                [
+                    'name.required' => 'Product name is required.',
+                    'sku.required' => 'SKU is required.',
+                    'sku.unique' => 'SKU must be unique.',
+                    'vendor_id.required' => 'Vendor is required.',
+                    'selectedCategories.required' => 'You must select at least one category.',
+                    'selectedAttributes.required' => 'You must select at least one attribute.',
+                ]
+            );
+        } catch (ValidationException $e) {
+            $errors = $e->validator->errors()->all();
+            $this->dispatch('validationFailed', $errors);
+            return;
+        }
+
 
         DB::beginTransaction();
         try {
@@ -208,7 +217,7 @@ class EditProductForm extends Component
                 'slug' => $this->generateUniqueSlug($this->product, $this->name, 'slug'),
             ]);
 
-    
+
             // Store the uploaded images from $imagesWithOrders
             if ($this->imagesWithOrders && count($this->imagesWithOrders) > 0) {
                 $imagePaths = [];

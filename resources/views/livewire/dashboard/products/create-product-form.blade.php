@@ -311,7 +311,7 @@
 
                                                 {{-- bellete btn --}}
                                                 <button class="btn btn-sm btn-danger"
-                                                style="position: absolute; top: 5px; right: 5px;"
+                                                    style="position: absolute; top: 5px; right: 5px;"
                                                     wire:click.prevent="removeImage({{ $index }})">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
@@ -334,11 +334,11 @@
             </div>
 
             <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary" wire:loading.attr="disabled"
+                <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:loading.remove
                     wire:target="save, uploadedImages" x-bind:disabled="isUploading"
                     x-bind:class="{ 'btn-secondary': isUploading }" x-text="isUploading ? 'Uploading...' : 'Save'">
                     {{-- loading spinner --}}
-                    <span wire:loading>
+                    <span wire:loading wire:target="save, uploadedImages">
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                     </span>
 
@@ -346,6 +346,14 @@
                         Save
                     </span>
                 </button>
+                {{-- spinner btn --}}
+                <button type="button" class="btn btn-secondary ms-2" wire:target="save, uploadedImages"
+                    wire:loading.attr="disabled" wire:loading>
+                    <span>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    </span>
+                </button>
+
                 <p x-show="isError" class="alert alert-danger ms-2" x-text="errMessage">
                     an error occured while uploading, please try again
                 </p>
@@ -357,7 +365,7 @@
 
 
     {{-- Print all errors if exists --}}
-    @if ($errors->any())
+    {{-- @if ($errors->any())
         <div class="mt-3 alert alert-danger">
             <ul>
                 @foreach ($errors->all() as $error)
@@ -365,7 +373,7 @@
                 @endforeach
             </ul>
         </div>
-    @endif
+    @endif --}}
 </form>
 
 
@@ -388,8 +396,6 @@
                         console.error(error);
                     });
             }
-
-
         });
 
         function fileUpload() {

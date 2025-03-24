@@ -15,6 +15,7 @@ use Livewire\Attributes\Computed;
 use App\Traits\GenerateSlugsTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\On;
 
 class CreateProductForm extends Component
@@ -105,25 +106,33 @@ class CreateProductForm extends Component
 
     public function save()
     {
-        $this->validate(
-            [
-                'name' => 'required',
-                'sku' => 'required|unique:products,sku',
-                'vendor_id' => 'nullable|exists:vendors,id',
-                'selectedCategories' => 'required|array|min:1',
-                'selectedAttributes' => 'required|array|min:1',
-                'uploadedImages' => 'required|array|min:1|max:15',
-                'uploadedImages.*' => 'image',
-            ],
-            [
-                'name.required' => 'Product name is required.',
-                'sku.required' => 'SKU is required.',
-                'sku.unique' => 'SKU must be unique.',
-                'vendor_id.required' => 'Vendor is required.',
-                'selectedCategories.required' => 'You must select at least one category.',
-                'selectedAttributes.required' => 'You must select at least one attribute.',
-            ]
-        );
+
+        try {
+            $this->validate(
+                [
+                    'name' => 'required',
+                    'sku' => 'required|unique:products,sku',
+                    'vendor_id' => 'nullable|exists:vendors,id',
+                    'selectedCategories' => 'required|array|min:1',
+                    'selectedAttributes' => 'required|array|min:1',
+                    'uploadedImages' => 'required|array|min:1|max:15',
+                    'uploadedImages.*' => 'image',
+                ],
+                [
+                    'name.required' => 'Product name is required.',
+                    'sku.required' => 'SKU is required.',
+                    'sku.unique' => 'SKU must be unique.',
+                    'vendor_id.required' => 'Vendor is required.',
+                    'selectedCategories.required' => 'You must select at least one category.',
+                    'selectedAttributes.required' => 'You must select at least one attribute.',
+                ]
+            );
+        } catch (ValidationException $e) {
+            $errors = $e->validator->errors()->all();
+            $this->dispatch('validationFailed', $errors);
+            return;
+        }
+
 
         DB::beginTransaction();
         try {
@@ -170,8 +179,7 @@ class CreateProductForm extends Component
             return redirect()->route('dashboard.products.create-variant', $product->id)->with('success', "Product created successfully.");
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error creating product: ' . $e->getMessage());
-            $this->dispatch('error', 'Something went wrong. Please try again.');
+            $this->dispatch('error', "Error: " . $e->getMessage());
         }
     }
 
