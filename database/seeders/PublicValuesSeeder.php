@@ -36,24 +36,28 @@ class PublicValuesSeeder extends Seeder
                 'type' => 'select',
                 'description' => "To display the vendor in the front pages",
             ],
+            // show become a rep in the menu
             [
                 'key' => 'show become a rep in the menu',
                 'value' => 0,
                 'type' => 'select',
                 'description' => "To display the become a rep in the front pages menu header",
             ],
+            //main logo
             [
                 'key' => 'main logo',
                 'value' => asset('assets/img/logo.webp'),
                 'type' => 'image',
                 'description' => "Main logo of the website",
             ],
+            // show category & shop pages
             [
                 'key' => 'toggle show category & shop pages',
                 'value' => 1,
                 'type' => 'select',
                 'description' => "To display the category & shop pages in the front pages",
             ],
+            // google analytics
             [
                 'key' => 'google analytics',
                 'value' => '<script async src="https://www.googletagmanager.com/gtag/js?id=G-CVGZF5CQ6D"></script>
@@ -69,7 +73,21 @@ class PublicValuesSeeder extends Seeder
                 </script>',
                 'type' => 'text',
                 'description' => "Google analytics code",
-            ]
+            ],
+            // favicon
+            [
+                'key' => 'favicon',
+                'value' => asset('assets/img/favicon.png'),
+                'type' => 'image',
+                'description' => "Favicon of the website",
+            ],
+            // website title
+            [
+                'key' => 'website title',
+                'value' => 'Golden Rugs',
+                'type' => 'text',
+                'description' => "Title of the website",
+            ],
 
         ];
 

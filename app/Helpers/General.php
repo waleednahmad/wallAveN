@@ -39,7 +39,23 @@ function getMainImage()
     }
 }
 
+function getFavicon()
+{
+    $value = PublicSetting::where('key', 'favicon')->first();
+    if ($value) {
+        return asset($value->value);
+    } else {
+        return asset('assets/img/favicon.png');
+    }
+}
+
 function getGoogleAnalytics()
 {
     return PublicSetting::where('key', 'google analytics')->first()->value ?? '';
+}
+
+
+function getWebsiteTitle()
+{
+    return PublicSetting::where('key', 'website title')->first()->value ?? '';
 }

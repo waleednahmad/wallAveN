@@ -25,8 +25,10 @@
 
 <link rel="stylesheet" href="{{ asset('dashboard/plugins/fontawesome-free/css/all.min.css') }}">
 <!-- Title -->
-<title>Golden Rugs</title>
-<link rel="icon" href="{{ asset('assets/img/favicon.png') }}" type="image/gif" sizes="20x20">
+<title>
+    {{ getWebsiteTitle() }}
+</title>
+<link rel="icon" href="{{ getFavicon() }}" type="image/gif" sizes="20x20">
 
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 

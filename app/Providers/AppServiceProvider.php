@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Category;
+use App\Models\Page;
 use App\Models\PublicSetting;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
@@ -25,16 +26,17 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
 
-        View::composer([
-            'frontend.layout.app'
-        ], function ($view) {
-            // ----- Active Categories -----
-            $view->with('publicActiveCategories', Category::active()
-                ->whereHas('products', function ($query) {
-                    $query->where('status', 1)->whereHas('variants');
-                })
-                ->orderBy('name')
-                ->get());
-        });
+        $publicActiveCategories = Category::active()
+            ->whereHas('products', function ($query) {
+                $query->where('status', 1)->whereHas('variants');
+            })
+            ->orderBy('name')
+            ->get();
+
+        $footerContent =  Page::where('title', 'Footer')->first()->content ?? '';
+
+
+        View::share('publicActiveCategories', $publicActiveCategories);
+        View::share('footerContent', $footerContent);
     }
 }

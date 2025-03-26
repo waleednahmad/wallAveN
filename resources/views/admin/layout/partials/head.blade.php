@@ -3,7 +3,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <title>
-    Golden Rugs Dashboard
+    {{ getWebsiteTitle() }} Dashboard
 </title>
 
 <!-- Google Font: Source Sans Pro -->
@@ -27,7 +27,7 @@
 
 {{-- =================================== --}}
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-<link rel="icon" href="{{ asset('assets/img/favicon.png') }}" type="image/gif" sizes="20x20">
+<link rel="icon" href="{{ getFavicon() }}" type="image/gif" sizes="20x20">
 
 @vite(['resources/js/app.js', 'resources/css/app.css'])
 

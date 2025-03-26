@@ -34,12 +34,13 @@ class EditPublicSetting extends Component
         $this->value = $this->publicSetting->value;
         $this->description = $this->publicSetting->description;
         $this->type = $this->publicSetting->type;
-        $this->default_image = asset('assets/img/logo.webp');
+        $this->default_image = $this->key == 'favicon' ? asset('assets/img/favicon.png') : asset('assets/img/logo.webp');
     }
 
     public function resetImage()
     {
         $old_image = $this->publicSetting->value;
+        $value = $this->default_image;
 
         $this->publicSetting->update([
             'value' => $value,
@@ -48,6 +49,9 @@ class EditPublicSetting extends Component
         if ($old_image && file_exists(public_path($old_image)) && !str_contains($old_image, 'assets/img/logo.webp')) {
             unlink(public_path($old_image));
         }
+
+
+        return redirect()->route('dashboard.public-settings.index')->with('success', 'Public setting updated successfully');
     }
 
     public function update()
