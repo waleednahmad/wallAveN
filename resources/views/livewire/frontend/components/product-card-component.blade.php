@@ -7,22 +7,23 @@
                     style="object-fit: contain; width: 100%; height: 100%;" alt="{{ $product->name }}">
             </a>
         </div>
-        <div class="imgs-thumbnail-container">
-            @if (isset($variantImages) && count($variantImages) > 0)
-                @foreach ($variantImages as $image)
-                    @if (file_exists($image))
-                        <div class="img-thumbnail">
-                            <a href="{{ route('frontend.product', $product->slug) }}" class="card-img">
-                                <img src="{{ asset($image) }}" loading="lazy"
-                                    style="object-fit: contain; width: 100%; height: 100%;" alt="{{ $product->name }}">
-                            </a>
-                        </div>
-                    @endif
-                @endforeach
-            @endif
 
-        </div>
         <div class="auction-card-content pt-1">
+            <div class="imgs-thumbnail-container">
+                @if (isset($variantImages) && count($variantImages) > 0)
+                    @foreach ($variantImages as $image)
+                        @if (file_exists($image))
+                            <div class="img-thumbnail">
+                                <a href="{{ route('frontend.product', $product->slug) }}" class="card-img">
+                                    <img src="{{ asset($image) }}" loading="lazy"
+                                        style="object-fit: contain; width: 100%; height: 100%;" alt="{{ $product->name }}">
+                                </a>
+                            </div>
+                        @endif
+                    @endforeach
+                @endif
+            </div>
+
             <h6>
                 <a href="{{ route('frontend.product', $product->slug) }}">
                     {{ $product->name }}
