@@ -13,12 +13,10 @@
                 @if (isset($variantImages) && count($variantImages) > 0)
                     @foreach ($variantImages as $image)
                         @if (file_exists($image))
-                            <div class="img-thumbnail">
-                                <a href="{{ route('frontend.product', $product->slug) }}" class="card-img">
-                                    <img src="{{ asset($image) }}" loading="lazy"
-                                        style="object-fit: contain; width: 100%; height: 100%;" alt="{{ $product->name }}">
-                                </a>
-                            </div>
+                            <a href="{{ route('frontend.product', $product->slug) }}" class="card-img img-thumbnail">
+                                <img src="{{ asset($image) }}" loading="lazy"
+                                    style="object-fit: contain; width: 100%; height: 100%;" alt="{{ $product->name }}">
+                            </a>
                         @endif
                     @endforeach
                 @endif
