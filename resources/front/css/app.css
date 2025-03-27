@@ -365,8 +365,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 5px;
 }
 
 .imgs-thumbnail-container .img-thumbnail img {
-    object-fit: cover;
+    object-fit: contain;
 }
