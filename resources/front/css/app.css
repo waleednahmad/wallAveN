@@ -357,8 +357,8 @@
 }
 
 .imgs-thumbnail-container .img-thumbnail {
-    width: 70px;
-    height: 70px;
+    width: 65px;
+    height: 65px;
     overflow: hidden;
     list-style: none;
     cursor: pointer;
