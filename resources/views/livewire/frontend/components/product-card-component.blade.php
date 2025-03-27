@@ -24,7 +24,7 @@
                 @endif
             </div>
 
-            <h6>
+            <h6 class="pt-2">
                 <a href="{{ route('frontend.product', $product->slug) }}">
                     {{ $product->name }}
 
