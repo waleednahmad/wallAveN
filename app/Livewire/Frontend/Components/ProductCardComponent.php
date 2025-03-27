@@ -26,10 +26,10 @@ class ProductCardComponent extends Component
 
         $this->variantImages[] = $this->product->image;
         if ($this->product->variants->count() > 1) {
-            $this->variantImages = array_merge(
+            $this->variantImages = array_unique(array_merge(
             [$this->product->image],
             $this->product->variants->pluck('image')->take(4)->toArray()
-            );
+            ));
         }
     }
 
