@@ -16,7 +16,7 @@ class FrontController extends Controller
     public function index()
     {
         $page = Page::where('title', 'Home')->first();
-        $products = Product::with(['vendor', 'firstVariant'])
+        $products = Product::with(['vendor', 'firstVariant', 'variants'])
             ->whereHas('variants')
             ->active()
             ->take(12)
@@ -38,13 +38,13 @@ class FrontController extends Controller
         if (showCategoryAndShopPages() || auth('dealer')->check() || auth('representative')->check() || auth('web')->check()) {
             $product = Product::where('slug', $slug)->first();
             $firstCategory = $product->categories->first();
-            
+
             if (!$product) {
                 return redirect()->route('frontend.home')->with('error', 'Product not found.');
             }
             return view('frontend.product', compact('product', 'firstCategory'));
         }
-        
+
         return redirect()->route('frontend.home')->with('error', 'Product page is disabled.');
     }
 

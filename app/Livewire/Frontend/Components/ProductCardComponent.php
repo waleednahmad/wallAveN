@@ -10,6 +10,7 @@ class ProductCardComponent extends Component
     public $hasManyVariants = false;
     public $price = 0;
     public $compare_at_price = 0;
+    public $variantImages = [];
 
     public function mount($product)
     {
@@ -21,6 +22,12 @@ class ProductCardComponent extends Component
         if ($this->product->variants->count() > 1) {
             $this->hasManyVariants = true;
             $this->price = $this->product->variants->min('price');
+        }
+
+        if ($this->product->variants->count() > 1) {
+            $this->variantImages = $this->product->variants->pluck('image')->take(4)->toArray();
+        } else {
+            $this->variantImages[] = $this->product->firstVariant->image;
         }
     }
 

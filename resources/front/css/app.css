@@ -342,3 +342,31 @@
     text-align: center;
     width: 136px;
 }
+.imgs-thumbnail-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.imgs-thumbnail-container .img-thumbnail {
+    width: 70px;
+    height: 70px;
+    overflow: hidden;
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.imgs-thumbnail-container .img-thumbnail img {
+    object-fit: cover;
+}
