@@ -61,7 +61,7 @@ class EditProductVariantForm extends Component
             return [
                 'id' => $attribute->id,
                 'name' => ucfirst(strtolower($attribute->name)),
-                'values' => $attribute->values->map(function ($value) {
+                'values' => $attribute->values->sortBy('value')->map(function ($value) {
                     return [
                         'id' => $value->id,
                         'value' => $value->value,

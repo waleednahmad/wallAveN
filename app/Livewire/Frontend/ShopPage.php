@@ -19,6 +19,7 @@ class ShopPage extends Component
     // ======= Filteration =======
     #[Url()]
     public $search = '';
+    public $searchQuery = '';
     public $type = '';
     public $selectedCategories = [];
     public $selectedSubCategories = [];
@@ -30,7 +31,7 @@ class ShopPage extends Component
     public $rangePrice;
     public $minValue;
     public $maxValue;
-    
+
 
 
     public function mount()
@@ -44,6 +45,9 @@ class ShopPage extends Component
                 $this->selectedCategories = [];
             }
         }
+        // set the search from the url if it exists
+        $this->search = request()->query('search', '');
+        $this->searchQuery = $this->search;
         $this->updateSubCategories();
         $this->selectedSubCategories = request()->input('sub_categories', []);
     }
@@ -135,6 +139,11 @@ class ShopPage extends Component
         $this->subCategories = [];
     }
 
+    public function applySearch()
+    {
+        $this->search = $this->searchQuery; // Update the search property with the query
+    }
+
     #[Computed()]
     public function categories()
     {
@@ -170,8 +179,17 @@ class ShopPage extends Component
     {
         $productsQuery = Product::whereHas('variants')->active()->with(['vendor']);
 
+        // reset the search query if the search is empty
+        if ($this->searchQuery == '') {
+            $this->search = '';
+        }
+
         if ($this->search) {
-            $productsQuery->where('name', 'like', '%' . $this->search . '%');
+            $productsQuery->where('name', 'like', '%' . $this->search . '%')
+                ->orWhere('sku', 'like', '%' . $this->search . '%')
+                ->orWhereHas('variants', function ($query) {
+                    $query->where('sku', 'like', '%' . $this->search . '%');
+                });
         }
 
         if (!empty($this->selectedCategories)) {

@@ -30,7 +30,7 @@
                     <br>
                 @endif
                 <span style="font-size: 14px; font-weight: 400">
-                    SKU: <strong>{{ $selectedSku }}</strong>
+                    SKU: <strong>{{ ucwords(strtolower($selectedSku)) }}</strong>
                 </span>
             </h6>
         </div>

@@ -11,8 +11,13 @@
                     data-wow-delay="200ms" data-wow-duration="1500ms">
                     <div class="col-lg-8 col-md-9">
                         <div class="section-title">
-                            <h3>General Artwork</h3>
-                            <p>Join us for an exhilarating live auction experience where art meets excitement.</p>
+                            <h3>New Arrivals</h3>
+                            <p>
+                                Discover our newest wholesale offerings, featuring fresh styles and designs to meet the
+                                needs
+                                of your customers. Stay ahead of trends with our latest collection of high-quality home
+                                décor.
+                            </p>
                         </div>
                     </div>
                     <div class="col-lg-2 col-md-2 d-flex justify-content-md-end">

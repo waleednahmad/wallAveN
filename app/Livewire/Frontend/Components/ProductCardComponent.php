@@ -24,12 +24,15 @@ class ProductCardComponent extends Component
             $this->price = $this->product->variants->min('price');
         }
 
-        $this->variantImages[] = $this->product->image;
+        // $this->variantImages[] = $this->product->image;
         if ($this->product->variants->count() > 1) {
-            $this->variantImages = array_unique(array_merge(
-            [$this->product->image],
-            $this->product->variants->pluck('image')->take(4)->toArray()
-            ));
+            // $this->variantImages = array_unique(array_merge(
+            // [$this->product->image],
+            // $this->product->variants->pluck('image')->take(4)->toArray()
+            // ));
+            $this->variantImages = $this->product->variants->map(function ($variant) {
+                return $variant->image;
+            })->take(4)->toArray();
         }
     }
 

@@ -297,12 +297,14 @@
                                                             class="btn btn-primary btn-sm preview-btn">
                                                             <i class="fas fa-eye"></i>
                                                         </a>
-                                                        {{-- delete icon span --}}
-                                                        <button class="btn btn-danger btn-sm delete-btn"
-                                                            wire:loading.attr="disabled" type="button"
-                                                            wire:click="removeImage('{{ $imageItem['id'] }}')">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
+                                                        @if (!$loop->first)
+                                                            {{-- delete icon span --}}
+                                                            <button class="btn btn-danger btn-sm delete-btn"
+                                                                wire:loading.attr="disabled" type="button"
+                                                                wire:click="deleteImage('{{ $imageItem['id'] }}')">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>

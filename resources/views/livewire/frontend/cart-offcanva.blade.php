@@ -10,14 +10,14 @@
                 @if ($item->item_type == 'variant')
                     @php
                         $attributes = json_decode($item->attributes, true);
-                        $values = implode(' | ', array_map('strtolower', array_values($attributes)));
+                        $values = implode(' | ', array_map('ucwords', array_values($attributes)));
                     @endphp
                     <p>
                         <small class="text-muted">({{ $values }})</small>
                     </p>
                 @endif
                 <p>
-                    ${{ $item->price ?? 0 }} x {{ $item->quantity }} = ${{ $item->total }}
+                    {{ $item->quantity }} x ${{ $item->price ?? 0 }} = ${{ $item->total }}
                 </p>
             </div>
             <div class="ml-3 cart-item-action">

@@ -3,7 +3,7 @@
 @section('content')
     <!-- Breadcrumb section strats here -->
     <div class="breadcrumb-section2"
-        style="background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.28)), url(assets/img/inner-page/breadcrumb-image2.jpg);">
+        style="background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.28)), url(https://goldenrugsinc.com/assets/img/inner-page/breadcrumb-image2.jpg?v=1);">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 d-flex">
@@ -19,17 +19,18 @@
                                     </svg>
                                 </a>
                             </li>
-                            <li>Art Catalog</li>
+                            <li>Our Catalog</li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="breadcrumb-content">
+                    <div class="breadcrumb-content text-white">
                         <h1>Art Catalog</h1>
-                        <p>An art catalog is a curated assembly of artworks gathered by an individual, institution, or
-                            group, often reflecting the collector's interests, tastes, or a specific theme.</p>
+                        <p class="text-white">Our wholesale catalog offers a wide range of high-quality home décor, including area rugs,
+                            furniture, and accessories. With diverse styles and categories, it’s designed to meet the needs
+                            of retailers and businesses, providing exceptional value at competitive prices.</p>
                     </div>
                 </div>
             </div>
@@ -39,6 +40,6 @@
     <!-- aution card section strats here -->
     <livewire:frontend.shop_page />
 
-    
+
     <!-- aution card section ends here -->
 @endsection

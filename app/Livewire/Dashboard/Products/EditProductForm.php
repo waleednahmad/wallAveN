@@ -269,6 +269,26 @@ class EditProductForm extends Component
         $this->dispatch('rerender');
     }
 
+    public function deleteImage($imageId)
+    {
+        DB::beginTransaction();
+        try {
+            $image = ProductImage::findOrFail($imageId);
+            $image->delete();
+
+            // Delete the image file from storage
+            if ($image->image && file_exists(public_path($image->image))) {
+                unlink(public_path($image->image));
+            }
+            DB::commit();
+            $this->dispatch('success', 'Image deleted successfully.');
+            $this->images = $this->product->images()->orderBy('order')->get();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $this->dispatch('error', $e->getMessage());
+        }
+    }
+
     public function render()
     {
         // If is there any uploaded images, add order foreach one start from 1
