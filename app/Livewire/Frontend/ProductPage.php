@@ -66,7 +66,7 @@ class ProductPage extends Component
         $this->groupedAttributes = $groupedAttributes;
         $this->vendor = $this->product->vendor ? $this->product->vendor->name : null;
         $this->description = $this->product->description;
-        $this->imagesGallery = $this->product->images;
+        $this->imagesGallery = $this->product->images->sortBy('order');
     }
 
     public function setDefaultAttributeValues()
