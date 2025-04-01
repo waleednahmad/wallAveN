@@ -27,8 +27,13 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrapFive();
 
         $publicActiveCategories = Category::active()
-            ->whereHas('products', function ($query) {
+            ->whereHas('subcategories', function ($subQuery) {
+            $subQuery->whereHas('products', function ($query) {
                 $query->where('status', 1)->whereHas('variants');
+            });
+            })
+            ->orWhereHas('products', function ($query) {
+            $query->where('status', 1)->whereHas('variants');
             })
             ->orderBy('name')
             ->get();

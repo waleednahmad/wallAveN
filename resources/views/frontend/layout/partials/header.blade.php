@@ -95,21 +95,43 @@
                 <li><a href="{{ route('frontend.home') }}">Home</a></li>
                 <li><a href="{{ route('frontend.aboutUs') }}">About us</a></li>
                 @if (showCategoryAndShopPages() || auth('dealer')->check() || auth('representative')->check() || auth('web')->check())
-                    <li><a href="{{ route('frontend.shop') }}">Shop</a></li>
-                    @if (isset($publicActiveCategories) && $publicActiveCategories->count() > 0)
-                        <li class="menu-item-has-children">
-                            <a href="#" class="drop-down">Categories</a>
-                            <i class="bi bi-plus dropdown-icon"></i>
-                            <ul class="sub-menu two" style="z-index: 9999;">
-                                @foreach ($publicActiveCategories as $category)
-                                    <li>
-                                        <a href="{{ route('frontend.shop', ['category' => $category->slug]) }}">
-                                            {{ $category->name }}
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </li>
+                    @if (!isLargeMenuActivated())
+                        <li><a href="{{ route('frontend.shop') }}">Shop</a></li>
+                        @if (isset($publicActiveCategories) && $publicActiveCategories->count() > 0)
+                            <li class="menu-item-has-children">
+                                <a href="#" class="drop-down">Categories</a>
+                                <i class="bi bi-plus dropdown-icon"></i>
+                                <ul class="sub-menu two" style="z-index: 9999;">
+                                    @foreach ($publicActiveCategories as $category)
+                                        <li>
+                                            <a href="{{ route('frontend.shop', ['category' => $category->slug]) }}">
+                                                {{ $category->name }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </li>
+                        @endif
+                    @else
+                        @if (isset($publicActiveCategories) && $publicActiveCategories->count() > 0)
+                            @foreach ($publicActiveCategories as $category)
+                                <li class="menu-item-has-children">
+                                    <a href="{{ route('frontend.shop', ['category' => $category->slug]) }}"
+                                        class="drop-down">{{ $category->name }}</a>
+                                    <i class="bi bi-plus dropdown-icon"></i>
+                                    <ul class="sub-menu two" style="z-index: 9999;">
+                                        @foreach ($category->subCategories as $subCategory)
+                                            <li>
+                                                <a
+                                                    href="{{ route('frontend.shop', ['sub_category' => $subCategory->slug]) }}">
+                                                    {{ $subCategory->name }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </li>
+                            @endforeach
+                        @endif
                     @endif
                 @endif
                 <li><a href="{{ route('frontend.contactUs') }}">Contact us</a></li>

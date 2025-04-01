@@ -29,6 +29,10 @@ function showCategoryAndShopPages()
     return PublicSetting::where('key', 'toggle show category & shop pages')->first()->value ?? 0;
 }
 
+function isLargeMenuActivated()
+{
+    return PublicSetting::where('key', 'activate-large-menu')->first()->value ?? 0;
+}
 function getMainImage()
 {
     $value = PublicSetting::where('key', 'main logo')->first();

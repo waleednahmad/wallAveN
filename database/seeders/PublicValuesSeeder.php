@@ -90,13 +90,13 @@ class PublicValuesSeeder extends Seeder
             ],
             // navbar style
             [
-                'key' => 'navbar style',
-                'value' => 'mini-navbar',
+                'key' => 'activate-large-menu',
+                'value' => 0,
                 'type' => 'select',
                 'description' => "Style of the navbar 
                 [
-                mini-navbar => main navbar with 2 options shop and categories,
-                large-navbar => preview all main categories with subcategories as a list
+                inactive => main navbar with 2 options shop and categories,
+                active => preview all main categories with subcategories as a list
                 ]",
             ],
 

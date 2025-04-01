@@ -45,11 +45,23 @@ class ShopPage extends Component
                 $this->selectedCategories = [];
             }
         }
+        $subCategory = request()->input('sub_category', '');
+        if ($subCategory) {
+            $subCategory = SubCategory::where('slug', $subCategory)->first();
+            if ($subCategory) {
+                $this->selectedCategories = [$subCategory->category_id];
+                $this->selectedSubCategories = [$subCategory->id];
+            } else {
+                $this->selectedSubCategories = [];
+            }
+        }
+
+
+
         // set the search from the url if it exists
         $this->search = request()->query('search', '');
         $this->searchQuery = $this->search;
         $this->updateSubCategories();
-        $this->selectedSubCategories = request()->input('sub_categories', []);
     }
 
     public function loadMore()
@@ -94,7 +106,7 @@ class ShopPage extends Component
     private function updateSubCategories()
     {
         // Clear selected subcategories
-        $this->selectedSubCategories = [];
+        // $this->selectedSubCategories = [];
         $this->selectedProductTypes = [];
         if (empty($this->selectedCategories)) {
             $this->subCategories = [];
@@ -203,7 +215,10 @@ class ShopPage extends Component
 
         if (!empty($this->selectedSubCategories)) {
             $productsQuery->whereHas('subCategories', function ($query) {
-                $query->whereIn('sub_categories.id', $this->selectedSubCategories);
+                $query->whereIn('sub_categories.id', $this->selectedSubCategories)
+                    ->whereHas('products', function ($query) {
+                        $query->where('status', 1)->whereHas('variants');
+                    });
             });
         } else {
             $this->productTypes = [];
@@ -221,7 +236,7 @@ class ShopPage extends Component
             });
         }
 
-
+        Log::info('Selected Sub Categories:', $this->selectedSubCategories);
         return view('livewire.frontend.shop-page')->with([
             'products' => $productsQuery->distinct()->paginate($this->perPage),
         ]);

@@ -25,7 +25,7 @@
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
             @elseif($type == 'text')
-                <textarea class="form-control" id="value" wire:model="value"></textarea>
+                <textarea class="form-control" id="value" wire:model="value" rows="10"></textarea>
             @else
                 <input type="number" class="form-control" id="value" wire:model="value">
             @endif
@@ -35,7 +35,7 @@
         </div>
         <div class="mb-3">
             <label for="description" class="form-label">Description</label>
-            <textarea class="form-control" id="description" wire:model="description"></textarea>
+            <textarea class="form-control" id="description" wire:model="description" rows="7"></textarea>
             @error('description')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
