@@ -144,8 +144,18 @@ final class DealerTable extends PowerGridComponent
         $dealer->update([
             'is_approved' => true,
             'approved_at' => now(),
-            'password' => Hash::make('Password123')
         ]);
+
+        // Update the password if the password was empty or null
+        if (empty($dealer->password)) {
+            $dealer->update([
+                'password' => Hash::make('Password123')
+            ]);
+        }
+
+        // Send email to dealer with password
+        // Mail::to($dealer->email)->send(new DealerApprovedMail($dealer));
+
         $this->js('toastr.success("Dealer approved successfully")');
         $this->refresh();
     }

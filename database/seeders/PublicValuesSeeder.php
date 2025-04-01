@@ -88,6 +88,17 @@ class PublicValuesSeeder extends Seeder
                 'type' => 'text',
                 'description' => "Title of the website",
             ],
+            // navbar style
+            [
+                'key' => 'navbar style',
+                'value' => 'mini-navbar',
+                'type' => 'select',
+                'description' => "Style of the navbar 
+                [
+                mini-navbar => main navbar with 2 options shop and categories,
+                large-navbar => preview all main categories with subcategories as a list
+                ]",
+            ],
 
         ];
 

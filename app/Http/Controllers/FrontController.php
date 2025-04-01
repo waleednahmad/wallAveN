@@ -78,6 +78,8 @@ class FrontController extends Controller
             'message' => ['nullable', 'string'],
             'resale_certificate' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png,pdf'],
             'ref' => ['nullable', 'string', 'exists:representatives,code'],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'password_confirmation' => ['nullable', 'string', 'min:8'],
         ], [
             'ref.exists' => 'Invalid referral code.'
         ]);
@@ -103,6 +105,7 @@ class FrontController extends Controller
         $data['address'] = explode(',', $request->address)[0];
         $data['name'] = ucwords(strtolower($request->name));
         $data['email'] = strtolower($request->email);
+        $data['password'] = Hash::make($request->password);
 
         // Check on referal code
         if ($request->ref) {

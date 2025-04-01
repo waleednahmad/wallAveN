@@ -97,13 +97,13 @@
                                     accept="application/pdf , image/*" name="resale_certificate">
                             </div>
 
-                        
+
                             <input type="hidden" class="form-control" id="ref" name="ref"
                                 value="{{ request()->get('ref') }}">
 
 
                             <!-- Full Width Fields -->
-                            <div class="mb-3 col-12">
+                            <div class="col-12">
                                 <div class="col-12">
                                     <label for="message" class="form-label">
                                         Message
@@ -120,7 +120,21 @@
                                     </div>
                                 @endif
                             </div>
-                            <button type="submit" class="btn btn-secondary"
+                            {{-- password and password confirmations --}}
+                            <div class="col-md-6">
+                                <label for="password" class="form-label">Password<span
+                                        class="text-danger">*</span></label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="password_confirmation" class="form-label">Confirm Password<span
+                                        class="text-danger">*</span></label>
+                                <input type="password" class="form-control" id="password_confirmation"
+                                    name="password_confirmation" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-secondary mt-3"
                                 style="max-width: 200px; margin: 0 auto; display: block;">Submit</button>
 
                             <p class="mt-3 text-center">

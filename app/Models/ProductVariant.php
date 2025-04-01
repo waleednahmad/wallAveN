@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class ProductVariant extends Model
 {
@@ -18,5 +19,14 @@ class ProductVariant extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+
+    // =========== Accessors ==============
+    protected function sku(): Attribute
+    {
+        return Attribute::make(
+            get: fn(string $value) => strtoupper($value),
+        );
     }
 }

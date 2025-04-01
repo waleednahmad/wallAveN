@@ -55,6 +55,9 @@ final class PublicSettingTable extends PowerGridComponent
                     return $value->value;
                 }
             })
+            ->add('description', function ($row) {
+                return "<p style='max-width: 350px ; text-wrap: wrap'>$row->description</p>";
+            })
             ->add('created_at');
     }
 
