@@ -2019,6 +2019,13 @@ header.style-1 .main-menu ul > li.menu-item-has-children::after {
 header.style-1 .main-menu ul > li.menu-item-has-children:hover::after {
   content: "\f286";
 }
+
+/* When ul.sub-menu is empty */
+header.style-1 .main-menu ul > li.menu-item-has-children.sub-menu-empty::after {
+  content: '';
+}
+
+
 header.style-1 .main-menu ul > li:hover > a {
   color: var(--primary-color);
 }

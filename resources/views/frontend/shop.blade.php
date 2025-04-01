@@ -27,8 +27,9 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb-content text-white">
-                        <h1>Art Catalog</h1>
-                        <p class="text-white">Our wholesale catalog offers a wide range of high-quality home décor, including area rugs,
+                        <h1>Our Catalog</h1>
+                        <p class="text-white">Our wholesale catalog offers a wide range of high-quality home décor,
+                            including area rugs,
                             furniture, and accessories. With diverse styles and categories, it’s designed to meet the needs
                             of retailers and businesses, providing exceptional value at competitive prices.</p>
                     </div>

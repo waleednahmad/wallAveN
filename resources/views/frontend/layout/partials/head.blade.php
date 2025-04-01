@@ -26,7 +26,7 @@
 <link rel="stylesheet" href="{{ asset('dashboard/plugins/fontawesome-free/css/all.min.css') }}">
 <!-- Title -->
 <title>
-    {{ getWebsiteTitle() }}
+    {{ getWebsiteTitle() }} | @yield('title', 'Home')
 </title>
 <link rel="icon" href="{{ getFavicon() }}" type="image/gif" sizes="20x20">
 

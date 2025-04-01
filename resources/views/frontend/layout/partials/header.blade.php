@@ -118,19 +118,19 @@
                                 <li class="menu-item-has-children">
                                     <a href="{{ route('frontend.shop', ['category' => $category->slug]) }}"
                                         class="drop-down">{{ $category->name }}</a>
-                                    @if ($category->subCategories & (count($category->subCategories) > 0))
+                                    @if ($category->subCategories && count($category->subCategories) > 0)
                                         <i class="bi bi-plus dropdown-icon"></i>
-                                        <ul class="sub-menu two" style="z-index: 9999;">
-                                            @foreach ($category->subCategories as $subCategory)
-                                                <li>
-                                                    <a
-                                                        href="{{ route('frontend.shop', ['sub_category' => $subCategory->slug]) }}">
-                                                        {{ $subCategory->name }}
-                                                    </a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
                                     @endif
+                                    <ul class="sub-menu two" style="z-index: 9999;">
+                                        @foreach ($category->subCategories as $subCategory)
+                                            <li>
+                                                <a
+                                                    href="{{ route('frontend.shop', ['sub_category' => $subCategory->slug]) }}">
+                                                    {{ $subCategory->name }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
                                 </li>
                             @endforeach
                         @endif
