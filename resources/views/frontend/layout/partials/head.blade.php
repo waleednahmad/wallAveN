@@ -46,4 +46,9 @@
         overflow: hidden !important;
         text-overflow: ellipsis !important;
     }
+
+    /* When ul.sub-menu is empty */
+    header.style-1 .main-menu ul>li.menu-item-has-children.sub-menu-empty::after {
+        content: '' !important;
+    }
 </style>
