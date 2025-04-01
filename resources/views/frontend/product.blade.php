@@ -1,6 +1,6 @@
 @extends('frontend.layout.app')
 
-
+@section('title', $product->name)
 
 @section('content')
     <!-- Top area strats -->

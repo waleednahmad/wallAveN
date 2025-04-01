@@ -1,5 +1,7 @@
 @extends('frontend.layout.app')
 
+@section('title', 'Our Catalog')
+
 @section('content')
     <!-- Breadcrumb section strats here -->
     <div class="breadcrumb-section2"
