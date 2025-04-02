@@ -120,14 +120,14 @@
                                                     <thead>
                                                         <tr>
                                                             @foreach (array_keys($attributes) as $key)
-                                                                <th>{{ ucfirst($key) }}</th>
+                                                                <th>{{ ucwords($key) }}</th>
                                                             @endforeach
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
                                                             @foreach (array_values($attributes) as $value)
-                                                                <td>{{ ucfirst(strtolower($value)) }}</td>
+                                                                <td>{{ ucwords($value) }}</td>
                                                             @endforeach
                                                         </tr>
                                                     </tbody>

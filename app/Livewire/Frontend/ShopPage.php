@@ -189,7 +189,7 @@ class ShopPage extends Component
 
     public function render()
     {
-        $productsQuery = Product::whereHas('variants')->active()->with(['vendor']);
+        $productsQuery = Product::whereHas('variants')->active()->with(['vendor', 'variants', 'variants.attributeValues']);
 
         // reset the search query if the search is empty
         if ($this->searchQuery == '') {

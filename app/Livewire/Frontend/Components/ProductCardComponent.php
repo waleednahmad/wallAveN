@@ -22,17 +22,27 @@ class ProductCardComponent extends Component
         if ($this->product->variants->count() > 1) {
             $this->hasManyVariants = true;
             $this->price = $this->product->variants->min('price');
-        }
 
-        // $this->variantImages[] = $this->product->image;
-        if ($this->product->variants->count() > 1) {
-            // $this->variantImages = array_unique(array_merge(
-            // [$this->product->image],
-            // $this->product->variants->pluck('image')->take(4)->toArray()
-            // ));
-            $this->variantImages = $this->product->variants->map(function ($variant) {
-                return $variant->image;
-            })->take(4)->toArray();
+            $colorAttribute = $this->product->attributes()->where('name', 'like', '%color%')->first();
+
+            if ($colorAttribute) {
+                // Select distinct variants based on the "color" attribute
+                $distinctVariants = $this->product->variants->filter(function ($variant) use ($colorAttribute) {
+                    return $variant->attributeValues->contains('attribute_id', $colorAttribute->id);
+                })->unique(function ($variant) use ($colorAttribute) {
+                    return $variant->attributeValues->firstWhere('attribute_id', $colorAttribute->id)->id ?? null;
+                });
+
+                // Set variant images thumbnails (limit to 4)
+                $this->variantImages = $distinctVariants->take(4)->map(function ($variant) {
+                    return $variant->image;
+                })->toArray();
+            } else {
+                // Fallback if no "color" attribute is found
+                $this->variantImages = $this->product->variants->map(function ($variant) {
+                    return $variant->image;
+                })->take(4)->toArray();
+            }
         }
     }
 
