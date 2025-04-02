@@ -2,6 +2,19 @@
 
 @section('title', $product->name)
 
+@push('styles')
+    <style>
+        #thumbnails .splide__slide {
+            opacity: 0.3;
+            border-radius: 10px;
+        }
+
+        #thumbnails .splide__slide.is-active {
+            opacity: 1;
+            border: 1px solid #494848;
+        }
+    </style>
+@endpush
 @section('content')
     <!-- Top area strats -->
     <div class="top-area">

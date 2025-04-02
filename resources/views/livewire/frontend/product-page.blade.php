@@ -1,39 +1,56 @@
 <div class="auction-details-section mb-120">
     <div class="container">
         <div class="row gy-5">
-            <div class="col-md-9">
+            <div class="col-md-9 ">
                 <div class="auction-details-img d-flex justify-content-center align-items-center flex-column"
                     wire:ignore>
 
 
-                    <section id="main-carousel" class="splide" aria-label="My Awesome Gallery">
-                        <div class="splide__track">
-                            <ul class="splide__list" id='thumb-gallery'>
-                                @foreach ($imagesGallery as $galleryItem)
-                                    <li class="splide__slide" data-splide-interval="3000"
-                                        data-mfp-src="{{ asset($galleryItem->image) }}">
-                                        <img src="{{ asset($galleryItem->image) }}" alt="" loading="lazy">
-                                    </li>
-                                @endforeach
+                    <section aria-label="My Awesome Gallery" class=" w-100">
+                        <div id="main-carousel" class="splide mb-2">
+                            <div class="splide__track">
+                                <ul class="splide__list" id='thumb-gallery'>
+                                    @foreach ($imagesGallery as $galleryItem)
+                                        <li class="splide__slide" data-splide-interval="3000"
+                                            data-mfp-src="{{ asset($galleryItem->image) }}">
+                                            <img src="{{ asset($galleryItem->image) }}" alt="" loading="lazy">
+                                        </li>
+                                    @endforeach
 
 
-                            </ul>
-                            <a href="#thumb-gallery" class="btn-large-view btn-danger btn-gallery-popup">
-                                View Larger
-                                <i class="fa fa-search-plus"></i>
-                            </a>
+                                </ul>
+                                <a href="#thumb-gallery" class="btn-large-view btn-danger btn-gallery-popup">
+                                    View Larger
+                                    <i class="fa fa-search-plus"></i>
+                                </a>
+                            </div>
                         </div>
+                        @if (count($imagesGallery) > 1)
+                            <div id="thumbnails" class="splide">
+                                <div class="splide__track">
+                                    <ul class="splide__list">
+                                        @foreach ($imagesGallery as $galleryItem)
+                                            <li class="splide__slide thumbnail">
+                                                <img src="{{ asset($galleryItem->image) }}" class="thumbnail-image"
+                                                    alt="" loading="lazy">
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        @endif
                     </section>
-                    @if (count($imagesGallery) > 1)
-                        <ul id="thumbnails" class="thumbnails">
-                            @foreach ($imagesGallery as $galleryItem)
-                                <li class="thumbnail">
-                                    <img src="{{ asset($galleryItem->image) }}" class="thumbnail-image" alt=""
-                                        loading="lazy">
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endif
+
+
+
+                    {{-- <ul id="thumbnails" class="thumbnails">
+                        @foreach ($imagesGallery as $galleryItem)
+                            <li class="thumbnail">
+                                <img src="{{ asset($galleryItem->image) }}" class="thumbnail-image" alt=""
+                                    loading="lazy">
+                            </li>
+                        @endforeach
+                    </ul> --}}
                 </div>
             </div>
             <div class="col-md-3 wow animate fadeInRight" data-wow-delay="200ms" data-wow-duration="1500ms">
@@ -282,6 +299,23 @@
             autoplay: false,
         });
 
+        let thumbnailsCarousel = new Splide('#thumbnails', {
+            fixedWidth: 100,
+            fixedHeight: 60,
+            gap: 10,
+            rewind: true,
+            pagination: false,
+            cover: true,
+            isNavigation: true,
+            focus: 'center',
+            breakpoints: {
+                600: {
+                    fixedWidth: 60,
+                    fixedHeight: 44,
+                },
+            },
+        });
+
         let thumbnails = document.getElementsByClassName("thumbnail");
         let current;
 
@@ -297,7 +331,9 @@
 
         splide.on("mounted move", function() {
             let thumbnail = thumbnails[splide.index];
-
+            console.log({
+                thumbnail
+            })
             if (thumbnail) {
                 if (current) {
                     current.classList.remove("is-active");
@@ -308,7 +344,9 @@
             }
         });
 
+        splide.sync(thumbnailsCarousel);
         splide.mount();
+        thumbnailsCarousel.mount();
 
         $wire.on('activateVariantThumbnail', (event) => {
             let variantImage = event[0].image; // the image path of the selected variant
@@ -318,9 +356,12 @@
             let variantIndex = Array.from(thumbnails).findIndex((thumbnail) => {
                 let thumbnailImage = thumbnail.querySelector('.thumbnail-image');
                 return thumbnailImage.src.includes(
-                variantImage); // Check if the thumbnail image contains the variant image
+                    variantImage); // Check if the thumbnail image contains the variant image
             });
 
+            console.log({
+                variantImage
+            })
             if (variantIndex !== -1) {
                 splide.go(variantIndex); // Move to the corresponding slide
             }
