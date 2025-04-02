@@ -300,12 +300,12 @@
         });
 
         let thumbnailsCarousel = new Splide('#thumbnails', {
-            fixedWidth: 100,
-            fixedHeight: 60,
+            fixedWidth: 110,
+            fixedHeight: 90,
             gap: 10,
             rewind: true,
             pagination: false,
-            cover: true,
+            cover: false,
             isNavigation: true,
             focus: 'center',
             breakpoints: {
