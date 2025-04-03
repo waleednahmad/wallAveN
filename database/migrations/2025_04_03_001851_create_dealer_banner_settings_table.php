@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('dealer_banner_settings', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('dealer_id')->index();
-            $table->longText('text')->default('Golden Rugs – Exclusive Deals Just for You');
+            $table->longText('text')->nullable();
             $table->string('text_color')->default('#000000');
             $table->string('bg_color')->default('#f1c55e');
             $table->timestamps();
