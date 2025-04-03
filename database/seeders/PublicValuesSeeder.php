@@ -98,6 +98,12 @@ class PublicValuesSeeder extends Seeder
                 inactive => main navbar with 2 options shop and categories,
                 active => preview all main categories with subcategories as a list
                 ]",
+            ],
+            [
+                'key' => 'minimum-dealer-sale-percentage',
+                'value' => 1,
+                'type' => 'number',
+                'description' => "Minimum dealer sale percentage",
             ]
         ];
 

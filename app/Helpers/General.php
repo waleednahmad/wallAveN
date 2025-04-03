@@ -63,3 +63,8 @@ function getWebsiteTitle()
 {
     return PublicSetting::where('key', 'website title')->first()->value ?? '';
 }
+
+function getMinimumDealerSalePercentage()
+{
+    return PublicSetting::where('key', 'minimum-dealer-sale-percentage')->first()->value ?? 1;
+}

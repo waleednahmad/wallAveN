@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard\PublicSettings;
 
+use App\Models\Dealer;
 use App\Models\PublicSetting;
 use App\Traits\GenerateSlugsTrait;
 use App\Traits\UploadImageTrait;
@@ -58,6 +59,12 @@ class EditPublicSetting extends Component
     {
         $this->validate();
 
+        if ($this->key == 'minimum-dealer-sale-percentage') {
+            $this->validate([
+                'value' => 'numeric|min:1|max:100',
+            ]);
+        }
+
         $value = $this->value;
 
         if ($this->type == 'image' && $this->image) {
@@ -80,6 +87,16 @@ class EditPublicSetting extends Component
                 'value' => $value,
                 'description' => $this->description,
             ]);
+        }
+
+
+        if ($this->key == 'minimum-dealer-sale-percentage') {
+            $dealers = Dealer::where('fake_sale_percentage', '<', $this->value)->get();
+            foreach ($dealers as $dealer) {
+                $dealer->update([
+                    'fake_sale_percentage' => $this->value,
+                ]);
+            }
         }
 
 

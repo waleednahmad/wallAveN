@@ -51,11 +51,13 @@
                         @endif
 
                         @auth('dealer')
-                            @php
-                                $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
-                                $compare_at_price = (float) $compare_at_price * (float) $dealerPercentage;
-                                $price = (float) $price * (float) $dealerPercentage;
-                            @endphp
+                            @if (auth('dealer')->user()->is_customer_mode_active)
+                                @php
+                                    $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
+                                    $compare_at_price = (float) $compare_at_price * (float) $dealerPercentage;
+                                    $price = (float) $price * (float) $dealerPercentage;
+                                @endphp
+                            @endif
                         @endauth
                         @if ($compare_at_price && $compare_at_price > $price)
                             <span style="text-decoration: line-through; color: #999999">

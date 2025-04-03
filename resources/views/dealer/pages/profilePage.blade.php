@@ -105,6 +105,6 @@
             </form>
         </div> --}}
         <livewire:frontend.dealer.dashboard.update-password-form />
-        <livewire:frontend.dealer.dashboard.update-banner-setting-form />
+        {{-- <livewire:frontend.dealer.dashboard.update-banner-setting-form /> --}}
     </div>
 </div>

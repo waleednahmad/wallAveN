@@ -221,7 +221,8 @@
     </div>
     @auth('dealer')
         {{-- bannerSetting --}}
-        @if (auth('dealer')->user()->bannerSetting)
+        @if (auth('dealer')->user()->bannerSetting && auth('dealer')->user()->is_customer_mode_active)
+            {{-- Dealer Banner --}}
             <div class="container">
                 <div class="alert text-center py-1"
                     style="background-color: {{ auth('dealer')->user()->bannerSetting()?->first()?->bg_color }}; color: {{ auth('dealer')->user()->bannerSetting()?->first()?->text_color }};">

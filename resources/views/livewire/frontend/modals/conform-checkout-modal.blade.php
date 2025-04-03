@@ -14,10 +14,12 @@
             @enderror
         </div>
         @auth('dealer')
-            @php
-                $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
-                $total = (float) $total * (float) $dealerPercentage;
-            @endphp
+            @if (auth('dealer')->user()->is_customer_mode_active)
+                @php
+                    $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
+                    $total = (float) $total * (float) $dealerPercentage;
+                @endphp
+            @endif
         @endauth
 
         <div class="mt-3 d-flex justify-content-between">

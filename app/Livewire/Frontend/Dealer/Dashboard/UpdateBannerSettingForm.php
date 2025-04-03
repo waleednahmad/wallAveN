@@ -19,8 +19,12 @@ class UpdateBannerSettingForm extends Component
     #[Validate('required|numeric|min:1|max:100')]
     public $fake_sale_percentage;
 
+    #[Validate('boolean')]
+    public $is_customer_mode_active = true;
+
     public function mount()
     {
+        $this->is_customer_mode_active = auth('dealer')->user()->is_customer_mode_active ?? true;
         $this->fake_sale_percentage = auth('dealer')->user()->fake_sale_percentage ?? 0;
         if (auth('dealer')->user()->bannerSetting) {
             $this->text = auth('dealer')->user()->bannerSetting->text;
@@ -39,6 +43,12 @@ class UpdateBannerSettingForm extends Component
     public function updateBannerSettings()
     {
         $this->validate();
+        $minPercentrage = getMinimumDealerSalePercentage();
+        // getMinimumDealerSalePercentage
+        if ($this->fake_sale_percentage < $minPercentrage || $this->fake_sale_percentage > 100) {
+            return redirect()->route('dealer.customerMode')->with('error', "Fake sale percentage must be between " . $minPercentrage . " and 100.");
+        }
+
         auth('dealer')->user()->bannerSetting()->updateOrCreate([], [
             'text' => $this->text,
             'text_color' => $this->text_color,
@@ -47,9 +57,10 @@ class UpdateBannerSettingForm extends Component
 
         auth('dealer')->user()->update([
             'fake_sale_percentage' => $this->fake_sale_percentage,
+            'is_customer_mode_active' => $this->is_customer_mode_active,
         ]);
 
-        return redirect()->route('dealer.profile')->with('success', 'Banner settings updated successfully.');
+        return redirect()->route('dealer.customerMode')->with('success', 'Banner settings updated successfully.');
     }
     public function render()
     {

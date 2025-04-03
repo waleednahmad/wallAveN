@@ -25,4 +25,9 @@ class DealerController extends Controller
     {
         return view('dealer.orders');
     }
+
+    public function customerMode()
+    {
+        return view('dealer.customer-mode');
+    }
 }

@@ -48,6 +48,7 @@ Route::controller(DealerController::class)
         Route::get('dashboard', 'dashboard')->name('dashboard');
         Route::get('profile', 'profile')->name('profile');
         Route::get('orders', 'orders')->name('orders');
+        Route::get('customer-mode', 'customerMode')->name('customerMode');
     });
 
 

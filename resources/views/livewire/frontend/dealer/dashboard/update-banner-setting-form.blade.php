@@ -1,9 +1,19 @@
 <div class="single-content style-2">
-    <h5>Update Banner Info</h5>
     <form wire:submit.prevent="updateBannerSettings">
+        <h5>Sale Percentage Data</h5>
         <div class="row">
-
-            {{-- Fake sale percentage --}}
+            <div class="col-md-6">
+                <div class="form-inner mb-30">
+                    <label for="is_customer_mode_active">Customer Mode</label>
+                    <select id="is_customer_mode_active" wire:model.live="is_customer_mode_active" class="form-control">
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+                    </select>
+                    @error('is_customer_mode_active')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
             <div class="col-md-6">
                 <div class="form-inner mb-30">
                     <label>Sale Percentage</label>
@@ -14,6 +24,12 @@
                     @enderror
                 </div>
             </div>
+
+        </div>
+        <h5>Update Banner Info</h5>
+        <div class="row">
+
+
             <div class="col-md-12">
                 <div class="form-inner mb-30">
                     <label>Text</label>
@@ -48,7 +64,7 @@
                 {{-- spinner --}}
                 <span wire:loading wire:target="updateBannerSettings" class="spinner-border spinner-border-sm"
                     role="status" aria-hidden="true"></span>
-                <span>Update Banner</span>
+                <span>Update</span>
                 <strong></strong>
             </button>
         </div>

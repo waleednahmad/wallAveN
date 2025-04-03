@@ -27,7 +27,8 @@
             @elseif($type == 'text')
                 <textarea class="form-control" id="value" wire:model="value" rows="10"></textarea>
             @else
-                <input type="number" class="form-control" id="value" wire:model="value">
+                <input type="number" class="form-control" id="value" wire:model="value"
+                    @if ($key == 'minimum-dealer-sale-percentage') min="0" step=".01" max="100" @endif>
             @endif
             @error('value')
                 <span class="text-danger">{{ $message }}</span>

@@ -38,11 +38,13 @@
             {{ $product?->name }}
         </h3>
         @auth('dealer')
-            @php
-                $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
-                $compare_at_price = (float) $compare_at_price * (float) $dealerPercentage;
-                $price = (float) $price * (float) $dealerPercentage;
-            @endphp
+            @if (auth('dealer')->user()->is_customer_mode_active)
+                @php
+                    $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
+                    $compare_at_price = (float) $compare_at_price * (float) $dealerPercentage;
+                    $price = (float) $price * (float) $dealerPercentage;
+                @endphp
+            @endif
         @endauth
         @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check() || auth('web')->check())
             @if ($compare_at_price && $compare_at_price > $price && $compare_at_price > 0)

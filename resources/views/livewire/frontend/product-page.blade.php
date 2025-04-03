@@ -72,11 +72,13 @@
                     </h3>
                     @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check() || auth('web')->check())
                         @auth('dealer')
-                            @php
-                                $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
-                                $compare_at_price = (float) $compare_at_price * (float) $dealerPercentage;
-                                $price = (float) $price * (float) $dealerPercentage;
-                            @endphp
+                            @if (auth('dealer')->user()->is_customer_mode_active)
+                                @php
+                                    $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
+                                    $compare_at_price = (float) $compare_at_price * (float) $dealerPercentage;
+                                    $price = (float) $price * (float) $dealerPercentage;
+                                @endphp
+                            @endif
                         @endauth
                         <ul class="artist-info">
                             <li><span>Price :</span>
