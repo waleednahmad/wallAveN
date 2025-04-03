@@ -25,7 +25,7 @@
                                 </a>
                             </div>
                         </div>
-                        @if (count($imagesGallery) > 1)
+                        @if (count($imagesGallery) >= 1)
                             <div id="thumbnails" class="splide">
                                 <div class="splide__track">
                                     <ul class="splide__list">
