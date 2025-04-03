@@ -46,7 +46,7 @@ class UpdateBannerSettingForm extends Component
         $minPercentrage = getMinimumDealerSalePercentage();
         // getMinimumDealerSalePercentage
         if ($this->fake_sale_percentage < $minPercentrage || $this->fake_sale_percentage > 100) {
-            return redirect()->route('dealer.customerMode')->with('error', "Fake sale percentage must be between " . $minPercentrage . " and 100.");
+            return redirect()->route('dealer.customerMode')->with('error', "Sale percentage must be greater than or equal to $minPercentrage .");
         }
 
         auth('dealer')->user()->bannerSetting()->updateOrCreate([], [
