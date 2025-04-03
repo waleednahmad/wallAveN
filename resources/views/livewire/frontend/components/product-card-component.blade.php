@@ -53,8 +53,8 @@
                         @auth('dealer')
                             @php
                                 $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
-                                $compare_at_price = $compare_at_price * $dealerPercentage;
-                                $price = $price * $dealerPercentage;
+                                $compare_at_price = (float) $compare_at_price * (float) $dealerPercentage;
+                                $price = (float) $price * (float) $dealerPercentage;
                             @endphp
                         @endauth
                         @if ($compare_at_price && $compare_at_price > $price)

@@ -14,11 +14,11 @@
             @enderror
         </div>
         @auth('dealer')
-        @php
-            $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
-            $total = $total * $dealerPercentage;
-        @endphp
-    @endauth
+            @php
+                $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
+                $total = (float) $total * (float) $dealerPercentage;
+            @endphp
+        @endauth
 
         <div class="mt-3 d-flex justify-content-between">
             <h6 class="mb-0">Total: $ {{ $total }}</h6>

@@ -25,9 +25,9 @@
                 @auth('dealer')
                     @php
                         $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
-                        $itemPrice = $itemPrice * $dealerPercentage;
-                        $itemTotal = $itemTotal * $dealerPercentage;
-                        $total = $total * $dealerPercentage;
+                        $itemPrice = (float) $itemPrice * (float) $dealerPercentage;
+                        $itemTotal = (float) $itemTotal * (float) $dealerPercentage;
+                        $total = (float) $total * (float) $dealerPercentage;
                     @endphp
                 @endauth
                 <p>
