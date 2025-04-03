@@ -38,7 +38,8 @@
                             <th>Attributes</th>
                             <td class="flex-wrap d-flex" style="gap: 5px;">
                                 @forelse ($product->attributes as $attribute)
-                                    <span class="badge badge-secondary">{{ $attribute->name }}</span>
+                                    <span
+                                        class="badge badge-secondary">{{ ucwords(strtolower($attribute->name)) }}</span>
                                 @empty
                                     <span class="badge badge-danger">No attributes found</span>
                                 @endforelse

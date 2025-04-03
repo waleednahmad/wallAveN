@@ -219,6 +219,19 @@
             </div>
         </div>
     </div>
+    @auth('dealer')
+        {{-- bannerSetting --}}
+        @if (auth('dealer')->user()->bannerSetting)
+            <div class="container">
+                <div class="alert text-center py-1"
+                    style="background-color: {{ auth('dealer')->user()->bannerSetting()?->first()?->bg_color }}; color: {{ auth('dealer')->user()->bannerSetting()?->first()?->text_color }};">
+                    <p>
+                        {{ auth('dealer')->user()->bannerSetting()?->first()?->text }}
+                    </p>
+                </div>
+            </div>
+        @endif
+    @endauth
     @if (auth('representative')->check() || auth('web')->check())
         <div class="container alert alert-info alert-dismissible show d-block" role="alert">
             <div class="alert-body">

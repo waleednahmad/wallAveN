@@ -54,7 +54,7 @@
             <div class="category-container d-flex flex-column">
                 @forelse ($this->productAttributesWithValues as $attribute)
                     <h6 class="mt-1 mb-0">
-                        {{ $attribute['name'] }} 
+                        {{ ucwords(strtolower($attribute['name'])) }}
                         {{-- add new value button with modal --}}
                         <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
                             data-bs-target="#addNewValueModal" wire:click="setAttribute({{ $attribute['id'] }})">

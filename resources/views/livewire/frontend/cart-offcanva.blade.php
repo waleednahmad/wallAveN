@@ -16,8 +16,22 @@
                         <small class="text-muted">({{ $values }})</small>
                     </p>
                 @endif
+                @php
+                    $cartQuantity = $item->quantity;
+                    $itemPrice = $item->price;
+                    $itemTotal = $item->total;
+                @endphp
+
+                @auth('dealer')
+                    @php
+                        $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
+                        $itemPrice = $itemPrice * $dealerPercentage;
+                        $itemTotal = $itemTotal * $dealerPercentage;
+                        $total = $total * $dealerPercentage;
+                    @endphp
+                @endauth
                 <p>
-                    {{ $item->quantity }} x ${{ $item->price ?? 0 }} = ${{ $item->total }}
+                    {{ $item->quantity }} x ${{ $itemPrice ?? 0 }} = ${{ $itemTotal }}
                 </p>
             </div>
             <div class="ml-3 cart-item-action">

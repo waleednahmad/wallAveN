@@ -71,6 +71,13 @@
                         {{ $product->name }}
                     </h3>
                     @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check() || auth('web')->check())
+                        @auth('dealer')
+                            @php
+                                $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
+                                $compare_at_price = (float) $compare_at_price * (float) $dealerPercentage;
+                                $price = (float) $price * (float) $dealerPercentage;
+                            @endphp
+                        @endauth
                         <ul class="artist-info">
                             <li><span>Price :</span>
                                 @if ($compare_at_price && $compare_at_price > $price && $compare_at_price > 0)

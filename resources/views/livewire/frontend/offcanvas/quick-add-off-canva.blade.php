@@ -37,6 +37,13 @@
         <h3 class="my-3">
             {{ $product?->name }}
         </h3>
+        @auth('dealer')
+            @php
+                $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
+                $compare_at_price = (float) $compare_at_price * (float) $dealerPercentage;
+                $price = (float) $price * (float) $dealerPercentage;
+            @endphp
+        @endauth
         @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check() || auth('web')->check())
             @if ($compare_at_price && $compare_at_price > $price && $compare_at_price > 0)
                 <span style="text-decoration: line-through; color: #999999">

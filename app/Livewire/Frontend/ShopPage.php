@@ -236,7 +236,6 @@ class ShopPage extends Component
             });
         }
 
-        Log::info('Selected Sub Categories:', $this->selectedSubCategories);
         return view('livewire.frontend.shop-page')->with([
             'products' => $productsQuery->distinct()->paginate($this->perPage),
         ]);

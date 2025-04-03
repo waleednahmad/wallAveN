@@ -98,8 +98,7 @@ class PublicValuesSeeder extends Seeder
                 inactive => main navbar with 2 options shop and categories,
                 active => preview all main categories with subcategories as a list
                 ]",
-            ],
-
+            ]
         ];
 
         foreach ($values as $value) {

@@ -29,4 +29,5 @@ class ProductVariant extends Model
             get: fn(string $value) => strtoupper($value),
         );
     }
+
 }

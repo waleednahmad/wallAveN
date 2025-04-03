@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Observers\DealerObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+#[ObservedBy([DealerObserver::class])]
 class Dealer extends Authenticatable
 {
     protected $guarded = [];
@@ -21,6 +24,11 @@ class Dealer extends Authenticatable
     public function cartTemps()
     {
         return $this->hasMany(CartTemp::class);
+    }
+
+    public function bannerSetting()
+    {
+        return $this->hasOne(DealerBannerSetting::class);
     }
 
 

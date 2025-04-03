@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute as AttrEl;
 
 class Attribute extends Model
 {
@@ -21,4 +22,14 @@ class Attribute extends Model
         return $this->belongsToMany(Product::class);
     }
 
+
+
+
+    // =========== Accessors ==============
+    protected function name(): AttrEl
+    {
+        return AttrEl::make(
+            get: fn(string $value) => ucwords(strtolower($value))
+        );
+    }
 }

@@ -43,10 +43,20 @@
                     @endif
                 @endif
                 @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check() || auth('web')->check())
+
+                    {{-- dump the ath guard --}}
                     <li>
                         @if ($hasManyVariants)
                             <span>From </span>
                         @endif
+
+                        @auth('dealer')
+                            @php
+                                $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
+                                $compare_at_price = $compare_at_price * $dealerPercentage;
+                                $price = $price * $dealerPercentage;
+                            @endphp
+                        @endauth
                         @if ($compare_at_price && $compare_at_price > $price)
                             <span style="text-decoration: line-through; color: #999999">
                                 ${{ $compare_at_price }}
