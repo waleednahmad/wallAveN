@@ -156,9 +156,9 @@ class EditProductVariantForm extends Component
             $this->variant->update([
                 'sku' => $this->sku,
                 'barcode' => $this->barcode,
-                'compare_at_price' => $this->compare_at_price,
-                'cost_price' => $this->cost_price,
-                'price' => $this->price,
+                'compare_at_price' => !empty($this->compare_at_price) ? $this->compare_at_price : null,
+                'cost_price' => !empty($this->cost_price) ? $this->cost_price : null,
+                'price' => !empty($this->price) ? $this->price : null,
                 'description' => $this->description,
                 // 'image' => $this->image ? $this->saveImage($this->image, "products/" . $this->product->id) : $this->variant->image,
             ]);
