@@ -70,8 +70,8 @@
             Website:
         </strong>
         <br>
-        <a href="{{ $dealer?->website ?? '#' }}" target="_blank">
-            {{ $dealer?->website ?? '-' }}
+        <a href="{{ $dealer?->website ? (parse_url($dealer->website, PHP_URL_SCHEME) ? $dealer->website : '//' . $dealer->website) : '#' }}" target="_blank">
+            {{ $dealer?->website ? strtolower(parse_url($dealer->website, PHP_URL_HOST) . parse_url($dealer->website, PHP_URL_PATH)) : '-' }}
         </a>
     </p>
     <p class="card-text">

@@ -55,14 +55,14 @@ class CreateProductVariantForm extends Component
         $this->main_sku = strtoupper($this->product->sku);
         $this->productAttributesWithValues = $this->product->attributes ? $this->product->attributes->map(function ($attribute) {
             return [
-            'id' => $attribute->id,
-            'name' => ucfirst(strtolower($attribute->name)),
-            'values' => $attribute->values->sortBy('value')->map(function ($value) {
-                return [
-                'id' => $value->id,
-                'value' => $value->value,
-                ];
-            }),
+                'id' => $attribute->id,
+                'name' => ucfirst(strtolower($attribute->name)),
+                'values' => $attribute->values->sortBy('value')->map(function ($value) {
+                    return [
+                        'id' => $value->id,
+                        'value' => $value->value,
+                    ];
+                }),
             ];
         }) : [];
     }
@@ -130,9 +130,9 @@ class CreateProductVariantForm extends Component
                 'product_id' => $this->product->id,
                 'sku' => $this->sku,
                 'barcode' => $this->barcode,
-                'compare_at_price' => $this->compare_at_price,
-                'cost_price' => $this->cost_price,
-                'price' => $this->price,
+                'compare_at_price' => !empty($this->compare_at_price) ? $this->compare_at_price : null,
+                'cost_price' => !empty($this->cost_price) ? $this->cost_price : null,
+                'price' => !empty($this->price) ? $this->price : null,
                 'description' => $this->description,
                 'image' => $this->image ?? null,
             ]);
@@ -240,14 +240,14 @@ class CreateProductVariantForm extends Component
     {
         $this->productAttributesWithValues = $this->product->attributes ? $this->product->attributes->map(function ($attribute) {
             return [
-            'id' => $attribute->id,
-            'name' => ucfirst(strtolower($attribute->name)),
-            'values' => $attribute->values->sortBy('value')->map(function ($value) {
-                return [
-                'id' => $value->id,
-                'value' => $value->value,
-                ];
-            }),
+                'id' => $attribute->id,
+                'name' => ucfirst(strtolower($attribute->name)),
+                'values' => $attribute->values->sortBy('value')->map(function ($value) {
+                    return [
+                        'id' => $value->id,
+                        'value' => $value->value,
+                    ];
+                }),
             ];
         }) : [];
     }
