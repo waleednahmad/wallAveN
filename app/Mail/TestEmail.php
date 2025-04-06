@@ -22,11 +22,11 @@ class TestEmail extends Mailable
      * @param $emailContent
      * @param $someOtherVariable
      */
-    public function __construct($emailContent, $someOtherVariable)
+    public function __construct()
     {
 
-        $this->subject = $emailContent->subject;
-        $this->description = $emailContent->desc_ar;
+        $this->subject = "Test Email";
+        $this->description = "Test Email Description";
 
 
     }
