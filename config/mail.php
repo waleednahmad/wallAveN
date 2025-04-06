@@ -13,7 +13,6 @@ return [
     |
     */
 
-    'verify_peer' => false,
 
     'default' => env('MAIL_MAILER', 'smtp'),
 
@@ -47,6 +46,7 @@ return [
             'password' => env('MAIL_PASSWORD'),
             'encryption' => null,
             'timeout' => null,
+            'verify_peer' => false,
         ],
 
         'ses' => [
