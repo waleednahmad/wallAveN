@@ -55,11 +55,12 @@ Route::controller(DealerController::class)
 
 
     Route::get('testEmail', function () {
-        Mail::raw('This is a test email.', function ($message) {
-            $message->to('test@example.com')
-                    ->subject('Test Email');
-        });
-        return 'Email sent!';
+        try {
+            Mail::to('ahmadalsakhen36@gmail.com')->send(new TestEmail());
+            return "Email sent successfully!";
+        } catch (\Exception $e) {
+            return "Failed to send email: " . $e->getMessage();
+        }
     })->name('testEmail');
 
 
