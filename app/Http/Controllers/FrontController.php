@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TestEmail;
 use App\Models\Dealer;
 use App\Models\Page;
 use App\Models\Product;
@@ -10,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class FrontController extends Controller
 {
@@ -197,5 +199,17 @@ class FrontController extends Controller
     {
         $page = Page::where('title', 'Contact Us')->first();
         return view('frontend.contact-us', compact('page'));
+    }
+
+
+
+    // Send Test Email
+    public function sendEmail(){
+        try {
+            Mail::to('ahmadalsakhen36@gmail.com')->send(new TestEmail());
+            return "Email sent successfully!";
+        } catch (\Exception $e) {
+            return "Failed to send email: " . $e->getMessage();
+        }
     }
 }

@@ -17,6 +17,7 @@ Route::controller(FrontController::class)->group(function () {
     Route::get('/shop', 'shop')->name('frontend.shop');
     Route::get('/about-us', 'aboutUs')->name('frontend.aboutUs');
     Route::get('/contact-us', 'contactUs')->name('frontend.contactUs');
+    Route::get('/send-email', 'sendEmail');
 });
 
 Route::controller(FrontController::class)
@@ -52,17 +53,6 @@ Route::controller(DealerController::class)
         Route::get('orders', 'orders')->name('orders');
         Route::get('customer-mode', 'customerMode')->name('customerMode');
     });
-
-
-    Route::get('testEmail', function () {
-        try {
-            Mail::to('ahmadalsakhen36@gmail.com')->send(new TestEmail());
-            return "Email sent successfully!";
-        } catch (\Exception $e) {
-            return "Failed to send email: " . $e->getMessage();
-        }
-    })->name('testEmail');
-
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
