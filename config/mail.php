@@ -13,6 +13,7 @@ return [
     |
     */
 
+    'verify_peer' => false,
 
     'default' => env('MAIL_MAILER', 'smtp'),
 
@@ -44,8 +45,10 @@ return [
             'port' => env('MAIL_PORT', 587),
             'username' => env('MAIL_USERNAME'),
             'password' => env('MAIL_PASSWORD'),
-            'encryption' => null,
+            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
             'timeout' => null,
+            'verify_peer' => false,
+
         ],
 
         'ses' => [
