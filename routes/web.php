@@ -4,7 +4,9 @@ use App\Http\Controllers\DealerController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\CheckIsDealerLoggedIn;
+use App\Mail\TestEmail;
 use App\Models\Product;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 
@@ -50,6 +52,16 @@ Route::controller(DealerController::class)
         Route::get('orders', 'orders')->name('orders');
         Route::get('customer-mode', 'customerMode')->name('customerMode');
     });
+
+
+    Route::get('testEmail', function () {
+        try {
+            Mail::to('ahmadalsakhen36@gmail.com')->send(new TestEmail());
+            return "Email sent successfully!";
+        } catch (\Exception $e) {
+            return "Failed to send email: " . $e->getMessage();
+        }
+    })->name('testEmail');
 
 
 // Route::get('/dashboard', function () {
