@@ -13,6 +13,8 @@ return [
     |
     */
 
+    'verify_peer' => false,
+
     'default' => env('MAIL_MAILER', 'smtp'),
 
     /*
