@@ -182,6 +182,13 @@ class ProductPage extends Component
             $item->save();
         } else {
 
+            $dealerId = auth('dealer')->check() ? auth('dealer')->id() : null;
+            if (auth('representative')->check()) {
+                $dealerId = auth('representative')->user()->buyingFor->id;
+            }
+            if (auth('web')->check()) {
+                $dealerId = auth('web')->user()->buyingFor->id;
+            }
 
             CartTemp::create([
                 'dealer_id' => auth('dealer')->id() ?? null,
