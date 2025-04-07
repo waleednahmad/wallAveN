@@ -44,35 +44,59 @@ class NewPasswordController extends Controller
             ->filter()
             ->first();
 
-
         // If no user is found, redirect back with an error
         if (!$user->exists()) {
             return back()->withInput($request->only('email'))
                 ->withErrors(['email' => __('We can\'t find a user with that email address.')]);
         }
 
+        // Admin Check
+        $admin = User::where('email', $request->email)->first();
+        if ($admin) {
+            $status = Password::reset(
+                $request->only('email', 'password', 'password_confirmation', 'token'),
+                function (User $user) use ($request) {
+                    $user->forceFill([
+                        'password' => Hash::make($request->password),
+                        'remember_token' => Str::random(60),
+                    ])->save();
 
-        // Attempt to reset the user's password
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user) use ($request) {
-                // Check if the user is an instance of the model
-                if ($user instanceof User) {
-                    $user = User::where('email', $request->email)->first();
-                } elseif ($user instanceof Dealer) {
-                    $user = Dealer::where('email', $request->email)->first();
-                } elseif ($user instanceof Representative) {
-                    $user = Representative::where('email', $request->email)->first();
+                    event(new PasswordReset($user));
                 }
-                dd($user);
-                $user->forceFill([
-                    'password' => Hash::make($request->password),
-                    'remember_token' => Str::random(60),
-                ])->save();
+            );
+        }
 
-                event(new PasswordReset($user));
-            }
-        );
+        // Dealer Check
+        $dealer = Dealer::where('email', $request->email)->first();
+        if ($dealer) {
+            $status = Password::broker('dealers')->reset(
+                $request->only('email', 'password', 'password_confirmation', 'token'),
+                function (Dealer $user) use ($request) {
+                    $user->forceFill([
+                        'password' => Hash::make($request->password),
+                        'remember_token' => Str::random(60),
+                    ])->save();
+
+                    event(new PasswordReset($user));
+                }
+            );
+        }
+        // Representative Check
+        $representative = Representative::where('email', $request->email)->first();
+        if ($representative) {
+            $status = Password::broker('representatives')->reset(
+                $request->only('email', 'password', 'password_confirmation', 'token'),
+                function (Representative $user) use ($request) {
+                    $user->forceFill([
+                        'password' => Hash::make($request->password),
+                        'remember_token' => Str::random(60),
+                    ])->save();
+
+                    event(new PasswordReset($user));
+                }
+            );
+        }
+
 
         dd(Password::PASSWORD_RESET, $status);
         // Redirect based on the reset status
