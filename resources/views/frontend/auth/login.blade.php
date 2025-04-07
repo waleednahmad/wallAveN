@@ -43,10 +43,19 @@
                             <button type="submit" class="btn btn-secondary"
                                 style="max-width: 200px; margin: 0 auto; display: block;">Login</button>
                             <p class="mt-3 text-center">
-                                Or you can
+                                <a href="{{ route('password.request') }}" class="text-underlined">
+                                    <b>
+                                        Forgot password ?
+                                    </b>
+                                </a>
+
+                                <span class="mx-2">
+                                    .
+                                </span>
+
                                 <a href="{{ route('frontend.register') }}" class="text-underlined">
                                     <b>
-                                        become a dealer
+                                        Become a dealer
                                     </b>
                                 </a>
                             </p>
