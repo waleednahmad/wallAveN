@@ -39,9 +39,12 @@ class NewPasswordController extends Controller
         ]);
 
         // Search for the user in users, dealers, and representatives tables
-        $user = User::where('email', $request->email)->first()
-            ?? Dealer::where('email', $request->email)->first()
-            ?? Representative::where('email', $request->email)->first();
+        $user = collect([User::class, Dealer::class, Representative::class])
+            ->map(fn($model) => $model::where('email', $request->email)->first())
+            ->filter()
+            ->first();
+
+            dd($user);
 
         // If no user is found, redirect back with an error
         if (!$user->exists()) {
