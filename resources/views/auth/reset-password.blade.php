@@ -20,6 +20,8 @@
                                 </div>
                             </div>
 
+        <input type="hidden" name="token" value="{{ $request->route('token') }}">
+
                             <div class="col-12">
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Password<span
