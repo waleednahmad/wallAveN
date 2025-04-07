@@ -12,7 +12,7 @@
                     <div class="card-body">
                         <form class="row g-4" method="POST" action="{{ route('password.store') }}">
                             @csrf
-                            <div class="col-12">
+                            <div class="col-12 mt-0">
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email<span class="text-danger">*</span></label>
                                     <input type="email" class="form-control" id="email" name="email" required
@@ -22,7 +22,7 @@
 
                             <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
-                            <div class="col-12">
+                            <div class="col-12 mt-0">
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Password<span
                                             class="text-danger">*</span></label>
@@ -30,7 +30,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-12">
+                            <div class="col-12 mt-0">
                                 <div class="mb-3">
                                     <label for="password_confirmation" class="form-label">Confirm Password<span
                                             class="text-danger">*</span></label>
