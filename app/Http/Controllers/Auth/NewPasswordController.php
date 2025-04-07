@@ -43,6 +43,7 @@ class NewPasswordController extends Controller
             ?? Dealer::where('email', $request->email)->first()
             ?? Representative::where('email', $request->email)->first();
 
+        dd($user);
         if (!$user) {
             return back()->withInput($request->only('email'))
                 ->withErrors(['email' => __('We can\'t find a user with that email address.')]);
