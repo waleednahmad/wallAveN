@@ -48,7 +48,6 @@ class NewPasswordController extends Controller
                 ->withErrors(['email' => __('We can\'t find a user with that email address.')]);
         }
 
-        dd($user);
 
         // Attempt to reset the user's password
         $status = Password::reset(
