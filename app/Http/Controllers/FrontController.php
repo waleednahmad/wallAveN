@@ -8,6 +8,7 @@ use App\Models\Page;
 use App\Models\Product;
 use App\Models\Representative;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -118,6 +119,7 @@ class FrontController extends Controller
         }
 
         $dealer = Dealer::create($data);
+        event(new Registered($dealer));
         return redirect()->route('frontend.home')->with('success', 'Your registration has been submitted successfully, we will contact you soon.');
     }
 
@@ -204,7 +206,8 @@ class FrontController extends Controller
 
 
     // Send Test Email
-    public function sendEmail(){
+    public function sendEmail()
+    {
         try {
             Mail::to('ahmadalsakhen36@gmail.com')->send(new TestEmail());
             return "Email sent successfully!";

@@ -2,12 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Representative extends Authenticatable
+class Representative extends Authenticatable implements MustVerifyEmail
 {
+    use Notifiable;
+
+
     protected $guarded = [];
 
     // ==================

@@ -3,14 +3,19 @@
 namespace App\Models;
 
 use App\Observers\DealerObserver;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 #[ObservedBy([DealerObserver::class])]
-class Dealer extends Authenticatable
+class Dealer extends Authenticatable implements MustVerifyEmail
 {
+
+    use Notifiable;
+
     protected $guarded = [];
 
     // ==================
