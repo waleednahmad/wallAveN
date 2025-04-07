@@ -43,12 +43,15 @@ class NewPasswordController extends Controller
             ?? Dealer::where('email', $request->email)->first()
             ?? Representative::where('email', $request->email)->first();
 
-            dd($user);
         // If no user is found, redirect back with an error
-        if (!$user) {
+        if (!$user->exists()) {
+            dd('User not found');
             return back()->withInput($request->only('email'))
                 ->withErrors(['email' => __('We can\'t find a user with that email address.')]);
+        } else {
+            dd('User found');
         }
+
 
         // Attempt to reset the user's password
         $status = Password::reset(
