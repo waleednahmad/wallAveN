@@ -69,6 +69,7 @@ class NewPasswordController extends Controller
         // Dealer Check
         $dealer = Dealer::where('email', $request->email)->first();
         if ($dealer) {
+            dd('dealer user');
             $status = Password::broker('dealers')->reset(
                 $request->only('email', 'password', 'password_confirmation', 'token'),
                 function (Dealer $user) use ($request) {
