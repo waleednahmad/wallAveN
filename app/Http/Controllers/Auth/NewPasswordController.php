@@ -44,7 +44,6 @@ class NewPasswordController extends Controller
             ->filter()
             ->first();
 
-            dd($user);
 
         // If no user is found, redirect back with an error
         if (!$user->exists()) {
@@ -57,6 +56,14 @@ class NewPasswordController extends Controller
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
+                // Check if the user is an instance of the model
+                if ($user instanceof User) {
+                    $user = User::where('email', $request->email)->first();
+                } elseif ($user instanceof Dealer) {
+                    $user = Dealer::where('email', $request->email)->first();
+                } elseif ($user instanceof Representative) {
+                    $user = Representative::where('email', $request->email)->first();
+                }
                 dd($user);
                 $user->forceFill([
                     'password' => Hash::make($request->password),
@@ -67,7 +74,7 @@ class NewPasswordController extends Controller
             }
         );
 
-        dd(Password::PASSWORD_RESET , $status);
+        dd(Password::PASSWORD_RESET, $status);
         // Redirect based on the reset status
         return $status == Password::PASSWORD_RESET
             ? redirect()->route('login')->with('status', __($status))
