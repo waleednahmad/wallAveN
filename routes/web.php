@@ -61,5 +61,6 @@ Route::controller(DealerController::class)
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
 
-    return redirect('/home');
+    return redirect()->route('frontend.home')
+        ->with('success', 'Email verified successfully.');
 })->middleware(['auth:web,dealer,representative', 'signed'])->name('verification.verify');
