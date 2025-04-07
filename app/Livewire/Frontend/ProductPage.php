@@ -174,7 +174,24 @@ class ProductPage extends Component
         }
 
 
-        $item = CartTemp::where('variant_id', $variant->id)->first();
+        $item = CartTemp::where('variant_id', $variant->id)
+            ->where(function ($query) {
+                if (auth('dealer')->check()) {
+                    $query->where('dealer_id', auth('dealer')->user()->id)
+                        ->whereNull('representative_id')
+                        ->whereNull('admin_id');
+                } elseif (auth('representative')->check()) {
+                    $query->where('representative_id', auth('representative')->user()->id)
+                        ->where('dealer_id', auth('representative')->user()->buyingFor->id)
+                        ->whereNull('admin_id');
+                } elseif (auth('web')->check()) { // admin check
+                    $query->where('admin_id', auth('web')->user()->id)
+                        ->where('dealer_id', auth('web')->user()->buyingFor->id)
+                        ->whereNull('representative_id');
+                }
+            })
+            ->where('item_type', 'variant')
+            ->first();
 
         if ($item) {
             $item->quantity += $this->quantity;
@@ -191,7 +208,7 @@ class ProductPage extends Component
             }
 
             CartTemp::create([
-                'dealer_id' => auth('dealer')->id() ?? null,
+                'dealer_id' => $dealerId,
                 'representative_id' => auth('representative')->id() ?? null,
                 'admin_id' => auth('web')->id() ?? null,
                 'product_id' => $this->product->id,

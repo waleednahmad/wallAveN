@@ -16,13 +16,26 @@ class ConformCheckoutModal extends Component
     public function getTotal()
     {
         if (auth('dealer')->check()) {
-            $cartTemps = CartTemp::where('dealer_id', auth('dealer')->user()->id)->get();
+            $cartTemps = CartTemp::where('dealer_id', auth('dealer')->user()->id)
+                ->whereNull('representative_id')
+                ->whereNull('admin_id')
+                ->get();
             $this->total = $cartTemps->sum('total');
         } elseif (auth('representative')->check()) {
-            $cartTemps = CartTemp::where('representative_id', auth('representative')->user()->id)->get();
+            $cartTemps = CartTemp::where('representative_id', auth('representative')->user()->id)
+                ->when(auth('representative')->user()->buyingFor()->exists(), function ($query) {
+                    $query->where('dealer_id', auth('representative')->user()->buyingFor->id);
+                })
+                ->whereNull('admin_id')
+                ->get();
             $this->total = $cartTemps->sum('total');
         } elseif (auth('web')->check()) { // admin check
-            $cartTemps = CartTemp::where('admin_id', auth('web')->user()->id)->get();
+            $cartTemps = CartTemp::where('admin_id', auth('web')->user()->id)
+                ->when(auth('web')->user()->buyingFor()->exists(), function ($query) {
+                    $query->where('dealer_id', auth('web')->user()->buyingFor->id);
+                })
+                ->whereNull('representative_id')
+                ->get();
             $this->total = $cartTemps->sum('total');
         } else {
             $this->total = 0;
@@ -38,13 +51,26 @@ class ConformCheckoutModal extends Component
             try {
                 if (auth('dealer')->check()) {
                     $user = auth('dealer')->user();
-                    $cartTemps = CartTemp::where('dealer_id', $user->id)->get();
+                    $cartTemps = CartTemp::where('dealer_id', $user->id)
+                        ->whereNull('representative_id')
+                        ->whereNull('admin_id')
+                    ->get();
                 } else if (auth('representative')->check()) {
                     $user = auth('representative')->user();
-                    $cartTemps = CartTemp::where('representative_id', $user->id)->get();
+                    $cartTemps = CartTemp::where('representative_id', $user->id)
+                        ->when(auth('representative')->user()->buyingFor()->exists(), function ($query) {
+                            $query->where('dealer_id', auth('representative')->user()->buyingFor->id);
+                        })
+                        ->whereNull('admin_id')
+                    ->get();
                 } elseif (auth('web')->check()) {
                     $user = auth('web')->user();
-                    $cartTemps = CartTemp::where('admin_id', $user->id)->get();
+                    $cartTemps = CartTemp::where('admin_id', $user->id)
+                        ->when(auth('web')->user()->buyingFor()->exists(), function ($query) {
+                            $query->where('dealer_id', auth('web')->user()->buyingFor->id);
+                        })
+                        ->whereNull('representative_id')
+                    ->get();
                 }
 
                 if ($cartTemps->isEmpty()) {
@@ -96,9 +122,10 @@ class ConformCheckoutModal extends Component
                         'quantity' => $cartTemp->quantity,
                         'attributes' => $cartTemp->attributes,
                     ]);
+
+                    $cartTemp->delete();
                 }
 
-                $user->cartTemps()->delete();
                 $this->dispatch('success', 'Order placed successfully');
                 $this->dispatch('closeCartOffcanva');
                 DB::commit();
