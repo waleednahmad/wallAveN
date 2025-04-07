@@ -69,16 +69,16 @@ class NewPasswordController extends Controller
         // Dealer Check
         $dealer = Dealer::where('email', $request->email)->first();
         if ($dealer) {
-            dd('dealer user');
             $status = Password::broker('dealers')->reset(
                 $request->only('email', 'password', 'password_confirmation', 'token'),
-                function (Dealer $user) use ($request) {
-                    $user->forceFill([
+                function (Dealer $dealer) use ($request) {
+                    $dealer->forceFill([
                         'password' => Hash::make($request->password),
                         'remember_token' => Str::random(60),
                     ])->save();
 
-                    event(new PasswordReset($user));
+                    dd('dealer dealer', $dealer);
+                    event(new PasswordReset($dealer));
                 }
             );
         }
@@ -87,13 +87,13 @@ class NewPasswordController extends Controller
         if ($representative) {
             $status = Password::broker('representatives')->reset(
                 $request->only('email', 'password', 'password_confirmation', 'token'),
-                function (Representative $user) use ($request) {
-                    $user->forceFill([
+                function (Representative $representative) use ($request) {
+                    $representative->forceFill([
                         'password' => Hash::make($request->password),
                         'remember_token' => Str::random(60),
                     ])->save();
 
-                    event(new PasswordReset($user));
+                    event(new PasswordReset($representative));
                 }
             );
         }
