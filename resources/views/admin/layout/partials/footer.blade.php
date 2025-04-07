@@ -4,8 +4,7 @@
 
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy;{{ date('Y') }}
-        <a href="#" target="_blank">Golden Rugs</a>.
-    </strong> All rights
-    reserved.
+    <strong>Copyright &copy;{{ date('Y') }} Golden Rugs |  Designed & Developed by
+        <a href="https://zenith-tech.digital/" target="_blank">Zenith Tech</a>.
+    </strong>
 </footer>
