@@ -36,7 +36,6 @@ class PasswordResetLinkController extends Controller
 
         // If not found in users, check in dealers table
         if ($status !== Password::RESET_LINK_SENT) {
-            dd('test');
             $status = Password::broker('dealers')->sendResetLink(
                 $request->only('email')
             );
