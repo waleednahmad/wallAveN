@@ -45,12 +45,9 @@ class NewPasswordController extends Controller
 
         // If no user is found, redirect back with an error
         if (!$user->exists()) {
-            dd('User not found');
             return back()->withInput($request->only('email'))
                 ->withErrors(['email' => __('We can\'t find a user with that email address.')]);
-        } else {
-            dd('User found');
-        }
+        } 
 
 
         // Attempt to reset the user's password
