@@ -41,13 +41,12 @@ return [
         ],
         'smtp' => [
             'transport' => 'smtp',
-            'host' => env('MAIL_HOST', 'live.smtp.mailtrap.io'),
-            'port' => env('MAIL_PORT', 587),
-            'username' => env('MAIL_USERNAME'),
-            'password' => env('MAIL_PASSWORD'),
-            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+            'host' => "live.smtp.mailtrap.io",
+            'port' => 587,
+            'username' => 'api',
+            'password' => '79330b33f244e38dac4b6ed235c01a7b',
+            'encryption' => 'TLS',
             'timeout' => null,
-            'verify_peer' => false,
         ],
 
         'ses' => [
