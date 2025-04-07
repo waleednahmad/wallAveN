@@ -36,6 +36,12 @@
                                     {{ session('error') }}
                                 </div>
                             @endif
+
+                            @if (session('status'))
+                                <div class="alert alert-success">
+                                    {{ session('status') }}
+                                </div>
+                            @endif
                             <button type="submit" class="btn btn-secondary"
                                 style="max-width: 200px; margin: 0 auto; display: block;">
                                 Reset Password
