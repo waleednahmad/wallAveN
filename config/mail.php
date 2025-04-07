@@ -47,6 +47,7 @@ return [
             'password' => env('MAIL_PASSWORD'),
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
             'timeout' => null,
+            'verify_peer' => false,
         ],
 
         'ses' => [
