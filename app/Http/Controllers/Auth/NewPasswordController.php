@@ -47,10 +47,9 @@ class NewPasswordController extends Controller
         if (!$user->exists()) {
             return back()->withInput($request->only('email'))
                 ->withErrors(['email' => __('We can\'t find a user with that email address.')]);
-        } 
+        }
 
 
-        dd('test');
         // Attempt to reset the user's password
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
@@ -64,6 +63,7 @@ class NewPasswordController extends Controller
             }
         );
 
+        dd('test end');
         // Redirect based on the reset status
         return $status == Password::PASSWORD_RESET
             ? redirect()->route('login')->with('status', __($status))
