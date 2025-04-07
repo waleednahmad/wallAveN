@@ -100,8 +100,6 @@ class NewPasswordController extends Controller
             );
         }
 
-
-        dd(Password::PASSWORD_RESET, $status);
         // Redirect based on the reset status
         return $status == Password::PASSWORD_RESET
             ? redirect()->route('login')->with('status', __($status))
