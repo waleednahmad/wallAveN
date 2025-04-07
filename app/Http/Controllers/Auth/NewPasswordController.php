@@ -50,6 +50,7 @@ class NewPasswordController extends Controller
         } 
 
 
+        dd('test');
         // Attempt to reset the user's password
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
