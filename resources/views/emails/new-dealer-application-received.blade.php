@@ -23,6 +23,9 @@
                 style="color: #d19c4b; text-decoration: none;">{{ $email }}</a> <br>
             📞 <strong>Phone:</strong> <a href="tel:{{ $phone }}">{{ $phone }}</a>
         </p>
+        <br>
+        <hr>
+        <br>
         <p style="font-size: 16px; color: #555;">
             📍 <strong>Address:</strong> 4528 W 51st St, Chicago, IL 60632 <br>
             📞 <strong>Phone:</strong> <a href="tel:(773) 490-3801">(773) 490-3801</a> <br>
