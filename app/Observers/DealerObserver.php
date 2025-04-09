@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Mail\DealerApplicationReceived;
+use App\Mail\NewDealerApplicationReceived;
 use App\Models\Dealer;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
@@ -30,10 +31,10 @@ class DealerObserver
         // event(new Registered($dealer));
 
         // Send a notification email to the admin
-        // $admins =  User::all();
-        // foreach ($admins as $admin) {
-        //     Mail::to($admin->email)->send(new DealerApplicationReceived());
-        // }
+        $admins =  User::all();
+        foreach ($admins as $admin) {
+            Mail::to($admin->email)->send(new NewDealerApplicationReceived($dealer));
+        }
     }
 
     /**
