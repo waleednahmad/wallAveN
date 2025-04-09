@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use App\Observers\RepresentativeObserver;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+
+#[ObservedBy([RepresentativeObserver::class])]
 
 class Representative extends Authenticatable implements MustVerifyEmail
 {
