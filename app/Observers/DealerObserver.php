@@ -2,7 +2,11 @@
 
 namespace App\Observers;
 
+use App\Mail\DealerApplicationReceived;
 use App\Models\Dealer;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
+
 
 class DealerObserver
 {
@@ -17,6 +21,19 @@ class DealerObserver
             'text_color' => '#000000',
             'bg_color' => '#f1c55e',
         ]);
+
+
+        // Send a welcome email to the dealer
+        Mail::to($dealer->email)->send(new DealerApplicationReceived());
+
+        // Verify the dealer's email address (from the laravel auth)
+        // event(new Registered($dealer));
+
+        // Send a notification email to the admin
+        // $admins =  User::all();
+        // foreach ($admins as $admin) {
+        //     Mail::to($admin->email)->send(new DealerApplicationReceived());
+        // }
     }
 
     /**

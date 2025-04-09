@@ -118,8 +118,7 @@ class FrontController extends Controller
             }
         }
 
-        $dealer = Dealer::create($data);
-        event(new Registered($dealer));
+        Dealer::create($data);
         return redirect()->route('frontend.home')->with('success', 'Your registration has been submitted successfully, we will contact you soon.');
     }
 
