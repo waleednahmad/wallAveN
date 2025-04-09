@@ -12,9 +12,6 @@
         <h2 style="color: #333;">Thank You for Registering!</h2>
         <p style="font-size: 16px; color: #555;">
             We have received your representative rep application at <strong>{{ getWebsiteTitle() }}</strong>
-
-            @endenv
-            </strong>
             Our team will review your information and get back to you shortly.
         </p>
         <p style="font-size: 16px; color: #555;">
