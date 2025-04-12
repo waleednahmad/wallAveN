@@ -54,57 +54,47 @@
                     <!-- Table row -->
 
                     @if (isset($items) && count($items) > 0)
-                        <div class="row">
-                            <div class="col-12 table-responsive">
-                                <table class="table table-striped">
+                        <div style="display: flex; justify-content: center;">
+                            <div style="width: 100%; overflow-x: auto;">
+                                <table style="width: 100%; border: 1px solid #ddd; border-collapse: collapse; margin: auto;">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>
-                                                Image
-                                            </th>
-                                            <th>SKU</th>
-                                            <th>Name</th>
-                                            <th>Qty</th>
-                                            <th>
-                                                Attributes
-                                            </th>
-                                            <th>
-                                                Price/Unit
-                                            </th>
-                                            <th>
-                                                Total
-                                            </th>
+                                            <th style="border: 1px solid #ddd; padding: 3px;">#</th>
+                                            <th style="border: 1px solid #ddd; padding: 3px;">Image</th>
+                                            <th style="border: 1px solid #ddd; padding: 3px;">SKU</th>
+                                            <th style="border: 1px solid #ddd; padding: 3px;">Name</th>
+                                            <th style="border: 1px solid #ddd; padding: 3px;">Qty</th>
+                                            <th style="border: 1px solid #ddd; padding: 3px;">Attributes</th>
+                                            <th style="border: 1px solid #ddd; padding: 3px;">Price/Unit</th>
+                                            <th style="border: 1px solid #ddd; padding: 3px;">Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($items as $item)
                                             <tr>
-                                                <td>
+                                                <td style="border: 1px solid #ddd; padding: 3px;">
                                                     {{ $loop->iteration }}
                                                 </td>
-                                                <td>
+                                                <td style="border: 1px solid #ddd; padding: 3px;">
                                                     @if ($item->image && file_exists($item->image))
                                                         <img src="{{ asset($item->image) }}" alt="{{ $item->name }}"
-                                                            class="img-thumbnail"
                                                             style="width: 70px; height: 70px; border-radius: 15px; object-fit: contain;">
                                                     @else
                                                         <img src="{{ asset($item->product->image) }}"
-                                                            alt="{{ $item->name }}" class="img-thumbnail"
+                                                            alt="{{ $item->name }}"
                                                             style="width: 70px; height: 70px; border-radius: 15px; object-fit: contain;">
                                                     @endif
                                                 </td>
-                                                <td style="max-width: fit-content">
+                                                <td style="border: 1px solid #ddd; padding: 3px; max-width: fit-content;">
                                                     {{ $item->sku ?? '---' }}
                                                 </td>
-                                                <td style="max-width: 110px; text-wrap: pretty;">
+                                                <td style="border: 1px solid #ddd; padding: 3px; max-width: 110px; word-wrap: break-word;">
                                                     {{ $item->name ?? '---' }}
                                                 </td>
-
-                                                <td>
+                                                <td style="border: 1px solid #ddd; padding: 3px;">
                                                     {{ $item->quantity }}
                                                 </td>
-                                                <td>
+                                                <td style="border: 1px solid #ddd; padding: 3px;">
                                                     @if ($item->item_type == 'variant')
                                                         @php
                                                             $attributes = json_decode($item->attributes, true);
@@ -115,7 +105,7 @@
                                                                 <tr>
                                                                     @foreach (array_keys($attributes) as $key)
                                                                         <th
-                                                                            style="border: 1px solid #ddd; padding: 8px; text-align: left;">
+                                                                            style="border: 1px solid #ddd; padding: 3px; text-align: left;">
                                                                             {{ ucwords($key) }}</th>
                                                                     @endforeach
                                                                 </tr>
@@ -124,7 +114,7 @@
                                                                 <tr>
                                                                     @foreach (array_values($attributes) as $value)
                                                                         <td
-                                                                            style="border: 1px solid #ddd; padding: 8px; text-align: left;">
+                                                                            style="border: 1px solid #ddd; padding: 3px; text-align: left;">
                                                                             {{ ucwords($value) }}</td>
                                                                     @endforeach
                                                                 </tr>
@@ -132,28 +122,27 @@
                                                         </table>
                                                     @endif
                                                 </td>
-                                                <td>
+                                                <td style="border: 1px solid #ddd; padding: 3px;">
                                                     <b>$</b> {{ $item->price ?? '---' }}
                                                 </td>
-                                                <td>
+                                                <td style="border: 1px solid #ddd; padding: 3px;">
                                                     <b>$</b> {{ $item->total ?? '---' }}
                                                 </td>
                                             </tr>
                                         @endforeach
 
                                         <tr>
-                                            <td colspan="6"></td>
-                                            <td>
+                                            <td colspan="6" style="border: 1px solid #ddd; padding: 3px;"></td>
+                                            <td style="border: 1px solid #ddd; padding: 3px;">
                                                 <b>Total</b>
                                             </td>
-                                            <td>
+                                            <td style="border: 1px solid #ddd; padding: 3px;">
                                                 <b>$</b> {{ $order?->total }}
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <!-- /.col -->
                         </div>
                     @endif
                 </div>
