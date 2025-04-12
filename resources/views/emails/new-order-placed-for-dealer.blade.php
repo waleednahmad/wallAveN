@@ -53,8 +53,8 @@
 
                     <!-- Table row -->
 
-                    @if (isset($order) && $order->orderItems)
-                        <div class="row" wire:loading.remove>
+                    @if (isset($items) && count($items) > 0)
+                        <div class="row">
                             <div class="col-12 table-responsive">
                                 <table class="table table-striped">
                                     <thead>
@@ -78,7 +78,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($order?->orderItems as $item)
+                                        @foreach ($items as $item)
                                             <tr>
                                                 <td>
                                                     {{ $loop->iteration }}
@@ -150,15 +150,6 @@
                             <!-- /.col -->
                         </div>
                     @endif
-
-                    <div class="row">
-                        {{-- ============ Previrer loading spinner ======== --}}
-                        <div class="text-center col-12" wire:loading>
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div><!-- /.col -->
         </div>

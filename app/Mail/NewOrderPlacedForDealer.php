@@ -43,6 +43,7 @@ class NewOrderPlacedForDealer extends Mailable
             view: 'emails.new-order-placed-for-dealer',
             with: [
                 'dealer' => $this->order->dealer,
+                'items' => $this->order->orderItems,
                 'order' => $this->order,
             ],
         );
