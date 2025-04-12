@@ -2,11 +2,13 @@
 
 namespace App\Livewire\Frontend\Modals;
 
+use App\Mail\NewOrderPlacedForDealer;
 use App\Models\CartTemp;
 use App\Models\Dealer;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Illuminate\Support\Facades\Mail;
 
 class ConformCheckoutModal extends Component
 {
@@ -128,6 +130,11 @@ class ConformCheckoutModal extends Component
 
                 $this->dispatch('success', 'Order placed successfully');
                 $this->dispatch('closeCartOffcanva');
+
+                // Send Email for the dealer
+                $dealer = $order->dealer;
+                // Send a welcome email to the dealer
+                Mail::to($dealer->email)->send(new NewOrderPlacedForDealer($order));
                 DB::commit();
             } catch (\Exception $e) {
                 DB::rollBack();

@@ -15,9 +15,9 @@ class OrderObserver
      */
     public function created(Order $order): void
     {
-        $dealer = $order->dealer;
+        // $dealer = $order->dealer;
         // Send a welcome email to the dealer
-        Mail::to($dealer->email)->send(new NewOrderPlacedForDealer($order));
+        // Mail::to($dealer->email)->send(new NewOrderPlacedForDealer($order));
 
         // Verify the dealer's email address (from the laravel auth)
         // event(new Registered($dealer));

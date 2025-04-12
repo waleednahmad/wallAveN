@@ -21,7 +21,6 @@ class NewOrderPlacedForDealer extends Mailable
     public function __construct(Order $order)
     {
         $this->order = $order->load('dealer', 'orderItems');
-        dd($this->order);
     }
 
 
