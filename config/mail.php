@@ -53,7 +53,7 @@ return [
             'host' => "mail.goldenrugsinc.com",
             'port' => 465,
             'username' => 'sales@goldenrugsinc.com',
-            'password' => '%QC7(l3C!+jO',
+            'password' => 'C9,kFvifTk!q',
             'encryption' => 'TLS',
             'timeout' => null,
         ],
