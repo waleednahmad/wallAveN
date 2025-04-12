@@ -56,6 +56,13 @@ return [
             'password' => '79330b33f244e38dac4b6ed235c01a7b',
             'encryption' => 'TLS',
             'timeout' => null,
+            'stream' => [
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true,
+                ],
+            ],
         ],
 
         'ses' => [
