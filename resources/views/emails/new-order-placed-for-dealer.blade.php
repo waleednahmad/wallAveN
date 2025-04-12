@@ -86,11 +86,12 @@
                                                 <td>
                                                     @if ($item->image && file_exists($item->image))
                                                         <img src="{{ asset($item->image) }}" alt="{{ $item->name }}"
-                                                            class="img-thumbnail" style="width: 90px; height: 90px;">
+                                                            class="img-thumbnail"
+                                                            style="width: 70px; height: 70px; border-radius: 15px; object-fit: contain;">
                                                     @else
-                                                        <img src="{{ asset('dashboard/images/default.webp') }}"
+                                                        <img src="{{ asset($item->product->image) }}"
                                                             alt="{{ $item->name }}" class="img-thumbnail"
-                                                            style="width: 90px; height: 90px;">
+                                                            style="width: 70px; height: 70px; border-radius: 15px; object-fit: contain;">
                                                     @endif
                                                 </td>
                                                 <td style="max-width: fit-content">
@@ -108,18 +109,23 @@
                                                         @php
                                                             $attributes = json_decode($item->attributes, true);
                                                         @endphp
-                                                        <table class="table table-bordered table-sm mb-0">
+                                                        <table
+                                                            style="border: 1px solid #ddd; border-collapse: collapse; width: 100%; margin-bottom: 0;">
                                                             <thead>
                                                                 <tr>
                                                                     @foreach (array_keys($attributes) as $key)
-                                                                        <th>{{ ucwords($key) }}</th>
+                                                                        <th
+                                                                            style="border: 1px solid #ddd; padding: 8px; text-align: left;">
+                                                                            {{ ucwords($key) }}</th>
                                                                     @endforeach
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 <tr>
                                                                     @foreach (array_values($attributes) as $value)
-                                                                        <td>{{ ucwords($value) }}</td>
+                                                                        <td
+                                                                            style="border: 1px solid #ddd; padding: 8px; text-align: left;">
+                                                                            {{ ucwords($value) }}</td>
                                                                     @endforeach
                                                                 </tr>
                                                             </tbody>
