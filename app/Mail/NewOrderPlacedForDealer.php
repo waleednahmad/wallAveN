@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -13,13 +14,15 @@ class NewOrderPlacedForDealer extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $order;
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(Order $order)
     {
-        //
+        $this->order = $order;
     }
+
 
     /**
      * Get the message envelope.
@@ -38,6 +41,10 @@ class NewOrderPlacedForDealer extends Mailable
     {
         return new Content(
             view: 'emails.new-order-placed-for-dealer',
+            with: [
+                'dealer' => $this->order->dealer,
+                'order' => $this->order,
+            ],
         );
     }
 
