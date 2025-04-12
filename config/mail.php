@@ -39,12 +39,21 @@ return [
         'mailtrap' => [
             'transport' => 'mailtrap'
         ],
+        // 'smtp' => [
+        //     'transport' => 'smtp',
+        //     'host' => "mail.goldenrugsinc.com",
+        //     'port' => 465,
+        //     'username' => 'nidal@goldenrugsinc.com',
+        //     'password' => 'hc7fdJaEpU*A',
+        //     'encryption' => 'TLS',
+        //     'timeout' => null,
+        // ],
         'smtp' => [
             'transport' => 'smtp',
             'host' => "mail.goldenrugsinc.com",
             'port' => 465,
-            'username' => 'nidal@goldenrugsinc.com',
-            'password' => 'hc7fdJaEpU*A',
+            'username' => 'sales@goldenrugsinc.com',
+            'password' => '%QC7(l3C!+jO',
             'encryption' => 'TLS',
             'timeout' => null,
         ],
