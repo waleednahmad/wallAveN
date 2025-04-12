@@ -39,30 +39,14 @@ return [
         'mailtrap' => [
             'transport' => 'mailtrap'
         ],
-        // 'smtp' => [
-        //     'transport' => 'smtp',
-        //     'host' => "mail.goldenrugsinc.com",
-        //     'port' => 465,
-        //     'username' => 'nidal@goldenrugsinc.com',
-        //     'password' => 'hc7fdJaEpU*A',
-        //     'encryption' => 'TLS',
-        //     'timeout' => null,
-        // ],
         'smtp' => [
             'transport' => 'smtp',
-            'host' => "live.smtp.mailtrap.io",
-            'port' => 587,
-            'username' => 'api',
-            'password' => '79330b33f244e38dac4b6ed235c01a7b',
-            'encryption' => 'TLS',
+            'host' => env('MAIL_HOST', 'live.smtp.mailtrap.io'),
+            'port' => env('MAIL_PORT', 587),
+            'username' => env('MAIL_USERNAME', 'api'),
+            'password' => env('MAIL_PASSWORD'),
+            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
             'timeout' => null,
-            'stream' => [
-                'ssl' => [
-                    'verify_peer' => false,
-                    'verify_peer_name' => false,
-                    'allow_self_signed' => true,
-                ],
-            ],
         ],
 
         'ses' => [
@@ -118,7 +102,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'nidal@goldenrugsinc.com'),
+        'address' => env('MAIL_FROM_ADDRESS', 'sales@goldenrugsinc.com'),
         'name' => env('MAIL_FROM_NAME', 'Golden Rugs'),
     ],
 
