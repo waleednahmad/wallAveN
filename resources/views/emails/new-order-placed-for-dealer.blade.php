@@ -26,9 +26,9 @@
 
 
         <div
-            style="border: 1px solid #ddd; padding: 10px; margin-bottom: 20px; border-radius: 5px; display: table; width: 100%; text-align: left !important;">
+            style="border: 1px solid #ddd; padding: 10px; margin-bottom: 20px; border-radius: 5px; overflow: hidden; text-align: left !important;">
             {{-- Bill to --}}
-            <section style="display: table-cell; width: 33%; vertical-align: top; padding-right: 10px;">
+            <section style="float: left; width: 32%; margin-right: 2%;">
                 <p>
                     <span style="font-weight: bold; color: #333; display: block; margin-bottom: 4px; font-size: 14px;">
                         BILL TO
@@ -39,7 +39,7 @@
                     {{ $zip_code }}
                 </p>
             </section>
-            <section style="display: table-cell; width: 33%; vertical-align: top; padding-right: 10px;">
+            <section style="float: left; width: 32%; margin-right: 2%;">
                 <p>
                     <span style="font-weight: bold; color: #333; display: block; margin-bottom: 4px; font-size: 14px;">
                         SHIP TO
@@ -50,7 +50,7 @@
                     {{ $zip_code }}
                 </p>
             </section>
-            <section style="display: table-cell; width: 33%; vertical-align: top;">
+            <section style="float: left; width: 32%;">
                 <table style="text-align: left; width: 100%; border-collapse: collapse;">
                     <tr>
                         <th style="font-size: 14px;">INVOICE</th>
@@ -70,6 +70,7 @@
                     </tr>
                 </table>
             </section>
+            <div style="clear: both;"></div>
         </div>
 
 
