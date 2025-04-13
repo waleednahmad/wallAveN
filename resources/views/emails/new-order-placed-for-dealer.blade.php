@@ -8,7 +8,7 @@
 </head>
 
 <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center;">
-    <div style="max-width: 600px; background: #ffffff; padding: 20px; border-radius: 5px; margin: auto;">
+    <div style="max-width: 900px; background: #ffffff; padding: 20px; border-radius: 5px; margin: auto;">
         <header style="text-align: center; margin-bottom: 20px;">
             <img src="{{ getMainImage() }}" alt="{{ getWebsiteTitle() }}" style="max-width: 200px;">
             <h2 style="color: #333;">New Order Placed</h2>
@@ -25,11 +25,12 @@
         @endphp
 
 
-        <div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 20px; border-radius: 5px;">
-            {{-- Bitll to --}}
-            <section style="display: inline-block; width: 32%; vertical-align: top;">
+        <div
+            style="border: 1px solid #ddd; padding: 10px; margin-bottom: 20px; border-radius: 5px; display: table; width: 100%; text-align: left !important;">
+            {{-- Bill to --}}
+            <section style="display: table-cell; width: 33%; vertical-align: top; padding-right: 10px;">
                 <p>
-                    <span style="font-weight: bold; color: #333; display: block;margin-bottom: 4px;font-size: 14px">
+                    <span style="font-weight: bold; color: #333; display: block; margin-bottom: 4px; font-size: 14px;">
                         BILL TO
                     </span>
                     {{ $address }}<br>
@@ -38,9 +39,9 @@
                     {{ $zip_code }}
                 </p>
             </section>
-            <section style="display: inline-block; width: 32%; vertical-align: top;">
+            <section style="display: table-cell; width: 33%; vertical-align: top; padding-right: 10px;">
                 <p>
-                    <span style="font-weight: bold; color: #333; display: block;margin-bottom: 4px;font-size: 14px">
+                    <span style="font-weight: bold; color: #333; display: block; margin-bottom: 4px; font-size: 14px;">
                         SHIP TO
                     </span>
                     {{ $address }}<br>
@@ -49,22 +50,22 @@
                     {{ $zip_code }}
                 </p>
             </section>
-            <section style="display: inline-block; width: 32%; vertical-align: top;">
+            <section style="display: table-cell; width: 33%; vertical-align: top;">
                 <table style="text-align: left; width: 100%; border-collapse: collapse;">
                     <tr>
-                        <th style="font-size: 14px">INVOICE</th>
+                        <th style="font-size: 14px;">INVOICE</th>
                         <td>{{ $order?->id }}</td>
                     </tr>
                     <tr>
-                        <th style="font-size: 14px">DATE</th>
-                        <td> {{ $order?->created_at->format('m/d/Y') }}</td>
+                        <th style="font-size: 14px;">DATE</th>
+                        <td>{{ $order?->created_at->format('m/d/Y') }}</td>
                     </tr>
                     <tr>
-                        <th style="font-size: 14px">DUE DATE</th>
-                        <td> {{ $order?->created_at->format('m/d/Y') }}</td>
+                        <th style="font-size: 14px;">DUE DATE</th>
+                        <td>{{ $order?->created_at->format('m/d/Y') }}</td>
                     </tr>
                     <tr>
-                        <th style="font-size: 14px">PLACED BY</th>
+                        <th style="font-size: 14px;">PLACED BY</th>
                         <td>{{ $order?->dealer?->name }}</td>
                     </tr>
                 </table>
