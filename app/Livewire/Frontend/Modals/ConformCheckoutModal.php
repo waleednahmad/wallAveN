@@ -5,6 +5,7 @@ namespace App\Livewire\Frontend\Modals;
 use App\Mail\NewOrderPlacedForDealer;
 use App\Models\CartTemp;
 use App\Models\Dealer;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -56,7 +57,7 @@ class ConformCheckoutModal extends Component
                     $cartTemps = CartTemp::where('dealer_id', $user->id)
                         ->whereNull('representative_id')
                         ->whereNull('admin_id')
-                    ->get();
+                        ->get();
                 } else if (auth('representative')->check()) {
                     $user = auth('representative')->user();
                     $cartTemps = CartTemp::where('representative_id', $user->id)
@@ -64,7 +65,7 @@ class ConformCheckoutModal extends Component
                             $query->where('dealer_id', auth('representative')->user()->buyingFor->id);
                         })
                         ->whereNull('admin_id')
-                    ->get();
+                        ->get();
                 } elseif (auth('web')->check()) {
                     $user = auth('web')->user();
                     $cartTemps = CartTemp::where('admin_id', $user->id)
@@ -72,7 +73,7 @@ class ConformCheckoutModal extends Component
                             $query->where('dealer_id', auth('web')->user()->buyingFor->id);
                         })
                         ->whereNull('representative_id')
-                    ->get();
+                        ->get();
                 }
 
                 if ($cartTemps->isEmpty()) {
@@ -131,10 +132,21 @@ class ConformCheckoutModal extends Component
                 $this->dispatch('success', 'Order placed successfully');
                 $this->dispatch('closeCartOffcanva');
 
-                // Send Email for the dealer
                 $dealer = $order->dealer;
-                // Send a welcome email to the dealer
+                $representative = $dealer->referalTo ?? null;
+                // Send a email to the dealer
                 Mail::to($dealer->email)->send(new NewOrderPlacedForDealer($order));
+                // Send a email to the represenataive
+                if ($representative) {
+                    Mail::to($representative->email)->send(new NewOrderPlacedForDealer($order));
+                }
+
+                // Send to all admins
+                $admins = User::all();
+                foreach ($admins as $admin) {
+                    Mail::to($admin->email)->send(new NewOrderPlacedForDealer($order));
+                }
+                // Send Email for the admin
                 DB::commit();
             } catch (\Exception $e) {
                 DB::rollBack();

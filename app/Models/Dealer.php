@@ -36,6 +36,11 @@ class Dealer extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(DealerBannerSetting::class);
     }
 
+    public function referalTo()
+    {
+        return $this->belongsTo(Representative::class, 'referal_id');
+    }
+
 
     // ==================
     // Scopes

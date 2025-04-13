@@ -5,6 +5,7 @@ use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\CheckIsDealerLoggedIn;
 use App\Mail\TestEmail;
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Mail;
@@ -62,6 +63,14 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
     return redirect()->route('frontend.home')
         ->with('success', 'Email verified successfully.');
 })->middleware(['auth:web,dealer,representative', 'signed'])->name('verification.verify');
-    
 
+Route::get('preview-email', function () {
+    $order = Order::find(113);
+    $items = $order->orderItems;
+    return view('emails.new-order-placed-for-dealer' ,
+        [
+            'order' => $order,
+            'items' => $items,
+        ]);
+});
 require __DIR__ . '/auth.php';
