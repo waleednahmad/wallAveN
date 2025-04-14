@@ -15,7 +15,8 @@
                             <div class="col-12">
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email<span class="text-danger">*</span></label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
+                                    <input type="email" class="form-control" id="email" name="email" required
+                                        value="{{ old('email', request()->get('email')) }}">
                                 </div>
                             </div>
                             <div class="col-12">

@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Dashboard\Orders;
 
+use App\Mail\OrderStatusUpdated;
 use App\Models\Order;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -47,6 +49,10 @@ class ChangeStatusModal extends Component
             'status' => $this->status,
         ]);
 
+
+        if ($this->order->dealerr) {
+            Mail::to($this->order->dealerr->email)->send(new OrderStatusUpdated($this->order));
+        }
         $this->dispatch('success', 'Order status updated successfully');
         $this->dispatch('closeChangeStatusModal');
         $this->dispatch('refreshOrders');

@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Tables;
 
+use App\Mail\RepresentativeAccepted;
 use App\Models\Representative;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
@@ -123,16 +125,19 @@ final class RepresentativeTable extends PowerGridComponent
     #[\Livewire\Attributes\On('approve')]
     public function approve($rowId): void
     {
-        $representative = Representative::find($rowId);
-        if (!$representative) {
+        $rep = Representative::find($rowId);
+        if (!$rep) {
             $this->js('toastr.error("representative not found")');
             return;
         }
 
-        $representative->update([
+        $rep->update([
             'is_approved' => true,
             'approved_at' => now(),
         ]);
+
+        Mail::to($rep->email)->send(new RepresentativeAccepted($rep));
+
         $this->js('toastr.success("representative approved successfully")');
         $this->refresh();
     }

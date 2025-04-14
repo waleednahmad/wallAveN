@@ -5,8 +5,10 @@ use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\CheckIsDealerLoggedIn;
 use App\Mail\TestEmail;
+use App\Models\Dealer;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Representative;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -65,12 +67,12 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 })->middleware(['auth:web,dealer,representative', 'signed'])->name('verification.verify');
 
 Route::get('preview-email', function () {
-    $order = Order::find(113);
-    $items = $order->orderItems;
-    return view('emails.new-order-placed-for-dealer' ,
+    $order = Order::first();
+    return view(
+        'emails.order-status-updated',
         [
             'order' => $order,
-            'items' => $items,
-        ]);
+        ]
+    );
 });
 require __DIR__ . '/auth.php';

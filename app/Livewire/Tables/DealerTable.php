@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Tables;
 
+use App\Mail\DealerAccepted;
 use App\Models\Dealer;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,6 +15,7 @@ use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\Facades\Rule;
+use Illuminate\Support\Facades\Mail;
 
 
 final class DealerTable extends PowerGridComponent
@@ -154,7 +156,7 @@ final class DealerTable extends PowerGridComponent
         }
 
         // Send email to dealer with password
-        // Mail::to($dealer->email)->send(new DealerApprovedMail($dealer));
+        Mail::to($dealer->email)->send(new DealerAccepted($dealer));
 
         $this->js('toastr.success("Dealer approved successfully")');
         $this->refresh();

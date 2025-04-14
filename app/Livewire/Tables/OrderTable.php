@@ -10,6 +10,7 @@ use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
+use PowerComponents\LivewirePowerGrid\Facades\Rule;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 
@@ -178,15 +179,13 @@ final class OrderTable extends PowerGridComponent
         ];
     }
 
-    /*
     public function actionRules($row): array
     {
-       return [
+        return [
             // Hide button edit for ID 1
-            Rule::button('edit')
-                ->when(fn($row) => $row->id === 1)
+            Rule::button('editStatus')
+                ->when(fn($row) => $row->status == 'completed' || $row->status == 'declined' || $row->status == 'canceled')
                 ->hide(),
         ];
     }
-    */
 }
