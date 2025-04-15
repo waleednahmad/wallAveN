@@ -3,6 +3,8 @@
 
 <head>
     @include('admin.layout.partials.head')
+    <script src="{{ asset('assets/js/popper.min.js') }}"></script>
+
     {{-- <script src="https://unpkg.com/@popperjs/core@2"></script> --}}
 
     @stack('styles')

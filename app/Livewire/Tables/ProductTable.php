@@ -23,6 +23,7 @@ final class ProductTable extends PowerGridComponent
 
         return [
             PowerGrid::header()
+                ->showSoftDeletes()
                 ->showSearchInput(),
             PowerGrid::footer()
                 ->showPerPage(
