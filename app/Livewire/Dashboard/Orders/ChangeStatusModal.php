@@ -50,9 +50,8 @@ class ChangeStatusModal extends Component
         ]);
 
 
-        if ($this->order->dealerr) {
-            dd($this->order->dealerr->email);
-            Mail::to($this->order->dealerr->email)->send(new OrderStatusUpdated($this->order));
+        if ($this->order->dealer) {
+            Mail::to($this->order->dealer->email)->send(new OrderStatusUpdated($this->order));
         }
         $this->dispatch('success', 'Order status updated successfully');
         $this->dispatch('closeChangeStatusModal');
