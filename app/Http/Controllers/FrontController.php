@@ -14,6 +14,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class FrontController extends Controller
@@ -130,8 +131,9 @@ class FrontController extends Controller
         // event(new Registered($dealer));
 
         // Send a notification email to the admin
-        $admins =  User::all();
+        $admins = User::where('is_admin', true)->get();
         foreach ($admins as $admin) {
+            Log::info('Sending email to admin: ' . $admin->email);
             Mail::to($admin->email)->send(new NewDealerApplicationReceived($dealer));
         }
         return redirect()->route('frontend.home')->with('success', 'Your registration has been submitted successfully, we will contact you soon.');
