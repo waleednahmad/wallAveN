@@ -104,6 +104,8 @@ class FrontController extends Controller
             'message',
         ]);
 
+        
+
         if ($request->hasFile('resale_certificate')) {
             $file = $request->file('resale_certificate')->store('resale_certificates', 'public');
             $data['resale_certificate'] = "storage/" . $file;
@@ -131,7 +133,7 @@ class FrontController extends Controller
         // event(new Registered($dealer));
 
         // Send a notification email to the admin
-        $admins = User::where('is_admin', true)->get();
+        $admins = User::get();
         foreach ($admins as $admin) {
             Log::info('Sending email to admin: ' . $admin->email);
             Mail::to($admin->email)->send(new NewDealerApplicationReceived($dealer));
