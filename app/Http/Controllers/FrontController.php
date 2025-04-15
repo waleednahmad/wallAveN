@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\DealerApplicationReceived;
+use App\Mail\NewDealerApplicationReceived;
 use App\Mail\TestEmail;
 use App\Models\Dealer;
 use App\Models\Page;
@@ -118,7 +120,20 @@ class FrontController extends Controller
             }
         }
 
-        Dealer::create($data);
+        $dealer = Dealer::create($data);
+
+        // =================== Send Emails ===================
+        // Send a welcome email to the dealer
+        Mail::to($dealer->email)->send(new DealerApplicationReceived());
+
+        // Verify the dealer's email address (from the laravel auth)
+        // event(new Registered($dealer));
+
+        // Send a notification email to the admin
+        $admins =  User::all();
+        foreach ($admins as $admin) {
+            Mail::to($admin->email)->send(new NewDealerApplicationReceived($dealer));
+        }
         return redirect()->route('frontend.home')->with('success', 'Your registration has been submitted successfully, we will contact you soon.');
     }
 

@@ -25,16 +25,16 @@ class DealerObserver
 
 
         // Send a welcome email to the dealer
-        Mail::to($dealer->email)->send(new DealerApplicationReceived());
+        // Mail::to($dealer->email)->send(new DealerApplicationReceived());
 
         // Verify the dealer's email address (from the laravel auth)
         // event(new Registered($dealer));
 
         // Send a notification email to the admin
-        $admins =  User::all();
-        foreach ($admins as $admin) {
-            Mail::to($admin->email)->send(new NewDealerApplicationReceived($dealer));
-        }
+        // $admins =  User::all();
+        // foreach ($admins as $admin) {
+        //     Mail::to($admin->email)->send(new NewDealerApplicationReceived($dealer));
+        // }
     }
 
     /**
