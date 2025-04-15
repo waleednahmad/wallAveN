@@ -138,6 +138,7 @@ final class DealerTable extends PowerGridComponent
     public function approve($rowId): void
     {
         $dealer = Dealer::find($rowId);
+        $dealerEmail = $dealer->email;
         if (!$dealer) {
             $this->js('toastr.error("Dealer not found")');
             return;
@@ -156,7 +157,7 @@ final class DealerTable extends PowerGridComponent
         }
 
         // Send email to dealer with password
-        Mail::to($dealer->email)->send(new DealerAccepted($dealer));
+        Mail::to($dealerEmail)->send(new DealerAccepted($dealer));
 
         $this->js('toastr.success("Dealer approved successfully")');
         $this->refresh();
