@@ -52,13 +52,13 @@ final class OrderTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             ->add('dealer_name', function (Order $order) {
-                return $order->dealer->name;
+                return $order->dealer ? $order->dealer->name : '';
             })
             ->add('dealer_email', function (Order $order) {
-                return $order->dealer->email;
+                return $order->dealer ? $order->dealer->email : '';
             })
             ->add('dealer_phone', function (Order $order) {
-                return $order->dealer->phone;
+                return $order->dealer ? $order->dealer->phone : '';
             })
 
             ->add('status', function (Order $order) {
