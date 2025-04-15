@@ -14,7 +14,10 @@
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "*",
-        "power-components/livewire-powergrid": "^6.1"
+        "nyholm/psr7": "^1.8",
+        "power-components/livewire-powergrid": "^6.1",
+        "railsware/mailtrap-php": "^2.1",
+        "symfony/http-client": "^7.2"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.14",
