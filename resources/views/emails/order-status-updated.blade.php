@@ -17,7 +17,7 @@
             The status of your order <strong>#{{ $order->id }}</strong> has been updated to:
         </p>
         <p style="font-size: 18px; color: #d19c4b; font-weight: bold;">
-            {{ $order->status }}
+            {{ ucfirst($order->status) }}
         </p>
         <p style="font-size: 16px; color: #555;">
             You can view your order details and track updates from your account.

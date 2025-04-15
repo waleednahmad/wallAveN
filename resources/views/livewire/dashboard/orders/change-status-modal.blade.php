@@ -10,7 +10,7 @@
                 <label for="status" class="form-label">Status</label>
                 <select wire:model="status" class="form-select" id="status">
                     @foreach ($this->statuses as $status)
-                        <option value="{{ $status }}">{{ $status }}</option>
+                        <option value="{{ $status }}">{{ ucfirst($status) }}</option>
                     @endforeach
                 </select>
                 @error('status')
