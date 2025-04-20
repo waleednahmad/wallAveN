@@ -48,6 +48,8 @@ class SetPriceListModal extends Component
                     $dealer->save();
                 }
             }
+            // Clear the dealer carttemps
+            $dealer->cartTemps()->delete();
         }
 
         // Clear the selected dealers after saving
