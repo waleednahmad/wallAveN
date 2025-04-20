@@ -1,9 +1,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{ route('dashboard') }}" class="brand-link d-flex flex-column justify-items-center align-items-center">
-        <img src="{{ getMainImage() }}" alt=""
-            style="width: 75%; object-fit: contain;"
-        >
+        <img src="{{ getMainImage() }}" alt="" style="width: 75%; object-fit: contain;">
 
     </a>
 
@@ -191,6 +189,18 @@
                         <i class="nav-icon fas fa-users"></i>
                         <p>
                             Representatives
+                        </p>
+                    </a>
+                </li>
+                {{-- -------------------- Price Lists -------------------- --}}
+                <li class="nav-item">
+                    <a href="{{ route('dashboard.price-lists.index') }}" @class([
+                        'nav-link',
+                        'active' => request()->routeIs('dashboard.price-lists.*'),
+                    ])>
+                        <i class="nav-icon fas fa-tags"></i>
+                        <p>
+                            Price Lists
                         </p>
                     </a>
                 </li>

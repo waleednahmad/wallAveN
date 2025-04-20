@@ -12,6 +12,7 @@ use App\Http\Controllers\Dashboard\EmployeeController;
 use App\Http\Controllers\Dashboard\InfluencerController;
 use App\Http\Controllers\Dashboard\OrderController;
 use App\Http\Controllers\Dashboard\PaymentPolicyController;
+use App\Http\Controllers\Dashboard\PriceListController;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\ProductTypeController;
 use App\Http\Controllers\Dashboard\ProjectController;
@@ -96,6 +97,10 @@ Route::prefix('super_admin')
                 // Attributes Routes :
                 // ---------------------
                 Route::resource('attributes', AttributeController::class)->only(['index']);
+
+                // Price List Routes :
+                // ---------------------
+                Route::resource('price-lists', PriceListController::class)->only(['index']);
             });
     });
 

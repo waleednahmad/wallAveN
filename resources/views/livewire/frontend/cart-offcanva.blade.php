@@ -24,10 +24,12 @@
 
                 @auth('dealer')
                     @php
-                        $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
-                        $itemPrice = (float) $itemPrice * (float) $dealerPercentage;
-                        $itemTotal = (float) $itemTotal * (float) $dealerPercentage;
-                        $total = (float) $total * (float) $dealerPercentage;
+                        if (auth('dealer')->user()->is_customer_mode_active) {
+                            $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
+                            $itemPrice = (float) $itemPrice * (float) $dealerPercentage;
+                            $itemTotal = (float) $itemTotal * (float) $dealerPercentage;
+                            $total = (float) $total * (float) $dealerPercentage;
+                        }
                     @endphp
                 @endauth
                 <p>

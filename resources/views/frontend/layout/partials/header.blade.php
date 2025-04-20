@@ -250,7 +250,7 @@
             <div class="alert-body">
                 @php
                     $dealer = auth('representative')->user()?->buyingFor ?? auth('web')->user()?->buyingFor;
-                    $dealerName = $dealer ? $dealer->name : 'No dealer selected';
+                    $dealerName = $dealer ? ($dealer->company_name ?? $dealer->name) : null;
                 @endphp
                 @if ($dealer)
                     <div class="d-flex justify-content-between align-items-center">

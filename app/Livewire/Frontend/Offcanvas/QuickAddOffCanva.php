@@ -81,6 +81,35 @@ class QuickAddOffCanva extends Component
             $this->compare_at_price = $firstVariant->compare_at_price;
             $this->variantNotFound = false;
         }
+
+        // Edit the product price based on the dealer's price list
+        if (auth('dealer')->check()) {
+            $dealer = auth('dealer')->user();
+            $percentage = (float)$dealer->priceList?->percentage ?? 0;
+            if ($percentage) {
+                $this->price = (float)$this->price - ((float)$this->price * $percentage);
+                $this->compare_at_price = (float)$this->compare_at_price - ((float)$this->compare_at_price * $percentage);
+            }
+        }
+        // Edit the product price based on the dealer's price list whe nthe represenatative is logged in and have "buyingFor" dealer
+        if (auth('representative')->check() && auth('representative')->user()->buyingFor) {
+            $dealer = auth('representative')->user()->buyingFor;
+            $percentage = (float)$dealer->priceList?->percentage ?? 0;
+            if ($percentage) {
+                $this->price = (float)$this->price - ((float)$this->price * $percentage);
+                $this->compare_at_price = (float)$this->compare_at_price - ((float)$this->compare_at_price * $percentage);
+            }
+        }
+
+        // Edit the product price based on the dealer's price list when the admin is logged in and have "buyingFor" dealer
+        if (auth('web')->check() && auth('web')->user()->buyingFor) {
+            $dealer = auth('web')->user()->buyingFor;
+            $percentage = (float)$dealer->priceList?->percentage ?? 0;
+            if ($percentage) {
+                $this->price = (float)$this->price - ((float)$this->price * $percentage);
+                $this->compare_at_price = (float)$this->compare_at_price - ((float)$this->compare_at_price * $percentage);
+            }
+        }
     }
 
     private function updateProductVariant()
@@ -102,6 +131,16 @@ class QuickAddOffCanva extends Component
             $this->price = "---";
             $this->compare_at_price = null;
             $this->variantNotFound = true;
+        }
+
+        // Edit the product price based on the dealer's price list
+        if (auth('dealer')->check()) {
+            $dealer = auth('dealer')->user();
+            $percentage = (float)$dealer->priceList?->percentage ?? 0;
+            if ($percentage) {
+                $this->price = (float)$this->price - ((float)$this->price * $percentage);
+                $this->compare_at_price = (float)$this->compare_at_price - ((float)$this->compare_at_price * $percentage);
+            }
         }
     }
 
@@ -192,7 +231,7 @@ class QuickAddOffCanva extends Component
 
         if ($item) {
             $item->quantity += $this->quantity;
-            $item->total = $item->quantity * $variant->price;
+            $item->total = $item->quantity * $this->price;
             $item->save();
         } else {
             $dealerId = auth('dealer')->check() ? auth('dealer')->id() : null;
@@ -214,8 +253,8 @@ class QuickAddOffCanva extends Component
                 'image' => $variant->image ?? $this->product->image,
                 'vendor' => $this->product->vendor ? $this->product->vendor->name : null,
                 'sku' => $variant->sku,
-                'price' => $variant->price,
-                'total' => $this->quantity * $variant->price,
+                'price' => $this->price,
+                'total' => $this->quantity * $this->price,
                 'quantity' => $this->quantity,
                 'attributes' => $variant->attributeValues->pluck('value', 'attribute.name')->toJson(),
             ]);

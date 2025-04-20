@@ -59,13 +59,25 @@ class DealerSelectionModal extends Component
                 ->where('status', true)
                 ->where('referal_id', auth('representative')->user()->id)
                 ->when($this->search, function ($query) {
-                    return $query->where('name', 'like', '%' . $this->search . '%');
+                    return $query->where('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('email', 'like', '%' . $this->search . '%')
+                        ->orWhere('phone', 'like', '%' . $this->search . '%')
+                        ->orWhere('address', 'like', '%' . $this->search . '%')
+                        ->orWhere('city', 'like', '%' . $this->search . '%')
+                        ->orWhere('state', 'like', '%' . $this->search . '%')
+                        ->orWhere('company_name', 'like', '%' . $this->search . '%');
                 });
         } elseif (auth('web')->check()) {
             $dealers = Dealer::where('is_approved', true)
                 ->where('status', true)
                 ->when($this->search, function ($query) {
-                    return $query->where('name', 'like', '%' . $this->search . '%');
+                    return $query->where('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('email', 'like', '%' . $this->search . '%')
+                        ->orWhere('phone', 'like', '%' . $this->search . '%')
+                        ->orWhere('address', 'like', '%' . $this->search . '%')
+                        ->orWhere('city', 'like', '%' . $this->search . '%')
+                        ->orWhere('state', 'like', '%' . $this->search . '%')
+                        ->orWhere('company_name', 'like', '%' . $this->search . '%');
                 });
         }
 
