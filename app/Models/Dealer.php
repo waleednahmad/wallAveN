@@ -45,7 +45,7 @@ class Dealer extends Authenticatable implements MustVerifyEmail
     public function priceList()
     {
         return $this->hasOne(PriceList::class, 'id', 'price_list_id')
-                    ->selectRaw('id, percentage / 100 as percentage');
+            ->selectRaw('id, percentage / 100 as percentage, name');
     }
 
     // ==================

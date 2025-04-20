@@ -18,6 +18,15 @@
     padding-right: 0 !important;
 }
 
+.form-check .form-check-input[type="checkbox"] {
+    width: 1.3em !important;
+    height: 1.3em !important;
+}
+.form-check.form-switch .form-check-input[type="checkbox"] {
+    width: 2em !important;
+    height: 1em !important;
+}
+
 .table-li-item {
     flex: 0 0 32%;
 }

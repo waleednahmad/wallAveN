@@ -52,6 +52,22 @@
             <livewire:dashboard.dealers.show-dealer />
         </div>
     </div>
+
+    {{-- SetPrice List --}}
+    {{-- priceListMoodalModal --}}
+    <div class="modal fade" id="priceListMoodal" tabindex="-1" aria-labelledby="priceListMoodalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="priceListMoodalLabel">
+                        Set Price List For Dealers
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <livewire:dashboard.dealers.set-price-list-modal />
+            </div>
+        </div>
+    </div>
 @endsection
 
 
@@ -78,6 +94,24 @@
                 offcanvas.show();
                 let dealer = event[0];
                 Livewire.dispatch('setDealer', dealer);
+            });
+
+            // ============== Open Accept Order Modal ==============
+            Livewire.on('openPriceListModal', (event) => {
+                let modal = new bootstrap.Modal(document.getElementById('priceListMoodal'));
+                modal.show();
+
+                let dealers = event.dealers ? Array.from(event.dealers) : [];
+                Livewire.dispatch('setDealers', {
+                    dealers
+                });
+            });
+
+            // ============== Open Send Order MOdal Bulk ==============
+
+            // ============== Close Accept Order Modal ==============
+            Livewire.on('closePriceListMoodal', (event) => {
+                bootstrap.Modal.getInstance(document.getElementById('priceListMoodal')).hide();
             });
         });
     </script>

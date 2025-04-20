@@ -4,6 +4,7 @@ namespace App\Livewire\Tables;
 
 use App\Mail\DealerAccepted;
 use App\Models\Dealer;
+use App\Models\PriceList;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
@@ -24,6 +25,7 @@ final class DealerTable extends PowerGridComponent
 
     public function setUp(): array
     {
+        $this->showCheckBox();
 
         return [
             PowerGrid::header()
@@ -37,10 +39,33 @@ final class DealerTable extends PowerGridComponent
         ];
     }
 
+    public function header(): array
+    {
+        return [
+            Button::add('setPriceList')
+                ->slot('Set Price List (<span x-text="window.pgBulkActions.count(\'' . $this->tableName . '\')"></span>)')
+                ->class('btn btn-success')
+                ->dispatch('setPriceList.' . $this->tableName, []),
+        ];
+    }
+
+    #[On('setPriceList.{tableName}')]
+    public function setPriceList(): void
+    {
+        $selectedDealers = "window.pgBulkActions.get('" . $this->tableName . "')";
+        $this->js("
+            if ({$selectedDealers}.length === 0) {
+                toastr.error('No dealers selected');
+                return;
+            }
+            Livewire.dispatch('openPriceListModal', { dealers: {$selectedDealers} });
+        ");
+    }
+
     #[On('reloadDealers')]
     public function datasource(): Builder
     {
-        return Dealer::query();
+        return Dealer::with('priceList');
     }
 
     public function relationSearch(): array
@@ -59,8 +84,6 @@ final class DealerTable extends PowerGridComponent
                     return "<span class='badge badge-danger'>No</span>";
                 }
             })
-
-
             ->add('resale_certificate', function ($row) {
                 if ($row->resale_certificate && file_exists(public_path($row->resale_certificate))) {
                     return "<a href='" . asset($row->resale_certificate) . "' target='_blank'>View</a>";
@@ -70,6 +93,9 @@ final class DealerTable extends PowerGridComponent
             })
             ->add('row_num', function ($row) {
                 return $this->getRowNum($row);
+            })
+            ->add('price_list_id', function ($row) {
+                return $row->priceList ? $row->priceList->name : '-';
             })
             ->add('approved_at', fn($row) => $row->approved_at ? Carbon::parse($row->approved_at)->format('Y-m-d') : '-')
             ->add('created_at');
@@ -92,6 +118,8 @@ final class DealerTable extends PowerGridComponent
             Column::make('Phone', 'phone')
                 ->sortable()
                 ->searchable(),
+
+            Column::make('Price List', 'price_list_id'),
 
             Column::make('is approved', 'is_approved'),
 
@@ -125,6 +153,11 @@ final class DealerTable extends PowerGridComponent
 
             Filter::boolean('status')
                 ->label('active', 'inactive'),
+
+            Filter::multiSelect('price_list_id', 'price_list_id')
+                ->dataSource(PriceList::whereHas('dealers')->get())
+                ->optionValue('id')
+                ->optionLabel('name'),
         ];
     }
 
@@ -213,6 +246,7 @@ final class DealerTable extends PowerGridComponent
                 ->slot('<i class="fas fa-eye"></i>')
                 ->class('btn btn-primary btn-sm rounded')
                 ->dispatch('show', ['rowId' => $row->id]),
+
         ];
     }
 
