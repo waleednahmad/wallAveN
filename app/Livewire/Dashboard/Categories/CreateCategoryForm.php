@@ -22,6 +22,12 @@ class CreateCategoryForm extends Component
     #[Validate(['nullable', 'image'])]
     public $image;
 
+    #[Validate(['nullable', 'image'])]
+    public $breadcrumb_image;
+
+    #[Validate(['nullable', 'string'])]
+    public $description;
+
     public function save()
     {
 
@@ -32,9 +38,11 @@ class CreateCategoryForm extends Component
             'slug' => $this->generateUniqueSlug(new Category(), $this->name, 'slug'),
             'status' => $this->status,
             'image' => $this->image ? $this->saveImage($this->image, 'categories') : null,
+            'breadcrumb_image' => $this->breadcrumb_image ? $this->saveImage($this->breadcrumb_image, 'categories/breadcrumbs') : null,
+            'description' => $this->description,
         ]);
 
-        $this->reset(['name', 'status', 'image']);
+        $this->reset(['name', 'status', 'image', 'breadcrumb_image', 'description']);
         $this->dispatch('success', 'Category created successfully.');
         $this->dispatch('refreshCategories');
         $this->dispatch('closeCreateForm');

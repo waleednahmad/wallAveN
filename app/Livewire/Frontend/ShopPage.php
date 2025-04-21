@@ -27,20 +27,23 @@ class ShopPage extends Component
     public $selectedAttributeValues = [];
     public $productTypes = [];
     public $subCategories = [];
-
+    
     public $rangePrice;
     public $minValue;
     public $maxValue;
-
+    
+    #[Url()]
+    public $category ;
+    public $selectedCategory;
 
 
     public function mount()
     {
         $category = request()->input('category', '');
         if ($category) {
-            $category = Category::where('slug', $category)->first();
-            if ($category) {
-                $this->selectedCategories = [$category->id];
+            $this->selectedCategory = Category::where('slug', $category)->first();
+            if ($this->selectedCategory) {
+                $this->selectedCategories = [$this->selectedCategory->id];
             } else {
                 $this->selectedCategories = [];
             }
@@ -55,6 +58,8 @@ class ShopPage extends Component
                 $this->selectedSubCategories = [];
             }
         }
+
+
 
 
 
@@ -154,6 +159,31 @@ class ShopPage extends Component
     public function applySearch()
     {
         $this->search = $this->searchQuery; // Update the search property with the query
+    }
+
+    public function selectCategory($slug)
+    {
+        $category = Category::where('slug', $slug)->first();
+        if ($category) {
+            $this->selectedCategory = $category;
+            $this->selectedCategories = [$category->id];
+            $this->category = $category->slug;
+            $this->selectedSubCategories = [];
+            $this->selectedProductTypes = [];
+            $this->selectedAttributeValues = [];
+            $this->updateSubCategories();
+            // Update the URL with the selected category slug
+            // $this->redirect(request()->url() . '?category=' . $category->slug, navigate: true);
+        } else {
+            $this->selectedCategory = null;
+            $this->selectedCategories = [];
+            $this->category = null;
+            $this->selectedSubCategories = [];
+            $this->selectedProductTypes = [];
+            $this->selectedAttributeValues = [];
+            $this->subCategories = [];
+            $this->productTypes = [];
+        }
     }
 
     #[Computed()]

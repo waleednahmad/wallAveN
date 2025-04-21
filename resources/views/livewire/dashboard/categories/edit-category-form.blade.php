@@ -46,6 +46,41 @@
                 </div>
             </div>
 
+            {{-- Breadcrumb Image --}}
+            <div class="col-12">
+                <div class="form-group mb-3">
+                    <label for="breadcrumb_image">Breadcrumb Image</label>
+                    <input type="file" id="breadcrumb_image" accept="image/*" wire:model="breadcrumb_image"
+                        class="form-control">
+
+                    @error('breadcrumb_image')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                    @if ($breadcrumb_image)
+                        <div class="mt-2">
+                            <img src="{{ $breadcrumb_image->temporaryUrl() }}" alt="Breadcrumb Image"
+                                style="max-width: 200px;">
+                        </div>
+                    @elseif($category?->breadcrumb_image && file_exists(public_path($category?->breadcrumb_image)))
+                        <div class="mt-2">
+                            <img src="{{ asset($category->breadcrumb_image) }}" alt="Breadcrumb Image"
+                                style="max-width: 200px;">
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            {{-- Description --}}
+            <div class="col-12">
+                <div class="form-group mb-3">
+                    <label for="description">Description</label>
+                    <textarea id="description" wire:model.lazy="description" class="form-control" rows="3"></textarea>
+                    @error('description')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+
             {{-- Status --}}
             <div class="col-12">
                 <div class="form-group">

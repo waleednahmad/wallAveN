@@ -12,7 +12,7 @@ use Livewire\WithFileUploads;
 
 class EditCategoryForm extends Component
 {
-    use GenerateSlugsTrait, WithFileUploads , UploadImageTrait;
+    use GenerateSlugsTrait, WithFileUploads, UploadImageTrait;
 
     public $category;
     #[Validate(['required', 'string', 'max:255'])]
@@ -24,23 +24,33 @@ class EditCategoryForm extends Component
     #[Validate(['nullable', 'image'])]
     public $image;
 
+    #[Validate(['nullable', 'image'])]
+    public $breadcrumb_image;
+
+    #[Validate(['nullable', 'string'])]
+    public $description;
+
     #[On('editCategory')]
     public function edit(Category $category)
     {
         $this->category = $category;
         $this->name = $category->name;
         $this->status = $category->status;
+        $this->breadcrumb_image = null;
+        $this->description = $category->description;
     }
 
     public function save()
     {
         $this->validate();
         $old_iamge = $this->category->image;
+        $old_breadcrumb_image = $this->category->breadcrumb_image;
 
         $this->category->update([
             'name' => $this->name,
             'slug' => $this->generateUniqueSlug($this->category, $this->name, 'slug'),
             'status' => $this->status,
+            'description' => $this->description,
         ]);
 
         if ($this->image) {
@@ -50,6 +60,18 @@ class EditCategoryForm extends Component
 
             if ($old_iamge && file_exists(public_path($old_iamge))) {
                 unlink(public_path($old_iamge));
+            }
+        }
+
+
+
+        if ($this->breadcrumb_image) {
+            $this->category->update([
+                'breadcrumb_image' => $this->saveImage($this->breadcrumb_image, 'categories/breadcrumbs'),
+            ]);
+
+            if ($old_breadcrumb_image && file_exists(public_path($old_breadcrumb_image))) {
+                unlink(public_path($old_breadcrumb_image));
             }
         }
 

@@ -40,6 +40,29 @@
                 </div>
             </div>
 
+            {{-- Breadcrumb Image --}}
+            <div class="col-12">
+                <div class="form-group mb-3">
+                    <label for="breadcrumb_image">Breadcrumb Image</label>
+                    <input type="file" accept="image/*" id="breadcrumb_image" wire:model="breadcrumb_image" class="form-control">
+                    @error('breadcrumb_image') <span class="text-danger">{{ $message }}</span> @enderror
+                    @if ($breadcrumb_image)
+                        <div class="mt-2">
+                            <img src="{{ $breadcrumb_image->temporaryUrl() }}" alt="Breadcrumb Image" style="max-width: 200px;">
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            {{-- Description --}}
+            <div class="col-12">
+                <div class="form-group mb-3">
+                    <label for="description">Description</label>
+                    <textarea id="description" wire:model.lazy="description" class="form-control" rows="3"></textarea>
+                    @error('description') <span class="text-danger">{{ $message }}</span> @enderror
+                </div>
+            </div>
+
             {{-- Status --}}
             <div class="col-12">
                 <div class="form-group">
