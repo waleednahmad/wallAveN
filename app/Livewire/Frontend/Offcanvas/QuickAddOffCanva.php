@@ -142,6 +142,26 @@ class QuickAddOffCanva extends Component
                 $this->compare_at_price = (float)$this->compare_at_price - ((float)$this->compare_at_price * $percentage);
             }
         }
+
+        // Edit the product price based on the dealer's price list whe nthe represenatative is logged in and have "buyingFor" dealer
+        if (auth('representative')->check() && auth('representative')->user()->buyingFor) {
+            $dealer = auth('representative')->user()->buyingFor;
+            $percentage = (float)$dealer->priceList?->percentage ?? 0;
+            if ($percentage) {
+                $this->price = (float)$this->price - ((float)$this->price * $percentage);
+                $this->compare_at_price = (float)$this->compare_at_price - ((float)$this->compare_at_price * $percentage);
+            }
+        }
+
+        // Edit the product price based on the dealer's price list when the admin is logged in and have "buyingFor" dealer
+        if (auth('web')->check() && auth('web')->user()->buyingFor) {
+            $dealer = auth('web')->user()->buyingFor;
+            $percentage = (float)$dealer->priceList?->percentage ?? 0;
+            if ($percentage) {
+                $this->price = (float)$this->price - ((float)$this->price * $percentage);
+                $this->compare_at_price = (float)$this->compare_at_price - ((float)$this->compare_at_price * $percentage);
+            }
+        }
     }
 
     public function resetDefaultVariant()
