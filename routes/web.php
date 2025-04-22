@@ -68,10 +68,24 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 
 Route::get('preview-email', function () {
     $order = Order::first();
+    $address = $order->dealer->address ? explode(',', $order->dealer->address)[0] : '---';
+    $city = $order->dealer->city ?? '---';
+    $state = $order->dealer->state ?? '---';
+    $zip_code = $order->dealer->zip_code ?? '---';
+
     return view(
-        'emails.order-status-updated',
+        'emails.new-order-placed-for-dealer',
         [
             'order' => $order,
+            'items' => $order->orderItems,
+            'dealer' => $order->dealer,
+            'email' => $order->dealer->email,
+            'name' => $order->dealer->company_name,
+            'phone' => $order->dealer->phone,
+            'address' => $address,
+            'city' => $city,
+            'state' => $state,
+            'zip_code' => $zip_code,
         ]
     );
 });

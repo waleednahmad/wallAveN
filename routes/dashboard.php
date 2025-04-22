@@ -11,6 +11,7 @@ use App\Http\Controllers\Dashboard\DealerController;
 use App\Http\Controllers\Dashboard\EmployeeController;
 use App\Http\Controllers\Dashboard\InfluencerController;
 use App\Http\Controllers\Dashboard\OrderController;
+use App\Http\Controllers\Dashboard\PageBreadcrumpController;
 use App\Http\Controllers\Dashboard\PaymentPolicyController;
 use App\Http\Controllers\Dashboard\PriceListController;
 use App\Http\Controllers\Dashboard\ProductController;
@@ -97,6 +98,11 @@ Route::prefix('super_admin')
                 // Attributes Routes :
                 // ---------------------
                 Route::resource('attributes', AttributeController::class)->only(['index']);
+
+                // Page Breadcrumps Routes :
+                // ---------------------
+                Route::resource('page-breadcrumps', PageBreadcrumpController::class)->only(['index']);
+
 
                 // Price List Routes :
                 // ---------------------

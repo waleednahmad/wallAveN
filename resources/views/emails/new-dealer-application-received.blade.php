@@ -21,7 +21,12 @@
             👤 <strong>Name:</strong> {{ $name }} <br>
             ✉️ <strong>Email:</strong> <a href="mailto:{{ $email }}"
                 style="color: #d19c4b; text-decoration: none;">{{ $email }}</a> <br>
-            📞 <strong>Phone:</strong> <a href="tel:{{ $phone }}">{{ $phone }}</a>
+            📞 <strong>Phone:</strong> <a href="tel:{{ $phone }}">{{ $phone }}</a> <br>
+            🏠 <strong>Address:</strong>
+            {{ $address }}<br>
+            {{ $city }}{{ $city != '---' ? ',' : '' }}
+            {{ $state }}{{ $state != '---' ? ' ' : '' }}
+            {{ $zip_code }}
         </p>
         <br>
         <hr>

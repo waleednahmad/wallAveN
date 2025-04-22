@@ -39,12 +39,23 @@ class NewOrderPlacedForDealer extends Mailable
      */
     public function content(): Content
     {
+        $address = $this?->order?->dealer->address ? explode(',', $this?->order?->dealer->address)[0] : '---';
+        $city = $this?->order?->dealer->city ?? '---';
+        $state = $this?->order?->dealer->state ?? '---';
+        $zip_code = $this?->order?->dealer->zip_code ?? '---';
         return new Content(
             view: 'emails.new-order-placed-for-dealer',
             with: [
-                'dealer' => $this->order->dealer,
+                'dealer' => $this?->order?->dealer,
                 'items' => $this->order->orderItems,
                 'order' => $this->order,
+                'email' => $this?->order?->dealer->email,
+                'name' => $this?->order?->dealer->company_name,
+                'phone' => $this?->order?->dealer->phone,
+                'address' => $address,
+                'city' => $city,
+                'state' => $state,
+                'zip_code' => $zip_code,
             ],
         );
     }

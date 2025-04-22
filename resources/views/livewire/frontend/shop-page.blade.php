@@ -44,9 +44,14 @@
                 </div>
             </div>
         </div>
-    @else
+    @elseif($breadcrumpData)
+        @php
+            $brImage = $breadcrumpData->image
+                ? asset($breadcrumpData->image)
+                : 'https://goldenrugsinc.com/assets/img/inner-page/breadcrumb-image2.jpg?v=1';
+        @endphp
         <div class="breadcrumb-section2"
-            style="background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.28)), url(https://goldenrugsinc.com/assets/img/inner-page/breadcrumb-image2.jpg?v=1);">
+            style="background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.28)), url({{ $brImage }});">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12 d-flex">
@@ -62,7 +67,9 @@
                                         </svg>
                                     </a>
                                 </li>
-                                <li>Our Catalog</li>
+                                <li>
+                                    {{ $breadcrumpData->title }}
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -70,13 +77,12 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="breadcrumb-content text-white">
-                            <h1>Our Catalog</h1>
-                            <p class="text-white">Our wholesale catalog offers a wide range of high-quality home décor,
-                                including area rugs,
-                                furniture, and accessories. With diverse styles and categories, it’s designed to meet
-                                the
-                                needs
-                                of retailers and businesses, providing exceptional value at competitive prices.</p>
+                            <h1>
+                                {{ $breadcrumpData->title }}
+                            </h1>
+                            <p class="text-white">
+                                {{ $breadcrumpData->description }}
+                            </p>
                         </div>
                     </div>
                 </div>

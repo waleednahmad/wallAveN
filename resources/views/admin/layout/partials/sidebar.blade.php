@@ -204,6 +204,37 @@
                         </p>
                     </a>
                 </li>
+                <li @class([
+                    'nav-item',
+                    'menu-open' => request()->routeIs('dashboard.page-breadcrumps.*'),
+                ])>
+                    <a href="#" @class([
+                        'nav-link',
+                        'active' => request()->routeIs('dashboard.page-breadcrumps.*'),
+                    ])>
+                        <i class="nav-icon fas fa-file-alt"></i>
+                        <p>
+                            Front Pages
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+                        {{-- Page Breadcrumps --}}
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.page-breadcrumps.index') }}" @class([
+                                'nav-link',
+                                'active' => request()->routeIs('dashboard.page-breadcrumps.*'),
+                            ])>
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Page Breadcrumps
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
 
                 {{-- -------------------- Public Settings -------------------- --}}
                 <li class="nav-item">
@@ -217,7 +248,6 @@
                         </p>
                     </a>
                 </li>
-
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

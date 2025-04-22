@@ -38,12 +38,20 @@ class NewDealerApplicationReceived extends Mailable
      */
     public function content(): Content
     {
+        $address = $this->dealer->address ? explode(',', $this->dealer->address)[0] : '---';
+        $city = $this->dealer->city ?? '---';
+        $state = $this->dealer->state ?? '---';
+        $zip_code = $this->dealer->zip_code ?? '---';
         return new Content(
             view: 'emails.new-dealer-application-received',
             with: [
                 'email' => $this->dealer->email,
-                'name' => $this->dealer->name,
+                'name' => $this->dealer->company_name,
                 'phone' => $this->dealer->phone,
+                'address' => $address,
+                'city' => $city,
+                'state' => $state,
+                'zip_code' => $zip_code,
             ],
         );
     }
