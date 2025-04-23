@@ -70,7 +70,8 @@
             Website:
         </strong>
         <br>
-        <a href="{{ $dealer?->website ? (parse_url($dealer->website, PHP_URL_SCHEME) ? $dealer->website : '//' . $dealer->website) : '#' }}" target="_blank">
+        <a href="{{ $dealer?->website ? (parse_url($dealer->website, PHP_URL_SCHEME) ? $dealer->website : '//' . $dealer->website) : '#' }}"
+            target="_blank">
             {{ $dealer?->website ? strtolower(parse_url($dealer->website, PHP_URL_HOST) . parse_url($dealer->website, PHP_URL_PATH)) : '-' }}
         </a>
     </p>
@@ -80,6 +81,19 @@
         </strong>
         <br>
         {{ $dealer?->business_type ?? '-' }}
+    </p>
+    <p class="card-text">
+        <strong>
+            Resale Certificate:
+        </strong>
+        <br>
+        @if ($dealer?->resale_certificate && file_exists(public_path($dealer?->resale_certificate)))
+            <a href="{{ asset($dealer?->resale_certificate) }} " target='_blank'>
+                View
+            </a>
+        @else
+            -
+        @endif
     </p>
     <p class="card-text">
         <strong>

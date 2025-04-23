@@ -82,7 +82,7 @@
                             </td>
                             <td data-label="Price">
                                 <span class="table-text">
-                                    ${{ $order->total }}
+                                    ${{ number_format($order->total, 2) }}
                                 </span>
                             </td>
 

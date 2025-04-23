@@ -33,6 +33,7 @@
                     <h1 class="modal-title fs-5" id="previewOrderLabel">
                         Order Details
                     </h1>
+      
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <livewire:dashboard.orders.preview-order-modal />
@@ -60,9 +61,30 @@
 
 @push('scripts')
     <script>
+        function printOrderDetails() {
+            const printContents = document.querySelector('#previewOrder .invoice').innerHTML;
+            const originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+            location.reload(); // To restore event listeners and scripts
+        }
+
+        function printOrderFromTable(orderId) {
+            console.log('Printing order with ID:', orderId);
+            // Open the preview modal and set the order, then print after a short delay
+            Livewire.dispatch('showOrderDetails', [{'order' : orderId}]);
+            Livewire.dispatch('setOrder', orderId);
+
+            setTimeout(() => {
+                printOrderDetails();
+            }, 2000); // Adjust delay if needed for modal content to load
+        }
+
         document.addEventListener('livewire:init', () => {
             // ============== Open Preview Modal ==============
             Livewire.on('showOrderDetails', (event) => {
+                console.log(event)
                 new bootstrap.Modal(document.getElementById('previewOrder')).show();
                 Livewire.dispatch('setOrder', event[0]);
             });

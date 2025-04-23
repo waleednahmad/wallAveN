@@ -39,7 +39,7 @@ final class OrderTable extends PowerGridComponent
     #[On('refreshOrders')]
     public function datasource(): Builder
     {
-        return Order::with('dealer');
+        return Order::with('dealer')->orderBy('created_at', 'desc');
     }
 
     public function relationSearch(): array
@@ -51,8 +51,8 @@ final class OrderTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('dealer_name', function (Order $order) {
-                return $order->dealer ? $order->dealer->name : '';
+            ->add('company_name', function (Order $order) {
+                return $order->dealer ? $order->dealer->company_name : '';
             })
             ->add('dealer_email', function (Order $order) {
                 return $order->dealer ? $order->dealer->email : '';
@@ -79,7 +79,7 @@ final class OrderTable extends PowerGridComponent
             })
 
             ->add('total', function (Order $order) {
-                return "$ " . number_format($order->total, 2);
+                return "$" . number_format($order->total, 2);
             })
 
 
@@ -91,8 +91,8 @@ final class OrderTable extends PowerGridComponent
         return [
             Column::make('Id', 'id'),
 
-            Column::make("Dealer Name", 'dealer_name'),
-            // ->searchableRaw('dealer_name like ?'),
+            Column::make("Company Name", 'company_name'),
+            // ->searchableRaw('company_name like ?'),
 
             Column::make('Dealer Email', 'dealer_email'),
             // ->searchableRaw('dealer.email like ?'),
@@ -176,6 +176,11 @@ final class OrderTable extends PowerGridComponent
                 ->slot('<i class="fas fa-edit"></i>')
                 ->class('btn btn-primary btn-sm rounded')
                 ->dispatch('editStatus', ['rowId' => $row->id]),
+
+            // Button::make('print')
+            //     ->slot('<i class="fas fa-print"></i>')
+            //     ->class('btn btn-secondary btn-sm rounded')
+            //     ->attributes(['onclick' => 'printOrderFromTable(' . $row->id . ')']),
         ];
     }
 

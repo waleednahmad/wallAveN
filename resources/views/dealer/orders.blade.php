@@ -45,6 +45,16 @@
 
 @push('scripts')
     <script>
+        function printOrderDetails() {
+            const printContents = document.querySelector('#previewOrder .invoice').innerHTML;
+            const originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+            location.reload(); // To restore event listeners and scripts
+        }
+
+
         document.addEventListener('livewire:init', () => {
             // ============== Open Preview Modal ==============
             Livewire.on('showOrderDetails', (event) => {

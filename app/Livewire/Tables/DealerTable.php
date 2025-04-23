@@ -110,6 +110,9 @@ final class DealerTable extends PowerGridComponent
             Column::make('Name', 'name')
                 ->sortable()
                 ->searchable(),
+            Column::make('Company Name', 'company_name')
+                ->sortable()
+                ->searchable(),
 
             Column::make('Email', 'email')
                 ->sortable()
@@ -128,7 +131,7 @@ final class DealerTable extends PowerGridComponent
                 ->searchable(),
 
 
-            Column::make('Resale Certificate', 'resale_certificate'),
+            // Column::make('Resale Certificate', 'resale_certificate'),
 
             Column::make('status', 'status')
                 ->toggleable(
