@@ -65,7 +65,7 @@ final class DealerTable extends PowerGridComponent
     #[On('reloadDealers')]
     public function datasource(): Builder
     {
-        return Dealer::with('priceList');
+        return Dealer::with('priceList')->orderBy('created_at', 'desc');
     }
 
     public function relationSearch(): array
@@ -105,21 +105,19 @@ final class DealerTable extends PowerGridComponent
     {
         return [
             Column::make('#', 'row_num'),
-
-
-            Column::make('Name', 'name')
-                ->sortable()
-                ->searchable(),
-            Column::make('Company Name', 'company_name')
-                ->sortable()
+            
+            Column::make('Name', 'company_name')
                 ->searchable(),
 
             Column::make('Email', 'email')
-                ->sortable()
+
+                ->searchable(),
+
+            Column::make('Address', 'address')
                 ->searchable(),
 
             Column::make('Phone', 'phone')
-                ->sortable()
+
                 ->searchable(),
 
             Column::make('Price List', 'price_list_id'),
@@ -127,7 +125,6 @@ final class DealerTable extends PowerGridComponent
             Column::make('is approved', 'is_approved'),
 
             Column::make('Approved at', 'approved_at')
-                ->sortable()
                 ->searchable(),
 
 

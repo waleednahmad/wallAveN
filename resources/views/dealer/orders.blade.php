@@ -15,10 +15,15 @@
     <div class="modal fade" id="previewOrder" tabindex="-1" aria-labelledby="previewOrderLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header position-relative">
                     <h1 class="modal-title fs-5" id="previewOrderLabel">
                         Order Details
                     </h1>
+
+                    <button type="button" class="btn btn-primary me-2 float-end position-absolute" style="right: 45px"
+                        onclick="printOrderDetails()">
+                        <i class="bi bi-printer"></i> 
+                    </button>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <livewire:frontend.dealer.dashboard.preview-order-modal />

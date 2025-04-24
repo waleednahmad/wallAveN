@@ -29,11 +29,15 @@
     <div class="modal fade" id="previewOrder" tabindex="-1" aria-labelledby="previewOrderLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header position-relative">
                     <h1 class="modal-title fs-5" id="previewOrderLabel">
                         Order Details
                     </h1>
-      
+
+                    <button type="button" class="btn btn-primary me-2 float-end position-absolute" style="right: 45px"
+                        onclick="printOrderDetails()">
+                        <i class="fas fa-print"></i>
+                    </button>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <livewire:dashboard.orders.preview-order-modal />
@@ -73,7 +77,9 @@
         function printOrderFromTable(orderId) {
             console.log('Printing order with ID:', orderId);
             // Open the preview modal and set the order, then print after a short delay
-            Livewire.dispatch('showOrderDetails', [{'order' : orderId}]);
+            Livewire.dispatch('showOrderDetails', [{
+                'order': orderId
+            }]);
             Livewire.dispatch('setOrder', orderId);
 
             setTimeout(() => {

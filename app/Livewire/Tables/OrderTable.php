@@ -104,15 +104,12 @@ final class OrderTable extends PowerGridComponent
                 ->searchable(),
 
             Column::make('total', 'total')
-                ->sortable()
                 ->searchable(),
 
             Column::make('quantity', 'quantity')
-                ->sortable()
                 ->searchable(),
 
             Column::make('Created at', 'created_at')
-                ->sortable()
                 ->searchable(),
 
             Column::action('Action')

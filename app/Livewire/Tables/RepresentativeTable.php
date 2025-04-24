@@ -40,7 +40,7 @@ final class RepresentativeTable extends PowerGridComponent
     #[On('reloadRepresentatives')]
     public function datasource(): Builder
     {
-        return Representative::query();
+        return Representative::orderBy('created_at', 'desc');
     }
 
     public function relationSearch(): array
@@ -71,18 +71,15 @@ final class RepresentativeTable extends PowerGridComponent
         return [
             Column::make('#', 'row_num'),
             Column::make('Name', 'name')
-                ->searchable()
-                ->sortable(),
+                ->searchable(),
             Column::make('Email', 'email')
-                ->searchable()
-                ->sortable(),
+                ->searchable(),
             Column::make('Phone', 'phone')
-                ->searchable()
-                ->sortable(),
+                ->searchable(),
             Column::make('is approved', 'is_approved'),
 
             Column::make('Approved at', 'approved_at')
-                ->sortable()
+
                 ->searchable(),
             Column::make('status', 'status')
                 ->toggleable(

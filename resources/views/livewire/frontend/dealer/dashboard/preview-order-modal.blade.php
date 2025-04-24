@@ -173,8 +173,11 @@
                                                         style="width: 90px; height: 90px;">
                                                 @endif
                                             </td>
-                                            <td style="max-width: fit-content">
-                                                {{ $item->sku ?? '---' }}
+                                            <td style="max-width: fit-content ; font-size:14px; text-wrap: pretty;">
+
+                                                <small>
+                                                    {{ $item->sku ?? '---' }}
+                                                </small>
                                             </td>
                                             <td style="max-width: 110px; text-wrap: pretty;">
                                                 {{ $item->name ?? '---' }}
@@ -196,7 +199,6 @@
                                             </td>
                                             <td>
                                                 <b>$</b>{{ number_format($item->total, 2) ?? '---' }}
-
                                             </td>
                                         </tr>
                                     @endforeach
@@ -223,10 +225,5 @@
                 </div>
             </div>
         </div><!-- /.col -->
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-primary me-2" onclick="printOrderDetails()">
-            <i class="bi bi-printer"></i> Print
-        </button>
     </div>
 </div>

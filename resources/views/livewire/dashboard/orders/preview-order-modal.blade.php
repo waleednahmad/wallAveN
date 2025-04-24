@@ -175,9 +175,11 @@
                                                 @endif
                                             </td>
                                             <td
-                                                style="max-width: fit-content ; text-wrap: pretty; text-transform: lowercase">
+                                                style="max-width: fit-content ; font-size:14px; text-wrap: pretty;">
 
-                                                {{ $item->sku ?? '---' }}
+                                                <small>
+                                                    {{ $item->sku ?? '---' }}
+                                                </small>
                                             </td>
                                             <td style="max-width: 110px; text-wrap: pretty;">
                                                 {{ $item->name ?? '---' }}
@@ -215,23 +217,6 @@
                     </div>
                 @endif
                 <div class="row">
-                    <!-- accepted payments column -->
-                    {{-- <div class="col-6">
-                        <p class="lead">Payment Methods:</p>
-                        <img src="{{ asset('dashboard/dist/img/credit/visa.png') }}" alt="Visa">
-                        <img src="{{ asset('dashboard/dist/img/credit/mastercard.png') }}" alt="Mastercard">
-                        <img src="{{ asset('dashboard/dist/img/credit/american-express.png') }}" alt="American Express">
-                        <img src="{{ asset('dashboard/dist/img/credit/paypal2.png') }}" alt="Paypal">
-    
-                        <p class="shadow-none text-muted well well-sm" style="margin-top: 10px;">
-                            Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya
-                            handango imeem
-                            plugg
-                            dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
-                        </p>
-                    </div> --}}
-                    <!-- /.col -->
-
                     {{-- ============ Previrer loading spinner ======== --}}
                     <div class="text-center col-12" wire:loading>
                         <div class="spinner-border text-primary" role="status">
@@ -242,10 +227,5 @@
                 <!-- /.row -->
             </div>
         </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-primary me-2" onclick="printOrderDetails()">
-            <i class="bi bi-printer"></i> Print
-        </button>
     </div>
 </div>
