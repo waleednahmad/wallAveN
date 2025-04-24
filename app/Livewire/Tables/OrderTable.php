@@ -174,10 +174,10 @@ final class OrderTable extends PowerGridComponent
                 ->class('btn btn-primary btn-sm rounded')
                 ->dispatch('editStatus', ['rowId' => $row->id]),
 
-            // Button::make('print')
-            //     ->slot('<i class="fas fa-print"></i>')
-            //     ->class('btn btn-secondary btn-sm rounded')
-            //     ->attributes(['onclick' => 'printOrderFromTable(' . $row->id . ')']),
+            Button::make('print')
+                ->slot('<i class="fas fa-print"></i>')
+                ->class('btn btn-secondary btn-sm rounded')
+                ->route('dashboard.orders.print', ['order' => $row->id], '_blank'),
         ];
     }
 

@@ -35,7 +35,7 @@
                     </h1>
 
                     <button type="button" class="btn btn-primary me-2 float-end position-absolute" style="right: 45px"
-                        onclick="printOrderDetails()">
+                        onclick="openPrintOrder()">
                         <i class="fas fa-print"></i>
                     </button>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -74,6 +74,14 @@
             location.reload(); // To restore event listeners and scripts
         }
 
+        let currentOrderId = null;
+
+        function openPrintOrder() {
+            if (currentOrderId) {
+                window.open(`/super_admin/orders/${currentOrderId}/print`, '_blank');
+            }
+        }
+
         function printOrderFromTable(orderId) {
             console.log('Printing order with ID:', orderId);
             // Open the preview modal and set the order, then print after a short delay
@@ -90,9 +98,9 @@
         document.addEventListener('livewire:init', () => {
             // ============== Open Preview Modal ==============
             Livewire.on('showOrderDetails', (event) => {
-                console.log(event)
                 new bootstrap.Modal(document.getElementById('previewOrder')).show();
                 Livewire.dispatch('setOrder', event[0]);
+                currentOrderId = event[0].order; // Store the current order ID
             });
 
             // ============== Open Change Status MOdal ==============

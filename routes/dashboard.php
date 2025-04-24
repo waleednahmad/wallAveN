@@ -74,6 +74,7 @@ Route::prefix('super_admin')
                 //  Orders Routes :
                 // ------------------------------------------
                 Route::resource('orders', OrderController::class)->only(['index']);
+                Route::get('orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
 
                 // Public Settings Routes :
                 // ------------------------------------------
