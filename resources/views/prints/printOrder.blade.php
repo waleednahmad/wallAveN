@@ -196,11 +196,11 @@
                         <th>Image</th>
                         <th>SKU</th>
                         <th>Name</th>
-                        <th>Qty</th>
                         @foreach ($attributeKeys as $key)
                             <th>{{ ucwords($key) }}</th>
                         @endforeach
-                        <th>Price/Unit</th>
+                        <th>Qty</th>
+                        <th>Price</th>
                         <th>Total</th>
                     </tr>
                 </thead>
@@ -218,14 +218,21 @@
                                 @endif
                             </td>
                             <td><small>{{ $item->sku ?? '---' }}</small></td>
-                            <td>{{ $item->name ?? '---' }}</td>
-                            <td>{{ $item->quantity }}</td>
+                            <td>
+                                @php
+                                    $slug = $item?->product?->slug;
+                                @endphp
+                                <a href="{{ route('frontend.product', $slug) }}" target="_blank">
+                                    {{ $item->name ?? '---' }}
+                                </a>
+                            </td>
                             @foreach ($attributeKeys as $key)
                                 <td>
                                     @php $value = json_decode($item->attributes, true)[$key] ?? ' '; @endphp
                                     {{ $value }}
                                 </td>
                             @endforeach
+                            <td>{{ $item->quantity }}</td>
                             <td><b>$</b>{{ number_format($item->price, 2) ?? '---' }}</td>
                             <td><b>$</b>{{ number_format($item->total, 2) ?? '---' }}</td>
                         </tr>

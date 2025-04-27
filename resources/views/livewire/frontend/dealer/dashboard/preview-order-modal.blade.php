@@ -143,14 +143,14 @@
                                         </th>
                                         <th>SKU</th>
                                         <th>Name</th>
-                                        <th>Qty</th>
                                         @foreach ($attributeKeys as $key)
                                             <th>
                                                 {{ ucwords($key) }}
                                             </th>
                                         @endforeach
+                                        <th>Qty</th>
                                         <th>
-                                            Price/Unit
+                                            Price
                                         </th>
                                         <th>
                                             Total
@@ -180,12 +180,15 @@
                                                 </small>
                                             </td>
                                             <td style="max-width: 110px; text-wrap: pretty;">
-                                                {{ $item->name ?? '---' }}
+                                                @php
+                                                    $slug = $item?->product?->slug;
+                                                @endphp
+                                                <a href="{{ route('frontend.product', $slug) }}" target="_blank">
+                                                    {{ $item->name ?? '---' }}
+                                                </a>
                                             </td>
 
-                                            <td>
-                                                {{ $item->quantity }}
-                                            </td>
+
                                             @foreach ($attributeKeys as $key)
                                                 <td style="border: 1px solid #ddd; padding: 3px;">
                                                     @php
@@ -194,6 +197,9 @@
                                                     {{ $value }}
                                                 </td>
                                             @endforeach
+                                            <td>
+                                                {{ $item->quantity }}
+                                            </td>
                                             <td>
                                                 <b>$</b>{{ number_format($item->price, 2) ?? '---' }}
                                             </td>

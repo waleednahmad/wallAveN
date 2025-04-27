@@ -74,7 +74,7 @@ Route::get('preview-email', function () {
     $zip_code = $order->dealer->zip_code ?? '---';
 
     return view(
-        'emails.new-order-placed-for-dealer',
+        'emails.new-dealer-application-received',
         [
             'order' => $order,
             'items' => $order->orderItems,

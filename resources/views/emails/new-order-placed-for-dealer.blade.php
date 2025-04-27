@@ -31,7 +31,8 @@
             <section style="float: left; width: 32%; margin-right: 2%;">
                 <p>
                     <strong>Name:</strong> {{ $name }} <br>
-                    <span style="font-weight: bold; color: #333; display: block; margin-bottom: 4px; font-size: 14px; margin-top: 7px;">
+                    <span
+                        style="font-weight: bold; color: #333; display: block; margin-bottom: 4px; font-size: 14px; margin-top: 7px;">
                         BILL TO
                     </span>
                     {{ $address }}<br>
@@ -43,7 +44,8 @@
             <section style="float: left; width: 32%; margin-right: 2%;">
                 <p>
                     <strong>Phone:</strong> <a href="tel:{{ $phone }}">{{ $phone }}</a> <br>
-                    <span style="font-weight: bold; color: #333; display: block; margin-bottom: 4px; font-size: 14px; margin-top: 7px;">
+                    <span
+                        style="font-weight: bold; color: #333; display: block; margin-bottom: 4px; font-size: 14px; margin-top: 7px;">
                         SHIP TO
                     </span>
                     {{ $address }}<br>
@@ -68,7 +70,19 @@
                     </tr>
                     <tr>
                         <th style="font-size: 14px;">PLACED BY</th>
-                        <td>{{ $order?->dealer?->name }}</td>
+                        @if ($order?->representative_id)
+                            <td>
+                                Sales Rep
+                            </td>
+                        @elseif($order?->admin_id)
+                            <td>
+                                Admin
+                            </td>
+                        @else
+                            <td>
+                                Dealer
+                            </td>
+                        @endif
                     </tr>
                 </table>
             </section>
@@ -160,7 +174,12 @@
                                         </td>
                                         <td
                                             style="border: 1px solid #ddd; padding: 3px; max-width: 110px; word-wrap: break-word;">
-                                            {{ $item->name ?? '---' }}
+                                            @php
+                                                $slug = $item?->product?->slug;
+                                            @endphp
+                                            <a href="{{ route('frontend.product', $slug) }}" target="_blank">
+                                                {{ $item->name ?? '---' }}
+                                            </a>
                                         </td>
 
                                         @foreach ($attributeKeys as $key)
