@@ -159,7 +159,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @php
+                                        $itemsQuantity = 0;
+                                    @endphp
                                     @foreach ($order?->orderItems as $item)
+                                        @php
+                                            $itemsQuantity += $item->quantity;
+                                        @endphp
                                         <tr>
                                             <td>
                                                 {{ $loop->iteration }}
@@ -211,11 +217,9 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <div class="pe-3">
-                                <h6 class="text-end">
-                                    <b>Total</b>
-                                    <b>$</b>{{ number_format($order?->total, 2) }}
-                                </h6>
+                            <div class="pe-3 text-end">
+                                <h6>Total Qty : {{ $itemsQuantity }}</h6>
+                                <h6>Total : <b>$</b>{{ number_format($order?->total, 2) }}</h6>
                             </div>
                         </div>
                         <!-- /.col -->

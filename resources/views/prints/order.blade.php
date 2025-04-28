@@ -36,12 +36,25 @@
             border-radius: 5px;
             overflow: hidden;
             text-align: left;
-            display: flex;
-            justify-content: space-between;
+            /* CSS2 float-based layout for 3 sections in one line */
         }
 
         .bill-ship section {
+            float: left;
             width: 32%;
+            margin-right: 2%;
+            box-sizing: border-box;
+        }
+
+        .bill-ship section:last-child {
+            margin-right: 0;
+        }
+
+        /* Clearfix for .bill-ship */
+        .bill-ship:after {
+            content: "";
+            display: table;
+            clear: both;
         }
 
         .bill-ship table {
@@ -105,7 +118,7 @@
 <body>
     <div class="invoice" id="printableArea">
         <header>
-            <img src="{{ getMainImage() }}" alt="{{ getWebsiteTitle() }}" style="max-width: 200px;">
+            {{-- <img src="{{ getMainImage() }}" alt="{{ getWebsiteTitle() }}" style="max-width: 200px;"> --}}
             <div class="bill-ship">
                 <section>
                     <p>
@@ -143,7 +156,7 @@
                     </p>
                 </section>
                 <section>
-                    <table>
+                    <table style="padding-top: 20px">
                         <tr>
                             <td>INVOICE</td>
                             <th>{{ $order?->id }}</th>

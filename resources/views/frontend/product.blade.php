@@ -40,7 +40,7 @@
                             </li>
                             @if ($firstCategory)
                                 <li>
-                                    <a href="{{ route('frontend.shop', ['categories' => [$firstCategory->id]]) }}">
+                                    <a href="{{ route('frontend.shop', ['category' => $firstCategory->slug]) }}">
                                         {{ $firstCategory->name }}
                                     </a>
                                 </li>

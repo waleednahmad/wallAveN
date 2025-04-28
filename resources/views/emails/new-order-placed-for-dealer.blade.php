@@ -5,6 +5,11 @@
     <meta charset="UTF-8">
     <title>New Order Placed - {{ getWebsiteTitle() }}</title>
 
+    <style>
+        .text-end {
+            text-align: right;
+        }
+    </style>
 </head>
 
 <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center;">
@@ -152,7 +157,13 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                    $itemsQuantity = 0;
+                                @endphp
                                 @foreach ($items as $item)
+                                    @php
+                                        $itemsQuantity += $item->quantity;
+                                    @endphp
                                     <tr>
                                         <td style="border: 1px solid #ddd; padding: 3px;">
                                             {{ $loop->iteration }}
@@ -204,10 +215,10 @@
                             </tbody>
                         </table>
 
-                        <p style="text-align: right; font-size: 16px; margin-top: 10px;">
-                            <b style="padding-right: 10px">Total</b>
-                            <b>$</b>{{ $order?->total }}
-                        </p>
+                        <div class="text-end">
+                            <h6>Total Qty : {{ $itemsQuantity }}</h6>
+                            <h6>Total : <b>$</b>{{ number_format($order?->total, 2) }}</h6>
+                        </div>
                     </div>
                 </div>
             @endif

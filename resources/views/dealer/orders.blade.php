@@ -21,8 +21,8 @@
                     </h1>
 
                     <button type="button" class="btn btn-primary me-2 float-end position-absolute" style="right: 45px"
-                        onclick="printOrderDetails()">
-                        <i class="bi bi-printer"></i> 
+                        onclick="openPrintOrder()">
+                        <i class="bi bi-printer"></i>
                     </button>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -50,13 +50,12 @@
 
 @push('scripts')
     <script>
-        function printOrderDetails() {
-            const printContents = document.querySelector('#previewOrder .invoice').innerHTML;
-            const originalContents = document.body.innerHTML;
-            document.body.innerHTML = printContents;
-            window.print();
-            document.body.innerHTML = originalContents;
-            location.reload(); // To restore event listeners and scripts
+        let currentOrderId = null;
+
+        function openPrintOrder() {
+            if (currentOrderId) {
+                window.open(`orders/${currentOrderId}/print`, '_blank');
+            }
         }
 
 
@@ -65,6 +64,8 @@
             Livewire.on('showOrderDetails', (event) => {
                 new bootstrap.Modal(document.getElementById('previewOrder')).show();
                 Livewire.dispatch('setOrder', event[0]);
+                currentOrderId = event[0].order; // Store the current order ID
+
             });
 
             // ============== showConfirmCancelOrderModal ==============

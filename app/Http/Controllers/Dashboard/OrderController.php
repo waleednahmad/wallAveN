@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
@@ -24,5 +25,18 @@ class OrderController extends Controller
         $zip_code = $order->dealer->zip_code ?? '---';
         $phone = $order->dealer->phone ?? '---';
         return view('prints.printOrder', compact('order', 'address', 'city', 'state', 'zip_code', 'phone'));
+    }
+
+    public function pdf($orderId)
+    {
+        $order = Order::with(['dealer', 'orderItems'])->findOrFail($orderId);
+        $dealer = $order->dealer;
+        $address = $dealer && $dealer->address ? explode(',', $dealer->address)[0] : '---';
+        $city = $dealer->city ?? '---';
+        $state = $dealer->state ?? '---';
+        $zip_code = $dealer->zip_code ?? '---';
+        $phone = $dealer->phone ?? '---';
+        $pdf = Pdf::loadView('prints.order', compact('order', 'address', 'city', 'state', 'zip_code', 'phone'));
+        return $pdf->download('order-' . $order->id . '.pdf');
     }
 }
