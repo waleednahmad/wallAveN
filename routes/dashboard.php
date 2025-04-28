@@ -71,6 +71,7 @@ Route::prefix('super_admin')
                 // ------------------------------------------
                 Route::resource('dealers', DealerController::class)->only(['index']);
 
+                
                 //  Orders Routes :
                 // ------------------------------------------
                 Route::resource('orders', OrderController::class)->only(['index']);
