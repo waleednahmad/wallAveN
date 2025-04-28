@@ -70,7 +70,6 @@
 
         menuItems.forEach(item => {
             const subMenu = item.querySelector('ul.sub-menu');
-            console.log(subMenu.children.length);
             if (subMenu && subMenu.children.length === 0) { // Check if sub-menu is empty
                 item.classList.add('sub-menu-empty');
             }
