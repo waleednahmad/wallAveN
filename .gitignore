@@ -3,6 +3,8 @@
 
 /public/hot
 /public/storage
+/public/resize
+/public/delete
 /storage/*.key
 /storage/pail
 /vendor
