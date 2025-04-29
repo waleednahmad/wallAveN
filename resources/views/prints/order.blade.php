@@ -194,6 +194,9 @@
                 foreach ($items as $item) {
                     if ($item->item_type == 'variant') {
                         $attributes = json_decode($item->attributes, true);
+                        $attributes = array_filter($attributes, function ($value) {
+                            return strtolower($value) !== 'none';
+                        });
                         foreach ($attributes as $key => $value) {
                             if (!in_array($key, $attributeKeys)) {
                                 $attributeKeys[] = $key;

@@ -88,7 +88,7 @@ class CreateProductVariantForm extends Component
         $newSku = $this->main_sku;
         foreach ($selectedAttributeValues as $attribute) {
             $attributeValue = $this->productAttributesWithValues->firstWhere('id', $attribute['id'])['values']->firstWhere('id', $attribute['value']);
-            if ($attributeValue) {
+            if ($attributeValue && strcasecmp($attributeValue['value'], 'none') !== 0) {
                 $newSku .= '-' . $attributeValue['value'];
             }
         }

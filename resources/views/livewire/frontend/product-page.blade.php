@@ -96,7 +96,10 @@
                         </ul>
                     @endif
 
-                    @if (isset($groupedAttributes) && count($groupedAttributes))
+                    @php
+                        $haveNoneValue = false;
+                    @endphp
+                    @if (isset($groupedAttributes) && count($groupedAttributes) && $haveNoneValue)
                         <div class="mt-3 quantity-area position-relative">
                             @foreach ($groupedAttributes as $attribute => $values)
                                 @php
@@ -111,6 +114,12 @@
                                             wire:click='selectAttributeValue("{{ $attribute_id }}", "{{ $value['id'] }}")'>
                                             {{ $value['value'] }}
                                         </span>
+                                        @if ($value['value'] == 'None')
+                                            @php
+                                                $haveNoneValue = true;
+                                            @endphp
+                                        @endif
+
                                     @empty
                                         <p>No values found</p>
                                     @endforelse

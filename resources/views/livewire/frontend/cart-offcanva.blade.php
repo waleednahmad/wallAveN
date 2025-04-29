@@ -10,11 +10,16 @@
                 @if ($item->item_type == 'variant')
                     @php
                         $attributes = json_decode($item->attributes, true);
-                        $values = implode(' | ', array_map('ucwords', array_values($attributes)));
+                        $filteredAttributes = array_filter($attributes, function ($value) {
+                            return strtolower($value) !== 'none';
+                        });
+                        $values = implode(' | ', array_map('ucwords', array_values($filteredAttributes)));
                     @endphp
-                    <p>
-                        <small class="text-muted">({{ $values }})</small>
-                    </p>
+                    @if (isset($values) && !empty($values))
+                        <p>
+                            <small class="text-muted">({{ $values }})</small>
+                        </p>
+                    @endif
                 @endif
                 @php
                     $cartQuantity = $item->quantity;
