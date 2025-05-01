@@ -60,9 +60,22 @@
         @endif
         {{-- {{ $compare_at_price }} : {{ $price }} --}}
         @php
-            $haveNoneValue = false;
+            // Check if any attribute is named 'None' and its value is also 'None'
+            $hasNoneAttribute = false;
+            if (isset($groupedAttributes) && count($groupedAttributes)) {
+                foreach ($groupedAttributes as $attribute => $values) {
+                    if (strtolower($attribute) === 'none') {
+                        foreach ($values['values'] as $value) {
+                            if (strtolower($value['value']) === 'none') {
+                                $hasNoneAttribute = true;
+                                break 2;
+                            }
+                        }
+                    }
+                }
+            }
         @endphp
-        @if (isset($groupedAttributes) && count($groupedAttributes) && $haveNoneValue)
+        @if (isset($groupedAttributes) && count($groupedAttributes) && !$hasNoneAttribute)
             <div class="mt-3 quantity-area position-relative">
                 @foreach ($groupedAttributes as $attribute => $values)
                     @php
@@ -77,11 +90,6 @@
                                 wire:click='selectAttributeValue("{{ $attribute_id }}", "{{ $value['id'] }}")'>
                                 {{ $value['value'] }}
                             </span>
-                            @if ($value['value'] == 'None')
-                                @php
-                                    $haveNoneValue = true;
-                                @endphp
-                            @endif
                         @empty
                             <p>No values found</p>
                         @endforelse

@@ -56,7 +56,7 @@ class FrontController extends Controller
     {
         if (showCategoryAndShopPages() || auth('dealer')->check() || auth('representative')->check() || auth('web')->check()) {
             $product = Product::where('slug', $slug)->first();
-            $firstCategory = $product->categories->first();
+            $firstCategory = $product?->categories->first();
 
             if (!$product) {
                 return redirect()->route('frontend.home')->with('error', 'Product not found.');

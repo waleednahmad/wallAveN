@@ -97,9 +97,23 @@
                     @endif
 
                     @php
-                        $haveNoneValue = false;
+                        // Check if any attribute is named 'None' and its value is also 'None'
+                        $hasNoneAttribute = false;
+                        if (isset($groupedAttributes) && count($groupedAttributes)) {
+                            foreach ($groupedAttributes as $attribute => $values) {
+                                if (strtolower($attribute) === 'none') {
+                                    foreach ($values['values'] as $value) {
+                                        if (strtolower($value['value']) === 'none') {
+                                            $hasNoneAttribute = true;
+                                            break 2;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     @endphp
-                    @if (isset($groupedAttributes) && count($groupedAttributes) && $haveNoneValue)
+
+                    @if (isset($groupedAttributes) && count($groupedAttributes) && !$hasNoneAttribute)
                         <div class="mt-3 quantity-area position-relative">
                             @foreach ($groupedAttributes as $attribute => $values)
                                 @php
@@ -114,76 +128,71 @@
                                             wire:click='selectAttributeValue("{{ $attribute_id }}", "{{ $value['id'] }}")'>
                                             {{ $value['value'] }}
                                         </span>
-                                        @if ($value['value'] == 'None')
-                                            @php
-                                                $haveNoneValue = true;
-                                            @endphp
-                                        @endif
-
                                     @empty
                                         <p>No values found</p>
                                     @endforelse
                                 </div>
                             @endforeach
-                            {{-- loading spinner --}}
-                            <div wire:loading>
-                                <div class="loading-spinner"
-                                    style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center; background-color: rgba(255, 255, 255, 0.8);">
-                                    <div class="spinner-border text-secondary" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
-                                </div>
+                        </div>
+                    @endif
+                    {{-- loading spinner --}}
+                    <div wire:loading>
+                        <div class="loading-spinner"
+                            style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center; background-color: rgba(255, 255, 255, 0.8);">
+                            <div class="spinner-border text-secondary" role="status">
+                                <span class="visually-hidden">Loading...</span>
                             </div>
                         </div>
-                    @endif
-
-                    @if ($variantNotFound)
-                        <div class="alert alert-warning" style="text-align: center;" wire:tranistion>
-                            No variant found for the selected attributes. Please try different combinations.
-                            <br>
-                            <button wire:click="setDefaultAttributeValues" class="mt-2 btn btn-sm btn-secondary">
-                                Reset
-                            </button>
-                        </div>
-                    @endif
-
-                    @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check() || auth('web')->check())
-                        {{-- ========== Add To Cart ========= --}}
-                        <div class="add-to-cart">
-                            @if (!$variantNotFound)
-                                <div style="display: flex; gap: 10px; align-items: center;" wire:tranistion>
-                                    <button class="btn" wire:click="decreaseQuantity"
-                                        style="background-color: #f5f5f5; color: #000;">-</button>
-                                    <input type="number" style="min-width: max-content; padding: 5px; border: none"
-                                        wire:model="quantity" min="1">
-                                    <button class="btn" wire:click="increaseQuantity"
-                                        style="background-color: #f5f5f5; color: #000;">+</button>
-                                </div>
-                                <button class="mt-3 btn" wire:click="addToCart" @disabled($variantNotFound)
-                                    style="background-color: #000; color: #fff; max-width: fit-content; padding: 10px 20px;">
-                                    Add to Cart
-                                </button>
-                            @endif
-                        </div>
-                        {{-- ========== End Add To Cart ========= --}}
-                    @endif
-
+                    </div>
                 </div>
+
+                @if ($variantNotFound)
+                    <div class="alert alert-warning" style="text-align: center;" wire:tranistion>
+                        No variant found for the selected attributes. Please try different combinations.
+                        <br>
+                        <button wire:click="setDefaultAttributeValues" class="mt-2 btn btn-sm btn-secondary">
+                            Reset
+                        </button>
+                    </div>
+                @endif
+
+                @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check() || auth('web')->check())
+                    {{-- ========== Add To Cart ========= --}}
+                    <div class="add-to-cart">
+                        @if (!$variantNotFound)
+                            <div style="display: flex; gap: 10px; align-items: center;" wire:tranistion>
+                                <button class="btn" wire:click="decreaseQuantity"
+                                    style="background-color: #f5f5f5; color: #000;">-</button>
+                                <input type="number" style="min-width: max-content; padding: 5px; border: none"
+                                    wire:model="quantity" min="1">
+                                <button class="btn" wire:click="increaseQuantity"
+                                    style="background-color: #f5f5f5; color: #000;">+</button>
+                            </div>
+                            <button class="mt-3 btn" wire:click="addToCart" @disabled($variantNotFound)
+                                style="background-color: #000; color: #fff; max-width: fit-content; padding: 10px 20px;">
+                                Add to Cart
+                            </button>
+                        @endif
+                    </div>
+                    {{-- ========== End Add To Cart ========= --}}
+                @endif
+
             </div>
         </div>
-        <div class="mt-5">
-            {!! str_replace(
-                'ðŸ‡ºðŸ‡',
-                '<img src="' . asset('assets/america-flag.webp') . '" alt="" style="height: 30px; object-fit: contain;">',
-                $description,
-            ) !!}
-        </div>
     </div>
+    <div class="mt-5">
+        {!! str_replace(
+            'ðŸ‡ºðŸ‡',
+            '<img src="' . asset('assets/america-flag.webp') . '" alt="" style="height: 30px; object-fit: contain;">',
+            $description,
+        ) !!}
+    </div>
+</div>
 
 
-    {{-- @if (isset($relatedProducts) && count($relatedProducts)) --}}
-    {{-- =========== Related Products Section ========= --}}
-    {{-- <div class="container pt-5" wire:ignore>
+{{-- @if (isset($relatedProducts) && count($relatedProducts)) --}}
+{{-- =========== Related Products Section ========= --}}
+{{-- <div class="container pt-5" wire:ignore>
             <hr>
             <div class="flex-wrap gap-3 row mb-60 align-items-center justify-content-between wow animate fadeInDown"
                 data-wow-delay="200ms" data-wow-duration="1500ms">
@@ -257,7 +266,7 @@
                 </div>
             </div>
         </div> --}}
-    {{-- @endif --}}
+{{-- @endif --}}
 </div>
 
 @push('styles')
