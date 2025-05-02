@@ -1,12 +1,12 @@
 @extends('frontend.layout.app')
 
-@section('title', 'Home')
+@section('title', $seoContent->title && !empty($seoContent->title) ? $seoContent->title : 'Home')
+@section('meta_desc', $seoContent->meta_desc && !empty($seoContent->meta_desc) ? $seoContent->meta_desc : 'Home')
+@section('keywords', $seoContent->keywords && !empty($seoContent->keywords) ? $seoContent->keywords : 'Home')
 
 @section('content')
     {!! $page->content !!}
     {{-- Categories Section Grid 6 columns --}}
-
-
 
     @if (showCategoryAndShopPages() || auth('dealer')->check() || auth('representative')->check() || auth('web')->check())
         <div class="home1-category-section mb-120">

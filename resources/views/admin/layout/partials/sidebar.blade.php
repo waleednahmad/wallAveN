@@ -232,6 +232,19 @@
                                 </p>
                             </a>
                         </li>
+
+                        {{-- SEO Pages --}}
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.seo-pages.index') }}" @class([
+                                'nav-link',
+                                'active' => request()->routeIs('dashboard.seo-pages.*'),
+                            ])>
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    SEO Pages
+                                </p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 

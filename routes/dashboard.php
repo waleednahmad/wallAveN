@@ -19,6 +19,7 @@ use App\Http\Controllers\Dashboard\ProductTypeController;
 use App\Http\Controllers\Dashboard\ProjectController;
 use App\Http\Controllers\Dashboard\PublicSettingController;
 use App\Http\Controllers\Dashboard\RepresentativeController;
+use App\Http\Controllers\Dashboard\SeoPageController;
 use App\Http\Controllers\Dashboard\SubCategoryController;
 use App\Http\Controllers\Dashboard\VendorController;
 use App\Http\Controllers\ProfileController;
@@ -72,7 +73,7 @@ Route::prefix('super_admin')
                 Route::resource('dealers', DealerController::class)->only(['index']);
 
 
-                
+
                 //  Orders Routes :
                 // ------------------------------------------
                 Route::resource('orders', OrderController::class)->only(['index']);
@@ -112,6 +113,10 @@ Route::prefix('super_admin')
                 // Price List Routes :
                 // ---------------------
                 Route::resource('price-lists', PriceListController::class)->only(['index']);
+
+                // SEO Pages Routes :
+                // ---------------------
+                Route::resource('seo-pages', SeoPageController::class)->only(['index']);
             });
     });
 

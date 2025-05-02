@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             PublicValuesSeeder::class,
             PagesSeeder::class,
             PageBreadcrumpSeeder::class,
+            SeoPageSeeder::class,
             // ProductListSeeder::class,
         ]);
     }

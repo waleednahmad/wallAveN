@@ -11,6 +11,7 @@ use App\Models\Page;
 use App\Models\PriceList;
 use App\Models\Product;
 use App\Models\Representative;
+use App\Models\SeoPage;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -41,13 +42,15 @@ class FrontController extends Controller
             })
             ->orderBy('name')
             ->get();
-        return view('frontend.index', compact('products', 'page', 'categories'));
+        $seoContent = SeoPage::where('name', 'home')->first();
+        return view('frontend.index', compact('products', 'page', 'categories', 'seoContent'));
     }
 
     public function shop()
     {
+        $seoContent = SeoPage::where('name', 'shop')->first();
         if (showCategoryAndShopPages() || auth('dealer')->check() || auth('representative')->check() || auth('web')->check()) {
-            return view('frontend.shop');
+            return view('frontend.shop', compact('seoContent'));
         }
         return redirect()->route('frontend.home')->with('error', 'Shop page is disabled.');
     }
@@ -228,12 +231,14 @@ class FrontController extends Controller
     public function aboutUs()
     {
         $page = Page::where('title', 'About Us')->first();
-        return view('frontend.about-us', compact('page'));
+        $seoContent = SeoPage::where('name', 'about_us')->first();
+        return view('frontend.about-us', compact('page', 'seoContent'));
     }
     public function contactUs()
     {
         $page = Page::where('title', 'Contact Us')->first();
-        return view('frontend.contact-us', compact('page'));
+        $seoContent = SeoPage::where('name', 'contact_us')->first();
+        return view('frontend.contact-us', compact('page', 'seoContent'));
     }
 
 
