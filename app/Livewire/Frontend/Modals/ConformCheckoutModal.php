@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Mail;
 
 class ConformCheckoutModal extends Component
 {
-    public $total, $po_number;
+    public $total, $po_number, $shipping_address;
 
     #[On('openConfirmCheckoutModal')]
     public function getTotal()
@@ -85,8 +85,10 @@ class ConformCheckoutModal extends Component
                     'total' => $cartTemps->sum('total'),
                     'quantity' => $cartTemps->sum('quantity'),
                     'po_number' => $this->po_number ?? null,
+                    'shipping_address' => $this->shipping_address ?? null,
                 ];
 
+                
                 if (auth('representative')->check()) {
                     $buyingFor = $user->buyingFor;
                     if (!$buyingFor) {

@@ -53,10 +53,18 @@
                         style="font-weight: bold; color: #333; display: block; margin-bottom: 4px; font-size: 14px; margin-top: 7px;">
                         SHIP TO
                     </span>
-                    {{ $address }}<br>
-                    {{ $city }}{{ $city != '---' ? ',' : '' }}
-                    {{ $state }}{{ $state != '---' ? ' ' : '' }}
-                    {{ $zip_code }}
+                    @if ($order?->shipping_address)
+                        <strong>
+                            {{ $order?->shipping_address }}
+                        </strong>
+                    @else
+                        <strong>
+                            {{ $address }}<br>
+                            {{ $city }}{{ $city != '---' ? ',' : '' }}
+                            {{ $state }}{{ $state != '---' ? ' ' : '' }}
+                            {{ $zip_code }}
+                        </strong>
+                    @endif
                 </p>
             </section>
             <section style="float: left; width: 32%;">
@@ -127,8 +135,8 @@
                         if ($item->item_type == 'variant') {
                             $attributes = json_decode($item->attributes, true);
                             $attributes = array_filter($attributes, function ($value) {
-                                    return strtolower($value) !== 'none';
-                                });
+                                return strtolower($value) !== 'none';
+                            });
                             foreach ($attributes as $key => $value) {
                                 if (!in_array($key, $attributeKeys)) {
                                     $attributeKeys[] = $key;

@@ -59,12 +59,18 @@
                                     style=" color: #333; display: block; margin-bottom: 4px; font-size: 14px; margin-top: 7px;">
                                     SHIP TO
                                 </span>
-                                <strong>
-                                    {{ $address }}<br>
-                                    {{ $city }}{{ $city != '---' ? ',' : '' }}
-                                    {{ $state }}{{ $state != '---' ? ' ' : '' }}
-                                    {{ $zip_code }}
-                                </strong>
+                                @if ($order?->shipping_address)
+                                    <strong>
+                                        {{ $order?->shipping_address }}
+                                    </strong>
+                                @else
+                                    <strong>
+                                        {{ $address }}<br>
+                                        {{ $city }}{{ $city != '---' ? ',' : '' }}
+                                        {{ $state }}{{ $state != '---' ? ' ' : '' }}
+                                        {{ $zip_code }}
+                                    </strong>
+                                @endif
                             </p>
                         </section>
                         <section style="float: left; width: 32%;">

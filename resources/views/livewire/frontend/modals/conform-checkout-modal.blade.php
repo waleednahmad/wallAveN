@@ -13,6 +13,14 @@
                 <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
+        {{-- Shipping Address --}}
+        <div class="mb-3">
+            <label for="shipping_address" class="form-label">Shipping Address</label>
+            <textarea class="form-control" id="shipping_address" rows="3" wire:model="shipping_address"></textarea>
+            @error('shipping_address')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
         @auth('dealer')
             @if (auth('dealer')->user()->is_customer_mode_active)
                 @php
