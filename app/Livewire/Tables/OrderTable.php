@@ -162,7 +162,7 @@ final class OrderTable extends PowerGridComponent
                 ->searchable()
                 ->visibleInExport(false),
 
-            Column::make('Created at', 'created_at_formatted' , 'created_at')
+            Column::make('Created at', 'created_at_formatted', 'created_at')
                 ->searchable()
                 ->hidden()
                 ->visibleInExport(true),
@@ -212,7 +212,9 @@ final class OrderTable extends PowerGridComponent
 
             Filter::select('company_name', 'company_name')
                 ->dataSource(
-                    Dealer::whereHas('orders')->get(['id', 'company_name'])
+                    Dealer::whereHas('orders')
+                        ->orderBy('company_name')
+                        ->get(['id', 'company_name'])
                         ->map(function ($dealer) {
                             return [
                                 'label' => $dealer->company_name,
