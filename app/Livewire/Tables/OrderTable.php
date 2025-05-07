@@ -182,9 +182,9 @@ final class OrderTable extends PowerGridComponent
     public function filters(): array
     {
         return [
-            Filter::datepicker('created_at', 'created_at'),
+            Filter::datepicker('created_at', 'orders.created_at'),
 
-            Filter::select('status', 'status')
+            Filter::select('status', 'orders.status') // Specify table name to avoid ambiguity
                 ->dataSource([
                     [
                         'label' => 'Pending',
