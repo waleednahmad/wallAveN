@@ -225,11 +225,20 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>
+                                            <b>
+                                                Total
+                                            </b>
+                                        </td>
+                                        <td colspan="{{ 3 + count($attributeKeys) }}"></td>
+                                        <td><b>{{ $itemsQuantity }}</b></td>
+                                        <td></td>
+                                        <td><b>${{ number_format($order?->total, 2) }}</b></td>
+                                    </tr>
+                                </tfoot>
                             </table>
-                            <div class="pe-3 text-end">
-                                <h6>Total Qty : {{ $itemsQuantity }}</h6>
-                                <h6>Total : <b>$</b>{{ number_format($order?->total, 2) }}</h6>
-                            </div>
                         </div>
                         <!-- /.col -->
                     </div>
