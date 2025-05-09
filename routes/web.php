@@ -90,4 +90,8 @@ Route::get('preview-email', function () {
         ]
     );
 });
+
+Route::get('test', function () {
+    echo phpinfo();
+});
 require __DIR__ . '/auth.php';
