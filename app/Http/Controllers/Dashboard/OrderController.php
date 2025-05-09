@@ -42,6 +42,13 @@ class OrderController extends Controller
         $logoImage  = PublicSetting::where('key', 'main logo')->first()->value;
         $logoImage = public_path($logoImage);
         $pdf = Pdf::loadView('prints.order', compact('order', 'address', 'city', 'state', 'zip_code', 'phone', 'logoImage'));
-        return $pdf->download('order-' . $order->id . '.pdf');
+
+        // Force file download with headers
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->output();
+        }, 'order-' . $order->id . '.pdf', [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="order-' . $order->id . '.pdf"',
+        ]);
     }
 }
