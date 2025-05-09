@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\PublicSetting;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
@@ -36,7 +37,11 @@ class OrderController extends Controller
         $state = $dealer->state ?? '---';
         $zip_code = $dealer->zip_code ?? '---';
         $phone = $dealer->phone ?? '---';
-        $pdf = Pdf::loadView('prints.order', compact('order', 'address', 'city', 'state', 'zip_code', 'phone'));
+
+        // Pass the public path for images to the view
+        $logoImage  = PublicSetting::where('key', 'main logo')->first()->value;
+        $logoImage = public_path($logoImage);
+        $pdf = Pdf::loadView('prints.order', compact('order', 'address', 'city', 'state', 'zip_code', 'phone', 'logoImage'));
         return $pdf->download('order-' . $order->id . '.pdf');
     }
 }

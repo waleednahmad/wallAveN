@@ -10,22 +10,59 @@ use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
+use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\Facades\Rule;
-
+use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 
 final class RepresentativeTable extends PowerGridComponent
 {
+    use WithExport;
+    public $fileName = '';
+
     public string $tableName = 'representative-table-lquyl7-table';
 
     public function setUp(): array
     {
 
+        $this->showCheckBox();
+        $this->fileName = 'representatives' . Carbon::now()->format('Y-m-d_H-i-s');
+
 
         return [
+            PowerGrid::exportable(fileName: $this->fileName)
+                ->type(Exportable::TYPE_XLS)
+                ->columnWidth([
+                    1 => 20,
+                    2 => 35,
+                    3 => 20,
+                    4 => 20,
+                    5 => 20,
+                    6 => 20,
+                    7 => 20,
+                    8 => 30,
+                    9 => 20,
+                    10 => 20,
+                    11 => 20,
+                    12 => 20,
+                    13 => 20,
+                    14 => 20,
+                    15 => 20,
+                    16 => 20,
+                    17 => 20,
+                    18 => 20,
+                    19 => 20,
+                    20 => 20,
+                    21 => 20,
+                    22 => 20,
+                    23 => 20,
+                    24 => 20,
+                    25 => 20,
+                    26 => 20,
+                ]),
             PowerGrid::header()
                 ->showSearchInput(),
             PowerGrid::footer()
@@ -63,6 +100,13 @@ final class RepresentativeTable extends PowerGridComponent
                 }
             })
             ->add('approved_at', fn($row) => $row->approved_at ? Carbon::parse($row->approved_at)->format('Y-m-d') : '-')
+
+            ->add('status_label', function ($row) {
+                return $row->status ? "Active" : "Inactive";
+            })
+            ->add('is_approved_label', function ($row) {
+                return $row->is_approved ? "Approved" : "Not Approved";
+            })
             ->add('created_at');
     }
 
@@ -72,16 +116,81 @@ final class RepresentativeTable extends PowerGridComponent
             Column::make('#', 'row_num'),
             Column::make('Name', 'name')
                 ->searchable(),
+
             Column::make('Email', 'email')
                 ->searchable(),
+
             Column::make('Phone', 'phone')
                 ->searchable(),
-            Column::make('is approved', 'is_approved'),
+
+            Column::make('Status', 'status_label')
+                ->searchable()
+                ->hidden()
+                ->visibleInExport(true),
+
+            Column::make('is approved', 'is_approved')
+                ->visibleInExport(false),
+
+            Column::make('is approved', 'is_approved_label')
+                ->hidden()
+                ->visibleInExport(true),
 
             Column::make('Approved at', 'approved_at')
-
                 ->searchable(),
+
+            Column::make('Addresss', 'address')
+                ->hidden()
+                ->visibleInExport(true),
+
+            Column::make('City', 'city')
+                ->hidden()
+                ->visibleInExport(true),
+
+            Column::make('State', 'state')
+                ->hidden()
+                ->visibleInExport(true),
+
+            Column::make('Zip Code', 'zip_code')
+                ->hidden()
+                ->visibleInExport(true),
+
+            Column::make(
+                'Taxpayer Identification Number',
+                'taxpayer_identification_number'
+            )
+                ->hidden()
+                ->visibleInExport(true),
+
+            Column::make(
+                'Social Security Number',
+                'social_security_number'
+            )
+                ->hidden()
+                ->visibleInExport(true),
+
+            Column::make('Employer Identification Number', 'employer_identification_number')
+                ->hidden()
+                ->visibleInExport(true),
+
+
+            Column::make(
+                'Bank Account Type',
+                'bank_account_type'
+            )
+                ->hidden()
+                ->visibleInExport(true),
+
+            Column::make('Bank Routing Number', 'bank_routing_number')
+                ->hidden()
+                ->visibleInExport(true),
+
+
+            Column::make('Bank Account Number', 'bank_account_number')
+                ->hidden()
+                ->visibleInExport(true),
+
             Column::make('status', 'status')
+                ->visibleInExport(false)
                 ->toggleable(
                     hasPermission: auth()->check(),
                     trueLabel: '<span class="text-green-500">Yes</span>',

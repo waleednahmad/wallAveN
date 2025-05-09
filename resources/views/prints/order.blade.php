@@ -118,7 +118,7 @@
 <body>
     <div class="invoice" id="printableArea">
         <header>
-            {{-- <img src="{{ getMainImage() }}" alt="{{ getWebsiteTitle() }}" style="max-width: 200px;"> --}}
+            <img src="{{ $logoImage }}" alt="{{ getWebsiteTitle() }}" style="max-width: 200px;">
             <div class="bill-ship">
                 <section>
                     <p>
@@ -232,11 +232,11 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>
                                 @if ($item->image && file_exists($item->image))
-                                    <img src="{{ asset($item->image) }}" alt="{{ $item->name }}"
+                                    <img src="{{ public_path($item->image) }}" alt="{{ $item->name }}"
                                         class="img-thumbnail">
                                 @else
-                                    <img src="{{ asset('dashboard/images/default.webp') }}" alt="{{ $item->name }}"
-                                        class="img-thumbnail">
+                                    <img src="{{ public_path('dashboard/images/default.webp') }}"
+                                        alt="{{ $item->name }}" class="img-thumbnail">
                                 @endif
                             </td>
                             <td><small>{{ $item->sku ?? '---' }}</small></td>

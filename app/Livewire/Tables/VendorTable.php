@@ -8,18 +8,40 @@ use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\On;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
+use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 
 final class VendorTable extends PowerGridComponent
 {
+    use WithExport;
+    public $fileName = '';
     public string $tableName = 'vendor-table-dwz3lp-table';
 
     public function setUp(): array
     {
+
+        $this->showCheckBox();
+        $this->fileName = 'vendors_' . Carbon::now()->format('Y-m-d_H-i-s');
+
         return [
+            PowerGrid::exportable(fileName: $this->fileName)
+                ->type(Exportable::TYPE_XLS)
+                ->columnWidth([
+                    1 => 20,
+                    2 => 35,
+                    3 => 20,
+                    4 => 20,
+                    5 => 20,
+                    6 => 20,
+                    7 => 20,
+                    8 => 30,
+                    9 => 20,
+                    10 => 20,
+                ]),
             PowerGrid::header()
                 ->showSearchInput(),
             PowerGrid::footer()
@@ -49,6 +71,9 @@ final class VendorTable extends PowerGridComponent
             ->add('row_num', function ($row) {
                 return $this->getRowNum($row);
             })
+            ->add('status_label', function ($row) {
+                return $row->status ? "Active" : "Inactive";
+            })
             ->add('created_at');
     }
 
@@ -61,9 +86,15 @@ final class VendorTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
+            Column::make('Status', 'status_label')
+                ->searchable()
+                ->hidden()
+                ->visibleInExport(true),
+
 
 
             Column::make('status', 'status')
+                ->visibleInExport(false)
                 ->toggleable(
                     hasPermission: auth()->check(),
                     trueLabel: '<span class="text-green-500">Yes</span>',
@@ -119,7 +150,7 @@ final class VendorTable extends PowerGridComponent
         $this->dispatch('success', 'Status updated successfully');
     }
 
-     public function getRowNum($row): int
+    public function getRowNum($row): int
     {
         return $this->datasource()->pluck('id')->search($row->id) + 1;
     }

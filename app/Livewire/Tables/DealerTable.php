@@ -17,17 +17,35 @@ use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\Facades\Rule;
 use Illuminate\Support\Facades\Mail;
-
+use PowerComponents\LivewirePowerGrid\Components\SetUp\Exportable;
+use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 
 final class DealerTable extends PowerGridComponent
 {
+    use WithExport;
     public string $tableName = 'dealer-table-davd0q-table';
+    public $fileName = '';
 
     public function setUp(): array
     {
         $this->showCheckBox();
+        $this->fileName = 'dealers_' . Carbon::now()->format('Y-m-d_H-i-s');
 
         return [
+            PowerGrid::exportable(fileName: $this->fileName)
+                ->type(Exportable::TYPE_XLS)
+                ->columnWidth([
+                    1 => 20,
+                    2 => 35,
+                    3 => 20,
+                    4 => 20,
+                    5 => 20,
+                    6 => 20,
+                    7 => 20,
+                    8 => 30,
+                    9 => 20,
+                    10 => 20,
+                ]),
             PowerGrid::header()
                 ->showSearchInput(),
             PowerGrid::footer()
@@ -97,7 +115,15 @@ final class DealerTable extends PowerGridComponent
             ->add('price_list_id', function ($row) {
                 return $row->priceList ? $row->priceList->name : '-';
             })
-            ->add('approved_at', fn($row) => $row->approved_at ? Carbon::parse($row->approved_at)->format('Y-m-d') : '-')
+            ->add('approved_at', fn($row) => $row->approved_at ? Carbon::parse($row->approved_at)->format('Y-m-d') : '')
+
+
+            ->add('status_label', function ($row) {
+                return $row->status ? "Active" : "Inactive";
+            })
+            ->add('is_approved_label', function ($row) {
+                return $row->is_approved ? "Approved" : "Not Approved";
+            })
             ->add('created_at');
     }
 
@@ -105,13 +131,17 @@ final class DealerTable extends PowerGridComponent
     {
         return [
             Column::make('#', 'row_num'),
-            
+
             Column::make('Name', 'company_name')
                 ->searchable(),
 
             Column::make('Email', 'email')
-
                 ->searchable(),
+
+            Column::make('Status', 'status_label')
+                ->searchable()
+                ->hidden()
+                ->visibleInExport(true),
 
             Column::make('Address', 'address')
                 ->searchable(),
@@ -122,7 +152,12 @@ final class DealerTable extends PowerGridComponent
 
             Column::make('Price List', 'price_list_id'),
 
-            Column::make('is approved', 'is_approved'),
+            Column::make('is approved', 'is_approved')
+                ->visibleInExport(false),
+
+            Column::make('is approved', 'is_approved_label')
+                ->hidden()
+                ->visibleInExport(true),
 
             Column::make('Approved at', 'approved_at')
                 ->searchable(),
@@ -131,11 +166,14 @@ final class DealerTable extends PowerGridComponent
             // Column::make('Resale Certificate', 'resale_certificate'),
 
             Column::make('status', 'status')
+                ->visibleInExport(false)
                 ->toggleable(
                     hasPermission: auth()->check(),
                     trueLabel: '<span class="text-green-500">Yes</span>',
                     falseLabel: '<span class="text-red-500">No</span>',
                 ),
+
+
 
             Column::action('Action')
         ];
