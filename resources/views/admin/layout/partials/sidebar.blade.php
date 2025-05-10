@@ -34,8 +34,87 @@
                     </a>
                 </li>
 
+                <li @class([
+                    'nav-item',
+                    'menu-open' =>
+                        request()->routeIs('dashboard.admins.*') ||
+                        request()->routeIs('dashboard.vendors.*') ||
+                        request()->routeIs('dashboard.dealers.*') ||
+                        request()->routeIs('dashboard.representatives.*'),
+                ])>
+                    <a href="#" @class([
+                        'nav-link',
+                        'active' =>
+                            request()->routeIs('dashboard.admins.*') ||
+                            request()->routeIs('dashboard.vendors.*') ||
+                            request()->routeIs('dashboard.dealers.*') ||
+                            request()->routeIs('dashboard.representatives.*'),
+                    ])>
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                            Users
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+                        {{-- Admins --}}
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.admins.index') }}" @class([
+                                'nav-link',
+                                'active' => request()->routeIs('dashboard.admins.*'),
+                            ])>
+                                <i class="far fa-circle nav-icon"></i>
+
+                                <p>
+                                    Admins
+                                </p>
+                            </a>
+                        </li>
+                        {{-- Dealers --}}
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.dealers.index') }}" @class([
+                                'nav-link',
+                                'active' => request()->routeIs('dashboard.dealers.*'),
+                            ])>
+                                <i class="far fa-circle nav-icon"></i>
+
+                                <p>
+                                    Dealers
+                                </p>
+                            </a>
+                        </li>
+                        {{-- Representatives --}}
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.representatives.index') }}" @class([
+                                'nav-link',
+                                'active' => request()->routeIs('dashboard.representatives.*'),
+                            ])>
+                                <i class="far fa-circle nav-icon"></i>
+
+                                <p>
+                                    Representatives
+                                </p>
+                            </a>
+                        </li>
+                        {{-- Vendors --}}
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.vendors.index') }}" @class([
+                                'nav-link',
+                                'active' => request()->routeIs('dashboard.vendors.*'),
+                            ])>
+                                <i class="far fa-circle nav-icon"></i>
+
+                                <p>
+                                    Vendors
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 {{-- -------------------- ADMIN -------------------- --}}
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="{{ route('dashboard.admins.index') }}" @class([
                         'nav-link',
                         'active' => request()->routeIs('dashboard.admins.*'),
@@ -45,10 +124,10 @@
                             Admins
                         </p>
                     </a>
-                </li>
+                </li> --}}
 
                 {{-- -------------------- Vendors -------------------- --}}
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="{{ route('dashboard.vendors.index') }}" @class([
                         'nav-link',
                         'active' => request()->routeIs('dashboard.vendors.*'),
@@ -58,12 +137,12 @@
                             Vendors
                         </p>
                     </a>
-                </li>
+                </li> --}}
 
 
 
                 {{-- -------------------- Dealers -------------------- --}}
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="{{ route('dashboard.dealers.index') }}" @class([
                         'nav-link',
                         'active' => request()->routeIs('dashboard.dealers.*'),
@@ -73,7 +152,20 @@
                             Dealers
                         </p>
                     </a>
-                </li>
+                </li> --}}
+
+                {{-- -------------------- Representatives -------------------- --}}
+                {{-- <li class="nav-item">
+                    <a href="{{ route('dashboard.representatives.index') }}" @class([
+                        'nav-link',
+                        'active' => request()->routeIs('dashboard.representatives.*'),
+                    ])>
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                            Representatives
+                        </p>
+                    </a>
+                </li> --}}
 
                 {{-- -------------------- Categories -------------------- --}}
                 <li @class([
@@ -137,6 +229,7 @@
                                 </p>
                             </a>
                         </li>
+
                     </ul>
                 </li>
 
@@ -168,30 +261,58 @@
 
 
                 {{-- -------------------- Orders -------------------- --}}
-                <li class="nav-item">
-                    <a href="{{ route('dashboard.orders.index') }}" @class([
+                <li @class([
+                    'nav-item',
+                    'menu-open' =>
+                        request()->routeIs('dashboard.orders.*') ||
+                        request()->routeIs('dashboard.abounded-orders.*'),
+                ])>
+                    <a href="#" @class([
                         'nav-link',
-                        'active' => request()->routeIs('dashboard.orders.*'),
+                        'active' =>
+                            request()->routeIs('dashboard.orders.*') ||
+                            request()->routeIs('dashboard.abounded-orders.*'),
                     ])>
-                        <i class="nav-icon fas fa-shopping-cart"></i>
+                                        <i class="nav-icon fas fa-shopping-cart"></i>
+
                         <p>
                             Orders
+                            <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
+                    <ul class="nav nav-treeview">
+
+                        {{-- orders --}}
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.orders.index') }}" @class([
+                                'nav-link',
+                                'active' => request()->routeIs('dashboard.orders.*'),
+                            ])>
+                                <i class="far fa-circle nav-icon"></i>
+
+                                <p>
+                                    Orders
+                                </p>
+                            </a>
+                        </li>
+                        {{-- Abounde Checkout --}}
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.abounded-orders.index') }}" @class([
+                                'nav-link',
+                                'active' => request()->routeIs('dashboard.abounded-orders.*'),
+                            ])>
+                                <i class="far fa-circle nav-icon"></i>
+
+                                <p>
+                                    Abounde Checkout
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
-                {{-- -------------------- Representatives -------------------- --}}
-                <li class="nav-item">
-                    <a href="{{ route('dashboard.representatives.index') }}" @class([
-                        'nav-link',
-                        'active' => request()->routeIs('dashboard.representatives.*'),
-                    ])>
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>
-                            Representatives
-                        </p>
-                    </a>
-                </li>
+
+
                 {{-- -------------------- Price Lists -------------------- --}}
                 <li class="nav-item">
                     <a href="{{ route('dashboard.price-lists.index') }}" @class([

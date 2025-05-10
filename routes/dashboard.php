@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\AboundedCheckoutController;
 use App\Http\Controllers\Dashboard\AdminController;
 use App\Http\Controllers\Dashboard\AllTransactionController;
 use App\Http\Controllers\Dashboard\AttributeController;
@@ -80,6 +81,10 @@ Route::prefix('super_admin')
                 Route::get('orders/{order}/print', [OrderController::class, 'print'])->name('orders.print');
                 Route::get('orders/{order}/pdf', [OrderController::class, 'pdf'])
                     ->name('orders.pdf');
+
+                // Abounded Orders Routes :
+                // ------------------------------------------
+                Route::resource('abounded-orders', AboundedCheckoutController::class)->only(['index']);
 
                 // Public Settings Routes :
                 // ------------------------------------------
