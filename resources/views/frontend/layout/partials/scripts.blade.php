@@ -19,49 +19,108 @@
 <!-- Marquee  JS -->
 <script src="{{ asset('assets/js/jquery.marquee.min.js') }}"></script>
 
-{{-- toastr --}}
-<script src="{{ asset('assets/js/toastr.min.js') }}"></script>
-
-
 <script src="{{ asset('assets/js/main.js') }}"></script>
 
 
 
 <script>
-    // ========== Toaster Mssages ==========
+    // ========== SweetAlert2 Messages ==========
     // success messages
     @if (session()->has('success'))
-        toastr.success('{{ session()->get('success') }}')
+        Swal.fire({
+            icon: 'success',
+            title: '{{ session()->get('success') }}',
+            timer: 6000,
+            showConfirmButton: false,
+            // toast: true,
+            position: 'top-right'
+        });
     @endif
     // error messages
     @if (session()->has('error'))
-        toastr.error('{{ session()->get('error') }}')
+        Swal.fire({
+            icon: 'error',
+            title: '{{ session()->get('error') }}',
+            timer: 6000,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top-right'
+        });
     @endif
 
-    //  error validation messages
+    // error validation messages
     @if ($errors->any())
         @foreach ($errors->all() as $error)
-            toastr.error('{{ $error }}')
+            Swal.fire({
+                icon: 'error',
+                title: '{{ $error }}',
+                timer: 6000,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-right'
+            });
         @endforeach
     @endif
-    // ========== End Toaster Mssages ==========
+    // ========== End SweetAlert2 Messages ==========
 
     document.addEventListener('livewire:init', () => {
         // Success Message
         Livewire.on('success', (event) => {
-            toastr.success(event[0]);
+            Swal.fire({
+                icon: 'success',
+                title: event[0],
+                timer: 6000,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-right'
+            });
         });
         // Error Message
         Livewire.on('error', (event) => {
-            toastr.error(event[0]);
+            Swal.fire({
+                icon: 'error',
+                title: event[0],
+                timer: 6000,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-right'
+            });
         });
         // Info Message
         Livewire.on('info', (event) => {
-            toastr.info(event[0]);
+            Swal.fire({
+                icon: 'info',
+                title: event[0],
+                timer: 6000,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-right'
+            });
         });
         // Warning Message
         Livewire.on('warning', (event) => {
-            toastr.warning(event[0]);
+            Swal.fire({
+                icon: 'warning',
+                title: event[0],
+                timer: 6000,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-right'
+            });
+        });
+
+        // Error Validation Message
+        Livewire.on('validationFailed', (event) => {
+            event[0].forEach((error) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: error,
+                    timer: 6000,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-right'
+                });
+            });
         });
     });
 

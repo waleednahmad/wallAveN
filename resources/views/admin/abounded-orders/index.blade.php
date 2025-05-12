@@ -2,14 +2,14 @@
 
 @section('breadcrumb')
     @include('admin.layout.partials.page-header', [
-        'title' => 'Abounded Checkout',
+        'title' => 'Abandoned Checkout',
         'links' => [
             [
                 'name' => 'Dashboard',
                 'url' => route('dashboard'),
             ],
             [
-                'name' => 'Abounded Checkout',
+                'name' => 'Abandoned Checkout',
                 'url' => '#',
             ],
         ],
@@ -31,7 +31,7 @@
             <div class="modal-content">
                 <div class="modal-header position-relative">
                     <h1 class="modal-title fs-5" id="previewOrderLabel">
-                        Abbounded Checkout
+                        Abandoned Checkout
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -79,6 +79,7 @@
             // ============== Open Preview Modal ==============
             Livewire.on('previewAboundedCheckout', (event) => {
                 new bootstrap.Modal(document.getElementById('previewOrder')).show();
+                console.log(event)
                 Livewire.dispatch('setDealer', event[0]);
             });
         });

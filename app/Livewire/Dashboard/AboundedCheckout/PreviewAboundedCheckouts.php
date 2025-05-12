@@ -12,7 +12,7 @@ class PreviewAboundedCheckouts extends Component
     public $dealer, $orderItems;
 
     #[On('setDealer')]
-    public function setDealer(Dealer $dealer)
+    public function setDealer(Dealer $dealer, $addedBy = null)
     {
         $this->dealer = $dealer;
         $this->orderItems = CartTemp::where('dealer_id', $dealer->id)

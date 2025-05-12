@@ -265,13 +265,13 @@
                     'nav-item',
                     'menu-open' =>
                         request()->routeIs('dashboard.orders.*') ||
-                        request()->routeIs('dashboard.abounded-orders.*'),
+                        request()->routeIs('dashboard.abandoned-orders.*'),
                 ])>
                     <a href="#" @class([
                         'nav-link',
                         'active' =>
                             request()->routeIs('dashboard.orders.*') ||
-                            request()->routeIs('dashboard.abounded-orders.*'),
+                            request()->routeIs('dashboard.abandoned-orders.*'),
                     ])>
                                         <i class="nav-icon fas fa-shopping-cart"></i>
 
@@ -297,14 +297,14 @@
                         </li>
                         {{-- Abounde Checkout --}}
                         <li class="nav-item">
-                            <a href="{{ route('dashboard.abounded-orders.index') }}" @class([
+                            <a href="{{ route('dashboard.abandoned-orders.index') }}" @class([
                                 'nav-link',
-                                'active' => request()->routeIs('dashboard.abounded-orders.*'),
+                                'active' => request()->routeIs('dashboard.abandoned-orders.*'),
                             ])>
                                 <i class="far fa-circle nav-icon"></i>
 
                                 <p>
-                                    Abounde Checkout
+                                    Abandoned Checkout
                                 </p>
                             </a>
                         </li>

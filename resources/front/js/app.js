@@ -2,7 +2,8 @@ import Splide from "@splidejs/splide";
 
 window.Splide = Splide;
 
-
+import Swal from "sweetalert2";
+window.Swal = Swal;
 
 // const { Autoplay } = splide.Components;
 // Autoplay.pause();

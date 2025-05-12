@@ -75,17 +75,11 @@ final class AboundedCheckoutTable extends PowerGridComponent
             Column::make('Name', 'company_name')
                 ->searchable(),
 
-            Column::make('Email', 'email')
-                ->searchable(),
-
-            Column::make('Phone', 'phone')
-                ->searchable(),
-
-            Column::make('total_cart_quantity', 'total_cart_quantity')
+            Column::make('Quantity', 'total_cart_quantity')
                 ->sortable()
                 ->searchable(),
 
-            Column::make('total_cart_amount', 'total_cart_amount')
+            Column::make('Total', 'total_cart_amount')
                 ->sortable()
                 ->searchable(),
 

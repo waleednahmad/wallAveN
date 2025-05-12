@@ -12,8 +12,7 @@
 <link rel="stylesheet" href="{{ asset('dashboard/plugins/fontawesome-free/css/all.min.css') }}">
 <!-- Theme style -->
 <link rel="stylesheet" href="{{ asset('dashboard/dist/css/adminlte.min.css') }}">
-{{-- toastr css --}}
-<link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
+
 <!-- Select2 -->
 <link rel="stylesheet" href="{{ asset('dashboard/plugins/select2/css/select2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('dashboard/css/bootstrap.min.css') }}">

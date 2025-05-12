@@ -31,9 +31,6 @@
 <link rel="stylesheet" href="{{ asset('assets/css/animate.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/jquery.fancybox.min.css') }}">
 
-{{-- toastr css --}}
-<link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
-
 <!-- BoxIcon  CSS -->
 <link href="{{ asset('assets/css/boxicons.min.css') }}" rel="stylesheet">
 

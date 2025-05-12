@@ -25,4 +25,13 @@ class CartTemp extends Model
     {
         return $this->belongsTo(ProductVariant::class);
     }
+    public function admin()
+    {
+        return $this->belongsTo(User::class, 'admin_id');
+    }
+
+    public function representative()
+    {
+        return $this->belongsTo(User::class, 'representative_id');
+    }
 }

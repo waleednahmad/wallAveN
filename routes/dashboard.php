@@ -84,7 +84,7 @@ Route::prefix('super_admin')
 
                 // Abounded Orders Routes :
                 // ------------------------------------------
-                Route::resource('abounded-orders', AboundedCheckoutController::class)->only(['index']);
+                Route::resource('abandoned-orders', AboundedCheckoutController::class)->only(['index']);
 
                 // Public Settings Routes :
                 // ------------------------------------------
