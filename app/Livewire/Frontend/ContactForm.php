@@ -35,7 +35,7 @@ class ContactForm extends Component
         // foreach ($admins as $admin) {
         //     Mail::to($admin->email)->send(new ContactFormEmail($this->name, $this->email, $this->phone, $this->emailSubject, $this->message));
         // }
-        Mail::to("alsakhena350@gmail.com")->send(new ContactFormEmail($this->name, $this->email, $this->phone, $this->emailSubject, $this->emailMessage));
+        Mail::to("alsakhena950@gmail.com")->send(new ContactFormEmail($this->name, $this->email, $this->phone, $this->emailSubject, $this->emailMessage));
 
         cache()->put($cacheKey, true, now()->addDay());
 
