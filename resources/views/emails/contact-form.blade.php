@@ -32,7 +32,7 @@
             </tr>
             <tr>
                 <td style="padding: 8px 0; vertical-align: top;"><strong>Message:</strong></td>
-                <td>{{ $message }}</td>
+                <td>{{ $emailMessage }}</td>
             </tr>
         </table>
         <hr>

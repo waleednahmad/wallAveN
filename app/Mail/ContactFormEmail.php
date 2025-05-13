@@ -21,13 +21,13 @@ class ContactFormEmail extends Mailable
         public string $email,
         public string $phone,
         public string $emailSubject,
-        public string $message
+        public string $emailMessage
     ) {
         $this->name = $name;
         $this->email = $email;
         $this->phone = $phone;
         $this->emailSubject = $emailSubject;
-        $this->message = $message;
+        $this->emailMessage = $emailMessage;
     }
 
     /**
@@ -52,7 +52,7 @@ class ContactFormEmail extends Mailable
                 'email' => $this->email,
                 'phone' => $this->phone,
                 'emailSubject' => $this->emailSubject,
-                'message' => $this->message,
+                'emailMessage' => $this->emailMessage,
             ],
         );
     }

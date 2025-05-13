@@ -83,8 +83,8 @@
                                             <div class="col-md-12 mb-40">
                                                 <div class="form-inner3">
                                                     <label>message *</label>
-                                                    <textarea wire:model='message' placeholder="Write your message"></textarea>
-                                                    @error('message')
+                                                    <textarea wire:model='emailMessage' placeholder="Write your message"></textarea>
+                                                    @error('emailMessage')
                                                         <span class="text-danger error-handler">{{ $message }}</span>
                                                     @enderror
                                                 </div>
