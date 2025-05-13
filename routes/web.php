@@ -75,18 +75,13 @@ Route::get('preview-email', function () {
     $zip_code = $order->dealer->zip_code ?? '---';
 
     return view(
-        'emails.new-dealer-application-received',
+        'emails.contact-form',
         [
-            'order' => $order,
-            'items' => $order->orderItems,
-            'dealer' => $order->dealer,
-            'email' => $order->dealer->email,
             'name' => $order->dealer->company_name,
+            'email' => $order->dealer->email,
             'phone' => $order->dealer->phone,
-            'address' => $address,
-            'city' => $city,
-            'state' => $state,
-            'zip_code' => $zip_code,
+            'subject' => 'Test Subject',
+            'message' => 'Test Message',
         ]
     );
 });

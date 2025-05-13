@@ -153,7 +153,6 @@ class FrontController extends Controller
         // Send a notification email to the admin
         $admins = User::get();
         foreach ($admins as $admin) {
-            Log::info('Sending email to admin: ' . $admin->email);
             Mail::to($admin->email)->send(new NewDealerApplicationReceived($dealer));
         }
         return redirect()->route('frontend.home')->with('success', 'Your registration has been submitted successfully, we will contact you soon.');
