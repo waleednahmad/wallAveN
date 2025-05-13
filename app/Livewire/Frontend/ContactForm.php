@@ -31,14 +31,12 @@ class ContactForm extends Component
             return redirect()->back()->with('error', 'You can only send a message once every 24 hours.');
         }
 
-        // $admins = User::get();
-        // foreach ($admins as $admin) {
-        //     Mail::to($admin->email)->send(new ContactFormEmail($this->name, $this->email, $this->phone, $this->emailSubject, $this->message));
-        // }
-        Mail::to("alsakhena950@gmail.com")->send(new ContactFormEmail($this->name, $this->email, $this->phone, $this->emailSubject, $this->emailMessage));
+        $admins = User::get();
+        foreach ($admins as $admin) {
+            Mail::to($admin->email)->send(new ContactFormEmail($this->name, $this->email, $this->phone, $this->emailSubject, $this->message));
+        }
 
         cache()->put($cacheKey, true, now()->addDay());
-
         $this->reset();
         return redirect()->route('frontend.home')->with('success', 'Your message has been sent successfully.');
     }
