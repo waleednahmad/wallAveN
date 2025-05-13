@@ -338,9 +338,6 @@
 
                 for (const component of place.address_components) {
                     const componentType = component.types[0];
-                    console.log({
-                        component
-                    })
                     switch (componentType) {
                         case "street_number":
                             address = component.long_name + " ";
@@ -361,9 +358,6 @@
                 }
 
                 // document.getElementById("address").value = address;
-                console.log({
-                    address
-                });
                 document.getElementById("city").value = city;
                 document.getElementById("state").value = state;
                 document.getElementById("zip_code").value = zip;

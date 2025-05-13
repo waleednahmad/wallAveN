@@ -358,9 +358,6 @@
 
         splide.on("mounted move", function() {
             let thumbnail = thumbnails[splide.index];
-            console.log({
-                thumbnail
-            })
             if (thumbnail) {
                 if (current) {
                     current.classList.remove("is-active");
@@ -385,10 +382,7 @@
                 return thumbnailImage.src.includes(
                     variantImage); // Check if the thumbnail image contains the variant image
             });
-
-            console.log({
-                variantImage
-            })
+        
             if (variantIndex !== -1) {
                 splide.go(variantIndex); // Move to the corresponding slide
             }

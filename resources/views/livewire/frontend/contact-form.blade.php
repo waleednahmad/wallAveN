@@ -73,7 +73,8 @@
                                             <div class="col-md-6 mb-30">
                                                 <div class="form-inner3">
                                                     <label>subject *</label>
-                                                    <input type="text" wire:model='emailSubject' placeholder="Subject">
+                                                    <input type="text" wire:model='emailSubject'
+                                                        placeholder="Subject">
                                                     @error('emailSubject')
                                                         <span class="text-danger error-handler">{{ $message }}</span>
                                                     @enderror
@@ -139,6 +140,21 @@
             }
 
             phoneInput.value = formattedNumber;
+        });
+
+        $wire.on('emailSent', (event) => {
+            Swal.fire({
+                icon: 'success',
+                title: event[0],
+                timer: 6000,
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-right'
+            });
+            // make the submit button disable  for 1.4 seconds then redirect to the home page
+            setTimeout(() => {
+                window.location.href = "{{ route('frontend.home') }}";
+            }, 1400);
         });
     </script>
 @endscript
