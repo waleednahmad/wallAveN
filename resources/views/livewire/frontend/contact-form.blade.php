@@ -99,7 +99,7 @@
                                                         </span>
 
                                                         <span wire:loading.remove>
-                                                            Send Email
+                                                            Send 
                                                             <i class="fas fa-paper-plane"></i>
                                                         </span>
                                                     </button>

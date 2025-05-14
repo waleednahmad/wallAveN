@@ -132,13 +132,19 @@ final class OrderTable extends PowerGridComponent
         return [
             Column::make('Id', 'id'),
 
-            Column::make("Company Name", 'company_name'),
+            Column::make("Company Name", 'company_name', 'dealers.company_name')
+                ->searchable()
+                ->sortable(),
             // ->searchableRaw('company_name like ?'),
 
-            Column::make('Dealer Email', 'dealer_email'),
+            Column::make('Dealer Email', 'dealer_email', 'dealers.email')
+                ->searchable()
+                ->sortable(),
             // ->searchableRaw('dealer.email like ?'),
 
-            Column::make('Dealer Phone', 'dealer_phone'),
+            Column::make('Dealer Phone', 'dealer_phone', 'dealers.phone')
+                ->searchable()
+                ->sortable(),
             // ->searchableRaw('dealer.phone like ?'),
 
             Column::make('Status', 'status')
@@ -146,7 +152,6 @@ final class OrderTable extends PowerGridComponent
                 ->visibleInExport(false),
 
             Column::make('Status', 'status_label')
-                ->searchable()
                 ->hidden()
                 ->visibleInExport(true),
 
