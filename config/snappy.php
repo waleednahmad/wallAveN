@@ -35,7 +35,7 @@ return [
 
     'pdf' => [
         'enabled' => true,
-        'binary'  => "../storage/wkhtmltopdf/bin/wkhtmltopdf.exe",
+        'binary'  => "../storage/wkhtmltopdf/bin/wkhtmltopdf",
         'timeout' => false,
         'options' => [
             'enable-local-file-access' => true,
@@ -45,7 +45,7 @@ return [
 
     'image' => [
         'enabled' => true,
-        'binary'  => "../storage/wkhtmltopdf/bin/wkhtmltoimage.exe",
+        'binary'  => "../storage/wkhtmltopdf/bin/wkhtmltoimage",
         'timeout' => false,
         'options' => [
             'enable-local-file-access' => true,
