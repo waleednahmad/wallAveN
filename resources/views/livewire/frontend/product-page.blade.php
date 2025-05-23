@@ -179,13 +179,13 @@
 
             </div>
         </div>
-    </div>
-    <div class="mt-5">
-        {!! str_replace(
-            'ðŸ‡ºðŸ‡',
-            '<img src="' . asset('assets/america-flag.webp') . '" alt="" style="height: 30px; object-fit: contain;">',
-            $description,
-        ) !!}
+        <div class="mt-5">
+            {!! str_replace(
+                'ðŸ‡ºðŸ‡',
+                '<img src="' . asset('assets/america-flag.webp') . '" alt="" style="height: 30px; object-fit: contain;">',
+                $description,
+            ) !!}
+        </div>
     </div>
 </div>
 
@@ -285,29 +285,47 @@
                 }
             });
 
-
             // Magnific popup
             var galleryBtnPopup = $(".btn-gallery-popup");
             galleryBtnPopup.on('click', function(event) {
                 event.preventDefault();
 
-                var gallery = $(this).attr('href');
-                console.log(gallery);
-
-                $(gallery).magnificPopup({
-                    delegate: '[data-mfp-src]',
-                    type: 'image',
-                    closeOnContentClick: false,
-                    closeBtnInside: false,
-                    mainClass: 'ht-mfp zoom-animate mfp-img-mobile',
-                    removalDelay: 800,
-                    image: {
-                        verticalFit: true
-                    },
-                    gallery: {
-                        enabled: true
+                var items = [];
+                // Select only original slides from the main carousel that are not Splide clones
+                $('#thumb-gallery').find('li.splide__slide:not(.is-cloned)').each(function() {
+                    var src = $(this).data('mfp-src');
+                    if (src) {
+                        items.push({
+                            src: src,
+                            type: 'image'
+                        });
                     }
-                }).magnificPopup('open');
+
+                });
+
+                // filtet the items and remove duplicates
+                items = items.filter((item, index, self) =>
+                    index === self.findIndex((t) => (
+                        t.src === item.src
+                    ))
+                );
+
+                if (items.length > 0) {
+                    $.magnificPopup.open({
+                        items: items,
+                        type: 'image',
+                        closeOnContentClick: false,
+                        closeBtnInside: false,
+                        mainClass: 'ht-mfp zoom-animate mfp-img-mobile',
+                        removalDelay: 800,
+                        image: {
+                            verticalFit: true
+                        },
+                        gallery: {
+                            enabled: true
+                        }
+                    });
+                }
             });
         });
     </script>
@@ -382,7 +400,7 @@
                 return thumbnailImage.src.includes(
                     variantImage); // Check if the thumbnail image contains the variant image
             });
-        
+
             if (variantIndex !== -1) {
                 splide.go(variantIndex); // Move to the corresponding slide
             }

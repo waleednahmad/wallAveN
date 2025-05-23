@@ -84,7 +84,6 @@ class ProductPage extends Component
             $this->compare_at_price = $firstVariant->compare_at_price;
             $this->variantNotFound = false;
             $this->selectedVariantImage = $firstVariant->image ?? $this->product->image;
-            // dd($this->selectedVariantImage);
         }
         // Edit the product price based on the dealer's price list
         if (auth('dealer')->check()) {
