@@ -10,6 +10,7 @@ use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
+use PowerComponents\LivewirePowerGrid\Facades\Rule;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 
@@ -66,7 +67,6 @@ final class ProductTable extends PowerGridComponent
         return [
             Column::make('#', 'row_num'),
 
-
             Column::make('image', 'image'),
 
             Column::make('name', 'name')
@@ -112,6 +112,41 @@ final class ProductTable extends PowerGridComponent
         $this->dispatch('openMediaOffcanvas', ['product' => $rowId]);
     }
 
+    //  soft delete
+    #[On('delete')]
+    public function delete($id): void
+    {
+        $product = Product::query()->find($id);
+        if ($product) {
+            $product->update([
+                'deleted_by' => auth()->user()->id,
+            ]);
+            $product->variants()->update([
+                'deleted_by' => auth()->user()->id,
+            ]);
+
+            // Delete the product and all of it's variants 
+            $product->delete();
+            $product->variants()->delete();
+            $this->dispatch('success', 'Product deleted successfully');
+        } else {
+            $this->dispatch('error', 'Product not found');
+        }
+    }
+
+    #[On('restore')]
+    public function restore($id): void
+    {
+        $product = Product::withTrashed()->find($id);
+        if ($product) {
+            $product->restore();
+            $product->variants()->withTrashed()->restore();
+            $this->dispatch('success', 'Product restored successfully');
+        } else {
+            $this->dispatch('error', 'Product not found');
+        }
+    }
+
     public function actions(Product $row): array
     {
         return [
@@ -136,6 +171,19 @@ final class ProductTable extends PowerGridComponent
                 ->slot('Variants')
                 ->class('btn btn-secondary btn-sm rounded')
                 ->dispatch('addVariant', ['rowId' => $row->id]),
+
+            Button::add('delete')
+                ->slot('<i class="fas fa-trash"></i>')
+                ->class('btn btn-danger btn-sm rounded')
+                ->dispatch('delete', ['id' => $row->id])
+                ->confirm('Are you sure you want to delete this product?'),
+
+            // restore
+            Button::add('restore')
+                ->slot('<i class="fas fa-undo"></i>')
+                ->class('btn btn-success btn-sm rounded')
+                ->dispatch('restore', ['id' => $row->id])
+                ->confirm('Are you sure you want to restore this product?'),
         ];
     }
 
@@ -151,15 +199,29 @@ final class ProductTable extends PowerGridComponent
         ]);
         $this->dispatch('success', 'Status updated successfully');
     }
-    /*
+
     public function actionRules($row): array
     {
-       return [
-            // Hide button edit for ID 1
+        return [
+            Rule::button('view')
+                ->when(fn($row) => $row->trashed())
+                ->hide(),
+
             Rule::button('edit')
-                ->when(fn($row) => $row->id === 1)
+                ->when(fn($row) => $row->trashed())
+                ->hide(),
+
+            Rule::button('add-variant')
+                ->when(fn($row) => $row->trashed())
+                ->hide(),
+
+            Rule::button('delete')
+                ->when(fn($row) => $row->trashed())
+                ->hide(),
+
+            Rule::button('restore')
+                ->when(fn($row) => !$row->trashed())
                 ->hide(),
         ];
     }
-    */
 }

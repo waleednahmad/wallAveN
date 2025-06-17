@@ -133,9 +133,23 @@
                             </small>
                         </span>
 
-                        {{-- seach category --}}
-                        <input type="text" wire:model.live="searchCategory" class="form-control"
-                            placeholder="Search Category" style="width: 200px;">
+                        <div class="d-flex">
+                            {{-- Add New Category --}}
+                            <button class="btn btn-primary me-2 btn-sm" type="button"
+                                wire:click="openAddCategoryOffcanvas" wire:loading.attr="disabled"
+                                wire:target="openAddCategoryOffcanvas" title="Add New Category">
+                                <span wire:loading wire:target="openAddCategoryOffcanvas">
+                                    <span class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span>
+                                </span>
+                                <span wire:loading.remove wire:target="openAddCategoryOffcanvas">
+                                    <i class="fas fa-plus"></i>
+                                </span>
+                            </button>
+                            {{-- seach category --}}
+                            <input type="text" wire:model.live="searchCategory" class="form-control"
+                                placeholder="Search Category" style="width: 200px;">
+                        </div>
                     </h5>
                     <div class="category-container">
                         @forelse ($this->categories as $item)
@@ -161,9 +175,24 @@
                                     ({{ count($this->selectedSubCategories) . '/' . $this->subCategories->count() }})
                                 </small>
                             </span>
-                            {{-- seach category --}}
-                            <input type="text" wire:model.live="searchSubCategory" class="form-control"
-                                placeholder="Search Sub Category" style="width: 200px;">
+
+                            <div class="d-flex">
+                                {{-- Add New Category --}}
+                                <button class="btn btn-primary me-2 btn-sm" type="button"
+                                    wire:click="openAddSubCategoryOffcanvas" wire:loading.attr="disabled"
+                                    wire:target="openAddSubCategoryOffcanvas" title="Add New SubCategory">
+                                    <span wire:loading wire:target="openAddSubCategoryOffcanvas">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                    </span>
+                                    <span wire:loading.remove wire:target="openAddSubCategoryOffcanvas">
+                                        <i class="fas fa-plus"></i>
+                                    </span>
+                                </button>
+                                {{-- seach category --}}
+                                <input type="text" wire:model.live="searchSubCategory" class="form-control"
+                                    placeholder="Search Sub Category" style="width: 200px;">
+                            </div>
                         </h5>
                         <div class="category-container w-100">
                             @forelse ($this->subCategories as $item)
@@ -193,9 +222,24 @@
                                     ({{ count($this->selectedProductTypes) . '/' . $this->productTypes->count() }})
                                 </small>
                             </span>
-                            {{-- seach category --}}
-                            <input type="text" wire:model.live="searchProductType" class="form-control"
-                                placeholder="Search Product Type" style="width: 200px;">
+
+                            <div class="d-flex">
+                                {{-- Add New Product Type --}}
+                                <button class="btn btn-primary me-2 btn-sm" type="button"
+                                    wire:click="openAddProductTypeOffcanvas" wire:loading.attr="disabled"
+                                    wire:target="openAddProductTypeOffcanvas" title="Add New Product Type">
+                                    <span wire:loading wire:target="openAddProductTypeOffcanvas">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                    </span>
+                                    <span wire:loading.remove wire:target="openAddProductTypeOffcanvas">
+                                        <i class="fas fa-plus"></i>
+                                    </span>
+                                </button>
+                                {{-- search product type --}}
+                                <input type="text" wire:model.live="searchProductType" class="form-control"
+                                    placeholder="Search Product Type" style="width: 200px;">
+                            </div>
                         </h5>
                         <div class="category-container w-100">
                             @forelse ($this->productTypes as $item)

@@ -37,14 +37,61 @@
                         }
                     @endphp
                 @endauth
-                <p>
-                    {{ $item->quantity }} x ${{ $itemPrice ?? 0 }} = ${{ $itemTotal }}
+
+                {{-- Quantity Controls (Hidden by default) --}}
+                @if (in_array((string)$item->id, $showQuantityControls))
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="me-2">Qty:</span>
+                        <div class="d-flex align-items-center">
+                            <button wire:click="decreaseQuantity('{{ $item->id }}')" type="button"
+                                class="btn btn-outline-secondary btn-sm" style="padding: 2px 6px; font-size: 12px;"
+                                wire:loading.attr="disabled">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" value="{{ $item->quantity }}" readonly
+                                class="form-control mx-1 text-center" style="width: 50px; padding: 2px; font-size: 12px;"
+                                min="1">
+                            <button wire:click="increaseQuantity('{{ $item->id }}')" type="button"
+                                class="btn btn-outline-secondary btn-sm" style="padding: 2px 6px; font-size: 12px;"
+                                wire:loading.attr="disabled">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                @else
+                    {{-- Simple quantity display when controls are hidden --}}
+                    <div class="mb-0">
+                        <span class="text-muted">Qty: {{ $item->quantity }}</span>
+                    </div>
+                @endif
+
+                <p class="mb-0">
+                    <small class="text-muted">${{ $itemPrice ?? 0 }} each</small>
+                </p>
+                <p class="mb-0 fw-bold">
+                    Total: ${{ $itemTotal }}
                 </p>
             </div>
-            <div class="ml-3 cart-item-action">
-                <button wire:click="removeFromCart('{{ $item->id }}')" class="btn btn-danger btn-sm">
-                    X
+            <div class="ml-3 cart-item-action d-flex flex-column align-items-center">
+                {{-- Toggle Quantity Controls Button --}}
+                <button wire:click="toggleQuantityControls('{{ $item->id }}')" 
+                        class="btn btn-success btn-sm mb-1"
+                        wire:loading.attr="disabled" 
+                        title="{{ in_array((string)$item->id, $showQuantityControls) ? 'Hide quantity controls' : 'Show quantity controls' }}">
+                    <i class="fas {{ in_array((string)$item->id, $showQuantityControls) ? 'fa-eye-slash' : 'fa-edit' }}"></i>
                 </button>
+                
+                {{-- Remove Button --}}
+                <button wire:click="removeFromCart('{{ $item->id }}')" class="btn btn-danger btn-sm mb-1"
+                    wire:loading.attr="disabled" title="Remove item">
+                    <i class="fas fa-trash"></i>
+                </button>
+                
+                {{-- Loading Spinner --}}
+                <div wire:loading wire:target="increaseQuantity, decreaseQuantity, updateQuantity, toggleQuantityControls"
+                    class="spinner-border spinner-border-sm" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
             </div>
         </div>
     @empty

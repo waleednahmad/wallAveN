@@ -269,7 +269,23 @@ class CreateProductForm extends Component
     }
 
 
+    // Events 
+    public function openAddCategoryOffcanvas()
+    {
+        $this->dispatch('openAddCategoryOffcanvas');
+    }
+    public function openAddSubCategoryOffcanvas()
+    {
+        $this->dispatch('openAddSubCategoryOffcanvas');
+    }
+
+    public function openAddProductTypeOffcanvas()
+    {
+        $this->dispatch('openAddProductTypeOffcanvas');
+    }
+
     #[On('rerender')]
+    #[On('refresh')]
     public function render()
     {
         // If is there any uploaded images, add order foreach one start from 1
