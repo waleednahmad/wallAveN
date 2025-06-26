@@ -134,7 +134,7 @@
                                     name="password_confirmation" required>
                             </div>
 
-                            {!! RecaptchaV3::field('recaptcha') !!}
+                            {!! RecaptchaV3::field('dealer_register') !!}
 
                             <button type="submit" class="btn btn-secondary mt-3"
                                 style="max-width: 200px; margin: 0 auto; display: block;">Submit</button>

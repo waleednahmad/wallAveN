@@ -240,7 +240,7 @@
                             </div>
 
 
-                            {!! RecaptchaV3::field('recaptcha') !!}
+                            {!! RecaptchaV3::field('representative_register') !!}
 
 
                             @if ($errors->any())
