@@ -22,103 +22,129 @@
 <script src="{{ asset('assets/js/main.js') }}"></script>
 
 
-
+@vite('resources/front/js/app.js')
 <script>
-    // ========== SweetAlert2 Messages ==========
-    // success messages
-    @if (session()->has('success'))
-        Swal.fire({
-            icon: 'success',
-            title: '{{ session()->get('success') }}',
-            timer: 6000,
-            showConfirmButton: false,
-            // toast: true,
-            position: 'top-right'
-        });
-    @endif
-    // error messages
-    @if (session()->has('error'))
-        Swal.fire({
-            icon: 'error',
-            title: '{{ session()->get('error') }}',
-            timer: 6000,
-            showConfirmButton: false,
-            toast: true,
-            position: 'top-right'
-        });
-    @endif
+    // Wait for Vite bundle to load before using Swal
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to wait for Swal to be available
+        function waitForSwal(callback) {
+            if (typeof window.Swal !== 'undefined') {
+                callback();
+            } else {
+                setTimeout(() => waitForSwal(callback), 10);
+            }
+        }
 
-    // error validation messages
-    @if ($errors->any())
-        @foreach ($errors->all() as $error)
-            Swal.fire({
-                icon: 'error',
-                title: '{{ $error }}',
-                timer: 6000,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-right'
-            });
-        @endforeach
-    @endif
-    // ========== End SweetAlert2 Messages ==========
-
-    document.addEventListener('livewire:init', () => {
-        // Success Message
-        Livewire.on('success', (event) => {
-            Swal.fire({
-                icon: 'success',
-                title: event[0],
-                timer: 6000,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-right'
-            });
-        });
-        // Error Message
-        Livewire.on('error', (event) => {
-            Swal.fire({
-                icon: 'error',
-                title: event[0],
-                timer: 6000,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-right'
-            });
-        });
-        // Info Message
-        Livewire.on('info', (event) => {
-            Swal.fire({
-                icon: 'info',
-                title: event[0],
-                timer: 6000,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-right'
-            });
-        });
-        // Warning Message
-        Livewire.on('warning', (event) => {
-            Swal.fire({
-                icon: 'warning',
-                title: event[0],
-                timer: 6000,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-right'
-            });
-        });
-
-        // Error Validation Message
-        Livewire.on('validationFailed', (event) => {
-            event[0].forEach((error) => {
+        // Initialize SweetAlert2 messages after Swal is available
+        waitForSwal(function() {
+            // ========== SweetAlert2 Messages ==========
+            // success messages
+            @if (session()->has('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: '{{ session()->get('success') }}',
+                    timer: 6000,
+                    showConfirmButton: false,
+                    // toast: true,
+                    position: 'top-right'
+                });
+            @endif
+            // error messages
+            @if (session()->has('error'))
                 Swal.fire({
                     icon: 'error',
-                    title: error,
+                    title: '{{ session()->get('error') }}',
                     timer: 6000,
                     showConfirmButton: false,
                     toast: true,
                     position: 'top-right'
+                });
+            @endif
+
+            // error validation messages
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    Swal.fire({
+                        icon: 'error',
+                        title: '{{ $error }}',
+                        timer: 6000,
+                        showConfirmButton: false,
+                        toast: true,
+                        position: 'top-right'
+                    });
+                @endforeach
+            @endif
+            // ========== End SweetAlert2 Messages ==========
+        });
+    });
+
+    document.addEventListener('livewire:init', () => {
+        // Ensure Swal is available for Livewire events too
+        function waitForSwal(callback) {
+            if (typeof window.Swal !== 'undefined') {
+                callback();
+            } else {
+                setTimeout(() => waitForSwal(callback), 10);
+            }
+        }
+
+        waitForSwal(function() {
+            // Success Message
+            Livewire.on('success', (event) => {
+                Swal.fire({
+                    icon: 'success',
+                    title: event[0],
+                    timer: 6000,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-right'
+                });
+            });
+            // Error Message
+            Livewire.on('error', (event) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: event[0],
+                    timer: 6000,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-right'
+                });
+            });
+            // Info Message
+            Livewire.on('info', (event) => {
+                Swal.fire({
+                    icon: 'info',
+                    title: event[0],
+                    timer: 6000,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-right'
+                });
+            });
+            // Warning Message
+            Livewire.on('warning', (event) => {
+                Swal.fire({
+                    icon: 'warning',
+                    title: event[0],
+                    timer: 6000,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-right'
+                });
+            });
+
+            // Error Validation Message
+            Livewire.on('validationFailed', (event) => {
+                event[0].forEach((error) => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: error,
+                        timer: 6000,
+                        showConfirmButton: false,
+                        toast: true,
+                        position: 'top-right'
+                    });
                 });
             });
         });

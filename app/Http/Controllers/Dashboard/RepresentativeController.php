@@ -36,21 +36,6 @@ class RepresentativeController extends Controller
      */
     public function submitRegister(Request $request)
     {
-        if (!$request->input('g-recaptcha-response')) {
-            return back()->withErrors(['g-recaptcha-response' => 'reCAPTCHA is required.']);
-        }
-
-        $recaptchaSecret = env('RECAPTCHA_SECRET_KEY');
-        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => $recaptchaSecret,
-            'response' => $request->input('g-recaptcha-response')
-        ]);
-
-        $recaptchaData = $response->json();
-
-        if (!isset($recaptchaData['success']) || !$recaptchaData['success']) {
-            return back()->withErrors(['g-recaptcha-response' => 'reCAPTCHA validation failed.']);
-        }
         $request->validate([
             'name' => ['required', 'string'],
             'email' => ['required', 'email', 'unique:representatives', 'unique:users', 'unique:dealers', 'email:rfc,dns'],
@@ -72,9 +57,16 @@ class RepresentativeController extends Controller
             'message' => ['nullable', 'string'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'password_confirmation' => ['required', 'string'],
-
+            'g-recaptcha-response' => ['required', new \App\Rules\RecaptchaRule()],
         ]);
-        $data = $request->except(['_token', 'signature', 'code', 'password', 'password_confirmation']);
+        $data = $request->except([
+            '_token',
+            'signature',
+            'code',
+            'password',
+            'password_confirmation',
+            'g-recaptcha-response'
+        ]);
         $data['password'] = Hash::make($request->password);
 
         // ==== Generate a unique code for the representative ====

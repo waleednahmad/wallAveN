@@ -14,7 +14,7 @@
     "isEntry": true
   },
   "resources/front/js/app.js": {
-    "file": "assets/app-DwHNfWeG.js",
+    "file": "assets/app-B2kM-aoE.js",
     "name": "app",
     "src": "resources/front/js/app.js",
     "isEntry": true,
@@ -23,7 +23,7 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-DOYas4B4.js",
+    "file": "assets/app-KGQ5IW6C.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -31,7 +31,7 @@
       "_sweetalert2.esm.all-DV3w3JmD.js"
     ],
     "css": [
-      "assets/app-DRWPhb4s.css"
+      "assets/app-DswgvAH1.css"
     ]
   }
 }

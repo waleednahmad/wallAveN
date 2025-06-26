@@ -8,7 +8,7 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <form class="row g-4" action="{{ route('frontend.submitRegister') }}" method="POST"
+                        <form class="row g-4" action="{{ route('frontend.submitRegister') }}" method="POST" id="demo-form"
                             enctype="multipart/form-data">
                             @csrf
                             <!-- Left Column -->
@@ -137,21 +137,15 @@
                             <div class="mt-2 col-12">
                                 <!-- Google reCAPTCHA -->
                                 <div class="form-group">
-                                    <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"
-                                        data-callback="enableSubmit"></div>
+                                    <div class="g-recaptcha" data-sitekey="{{ get_recaptcha_site_key() }}"></div>
                                     @if ($errors->has('g-recaptcha-response'))
                                         <p class="text-danger">{{ $errors->first('g-recaptcha-response') }}</p>
                                     @endif
                                 </div>
                             </div>
 
-                            @if ($errors->has('g-recaptcha-response'))
-                                <div class="alert alert-danger mt-2">
-                                    {{ $errors->first('g-recaptcha-response') }}
-                                </div>
-                            @endif
 
-                            <button type="submit" class="btn btn-secondary mt-3"
+                            <button type="submit" class="btn btn-secondary mt-3 "
                                 style="max-width: 200px; margin: 0 auto; display: block;">Submit</button>
 
                             <p class="mt-3 text-center">
@@ -178,7 +172,12 @@
     </script>
 
     <script>
+        function onSubmit(token) {
+            alert('test');
+            document.getElementById("demo-form").submit();
+        }
         $(document).ready(function() {
+
             // Prevent negative values in years in business field
             $('#years_in_business').on('input', function() {
                 if ($(this).val() < 0) {

@@ -85,22 +85,6 @@ class FrontController extends Controller
 
     public function submitRegister(Request $request)
     {
-        if (!$request->input('g-recaptcha-response')) {
-            return back()->withErrors(['g-recaptcha-response' => 'reCAPTCHA is required.']);
-        }
-
-        $recaptchaSecret = env('RECAPTCHA_SECRET_KEY');
-        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => $recaptchaSecret,
-            'response' => $request->input('g-recaptcha-response')
-        ]);
-
-        $recaptchaData = $response->json();
-
-        if (!isset($recaptchaData['success']) || !$recaptchaData['success']) {
-            return back()->withErrors(['g-recaptcha-response' => 'reCAPTCHA validation failed.']);
-        }
-
         $request->validate([
             'name' => ['required', 'string'],
             'email' => ['required', 'email', 'unique:dealers', 'email:rfc,dns', 'unique:users', 'unique:representatives'],
@@ -119,6 +103,7 @@ class FrontController extends Controller
             'ref' => ['nullable', 'string', 'exists:representatives,code'],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'password_confirmation' => ['nullable', 'string', 'min:8'],
+            'g-recaptcha-response' => ['required', new \App\Rules\RecaptchaRule()],
         ]);
 
 

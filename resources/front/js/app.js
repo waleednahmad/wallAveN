@@ -1,9 +1,12 @@
 import Splide from "@splidejs/splide";
-
-window.Splide = Splide;
-
 import Swal from "sweetalert2";
+
+// Make libraries globally available
+window.Splide = Splide;
 window.Swal = Swal;
+
+// Debug: Log when the bundle is loaded
+console.log('Vite bundle loaded, Swal available:', typeof window.Swal !== 'undefined');
 
 // const { Autoplay } = splide.Components;
 // Autoplay.pause();
