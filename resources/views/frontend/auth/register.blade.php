@@ -134,7 +134,13 @@
                                     name="password_confirmation" required>
                             </div>
 
-                            {!! RecaptchaV3::field('dealer_register') !!}
+                            {!! RecaptchaV3::field('register') !!}
+
+                            @if ($errors->has('g-recaptcha-response'))
+                                <div class="alert alert-danger mt-2">
+                                    {{ $errors->first('g-recaptcha-response') }}
+                                </div>
+                            @endif
 
                             <button type="submit" class="btn btn-secondary mt-3"
                                 style="max-width: 200px; margin: 0 auto; display: block;">Submit</button>

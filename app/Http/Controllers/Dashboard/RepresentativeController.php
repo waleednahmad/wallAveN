@@ -56,7 +56,7 @@ class RepresentativeController extends Controller
             'message' => ['nullable', 'string'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'password_confirmation' => ['required', 'string'],
-            'g-recaptcha-response' => ['required', 'recaptchav3:representative_register,0.5'],
+            'g-recaptcha-response' => ['required', 'recaptchav3:register,0.5'],
         ], [
             'g-recaptcha-response.required' => 'Please complete the reCAPTCHA verification.',
             'g-recaptcha-response.recaptchav3' => 'reCAPTCHA verification failed. Please try again.',

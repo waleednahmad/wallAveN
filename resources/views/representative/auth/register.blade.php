@@ -240,7 +240,13 @@
                             </div>
 
 
-                            {!! RecaptchaV3::field('representative_register') !!}
+                            {!! RecaptchaV3::field('register') !!}
+
+                            @if ($errors->has('g-recaptcha-response'))
+                                <div class="alert alert-danger mt-2">
+                                    {{ $errors->first('g-recaptcha-response') }}
+                                </div>
+                            @endif
 
 
                             @if ($errors->any())

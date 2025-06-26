@@ -102,7 +102,7 @@ class FrontController extends Controller
             'ref' => ['nullable', 'string', 'exists:representatives,code'],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'password_confirmation' => ['nullable', 'string', 'min:8'],
-            'g-recaptcha-response' => ['required', 'recaptchav3:dealer_register,0.5'],
+            'g-recaptcha-response' => ['required', 'recaptchav3:register,0.5'],
         ], [
             'ref.exists' => 'Invalid referral code.',
             'g-recaptcha-response.required' => 'Please complete the reCAPTCHA verification.',

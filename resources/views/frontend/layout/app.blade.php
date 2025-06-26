@@ -3,7 +3,6 @@
 
 <head>
     @include('frontend.layout.partials.head')
-    {!! RecaptchaV3::initJs() !!}
     @stack('styles')
     @vite(['resources/front/css/app.css', 'resources/front/js/app.js'])
 </head>
@@ -100,6 +99,7 @@
 
 
     @include('frontend.layout.partials.scripts')
+    {!! RecaptchaV3::initJs() !!}
     @stack('scripts')
     <script>
         document.addEventListener('livewire:init', () => {
