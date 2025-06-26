@@ -240,6 +240,9 @@
                             </div>
 
 
+                            {!! RecaptchaV3::field('recaptcha') !!}
+
+
                             @if ($errors->any())
                                 <div class="alert alert-danger">
                                     <ul>

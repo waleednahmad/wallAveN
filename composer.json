@@ -12,6 +12,7 @@
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^3.1",
         "barryvdh/laravel-snappy": "^1.0",
+        "josiasmontag/laravel-recaptchav3": "^1.0",
         "laravel/breeze": "^2.3",
         "laravel/framework": "^11.31",
         "laravel/nightwatch": "^1.7",
