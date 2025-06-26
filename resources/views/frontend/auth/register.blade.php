@@ -134,7 +134,16 @@
                                     name="password_confirmation" required>
                             </div>
 
-                            {!! RecaptchaV3::field('register') !!}
+                            <div class="mt-2 col-12">
+                                <!-- Google reCAPTCHA -->
+                                <div class="form-group">
+                                    <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"
+                                        data-callback="enableSubmit"></div>
+                                    @if ($errors->has('g-recaptcha-response'))
+                                        <p class="text-danger">{{ $errors->first('g-recaptcha-response') }}</p>
+                                    @endif
+                                </div>
+                            </div>
 
                             @if ($errors->has('g-recaptcha-response'))
                                 <div class="alert alert-danger mt-2">

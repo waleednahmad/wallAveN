@@ -5,7 +5,7 @@
     @include('frontend.layout.partials.head')
     @stack('styles')
     @vite(['resources/front/css/app.css', 'resources/front/js/app.js'])
-    {!! RecaptchaV3::initJs() !!}
+    {{-- {!! RecaptchaV3::initJs() !!} --}}
 </head>
 
 <body id="body">

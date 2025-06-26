@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Representative;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 
 class RepresentativeController extends Controller
 {
@@ -35,6 +36,21 @@ class RepresentativeController extends Controller
      */
     public function submitRegister(Request $request)
     {
+        if (!$request->input('g-recaptcha-response')) {
+            return back()->withErrors(['g-recaptcha-response' => 'reCAPTCHA is required.']);
+        }
+
+        $recaptchaSecret = env('RECAPTCHA_SECRET_KEY');
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => $recaptchaSecret,
+            'response' => $request->input('g-recaptcha-response')
+        ]);
+
+        $recaptchaData = $response->json();
+
+        if (!isset($recaptchaData['success']) || !$recaptchaData['success']) {
+            return back()->withErrors(['g-recaptcha-response' => 'reCAPTCHA validation failed.']);
+        }
         $request->validate([
             'name' => ['required', 'string'],
             'email' => ['required', 'email', 'unique:representatives', 'unique:users', 'unique:dealers', 'email:rfc,dns'],
@@ -56,10 +72,7 @@ class RepresentativeController extends Controller
             'message' => ['nullable', 'string'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'password_confirmation' => ['required', 'string'],
-            'g-recaptcha-response' => ['required', 'recaptchav3:register,0.5'],
-        ], [
-            'g-recaptcha-response.required' => 'Please complete the reCAPTCHA verification.',
-            'g-recaptcha-response.recaptchav3' => 'reCAPTCHA verification failed. Please try again.',
+
         ]);
         $data = $request->except(['_token', 'signature', 'code', 'password', 'password_confirmation']);
         $data['password'] = Hash::make($request->password);
