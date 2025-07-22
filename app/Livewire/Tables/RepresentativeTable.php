@@ -124,7 +124,6 @@ final class RepresentativeTable extends PowerGridComponent
                 ->searchable(),
 
             Column::make('Status', 'status_label')
-                ->searchable()
                 ->hidden()
                 ->visibleInExport(true),
 
