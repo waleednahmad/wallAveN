@@ -83,8 +83,19 @@ Route::prefix('super_admin')
                     ->name('orders.pdf');
 
                 // Abounded Orders Routes :
+
                 // ------------------------------------------
                 Route::resource('abandoned-orders', AboundedCheckoutController::class)->only(['index']);
+
+                // Admin Dealers Abandoned Carts Table
+                Route::get('admin-dealers-abandoned-carts/{admin}', function ($admin) {
+                    return view('admin.abandoned-carts.admin-dealers', ['adminId' => $admin]);
+                })->name('admin-dealers-abandoned-carts');
+
+                // Representative Dealers Abandoned Carts Table
+                Route::get('representative-dealers-abandoned-carts/{representative}', function ($representative) {
+                    return view('admin.abandoned-carts.representative-dealers', ['representativeId' => $representative]);
+                })->name('representative-dealers-abandoned-carts');
 
                 // Public Settings Routes :
                 // ------------------------------------------
@@ -122,6 +133,25 @@ Route::prefix('super_admin')
                 // SEO Pages Routes :
                 // ---------------------
                 Route::resource('seo-pages', SeoPageController::class)->only(['index']);
+
+                // All Admins Dealers Abandoned Carts
+
+                Route::get('all-admins-dealers-abandoned-carts', function () {
+                    $admins = \App\Models\User::whereHas('cartTemps', function ($query) {
+                        $query->whereNotNull('admin_id')
+                            ->whereNull('representative_id');
+                    })->get();
+                    return view('admin.abandoned-carts.all-admins-dealers', compact('admins'));
+                })->name('all-admins-dealers-abandoned-carts');
+
+                // All Representatives Dealers Abandoned Carts
+                Route::get('all-representatives-dealers-abandoned-carts', function () {
+                    $representatives = \App\Models\Representative::whereHas('cartTemps', function ($query) {
+                        $query->whereNotNull('representative_id')
+                            ->whereNull('admin_id');
+                    })->get();
+                    return view('admin.abandoned-carts.all-representatives-dealers', compact('representatives'));
+                })->name('all-representatives-dealers-abandoned-carts');
             });
     });
 

@@ -113,59 +113,6 @@
                     </ul>
                 </li>
 
-                {{-- -------------------- ADMIN -------------------- --}}
-                {{-- <li class="nav-item">
-                    <a href="{{ route('dashboard.admins.index') }}" @class([
-                        'nav-link',
-                        'active' => request()->routeIs('dashboard.admins.*'),
-                    ])>
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>
-                            Admins
-                        </p>
-                    </a>
-                </li> --}}
-
-                {{-- -------------------- Vendors -------------------- --}}
-                {{-- <li class="nav-item">
-                    <a href="{{ route('dashboard.vendors.index') }}" @class([
-                        'nav-link',
-                        'active' => request()->routeIs('dashboard.vendors.*'),
-                    ])>
-                        <i class="nav-icon fas fa-store-alt"></i>
-                        <p>
-                            Vendors
-                        </p>
-                    </a>
-                </li> --}}
-
-
-
-                {{-- -------------------- Dealers -------------------- --}}
-                {{-- <li class="nav-item">
-                    <a href="{{ route('dashboard.dealers.index') }}" @class([
-                        'nav-link',
-                        'active' => request()->routeIs('dashboard.dealers.*'),
-                    ])>
-                        <i class="nav-icon fas fa-store"></i>
-                        <p>
-                            Dealers
-                        </p>
-                    </a>
-                </li> --}}
-
-                {{-- -------------------- Representatives -------------------- --}}
-                {{-- <li class="nav-item">
-                    <a href="{{ route('dashboard.representatives.index') }}" @class([
-                        'nav-link',
-                        'active' => request()->routeIs('dashboard.representatives.*'),
-                    ])>
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>
-                            Representatives
-                        </p>
-                    </a>
-                </li> --}}
 
                 {{-- -------------------- Categories -------------------- --}}
                 <li @class([
@@ -263,17 +210,13 @@
                 {{-- -------------------- Orders -------------------- --}}
                 <li @class([
                     'nav-item',
-                    'menu-open' =>
-                        request()->routeIs('dashboard.orders.*') ||
-                        request()->routeIs('dashboard.abandoned-orders.*'),
+                    'menu-open' => request()->routeIs('dashboard.orders.*'),
                 ])>
                     <a href="#" @class([
                         'nav-link',
-                        'active' =>
-                            request()->routeIs('dashboard.orders.*') ||
-                            request()->routeIs('dashboard.abandoned-orders.*'),
+                        'active' => request()->routeIs('dashboard.orders.*'),
                     ])>
-                                        <i class="nav-icon fas fa-shopping-cart"></i>
+                        <i class="nav-icon fas fa-shopping-cart"></i>
 
                         <p>
                             Orders
@@ -295,6 +238,38 @@
                                 </p>
                             </a>
                         </li>
+                    </ul>
+                </li>
+                {{-- -------------------- Abonend Checkouts -------------------- --}}
+                <li @class([
+                    'nav-item',
+                    'menu-open' =>
+                        request()->routeIs('dashboard.abandoned-orders.*') ||
+                        request()->routeIs('dashboard.all-admins-dealers-abandoned-carts') ||
+                        request()->routeIs(
+                            'dashboard.all-representatives-dealers-abandoned-carts') ||
+                        request()->routeIs('dashboard.admin-dealers-abandoned-carts') ||
+                        request()->routeIs('dashboard.representative-dealers-abandoned-carts'),
+                ])>
+                    <a href="#" @class([
+                        'nav-link',
+                        'active' =>
+                            request()->routeIs('dashboard.abandoned-orders.*') ||
+                            request()->routeIs('dashboard.all-admins-dealers-abandoned-carts') ||
+                            request()->routeIs(
+                                'dashboard.all-representatives-dealers-abandoned-carts') ||
+                            request()->routeIs('dashboard.admin-dealers-abandoned-carts') ||
+                            request()->routeIs('dashboard.representative-dealers-abandoned-carts'),
+                    ])>
+                        <i class="nav-icon fas fa-shopping-cart"></i>
+
+                        <p>
+                            Abandoned Checkouts
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
                         {{-- Abounde Checkout --}}
                         <li class="nav-item">
                             <a href="{{ route('dashboard.abandoned-orders.index') }}" @class([
@@ -302,9 +277,64 @@
                                 'active' => request()->routeIs('dashboard.abandoned-orders.*'),
                             ])>
                                 <i class="far fa-circle nav-icon"></i>
-
                                 <p>
-                                    Abandoned Checkout
+                                    Dealers Carts
+                                </p>
+                            </a>
+                        </li>
+                        {{-- Admin Dealers Abandoned Carts --}}
+                        {{-- <li class="nav-item">
+                            <a href="{{ route('dashboard.admin-dealers-abandoned-carts', ['admin' => auth()->id()]) }}"
+                                @class([
+                                    'nav-link',
+                                    'active' => request()->routeIs('dashboard.admin-dealers-abandoned-carts'),
+                                ])>
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Admin Dealers Abandoned Carts
+                                </p>
+                            </a>
+                        </li> --}}
+                        {{-- Representative Dealers Abandoned Carts --}}
+                        {{-- <li class="nav-item">
+                            <a href="{{ route('dashboard.representative-dealers-abandoned-carts', ['representative' => auth()->id()]) }}"
+                                @class([
+                                    'nav-link',
+                                    'active' => request()->routeIs(
+                                        'dashboard.representative-dealers-abandoned-carts'),
+                                ])>
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Representative Dealers Abandoned Carts
+                                </p>
+                            </a>
+                        </li> --}}
+
+                        {{-- All Admins Dealers Abandoned Carts --}}
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.all-admins-dealers-abandoned-carts') }}"
+                                @class([
+                                    'nav-link',
+                                    'active' => request()->routeIs(
+                                        'dashboard.all-admins-dealers-abandoned-carts'),
+                                ])>
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Admins Carts
+                                </p>
+                            </a>
+                        </li>
+                        {{-- All Representatives Dealers Abandoned Carts --}}
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.all-representatives-dealers-abandoned-carts') }}"
+                                @class([
+                                    'nav-link',
+                                    'active' => request()->routeIs(
+                                        'dashboard.all-representatives-dealers-abandoned-carts'),
+                                ])>
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Representatives Carts
                                 </p>
                             </a>
                         </li>

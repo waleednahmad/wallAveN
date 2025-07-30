@@ -3,42 +3,41 @@
 namespace App\Livewire\Tables;
 
 use App\Models\Dealer;
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use Livewire\Attributes\On;
+use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
-use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Facades\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 
-final class AboundedCheckoutTable extends PowerGridComponent
+final class AdminDealersAbandonedCartsTable extends PowerGridComponent
 {
-    public string $tableName = 'abounded-checkout-table-54oczu-table';
+    public int $adminId;
+    public string $tableName = 'admin-dealers-abandoned-carts-table';
 
     public function setUp(): array
     {
         return [
-            PowerGrid::header()
-                ->showSearchInput(),
-            PowerGrid::footer()
-                ->showPerPage()
-                ->showRecordCount(),
+            PowerGrid::header()->showSearchInput(),
+            PowerGrid::footer()->showPerPage()->showRecordCount(),
         ];
     }
 
     public function datasource(): Builder
     {
         return Dealer::whereHas('cartTemps', function ($query) {
-            $query->whereNull('representative_id')
-                ->whereNull('admin_id');
-        })
+                $query->whereNotNull('admin_id')
+                      ->whereNull('representative_id');
+            })
+            ->whereHas('cartTemps', function ($query) {
+                $query->where('admin_id', $this->adminId)
+                      ->whereNull('representative_id');
+            })
             ->join('cart_temps', function ($join) {
                 $join->on('dealers.id', '=', 'cart_temps.dealer_id')
-                    ->whereNull('cart_temps.representative_id')
-                    ->whereNull('cart_temps.admin_id');
+                    ->where('cart_temps.admin_id', $this->adminId)
+                    ->whereNull('cart_temps.representative_id');
             })
             ->select([
                 'dealers.*',
@@ -48,11 +47,6 @@ final class AboundedCheckoutTable extends PowerGridComponent
             ])
             ->groupBy('dealers.id')
             ->distinct();
-    }
-
-    public function relationSearch(): array
-    {
-        return [];
     }
 
     public function fields(): PowerGridFields
@@ -72,35 +66,13 @@ final class AboundedCheckoutTable extends PowerGridComponent
     {
         return [
             Column::make('#', 'row_num'),
-
-            Column::make('Name', 'company_name')
-                ->searchable(),
-
-            Column::make('Quantity', 'total_cart_quantity')
-                ->sortable(),
-
-            Column::make('Total', 'total_cart_amount')
-                ->sortable(),
-
-            Column::make('Added At', 'created_at')
-                ->sortable()
-                ->searchable(),
-
+            Column::make('Name', 'company_name')->searchable(),
+            Column::make('Quantity', 'total_cart_quantity')->sortable(),
+            Column::make('Total', 'total_cart_amount')->sortable(),
+            Column::make('Added At', 'created_at')->sortable()->searchable(),
             Column::action('Action')
         ];
     }
-
-    public function filters(): array
-    {
-        return [];
-    }
-
-    #[On('show')]
-    public function show($id)
-    {
-        $this->dispatch('previewAboundedCheckout', ['dealer' => $id]);
-    }
-
 
     public function actions(Dealer $row): array
     {
@@ -116,16 +88,4 @@ final class AboundedCheckoutTable extends PowerGridComponent
     {
         return $this->datasource()->pluck('id')->search($row->id) + 1;
     }
-
-    /*
-    public function actionRules($row): array
-    {
-       return [
-            // Hide button edit for ID 1
-            Rule::button('edit')
-                ->when(fn($row) => $row->id === 1)
-                ->hide(),
-        ];
-    }
-    */
 }
