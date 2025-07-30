@@ -43,7 +43,8 @@ final class AboundedCheckoutTable extends PowerGridComponent
             ->select([
                 'dealers.*',
                 DB::raw('SUM(cart_temps.total) as total_cart_amount'),
-                DB::raw('SUM(cart_temps.quantity) as total_cart_quantity')
+                DB::raw('SUM(cart_temps.quantity) as total_cart_quantity'),
+                DB::raw('MAX(cart_temps.created_at) as last_cart_temp_date')
             ])
             ->groupBy('dealers.id')
             ->distinct();
@@ -62,7 +63,7 @@ final class AboundedCheckoutTable extends PowerGridComponent
                 return $this->getRowNum($row);
             })
             ->add('total_cart_amount', function ($row) {
-                return "$" . $row->total_cart_amount;
+                return "$" . number_format($row->total_cart_amount, 2);
             })
             ->add('created_at');
     }
@@ -80,6 +81,10 @@ final class AboundedCheckoutTable extends PowerGridComponent
                 ->searchable(),
 
             Column::make('Total', 'total_cart_amount')
+                ->sortable()
+                ->searchable(),
+
+            Column::make('Added At', 'created_at')
                 ->sortable()
                 ->searchable(),
 
