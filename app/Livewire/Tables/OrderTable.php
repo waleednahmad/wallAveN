@@ -266,7 +266,7 @@ final class OrderTable extends PowerGridComponent
             Button::make('pdf')
                 ->slot('<i class="fas fa-file-pdf"></i>')
                 ->class('btn btn-danger btn-sm rounded')
-                ->route('dashboard.orders.pdf', ['order' => $row->id], '_blank'),
+                ->route('dashboard.orders.pdf', ['order' => $row->id]),
         ];
     }
 
