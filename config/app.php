@@ -69,6 +69,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | PDF Template Configuration
+    |--------------------------------------------------------------------------
+    |
+    | This setting determines which PDF template to use for order generation.
+    | Options: 'prints.order' (complex), 'prints.order-simple' (fallback)
+    |
+    */
+
+    'pdf_template' => env('PDF_TEMPLATE', 'prints.order'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Locale Configuration
     |--------------------------------------------------------------------------
     |

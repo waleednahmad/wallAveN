@@ -28,6 +28,13 @@
             margin-bottom: 20px;
         }
 
+        .logo-img {
+            max-width: 200px;
+            max-height: 100px;
+            display: block;
+            margin: 0 auto 20px auto;
+        }
+
         .bill-ship {
             border: 1px solid #ddd;
             padding: 10px;
@@ -36,25 +43,25 @@
             border-radius: 5px;
             overflow: hidden;
             text-align: left;
-            /* CSS2 float-based layout for 3 sections in one line */
         }
 
-        .bill-ship section {
-            float: left;
-            width: 32%;
-            margin-right: 2%;
-            box-sizing: border-box;
+        .bill-ship-table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        .bill-ship section:last-child {
-            margin-right: 0;
+        .bill-ship-table td {
+            width: 33.33%;
+            vertical-align: top;
+            padding: 0 10px;
         }
 
-        /* Clearfix for .bill-ship */
-        .bill-ship:after {
-            content: "";
-            display: table;
-            clear: both;
+        .bill-ship-table td:first-child {
+            padding-left: 0;
+        }
+
+        .bill-ship-table td:last-child {
+            padding-right: 0;
         }
 
         .bill-ship table {
@@ -98,6 +105,20 @@
             text-align: right;
         }
 
+        /* Page break styles for PDF */
+        @page {
+            margin: 1cm;
+        }
+
+        .page-break {
+            page-break-after: always;
+        }
+
+        /* Avoid page breaks inside elements */
+        .bill-ship, .table {
+            page-break-inside: avoid;
+        }
+
         h6 {
             margin: 0;
         }
@@ -118,73 +139,75 @@
 <body>
     <div class="invoice" id="printableArea">
         <header>
-            <img src="{{ $logoImage }}" alt="{{ getWebsiteTitle() }}" style="max-width: 200px;">
+            @if($logoImage)
+                <img src="{{ $logoImage }}" alt="{{ getWebsiteTitle() }}" class="logo-img">
+            @endif
             <div class="bill-ship">
-                <section>
-                    <p>
-                        Name: <br>
-                        <strong>{{ $order?->dealer->company_name }}</strong><br>
-                        <span
-                            style="color: #333; display: block; margin-bottom: 4px; font-size: 14px; margin-top: 7px;">BILL
-                            TO</span>
-                        <strong>
-                            {{ $address }}<br>
-                            {{ $city }}{{ $city != '---' ? ',' : '' }}
-                            {{ $state }}{{ $state != '---' ? ' ' : '' }}
-                            {{ $zip_code }}
-                        </strong>
-                        @if ($order?->more_info)
-                            <hr>
-                            <u>More Info :</u>
-                            <strong>{{ $order?->more_info }}</strong>
-                        @endif
-                    </p>
-                </section>
-                <section>
-                    <p>
-                        Phone: <br>
-                        <strong><a href="tel:{{ $phone }}">{{ $phone }}</a></strong><br>
-                        <span
-                            style="color: #333; display: block; margin-bottom: 4px; font-size: 14px; margin-top: 7px;">SHIP
-                            TO</span>
-                        <strong>
-                            {{ $address }}<br>
-                            {{ $city }}{{ $city != '---' ? ',' : '' }}
-                            {{ $state }}{{ $state != '---' ? ' ' : '' }}
-                            {{ $zip_code }}
-                        </strong>
-                    </p>
-                </section>
-                <section>
-                    <table style="padding-top: 20px">
-                        <tr>
-                            <td>INVOICE</td>
-                            <th>{{ $order?->id }}</th>
-                        </tr>
-                        <tr>
-                            <td>DATE</td>
-                            <th>{{ $order?->created_at->format('m/d/Y') }}</th>
-                        </tr>
-                        <tr>
-                            <td>DUE DATE</td>
-                            <th>{{ $order?->created_at->format('m/d/Y') }}</th>
-                        </tr>
-                        <tr>
-                            <td>PLACED BY</td>
-                            @if ($order?->representative_id)
-                                <th>Sales Rep</th>
-                            @elseif($order?->admin_id)
-                                <th>Admin</th>
-                            @else
-                                <th>Dealer</th>
-                            @endif
-                        </tr>
-                        <tr>
-                            <td>STATUS</td>
-                            <th style="text-transform: capitalize;">{{ $order?->status }}</th>
-                        </tr>
-                    </table>
-                </section>
+                <table class="bill-ship-table">
+                    <tr>
+                        <td>
+                            <p>
+                                Name: <br>
+                                <strong>{{ $order?->dealer->company_name }}</strong><br>
+                                <span style="color: #333; display: block; margin-bottom: 4px; font-size: 14px; margin-top: 7px;">BILL TO</span>
+                                <strong>
+                                    {{ $address }}<br>
+                                    {{ $city }}{{ $city != '---' ? ',' : '' }}
+                                    {{ $state }}{{ $state != '---' ? ' ' : '' }}
+                                    {{ $zip_code }}
+                                </strong>
+                                @if ($order?->more_info)
+                                    <br><br>
+                                    <u>More Info :</u><br>
+                                    <strong>{{ $order?->more_info }}</strong>
+                                @endif
+                            </p>
+                        </td>
+                        <td>
+                            <p>
+                                Phone: <br>
+                                <strong>{{ $phone }}</strong><br>
+                                <span style="color: #333; display: block; margin-bottom: 4px; font-size: 14px; margin-top: 7px;">SHIP TO</span>
+                                <strong>
+                                    {{ $address }}<br>
+                                    {{ $city }}{{ $city != '---' ? ',' : '' }}
+                                    {{ $state }}{{ $state != '---' ? ' ' : '' }}
+                                    {{ $zip_code }}
+                                </strong>
+                            </p>
+                        </td>
+                        <td>
+                            <table style="padding-top: 20px; width: 100%; font-size: 14px;">
+                                <tr>
+                                    <td>INVOICE</td>
+                                    <th>{{ $order?->id }}</th>
+                                </tr>
+                                <tr>
+                                    <td>DATE</td>
+                                    <th>{{ $order?->created_at->format('m/d/Y') }}</th>
+                                </tr>
+                                <tr>
+                                    <td>DUE DATE</td>
+                                    <th>{{ $order?->created_at->format('m/d/Y') }}</th>
+                                </tr>
+                                <tr>
+                                    <td>PLACED BY</td>
+                                    @if ($order?->representative_id)
+                                        <th>Sales Rep</th>
+                                    @elseif($order?->admin_id)
+                                        <th>Admin</th>
+                                    @else
+                                        <th>Dealer</th>
+                                    @endif
+                                </tr>
+                                <tr>
+                                    <td>STATUS</td>
+                                    <th style="text-transform: capitalize;">{{ $order?->status }}</th>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </header>
         @if (isset($order) && $order->orderItems)

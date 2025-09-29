@@ -34,7 +34,7 @@ return [
     */
 
     'pdf' => [
-        'enabled' => true,
+        'enabled' => false, // Disabled since we're using DomPDF
         'binary'  => "../storage/wkhtmltopdf/bin/wkhtmltopdf.exe",
         'timeout' => false,
         'options' => [
@@ -44,7 +44,7 @@ return [
     ],
 
     'image' => [
-        'enabled' => true,
+        'enabled' => false, // Disabled since we're using DomPDF
         'binary'  => "../storage/wkhtmltopdf/bin/wkhtmltoimage.exe",
         'timeout' => false,
         'options' => [
