@@ -23,6 +23,7 @@
 
 
 @vite('resources/front/js/app.js')
+@livewireScripts
 <script>
     // Wait for Vite bundle to load before using Swal
     document.addEventListener('DOMContentLoaded', function() {
