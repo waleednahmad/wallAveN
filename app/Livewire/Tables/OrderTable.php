@@ -180,7 +180,7 @@ final class OrderTable extends PowerGridComponent
     {
         return [
             'total.{sum,avg,count,min,max}' => fn($value) => "$" . number_format($value, 2),
-            'quantity.{sum,avg,count,min,max}' => fn($value) => Number::format($value),
+            'quantity.{sum,avg,count,min,max}' => fn($value) => number_format($value),
         ];
     }
 
