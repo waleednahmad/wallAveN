@@ -17,10 +17,10 @@
         "laravel/framework": "^11.31",
         "laravel/nightwatch": "^1.7",
         "laravel/tinker": "^2.9",
-        "livewire/livewire": "*",
+        "livewire/livewire": "^4.0",
         "nyholm/psr7": "^1.8",
         "openspout/openspout": "^4.29",
-        "power-components/livewire-powergrid": "^6.1",
+        "power-components/livewire-powergrid": "^6.7",
         "railsware/mailtrap-php": "^2.1",
         "symfony/http-client": "^7.2"
     },
