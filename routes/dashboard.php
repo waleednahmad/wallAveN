@@ -34,7 +34,7 @@ use Livewire\Livewire;
 */
 
 Livewire::setUpdateRoute(function ($handle) {
-    return Route::post('demo/public/livewire/update', $handle);
+    return Route::post('livewire/update', $handle);
 });
 
 Route::prefix('super_admin')
