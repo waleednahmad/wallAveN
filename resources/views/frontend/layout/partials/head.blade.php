@@ -33,6 +33,8 @@
 
 <!-- BoxIcon  CSS -->
 <link href="{{ asset('assets/css/boxicons.min.css') }}" rel="stylesheet">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 
