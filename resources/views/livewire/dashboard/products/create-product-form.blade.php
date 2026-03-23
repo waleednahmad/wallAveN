@@ -296,9 +296,9 @@
         </div>
 
         <div class="col-12" x-data="{ uploading: false, progress: 0, isUploading: false, isUploadingStart: false, errMessage: '', isError: false }"
-            x-on:livewire-upload-start="isUploading = true; isUploadingStart = true"
+            x-on:livewire-upload-start="isUploading = true; isUploadingStart = true; isError = false; errMessage = ''"
             x-on:livewire-upload-finish="isUploading = false" x-on:livewire-upload-cancel="isUploading = false"
-            x-on:livewire-upload-error="isUploading = false; errMessage = $event.detail.message; isError = true"
+            x-on:livewire-upload-error="isUploading = false; errMessage = 'Upload failed. Check browser console (F12 > Network tab) for details.'; isError = true; console.error('Livewire upload error:', $event.detail)"
             x-on:livewire-upload-progress="progress = $event.detail.progress">
             {{-- -------------------- Product Images -------------------- --}}
             <div class="card">
@@ -372,6 +372,8 @@
                                         aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
+
+                            <div x-show="isError" x-cloak class="alert alert-danger mt-2" x-text="errMessage"></div>
                         </div>
                     </div>
                 </div>
