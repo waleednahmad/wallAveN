@@ -51,29 +51,31 @@
                     Attributes
                 </span>
             </h5>
-            <div class="category-container d-flex flex-column">
+            <div class="d-flex flex-column gap-3" x-data x-on:select-updated="$wire.selectAttributeValue($event.detail.target, $event.detail.value)">
                 @forelse ($this->productAttributesWithValues as $attribute)
-                    <h6 class="mt-1 mb-0">
-                        {{ ucwords(strtolower($attribute['name'])) }}
-                        {{-- add new value button with modal --}}
-                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#addNewValueModal" wire:click="setAttribute({{ $attribute['id'] }})">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </h6>
-                    {{-- values --}}
-                    <div class="flex-wrap gap-2 d-flex">
-                        @foreach ($attribute['values'] as $value)
-                            <div wire:click="selectAttributeValue({{ $attribute['id'] }},{{ $value['id'] }})"
-                                @class([
-                                    'category-card ',
-                                    'active' => in_array($value['id'], $this->selectedAttributeValues),
-                                ])>
-                                <p class="mb-0">
-                                    {{ $value['value'] }}
-                                </p>
+                    <div>
+                        <div class="d-flex align-items-end gap-2 mb-1">
+                            <div class="flex-grow-1">
+                            <livewire:form.select-dropdown
+                                :items="collect($attribute['values'])->map(fn($v) => ['id' => $v['id'], 'value' => $v['value']])->values()->toArray()"
+                                :targetModel="(string) $attribute['id']"
+                                :searchable="true"
+                                :multiple="false"
+                                :required="true"
+                                :placeholder="'Select ' . $attribute['name']"
+                                labelKey="value"
+                                valueKey="id"
+                                :label="ucwords(strtolower($attribute['name']))"
+                                :value="$this->selectedAttributeValues[$attribute['id']] ?? null"
+                                :key="'attr-select-' . $attribute['id'] . '-' . count($attribute['values'])"
+                            />
                             </div>
-                        @endforeach
+                            {{-- add new value button with modal --}}
+                            <button type="button" class="btn btn-sm btn-primary mb-1" data-bs-toggle="modal"
+                                data-bs-target="#addNewValueModal" wire:click="setAttribute({{ $attribute['id'] }})">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
                     </div>
                 @empty
                 @endforelse

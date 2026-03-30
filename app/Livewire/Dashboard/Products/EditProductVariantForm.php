@@ -131,7 +131,11 @@ class EditProductVariantForm extends Component
 
     public function selectAttributeValue($attributeId, $valueId)
     {
-        $this->selectedAttributeValues[$attributeId] = $valueId;
+        if ($valueId === null || $valueId === '') {
+            unset($this->selectedAttributeValues[$attributeId]);
+        } else {
+            $this->selectedAttributeValues[$attributeId] = $valueId;
+        }
     }
 
 
