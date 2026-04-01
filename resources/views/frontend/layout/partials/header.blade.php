@@ -96,7 +96,7 @@
                 <li><a href="{{ route('frontend.aboutUs') }}">About us</a></li>
                 @if (showCategoryAndShopPages() || auth('dealer')->check() || auth('representative')->check() || auth('web')->check())
                     @if (!isLargeMenuActivated())
-                        <li><a href="{{ route('frontend.shop') }}">Shop</a></li>
+                        <li><a href="{{ route('frontend.shop') }}">New Arrivals</a></li>
                         @if (isset($publicActiveCategories) && $publicActiveCategories->count() > 0)
                             <li class="menu-item-has-children">
                                 <a href="#" class="drop-down">Categories</a>
