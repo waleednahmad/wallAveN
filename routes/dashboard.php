@@ -5,6 +5,7 @@ use App\Http\Controllers\Dashboard\AdminController;
 use App\Http\Controllers\Dashboard\AllTransactionController;
 use App\Http\Controllers\Dashboard\AttributeController;
 use App\Http\Controllers\Dashboard\CampaignController;
+use App\Http\Controllers\Dashboard\CatalogController;
 use App\Http\Controllers\Dashboard\CategoryController;
 use App\Http\Controllers\Dashboard\ClientController;
 use App\Http\Controllers\Dashboard\DashboardController;
@@ -133,6 +134,11 @@ Route::prefix('super_admin')
                 // SEO Pages Routes :
                 // ---------------------
                 Route::resource('seo-pages', SeoPageController::class)->only(['index']);
+
+                // Catalog Routes :
+                // ---------------------
+                Route::get('catalog', [CatalogController::class, 'index'])->name('catalog.index');
+                Route::post('catalog/generate', [CatalogController::class, 'generate'])->name('catalog.generate');
 
                 // All Admins Dealers Abandoned Carts
 

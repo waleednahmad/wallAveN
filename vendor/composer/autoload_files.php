@@ -120,6 +120,7 @@ return array(
     'aadac1114cab8dc19489a7f6dc24c003' => $vendorDir . '/pestphp/pest-plugin-arch/src/Autoload.php',
     '8cff32064859f4559445b89279f3199c' => $vendorDir . '/php-http/message/src/filters.php',
     '40275907c8566c390185147049ef6e5d' => $vendorDir . '/livewire/livewire/src/helpers.php',
+    'db356362850385d08a5381de2638b5fd' => $vendorDir . '/mpdf/mpdf/src/functions.php',
     'f83ed111c2f97a0449abf067f157f418' => $vendorDir . '/pestphp/pest/src/Functions.php',
     '7d2876738dc0328edeb8a103c76cd8e7' => $vendorDir . '/pestphp/pest/src/Pest.php',
     '801c31d8ed748cfa537fa45402288c95' => $vendorDir . '/psy/psysh/src/functions.php',

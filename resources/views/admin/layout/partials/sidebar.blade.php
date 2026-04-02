@@ -355,6 +355,20 @@
                         </p>
                     </a>
                 </li>
+
+                {{-- -------------------- Product Catalog -------------------- --}}
+                <li class="nav-item">
+                    <a href="{{ route('dashboard.catalog.index') }}" @class([
+                        'nav-link',
+                        'active' => request()->routeIs('dashboard.catalog.*'),
+                    ])>
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>
+                            Product Catalog
+                        </p>
+                    </a>
+                </li>
+
                 <li @class([
                     'nav-item',
                     'menu-open' => request()->routeIs('dashboard.page-breadcrumps.*'),

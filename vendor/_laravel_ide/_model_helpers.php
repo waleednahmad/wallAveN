@@ -15,7 +15,7 @@ namespace App\Models {
      * @property string $name
      * @property int $id
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SubCategory> $subCategories
-     * @property-read int|null $subCategories_count
+     * @property-read int|null $sub_categories_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Product> $products
      * @property-read int|null $products_count
      * @method static \Illuminate\Database\Eloquent\Builder<Category>|Category whereId($value)
@@ -333,7 +333,7 @@ namespace App\Models {
      * @property int $id
      * @property-read \App\Models\Category $category
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductType> $productTypes
-     * @property-read int|null $productTypes_count
+     * @property-read int|null $product_types_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Product> $products
      * @property-read int|null $products_count
      * @method static \Illuminate\Database\Eloquent\Builder<SubCategory>|SubCategory whereId($value)
@@ -658,9 +658,9 @@ namespace App\Models {
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Category> $categories
      * @property-read int|null $categories_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\SubCategory> $subCategories
-     * @property-read int|null $subCategories_count
+     * @property-read int|null $sub_categories_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductType> $productTypes
-     * @property-read int|null $productTypes_count
+     * @property-read int|null $product_types_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductVariant> $variants
      * @property-read int|null $variants_count
      * @property-read \App\Models\ProductVariant $firstVariant
@@ -993,7 +993,7 @@ namespace App\Models {
      * @property int $id
      * @property-read mixed $sku
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\AttributeValue> $attributeValues
-     * @property-read int|null $attributeValues_count
+     * @property-read int|null $attribute_values_count
      * @property-read \App\Models\Product $product
      * @method static \Illuminate\Database\Eloquent\Builder<ProductVariant>|ProductVariant whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ProductVariant>|ProductVariant whereProductId($value)
@@ -1920,7 +1920,7 @@ namespace App\Models {
      * @property-read mixed $value
      * @property-read \App\Models\Attribute $attribute
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ProductVariant> $productVariants
-     * @property-read int|null $productVariants_count
+     * @property-read int|null $product_variants_count
      * @method static \Illuminate\Database\Eloquent\Builder<AttributeValue>|AttributeValue whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<AttributeValue>|AttributeValue whereAttributeId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<AttributeValue>|AttributeValue whereCreatedAt($value)
@@ -2586,7 +2586,7 @@ namespace App\Models {
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
      * @property-read int|null $orders_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CartTemp> $cartTemps
-     * @property-read int|null $cartTemps_count
+     * @property-read int|null $cart_temps_count
      * @property-read \App\Models\DealerBannerSetting $bannerSetting
      * @property-read \App\Models\Representative $referalTo
      * @property-read \App\Models\PriceList $priceList
@@ -3244,7 +3244,7 @@ namespace App\Models {
      * @property string|null $po_number
      * @property int $id
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\OrderItem> $orderItems
-     * @property-read int|null $orderItems_count
+     * @property-read int|null $order_items_count
      * @property-read \App\Models\Dealer $dealer
      * @method static \Illuminate\Database\Eloquent\Builder<Order>|Order whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Order>|Order wherePoNumber($value)
@@ -5467,7 +5467,7 @@ namespace App\Models {
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
      * @property-read int|null $orders_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CartTemp> $cartTemps
-     * @property-read int|null $cartTemps_count
+     * @property-read int|null $cart_temps_count
      * @property-read \App\Models\Dealer $buyingFor
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
      * @property-read int|null $notifications_count
@@ -6119,7 +6119,7 @@ namespace App\Models {
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
      * @property-read int|null $orders_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CartTemp> $cartTemps
-     * @property-read int|null $cartTemps_count
+     * @property-read int|null $cart_temps_count
      * @property-read \App\Models\Dealer $buyingFor
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
      * @property-read int|null $notifications_count
