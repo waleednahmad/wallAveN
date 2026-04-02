@@ -20,6 +20,9 @@ class CatalogController extends Controller
             'footer_text' => 'nullable|string|max:500',
             'front_cover' => 'nullable|image|max:4096',
             'back_cover' => 'nullable|image|max:4096',
+            'category_id' => 'nullable|integer|exists:categories,id',
+            'subcategory_ids' => 'nullable|array',
+            'subcategory_ids.*' => 'integer|exists:sub_categories,id',
         ]);
 
         $layout = $validated['layout'];
@@ -42,10 +45,25 @@ class CatalogController extends Controller
         $logoPath = $this->resolveImagePath(public_path($logoSetting), $tempFiles);
 
         // Get all active products with variants and attribute values
-        $products = Product::active()
+        $query = Product::active()
             ->with(['variants.attributeValues.attribute'])
-            ->orderBy('name')
-            ->get();
+            ->orderBy('name');
+
+        // Filter by category if selected
+        if (!empty($validated['category_id'])) {
+            $query->whereHas('categories', function ($q) use ($validated) {
+                $q->where('categories.id', $validated['category_id']);
+            });
+        }
+
+        // Filter by subcategories if selected
+        if (!empty($validated['subcategory_ids'])) {
+            $query->whereHas('subCategories', function ($q) use ($validated) {
+                $q->whereIn('sub_categories.id', $validated['subcategory_ids']);
+            });
+        }
+
+        $products = $query->get();
 
         // Build product data with grouped attributes
         $productData = $products->map(function ($product) use (&$tempFiles) {
