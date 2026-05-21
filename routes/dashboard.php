@@ -138,7 +138,7 @@ Route::prefix('super_admin')
                 // Catalog Routes :
                 // ---------------------
                 Route::get('catalog', [CatalogController::class, 'index'])->name('catalog.index');
-                Route::post('catalog/generate', [CatalogController::class, 'generate'])->name('catalog.generate');
+                Route::get('catalog/{catalog}/download', [CatalogController::class, 'download'])->name('catalog.download');
 
                 // All Admins Dealers Abandoned Carts
 
