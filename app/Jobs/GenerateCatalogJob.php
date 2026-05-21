@@ -111,8 +111,12 @@ class GenerateCatalogJob implements ShouldQueue
             $mpdf->showImageErrors = false;
             $mpdf->SetTitle($catalog->name ?: 'Product Catalog');
 
+            // Parse stylesheet in HEADER_CSS mode so mPDF treats it as
+            // pure styles and does NOT auto-open a blank first page.
             $css = view('admin.catalog.pdf-styles', ['layout' => $layout])->render();
-            $mpdf->WriteHTML($css);
+            // Strip <style> tags — HEADER_CSS expects raw CSS, not HTML.
+            $css = preg_replace('#</?style[^>]*>#i', '', $css);
+            $mpdf->WriteHTML(trim($css), \Mpdf\HTMLParserMode::HEADER_CSS);
 
             // Pre-render header & footer HTML once
             $headerHtml = view('admin.catalog.pdf-header', ['logoPath' => $logoPath])->render();

@@ -29,6 +29,28 @@ class CatalogGenerator extends Component
     public array $categories = [];
     public array $subcategories = [];
 
+    // Recent-catalogs filters + pagination
+    public string $search = '';
+    public string $statusFilter = '';
+    public string $layoutFilter = '';
+    public int $perPage = 8;
+
+    /** Reset pagination whenever a filter changes. */
+    public function updatedSearch(): void { $this->perPage = 8; }
+    public function updatedStatusFilter(): void { $this->perPage = 8; }
+    public function updatedLayoutFilter(): void { $this->perPage = 8; }
+
+    public function loadMore(): void
+    {
+        $this->perPage += 8;
+    }
+
+    public function clearFilters(): void
+    {
+        $this->reset(['search', 'statusFilter', 'layoutFilter']);
+        $this->perPage = 8;
+    }
+
     public function mount(): void
     {
         $this->footerText = 'All rights reserved © ' . date('Y');
@@ -52,7 +74,40 @@ class CatalogGenerator extends Component
     #[Computed]
     public function recentCatalogs()
     {
-        return Catalog::latest()->limit(15)->get();
+        return $this->recentCatalogsQuery()->limit($this->perPage)->get();
+    }
+
+    #[Computed]
+    public function recentCatalogsTotal(): int
+    {
+        return $this->recentCatalogsQuery()->count();
+    }
+
+    #[Computed]
+    public function hasMoreCatalogs(): bool
+    {
+        return $this->recentCatalogsTotal > $this->perPage;
+    }
+
+    private function recentCatalogsQuery()
+    {
+        $q = Catalog::query()->latest();
+
+        if (trim($this->search) !== '') {
+            $term = '%' . trim($this->search) . '%';
+            $q->where(function ($qq) use ($term) {
+                $qq->where('name', 'like', $term)
+                   ->orWhere('footer_text', 'like', $term);
+            });
+        }
+        if ($this->statusFilter !== '') {
+            $q->where('status', $this->statusFilter);
+        }
+        if ($this->layoutFilter !== '') {
+            $q->where('layout', $this->layoutFilter);
+        }
+
+        return $q;
     }
 
     #[Computed]
@@ -113,7 +168,7 @@ class CatalogGenerator extends Component
         $this->reset(['frontCover', 'backCover', 'catalogName']);
         session()->flash('catalog_message', 'Catalog queued for generation. You will see it appear in the list below.');
 
-        unset($this->recentCatalogs, $this->hasInProgress);
+        unset($this->recentCatalogs, $this->hasInProgress, $this->recentCatalogsTotal, $this->hasMoreCatalogs);
     }
 
     public function deleteCatalog(int $id): void
@@ -127,7 +182,7 @@ class CatalogGenerator extends Component
             return;
         }
         $catalog->delete();
-        unset($this->recentCatalogs);
+        unset($this->recentCatalogs, $this->recentCatalogsTotal, $this->hasMoreCatalogs);
     }
 
     public function retryCatalog(int $id): void
@@ -143,7 +198,7 @@ class CatalogGenerator extends Component
             'completed_at' => null,
         ]);
         GenerateCatalogJob::dispatch($catalog->id);
-        unset($this->recentCatalogs, $this->hasInProgress);
+        unset($this->recentCatalogs, $this->hasInProgress, $this->recentCatalogsTotal, $this->hasMoreCatalogs);
     }
 
     public function render()

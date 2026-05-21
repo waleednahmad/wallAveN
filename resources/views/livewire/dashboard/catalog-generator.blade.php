@@ -259,9 +259,60 @@
                         </span>
                     @endif
                 </div>
-                <div class="card-body p-0">
+
+                {{-- Filter bar --}}
+                <div class="p-3 border-bottom" style="background:#f8fafc;">
+                    <div class="position-relative mb-2">
+                        <i class="fas fa-search position-absolute"
+                           style="top:50%; left:.75rem; transform:translateY(-50%); color:#94a3b8; font-size:.8rem;"></i>
+                        <input type="text" class="form-control form-control-sm"
+                               style="padding-left:2rem;"
+                               wire:model.live.debounce.400ms="search"
+                               placeholder="Search by name or footer text...">
+                        @if ($search !== '')
+                            <button type="button"
+                                    class="btn-close position-absolute"
+                                    style="top:50%; right:.6rem; transform:translateY(-50%); font-size:.65rem;"
+                                    wire:click="$set('search', '')"></button>
+                        @endif
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <select class="form-select form-select-sm" wire:model.live="statusFilter">
+                                <option value="">All statuses</option>
+                                <option value="pending">Pending</option>
+                                <option value="processing">Processing</option>
+                                <option value="completed">Completed</option>
+                                <option value="failed">Failed</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <select class="form-select form-select-sm" wire:model.live="layoutFilter">
+                                <option value="">All layouts</option>
+                                <option value="2x3">2 × 3 (6 / page)</option>
+                                <option value="3x3">3 × 3 (9 / page)</option>
+                            </select>
+                        </div>
+                    </div>
+                    @if ($search !== '' || $statusFilter !== '' || $layoutFilter !== '')
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <small class="text-muted">
+                                <i class="fas fa-filter me-1"></i>
+                                {{ $this->recentCatalogsTotal }} match{{ $this->recentCatalogsTotal === 1 ? '' : 'es' }}
+                            </small>
+                            <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none"
+                                    wire:click="clearFilters">
+                                <i class="fas fa-times me-1"></i> Clear filters
+                            </button>
+                        </div>
+                    @endif
+                </div>
+
+                <div class="card-body p-0"
+                     id="catalog-list-scroll"
+                     style="max-height: 640px; overflow-y: auto;">
                     @forelse ($this->recentCatalogs as $catalog)
-                        <div class="catalog-row p-3 border-bottom">
+                        <div class="catalog-row p-3 border-bottom" wire:key="catalog-{{ $catalog->id }}">
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <div class="flex-grow-1 me-2" style="min-width: 0;">
                                     <div class="fw-semibold text-truncate">{{ $catalog->name }}</div>
@@ -314,10 +365,48 @@
                     @empty
                         <div class="empty-catalogs">
                             <i class="fas fa-folder-open icon"></i>
-                            <div>No catalogs yet</div>
-                            <small>Generated catalogs will appear here.</small>
+                            @if ($search !== '' || $statusFilter !== '' || $layoutFilter !== '')
+                                <div>No catalogs match your filters</div>
+                                <button type="button" class="btn btn-sm btn-link" wire:click="clearFilters">Clear filters</button>
+                            @else
+                                <div>No catalogs yet</div>
+                                <small>Generated catalogs will appear here.</small>
+                            @endif
                         </div>
                     @endforelse
+
+                    {{-- Infinite-scroll sentinel + loading state --}}
+                    @if ($this->hasMoreCatalogs)
+                        <div class="text-center py-3"
+                             x-data="{
+                                 observer: null,
+                                 init() {
+                                     this.observer = new IntersectionObserver((entries) => {
+                                         if (entries[0].isIntersecting) {
+                                             $wire.loadMore();
+                                         }
+                                     }, { root: this.$root.closest('#catalog-list-scroll'), rootMargin: '120px' });
+                                     this.observer.observe(this.$el);
+                                 },
+                                 destroy() { this.observer && this.observer.disconnect(); }
+                             }"
+                             wire:key="catalog-load-more-{{ $perPage }}">
+                            <div wire:loading.remove wire:target="loadMore">
+                                <button type="button" class="btn btn-sm btn-outline-primary" wire:click="loadMore">
+                                    <i class="fas fa-chevron-down me-1"></i> Load more
+                                </button>
+                            </div>
+                            <div wire:loading.flex wire:target="loadMore" class="justify-content-center align-items-center text-primary" style="display:none;">
+                                <span class="spinner-mini me-2"></span>
+                                <span class="small">Loading more catalogs...</span>
+                            </div>
+                        </div>
+                    @elseif (count($this->recentCatalogs) > 0 && $this->recentCatalogsTotal > 8)
+                        <div class="text-center py-3 text-muted small">
+                            <i class="fas fa-check-circle me-1"></i>
+                            All {{ $this->recentCatalogsTotal }} catalogs loaded
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
