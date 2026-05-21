@@ -90,41 +90,60 @@ class GenerateCatalogJob implements ShouldQueue
             // Pre-count for catalog row
             $productsCount = (clone $query)->count();
 
-            // Build mPDF
+            // Build mPDF — A4 with tight, balanced margins.
+            // top 18 / bottom 12 leave room for the running header/footer
+            // (margin_header 4, margin_footer 4) so they never overlap cards.
             $mpdf = new \Mpdf\Mpdf([
                 'mode' => 'utf-8',
                 'format' => 'A4',
-                'default_font_size' => 10,
+                'default_font_size' => 9,
                 'default_font' => 'sans-serif',
-                'margin_left' => 5,
-                'margin_right' => 5,
-                'margin_top' => 20,
-                'margin_bottom' => 14,
-                'margin_header' => 3,
-                'margin_footer' => 3,
+                'margin_left' => 8,
+                'margin_right' => 8,
+                'margin_top' => 18,
+                'margin_bottom' => 12,
+                'margin_header' => 4,
+                'margin_footer' => 4,
                 'tempDir' => $mpdfTempDir,
             ]);
 
-            // Reduce mPDF memory pressure
+            // Reduce mPDF memory pressure / noise
             $mpdf->showImageErrors = false;
+            $mpdf->SetTitle($catalog->name ?: 'Product Catalog');
 
             $css = view('admin.catalog.pdf-styles', ['layout' => $layout])->render();
             $mpdf->WriteHTML($css);
 
-            // Front cover (no header/footer)
+            // Pre-render header & footer HTML once
+            $headerHtml = view('admin.catalog.pdf-header', ['logoPath' => $logoPath])->render();
+            $footerHtml = view('admin.catalog.pdf-footer', ['footerText' => $catalog->footer_text ?? ''])->render();
+
+            // Front cover — full-bleed, no header/footer, no margins.
             if ($frontCoverAbs) {
                 $mpdf->SetHTMLHeader('');
                 $mpdf->SetHTMLFooter('');
+                $mpdf->AddPageByArray([
+                    'margin-left' => 0, 'margin-right' => 0,
+                    'margin-top' => 0,  'margin-bottom' => 0,
+                    'margin-header' => 0, 'margin-footer' => 0,
+                    'odd-header-name' => '', 'odd-footer-name' => '',
+                    'newformat' => 'A4',
+                ]);
                 $coverHtml = view('admin.catalog.pdf-cover', ['imagePath' => $frontCoverAbs])->render();
                 $mpdf->WriteHTML($coverHtml, \Mpdf\HTMLParserMode::HTML_BODY);
-                $mpdf->AddPage();
             }
 
-            // Header/footer for product pages
-            $headerHtml = view('admin.catalog.pdf-header', ['logoPath' => $logoPath])->render();
-            $footerHtml = view('admin.catalog.pdf-footer', ['footerText' => $catalog->footer_text ?? ''])->render();
+            // Switch back to product-page geometry + running header/footer.
+            // AddPageByArray here resets margins so the first product page has them.
             $mpdf->SetHTMLHeader($headerHtml);
             $mpdf->SetHTMLFooter($footerHtml);
+            $mpdf->AddPageByArray([
+                'margin-left' => 8, 'margin-right' => 8,
+                'margin-top' => 18, 'margin-bottom' => 12,
+                'margin-header' => 4, 'margin-footer' => 4,
+                'newformat' => 'A4',
+                'resetpagenum' => 1,
+            ]);
 
             // ---- Stream products in DB chunks, page-by-page ----
             // We accumulate $perPage products in $buffer, render a page, then
@@ -133,18 +152,21 @@ class GenerateCatalogJob implements ShouldQueue
             $pageTempFiles = [];
             $pageIndex = 0;
             $isFirstProductPage = true;
+            $globalIndex = 0; // running 1-based index across all pages (for №N badge)
 
             // Use lazy() so Eloquent reads in cursor-style chunks of 50 rows
             // and never holds the whole result set in memory.
             $query->lazy(50)->each(function ($product) use (
-                &$buffer, &$pageTempFiles, &$pageIndex, &$isFirstProductPage,
-                $mpdf, $cols, $rows, $perPage, $layout
+                &$buffer, &$pageTempFiles, &$pageIndex, &$isFirstProductPage, &$globalIndex,
+                $mpdf, $cols, $rows, $perPage, $layout, $productsCount
             ) {
                 $buffer[] = $this->mapProduct($product, $pageTempFiles);
 
                 if (count($buffer) >= $perPage) {
-                    $this->renderPage($mpdf, $buffer, $cols, $rows, $layout, $pageIndex, $isFirstProductPage);
+                    $startIndex = $globalIndex + 1;
+                    $this->renderPage($mpdf, $buffer, $cols, $rows, $layout, $pageIndex, $isFirstProductPage, $startIndex, $productsCount);
                     $this->cleanupTemp($pageTempFiles);
+                    $globalIndex += count($buffer);
                     $buffer = [];
                     $pageTempFiles = [];
                     $pageIndex++;
@@ -155,18 +177,26 @@ class GenerateCatalogJob implements ShouldQueue
 
             // Flush remainder (last partial page)
             if (count($buffer) > 0) {
-                $this->renderPage($mpdf, $buffer, $cols, $rows, $layout, $pageIndex, $isFirstProductPage);
+                $startIndex = $globalIndex + 1;
+                $this->renderPage($mpdf, $buffer, $cols, $rows, $layout, $pageIndex, $isFirstProductPage, $startIndex, $productsCount);
                 $this->cleanupTemp($pageTempFiles);
+                $globalIndex += count($buffer);
                 $buffer = [];
                 $pageTempFiles = [];
                 gc_collect_cycles();
             }
 
-            // Back cover
+            // Back cover — full-bleed, no header/footer/margins.
             if ($backCoverAbs) {
-                $mpdf->AddPage();
                 $mpdf->SetHTMLHeader('');
                 $mpdf->SetHTMLFooter('');
+                $mpdf->AddPageByArray([
+                    'margin-left' => 0, 'margin-right' => 0,
+                    'margin-top' => 0,  'margin-bottom' => 0,
+                    'margin-header' => 0, 'margin-footer' => 0,
+                    'odd-header-name' => '', 'odd-footer-name' => '',
+                    'newformat' => 'A4',
+                ]);
                 $coverHtml = view('admin.catalog.pdf-cover', ['imagePath' => $backCoverAbs])->render();
                 $mpdf->WriteHTML($coverHtml, \Mpdf\HTMLParserMode::HTML_BODY);
             }
@@ -284,12 +314,12 @@ class GenerateCatalogJob implements ShouldQueue
         ];
     }
 
-    private function renderPage(\Mpdf\Mpdf $mpdf, array $productArray, int $cols, int $rows, string $layout, int $pageIndex, bool $isFirstProductPage): void
+    private function renderPage(\Mpdf\Mpdf $mpdf, array $productArray, int $cols, int $rows, string $layout, int $pageIndex, bool $isFirstProductPage, int $startIndex = 1, int $totalProducts = 0): void
     {
         if (!$isFirstProductPage || $pageIndex > 0) {
             $mpdf->AddPage();
         }
-        $pageHtml = view('admin.catalog.pdf-page', compact('productArray', 'cols', 'rows', 'layout'))->render();
+        $pageHtml = view('admin.catalog.pdf-page', compact('productArray', 'cols', 'rows', 'layout', 'startIndex', 'totalProducts'))->render();
         $mpdf->WriteHTML($pageHtml, \Mpdf\HTMLParserMode::HTML_BODY);
     }
 
