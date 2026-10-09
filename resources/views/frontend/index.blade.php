@@ -60,7 +60,7 @@
                         </div>
                     </div>
                     <div class="col-lg-2 col-md-2 d-flex justify-content-md-end">
-                        <a href="{{ route('frontend.shop') }}" class="view-all-btn">View All</a>
+                        <a href="{{ route('frontend.shop', ['new_arrivals' => 1]) }}" class="view-all-btn">View All</a>
                     </div>
                 </div>
                 <div class="general-art-slider-wrap wow animate fadeInUp" data-wow-delay="200ms" data-wow-duration="1500ms">

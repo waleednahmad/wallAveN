@@ -274,6 +274,15 @@
                     </div>
                 </div>
                 <div class="order-1 col-xl-9 order-xl-2">
+                    @if ($newArrivals)
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                            <div class="section-title">
+                                <h3>New Arrivals Only</h3>
+                                <p class="mb-0">You are viewing recently added products.</p>
+                            </div>
+                            <a href="{{ route('frontend.shop') }}" class="view-all-btn">Preview All</a>
+                        </div>
+                    @endif
                     <div class="row">
                         <div class="col-lg-12 mb-30">
                             <div class="auction-card-top-area">

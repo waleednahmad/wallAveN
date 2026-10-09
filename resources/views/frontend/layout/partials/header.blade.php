@@ -96,8 +96,13 @@
                 <li><a href="{{ route('frontend.aboutUs') }}">About us</a></li>
                 @if (showCategoryAndShopPages() || auth('dealer')->check() || auth('representative')->check() || auth('web')->check())
                     <li>
-                        <a href="{{ route('frontend.shop') }}">
+                        <a href="{{ route('frontend.shop', ['new_arrivals' => 1]) }}">
                             New Arrivals
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('frontend.shop') }}">
+                            Shop
                         </a>
                     </li>
                     @if (!isLargeMenuActivated())

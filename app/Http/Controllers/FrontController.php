@@ -29,8 +29,8 @@ class FrontController extends Controller
         $products = Product::with(['vendor', 'firstVariant', 'variants'])
             ->whereHas('variants')
             ->active()
-            ->take(12)
-            ->inRandomOrder()
+            ->newArrivals()
+            ->take(30)
             ->get();
         $categories  = Category::active()
             ->whereHas('subcategories', function ($subQuery) {

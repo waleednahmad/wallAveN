@@ -20,6 +20,7 @@ class ShopPage extends Component
     #[Url()]
     public $search = '';
     public $searchQuery = '';
+    public $newArrivals = false;
     public $type = '';
     public $selectedCategories = [];
     public $selectedSubCategories = [];
@@ -41,6 +42,8 @@ class ShopPage extends Component
 
     public function mount()
     {
+        $this->newArrivals = request()->boolean('new_arrivals');
+
         $category = request()->input('category', '');
         if ($category) {
             $this->selectedCategory = Category::where('slug', $category)->first();
@@ -231,11 +234,13 @@ class ShopPage extends Component
         }
 
         if ($this->search) {
-            $productsQuery->where('name', 'like', '%' . $this->search . '%')
-                ->orWhere('sku', 'like', '%' . $this->search . '%')
-                ->orWhereHas('variants', function ($query) {
-                    $query->where('sku', 'like', '%' . $this->search . '%');
-                });
+            $productsQuery->where(function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%')
+                    ->orWhere('sku', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('variants', function ($query) {
+                        $query->where('sku', 'like', '%' . $this->search . '%');
+                    });
+            });
         }
 
         if (!empty($this->selectedCategories)) {
@@ -268,6 +273,10 @@ class ShopPage extends Component
             $productsQuery->whereHas('variants.attributeValues', function ($query) {
                 $query->whereIn('attribute_value_id', $this->selectedAttributeValues);
             });
+        }
+
+        if ($this->newArrivals) {
+            $productsQuery = $productsQuery->newArrivals();
         }
 
         return view('livewire.frontend.shop-page')->with([

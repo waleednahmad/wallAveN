@@ -61,6 +61,29 @@ class Product extends Model
     {
         return $query->where('status', 1);
     }
+
+    public function scopeNewArrivals($query)
+    {
+        $recentProductsQuery = (clone $query)
+            ->where('products.created_at', '>=', now()->subDays(60));
+
+        if ($recentProductsQuery->exists()) {
+            return $recentProductsQuery->reorder('products.created_at', 'desc')
+                ->orderByDesc('products.id');
+        }
+
+        $latestProductIds = (clone $query)
+            ->reorder()
+            ->orderByDesc('products.created_at')
+            ->orderByDesc('products.id')
+            ->limit(30)
+            ->select('products.id');
+
+        return $query->joinSub($latestProductIds, 'latest_products', function ($join) {
+            $join->on('latest_products.id', '=', 'products.id');
+        })->reorder('products.created_at', 'desc')
+            ->orderByDesc('products.id');
+    }
 }
 
 
