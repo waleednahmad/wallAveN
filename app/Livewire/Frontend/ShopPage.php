@@ -128,7 +128,7 @@ class ShopPage extends Component
                     })->withCount(['products' => function ($query) {
                         $query->where('status', 1)->whereHas('variants');
                     }])->orderBy('name');
-                }])->get()->pluck('subCategories')->flatten();
+                }])->get()->pluck('subCategories')->flatten()->pipeInto(\Illuminate\Database\Eloquent\Collection::class);
         }
     }
 

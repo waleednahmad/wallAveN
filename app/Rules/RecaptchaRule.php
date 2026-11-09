@@ -37,7 +37,7 @@ class RecaptchaRule implements ValidationRule
         }
 
         // Verify reCAPTCHA with Google
-        $recaptchaSecret = env('RECAPTCHA_SECRET_KEY');
+        $recaptchaSecret = config('recaptcha.secret_key');
         $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
             'secret' => $recaptchaSecret,
             'response' => $value,
@@ -79,7 +79,7 @@ class RecaptchaRule implements ValidationRule
         }
 
         $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => env('RECAPTCHA_SECRET_KEY'),
+            'secret' => config('recaptcha.secret_key'),
             'response' => $recaptchaResponse,
             'remoteip' => request()->ip(),
         ]);

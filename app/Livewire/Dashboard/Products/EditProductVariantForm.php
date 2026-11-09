@@ -66,9 +66,9 @@ class EditProductVariantForm extends Component
                         'id' => $value->id,
                         'value' => $value->value,
                     ];
-                }),
+                })->values()->toArray(),
             ];
-        }) : [];
+        })->values()->toArray() : [];
         $this->selectedAttributeValues = $variant->attributeValues->mapWithKeys(function ($value) {
             return [$value->attribute_id => $value->id];
         })->toArray();
@@ -239,9 +239,9 @@ class EditProductVariantForm extends Component
                         'id' => $value->id,
                         'value' => $value->value,
                     ];
-                }),
+                })->values()->toArray(),
             ];
-        }) : [];
+        })->values()->toArray() : [];
     }
     public function render()
     {

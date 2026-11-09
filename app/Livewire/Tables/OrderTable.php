@@ -225,7 +225,7 @@ final class OrderTable extends PowerGridComponent
                                 'label' => $dealer->company_name,
                                 'value' => $dealer->company_name,
                             ];
-                        })
+                        })->toArray()
                 )
                 ->optionLabel('label')
                 ->optionValue('value'),

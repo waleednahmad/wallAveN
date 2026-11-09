@@ -62,9 +62,9 @@ class CreateProductVariantForm extends Component
                         'id' => $value->id,
                         'value' => $value->value,
                     ];
-                }),
+                })->values()->toArray(),
             ];
-        }) : [];
+        })->values()->toArray() : [];
     }
 
 
@@ -80,7 +80,7 @@ class CreateProductVariantForm extends Component
 
     public function regenerateSku()
     {
-        $selectedAttributeValues = $this->productAttributesWithValues->map(function ($attribute) {
+        $selectedAttributeValues = collect($this->productAttributesWithValues)->map(function ($attribute) {
             return [
                 'id' => $attribute['id'],
                 'value' => $this->selectedAttributeValues[$attribute['id']] ?? null,
@@ -91,7 +91,7 @@ class CreateProductVariantForm extends Component
 
         $newSku = $this->main_sku;
         foreach ($selectedAttributeValues as $attribute) {
-            $attributeValue = $this->productAttributesWithValues->firstWhere('id', $attribute['id'])['values']->firstWhere('id', $attribute['value']);
+            $attributeValue = collect(collect($this->productAttributesWithValues)->firstWhere('id', $attribute['id'])['values'] ?? [])->firstWhere('id', $attribute['value']);
             if ($attributeValue && strcasecmp($attributeValue['value'], 'none') !== 0) {
                 $newSku .= '-' . $attributeValue['value'];
             }
@@ -251,9 +251,9 @@ class CreateProductVariantForm extends Component
                         'id' => $value->id,
                         'value' => $value->value,
                     ];
-                }),
+                })->values()->toArray(),
             ];
-        }) : [];
+        })->values()->toArray() : [];
     }
 
     public function render()

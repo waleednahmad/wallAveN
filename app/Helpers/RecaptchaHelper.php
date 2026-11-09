@@ -21,7 +21,7 @@ if (!function_exists('is_recaptcha_enabled')) {
      */
     function is_recaptcha_enabled()
     {
-        return !empty(env('RECAPTCHA_SITE_KEY')) && !empty(env('RECAPTCHA_SECRET_KEY'));
+        return !empty(config('recaptcha.site_key')) && !empty(config('recaptcha.secret_key'));
     }
 }
 
@@ -33,6 +33,6 @@ if (!function_exists('get_recaptcha_site_key')) {
      */
     function get_recaptcha_site_key()
     {
-        return env('RECAPTCHA_SITE_KEY', '');
+        return config('recaptcha.site_key', '');
     }
 }

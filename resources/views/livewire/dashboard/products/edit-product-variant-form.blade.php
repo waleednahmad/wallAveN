@@ -1,4 +1,4 @@
-<form wire:submit.prevent="save">
+<form wire:submit.prevent="save" novalidate>
     <div class="row">
 
         {{-- Image --}}
@@ -185,7 +185,7 @@
     </div>
 
     <div class="mt-3 d-flex justify-content-end">
-        <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
+        <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:target="save">
             <span wire:loading.remove wire:target="save">
                 Save
             </span>

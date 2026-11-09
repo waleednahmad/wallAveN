@@ -147,7 +147,6 @@ class CartOffcanva extends Component
             $total = 0;
         }
 
-        info('test');
         return view('livewire.frontend.cart-offcanva')->with([
             'cartTemps' => $cartTemps,
             'total' => $total,

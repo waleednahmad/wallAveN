@@ -21,7 +21,7 @@ Route::controller(FrontController::class)->group(function () {
     Route::get('/shop', 'shop')->name('frontend.shop');
     Route::get('/about-us', 'aboutUs')->name('frontend.aboutUs');
     Route::get('/contact-us', 'contactUs')->name('frontend.contactUs');
-    Route::get('/send-email', 'sendEmail');
+    // Route::get('/send-email', 'sendEmail'); // removed: public test endpoint
 });
 
 Route::controller(FrontController::class)
@@ -67,24 +67,7 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
         ->with('success', 'Email verified successfully.');
 })->middleware(['auth:web,dealer,representative', 'signed'])->name('verification.verify');
 
-Route::get('preview-email', function () {
-    $order = Order::first();
-    $address = $order->dealer->address ? explode(',', $order->dealer->address)[0] : '---';
-    $city = $order->dealer->city ?? '---';
-    $state = $order->dealer->state ?? '---';
-    $zip_code = $order->dealer->zip_code ?? '---';
-
-    return view(
-        'emails.contact-form',
-        [
-            'name' => $order->dealer->company_name,
-            'email' => $order->dealer->email,
-            'phone' => $order->dealer->phone,
-            'subject' => 'Test Subject',
-            'message' => 'Test Message',
-        ]
-    );
-});
+// preview-email test route removed
 
 // Route::get('test', function () {
 //     echo phpinfo();

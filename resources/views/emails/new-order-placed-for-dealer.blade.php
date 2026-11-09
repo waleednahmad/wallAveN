@@ -251,8 +251,8 @@
             <p style="font-size: 16px; color: #555;">
                 📍 <strong>Address:</strong> 4528 W 51st St, Chicago, IL 60632 <br>
                 📞 <strong>Phone:</strong> <a href="tel:(773) 490-3801">(773) 490-3801</a> <br>
-                ✉️ <strong>Email:</strong> <a href="mailto:{{ env('MAIL_FROM_ADDRESS', 'nidal@goldenrugsinc.com') }}"
-                    style="color: #d19c4b; text-decoration: none;">{{ env('MAIL_FROM_ADDRESS', 'nidal@goldenrugsinc.com') }}</a>
+                ✉️ <strong>Email:</strong> <a href="mailto:{{ config('mail.from.address', 'nidal@goldenrugsinc.com') }}"
+                    style="color: #d19c4b; text-decoration: none;">{{ config('mail.from.address', 'nidal@goldenrugsinc.com') }}</a>
             </p>
             <p style="font-size: 16px; color: #555;">Best regards, <br> <strong>{{ getWebsiteTitle() }}</strong></p>
         </footer>

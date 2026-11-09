@@ -317,7 +317,7 @@
                                     'form-control customized',
                                     'is-invalid' => $errors->has('uploadedImages'),
                                 ]) id="images"
-                                    wire:model="uploadedImages" accept="image/*" multiple>
+                                    x-data x-on:change="window.uploadResized($event, $wire)" accept="image/*" multiple><script src="{{ asset("js/resize-upload.js") }}?v=1"></script>
 
                                 @error('uploadedImages')
                                     <div class="invalid-feedback">

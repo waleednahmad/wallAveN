@@ -30,9 +30,9 @@ class EditVariantAttributeValuesForm extends Component
                         'id' => $value->id,
                         'value' => $value->value,
                     ];
-                }),
+                })->values()->toArray(),
             ];
-        }) : [];
+        })->values()->toArray() : [];
 
         $this->selectedAttributeValues = $this->variant->attributeValues->pluck('id', 'attribute_id')->toArray();
     }
