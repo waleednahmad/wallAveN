@@ -34,7 +34,8 @@ class DealerController extends Controller
 
     public function print($orderId)
     {
-        $order = Order::with('dealer', 'orderItems')->findOrFail($orderId);
+        // Only the dealer who placed the order may print it
+        $order = auth('dealer')->user()->orders()->with('dealer', 'orderItems')->findOrFail($orderId);
         $address = $order->dealer->address ? explode(',', $order->dealer->address)[0] : '---';
         $city = $order->dealer->city ?? '---';
         $state = $order->dealer->state ?? '---';
