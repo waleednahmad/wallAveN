@@ -474,3 +474,52 @@ textarea.form-control { min-height: 120px; padding-top: 12px; }
 .gr-grid.gr-grid-busy { opacity: .45; pointer-events: none; }
 .filteration-container.gr-busy .filter-container-label, .filteration-container.gr-busy .values-container span { opacity: .6; pointer-events: none; }
 .loading-screen { display: none !important; }
+
+/* ==========================================================================
+   Type system (applies site-wide; later rules win)
+   - Fraunces: headings and product names only, weight 400
+   - Inter: everything else. 400 text, 500 nav/controls, 600 emphasis, buttons, prices.
+     Only 400/500/600 are loaded, so 700 was a browser-faked bold: never use it.
+   - Sizes: 12 / 14 / 16 / 20 / 28 + display clamps
+   - Prices: Inter 600, tabular digits
+   ========================================================================== */
+:root {
+  --gr-fs-xs: 12px; --gr-fs-sm: 14px; --gr-fs-base: 16px; --gr-fs-lg: 20px; --gr-fs-xl: 28px;
+}
+b, strong, th { font-weight: 600; }
+h1, h2, h3, h4, h5, h6, .gr-display, .gr-h2, .offcanvas-title, .modal-title { font-weight: 400; }
+.btn-large-view, .btn-gallery-popup { font-weight: 600 !important; font-size: var(--gr-fs-sm) !important; }
+.footer-section p, .footer-section li, .footer-section a { font-size: var(--gr-fs-sm); }
+.footer-section .footer-about p, .footer-section .gr-footer-about { font-size: var(--gr-fs-base); }
+
+/* Prices everywhere */
+.gr-price, .gr-product-price strong, .gr-amount, .gr-cart-item strong, .gr-cart-total span:last-child {
+  font-family: var(--gr-font-body) !important; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -.01em; color: var(--gr-ink);
+}
+.gr-product-card .gr-product-price { font-size: var(--gr-fs-base); }
+.gr-product-from, .gr-product-was { font-size: var(--gr-fs-xs); font-weight: 400; }
+.gr-cart-total .gr-amount, .gr-amount { font-size: var(--gr-fs-xl) !important; }
+
+/* Product page + quick add header */
+.auction-details-content .batch, #quickAddOffcanva .batch { margin: 0; }
+.gr-vendor { margin: 0 0 4px; font-size: var(--gr-fs-xs); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--gr-madder); }
+.gr-sku { margin: 0; font-size: var(--gr-fs-sm); color: var(--gr-muted); letter-spacing: .02em; }
+.gr-sku span { color: var(--gr-ink); font-variant-numeric: tabular-nums; }
+.auction-details-content h3 { font-family: var(--gr-font-display); font-weight: 400; font-size: clamp(28px, 3vw, 40px); line-height: 1.1; letter-spacing: -.01em; margin: 8px 0 20px !important; }
+#quickAddOffcanva h3 { font-family: var(--gr-font-display); font-weight: 400; font-size: var(--gr-fs-xl); line-height: 1.15; margin: 6px 0 16px !important; }
+.gr-price-block { display: flex; flex-direction: column; gap: 4px; padding: 16px 0; margin: 0 0 8px; border-top: 1px solid var(--gr-line); border-bottom: 1px solid var(--gr-line); }
+.gr-price-label { font-size: var(--gr-fs-xs); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--gr-muted); }
+.gr-price-row { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.gr-price { font-size: var(--gr-fs-xl); line-height: 1.1; }
+#quickAddOffcanva .gr-price { font-size: 24px; }
+.gr-price-was { font-size: var(--gr-fs-base); color: var(--gr-muted); font-weight: 400; }
+
+/* Option labels and chips */
+.quantity-area h6 { font-family: var(--gr-font-body) !important; font-size: var(--gr-fs-sm) !important; font-weight: 600 !important; color: var(--gr-ink); margin-top: 20px !important; margin-bottom: 8px !important; }
+.values-container span { font-family: var(--gr-font-body); font-size: var(--gr-fs-sm) !important; font-weight: 500 !important; }
+.gr-qty button { font-size: 18px; font-weight: 400; }
+.gr-qty input, .gr-qty span { font-size: var(--gr-fs-base); font-weight: 600; }
+
+/* Cart */
+.gr-cart-name { font-size: 18px; line-height: 1.25; }
+.gr-cart-meta { font-size: var(--gr-fs-xs); }

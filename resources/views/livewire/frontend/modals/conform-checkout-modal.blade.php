@@ -7,7 +7,7 @@
 @endphp
 <div>
     <div class="modal-body" style="padding: 8px 28px 0;">
-        <h2 style="font-family: var(--gr-font-display); font-size: 30px; margin: 0 0 4px;">Checkout</h2>
+        <h2 style="font-family: var(--gr-font-display); font-size: 28px; margin: 0 0 4px;">Checkout</h2>
         <p style="color: var(--gr-muted); margin: 0 0 24px;">Check the details below, then place your order.</p>
 
         <div class="mb-3">
@@ -29,7 +29,7 @@
 
         <div class="d-flex justify-content-between align-items-baseline" style="border-top: 1px solid var(--gr-line); padding: 18px 0 4px;">
             <span style="font-weight: 600;">Order total</span>
-            <span style="font-family: var(--gr-font-display); font-size: 30px;">{{ $grTotalLabel }}</span>
+            <span class="gr-amount">{{ $grTotalLabel }}</span>
         </div>
     </div>
     <div class="modal-footer" style="border-top: 0; padding: 12px 28px 28px; display: flex; flex-direction: column; gap: 10px; align-items: stretch;">

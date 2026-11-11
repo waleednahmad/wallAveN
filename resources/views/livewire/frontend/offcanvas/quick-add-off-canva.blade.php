@@ -28,16 +28,10 @@
 
     <div class="auction-details-content">
         <div class="batch">
-            <h6>
-                @if (isVendorActivated())
-                    {{ $vendor }}
-                    <br>
-                    <br>
-                @endif
-                <span style="font-size: 14px; font-weight: 400">
-                    SKU: <strong>{{ ucwords(strtolower($selectedSku)) }}</strong>
-                </span>
-            </h6>
+            @if (isVendorActivated() && $vendor)
+                <p class="gr-vendor">{{ $vendor }}</p>
+            @endif
+            <p class="gr-sku">SKU <span>{{ $selectedSku }}</span></p>
         </div>
         <h3 class="my-3">
             {{ $product?->name }}
@@ -52,16 +46,7 @@
             @endif
         @endauth
         @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check() || auth('web')->check())
-            @if ($compare_at_price && $compare_at_price > $price && $compare_at_price > 0)
-                <span style="text-decoration: line-through; color: #999999">
-                    ${{ $compare_at_price }}
-                </span>
-                <strong>
-                    ${{ $price }}
-                </strong>
-            @else
-                <strong>${{ $price }}</strong>
-            @endif
+            @include('livewire.frontend.partials.price-block')
         @endif
         {{-- {{ $compare_at_price }} : {{ $price }} --}}
         @php

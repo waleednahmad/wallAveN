@@ -56,16 +56,10 @@
             <div class="col-lg-5 wow animate fadeInRight" data-wow-delay="200ms" data-wow-duration="1500ms">
                 <div class="auction-details-content">
                     <div class="batch">
-                        <h6>
-                            @if (isVendorActivated())
-                                {{ $vendor }}
-                                <br>
-                                <br>
-                            @endif
-                            <span style="font-size: 14px; font-weight: 400">
-                                SKU: <strong>{{ $selectedSku }}</strong>
-                            </span>
-                        </h6>
+                        @if (isVendorActivated() && $vendor)
+                            <p class="gr-vendor">{{ $vendor }}</p>
+                        @endif
+                        <p class="gr-sku">SKU <span>{{ $selectedSku }}</span></p>
                     </div>
                     <h3 class="my-3">
                         {{ $product->name }}
@@ -80,20 +74,7 @@
                                 @endphp
                             @endif
                         @endauth
-                        <ul class="artist-info">
-                            <li><span>Price :</span>
-                                @if ($compare_at_price && $compare_at_price > $price && $compare_at_price > 0)
-                                    <span style="text-decoration: line-through; color: #999999">
-                                        ${{ $compare_at_price }}
-                                    </span>
-                                    <strong>
-                                        ${{ $price }}
-                                    </strong>
-                                @else
-                                    <strong>${{ $price }}</strong>
-                                @endif
-                            </li>
-                        </ul>
+                        @include('livewire.frontend.partials.price-block')
                     @endif
 
                     @php
