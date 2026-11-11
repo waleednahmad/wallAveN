@@ -440,13 +440,14 @@ textarea.form-control { min-height: 120px; padding-top: 12px; }
 .gr-cart-btn-mobile .gr-cart-badge { top: 2px; right: 0; }
 @media (min-width: 992px) { .gr-cart-btn-mobile { display: none !important; } }
 
-/* Keep the main menu on one line on laptop screens (11 items with the category links) */
+/* Keep the main menu on one line on laptop screens (11 items with the category links).
+   Flex + gap instead of the template's inline-block items with left/right padding. */
 @media (min-width: 992px) and (max-width: 1399px) {
-  header .main-menu > ul.menu-list > li { padding-right: 14px; }
-  header .main-menu > ul.menu-list > li:last-child { padding-right: 0; }
+  header .main-menu > ul.menu-list { display: flex; flex-wrap: nowrap; align-items: center; gap: 22px; }
+  header .main-menu > ul.menu-list > li { padding-left: 0; padding-right: 0; white-space: nowrap; }
 }
 @media (min-width: 992px) and (max-width: 1199px) {
-  header .main-menu > ul.menu-list > li { padding-right: 10px; }
+  header .main-menu > ul.menu-list { gap: 14px; }
   header .main-menu > ul.menu-list > li > a { font-size: 14px; }
 }
 
