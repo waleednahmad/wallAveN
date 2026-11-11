@@ -1,3 +1,12 @@
+@php
+    // Active filters (category, sub categories, types, sizes/colors, search) for the "Clear all" buttons.
+    $grFilterCount = (!empty($selectedCategory) ? 1 : 0)
+        + count($selectedSubCategories ?? [])
+        + count($selectedProductTypes ?? [])
+        + count($selectedAttributeValues ?? [])
+        + ((isset($search) && $search !== '') ? 1 : 0);
+    $grFilterTargets = 'setProperty,selectCategory,clearAllFilters,applySearch,searchQuery';
+@endphp
 <div>
     <!-- Breadcrumb section strats here -->
     @if ($selectedCategory)
@@ -120,18 +129,14 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="single-widgets mb-50 position-relative filteration-container">
-                            @if (
-                                (isset($search) && $search != '') ||
-                                    (isset($selectedCategories) && count($selectedCategories) > 0) ||
-                                    (isset($selectedSubCategories) && count($selectedSubCategories) > 0) ||
-                                    (isset($selectedProductTypes) && count($selectedProductTypes) > 0) ||
-                                    (isset($selectedAttributeValues) && count($selectedAttributeValues) > 0))
-                                <button class="btn btn-danger btn-sm" wire:click="clearAllFilters()" wire:tranisition
-                                    title="Clear All Filters"
-                                    style="position: absolute; top: 0; right: 10px; z-index: 1000;">
-                                    <i class="fas fa-times"></i>
-                                </button>
+                        <div class="single-widgets mb-50 position-relative filteration-container" wire:loading.class="gr-busy" wire:target="{{ $grFilterTargets }}">
+                            @if ($grFilterCount)
+                                <div class="gr-filter-head">
+                                    <span>{{ $grFilterCount }} {{ $grFilterCount === 1 ? 'filter' : 'filters' }} on</span>
+                                    <button type="button" class="gr-clear-btn" wire:click="clearAllFilters()">
+                                        <i class="fas fa-undo" aria-hidden="true"></i> Clear all
+                                    </button>
+                                </div>
                             @endif
                             <div class="position-relative">
                                 <div class="widget-title">
@@ -159,9 +164,6 @@
                                             </li>
                                         @endforeach
                                     </ul>
-                                </div>
-                                {{-- loading  screen --}}
-                                <div class="loading-screen" wire:loading>
                                 </div>
                             </div>
                             <hr>
@@ -194,9 +196,6 @@
                                         </ul>
                                     </div>
                                     <hr>
-                                    {{-- loading  screen --}}
-                                    <div class="loading-screen" wire:loading>
-                                    </div>
                                 </div>
                             @endif
                             @if (isset($productTypes) && count($productTypes) > 0)
@@ -227,9 +226,6 @@
                                         </ul>
                                     </div>
                                     <hr>
-                                    {{-- loading  screen --}}
-                                    <div class="loading-screen" wire:loading>
-                                    </div>
                                 </div>
                             @endif
 
@@ -272,9 +268,6 @@
                                         </div>
                                     @endforeach
                                     <hr>
-                                    {{-- loading  screen --}}
-                                    <div class="loading-screen" wire:loading>
-                                    </div>
                                 </div>
                             @endif
                         </div>
@@ -293,8 +286,8 @@
                     <div class="row">
                         <div class="col-lg-12 mb-30">
                             <div class="auction-card-top-area">
-                                <div class="left-content">
-                                    <h6>
+                                <div class="left-content d-flex align-items-center flex-wrap" style="gap: 10px 14px;">
+                                    <h6 class="mb-0">
                                         Showing
                                         <span>
                                             {{ $products->firstItem() ?? 0 }} - {{ $products->lastItem() ?? 0 }}
@@ -305,6 +298,14 @@
                                         </span>
                                         results
                                     </h6>
+                                    @if ($grFilterCount)
+                                        <button type="button" class="gr-clear-chip" wire:click="clearAllFilters()">
+                                            Clear filters <i class="fas fa-times" aria-hidden="true"></i>
+                                        </button>
+                                    @endif
+                                    <span class="gr-updating gr-updating-inline" wire:loading.flex wire:target="{{ $grFilterTargets }}" role="status">
+                                        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Updating results
+                                    </span>
                                 </div>
 
                                 {{-- <div class="right-content">
@@ -340,7 +341,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="list-grid-product-wrap">
+                    <div class="list-grid-product-wrap gr-grid" wire:loading.class="gr-grid-busy" wire:target="{{ $grFilterTargets }}">
                         <div class="row gy-4">
                             {{-- <x-input-range :min="0" :max="50" wire:model.live="rangePrice">
                                 <x-slot:value>

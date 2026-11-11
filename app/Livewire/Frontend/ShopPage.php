@@ -165,6 +165,7 @@ class ShopPage extends Component
     public function clearAllFilters()
     {
         $this->search = '';
+        $this->searchQuery = '';
         $this->selectedCategories = [];
         $this->selectedSubCategories = [];
         $this->selectedProductTypes = [];
