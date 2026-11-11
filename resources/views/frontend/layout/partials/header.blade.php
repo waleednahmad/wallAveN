@@ -1,3 +1,23 @@
+@php
+    $grDealer = auth('dealer')->user();
+    $grCustomerMode = $grDealer && $grDealer->is_customer_mode_active;
+    $grBanner = $grCustomerMode ? $grDealer->bannerSetting()?->first() : null;
+@endphp
+@if ($grCustomerMode)
+    {{-- Customer Mode: the dealer's own banner, no wholesale wording --}}
+    @if ($grBanner && $grBanner->text)
+        <div style="background-color: {{ $grBanner->bg_color ?: '#1F2E45' }}; color: {{ $grBanner->text_color ?: '#FFFCF7' }}; text-align: center; font-size: 14px; padding: 11px 16px;">
+            {{ $grBanner->text }}
+        </div>
+    @endif
+@else
+    <div class="gr-announce">
+        <div class="gr-container">
+            <span><strong>Wholesale only</strong> — trade pricing for registered retailers</span>
+            <span>Call <a href="tel:+17734903801">(773) 490-3801</a> · Open 7 days</span>
+        </div>
+    </div>
+@endif
 <div class="topbar">
     <div class="container">
         <div class="topbar-wrap">
@@ -226,20 +246,7 @@
             </div>
         </div>
     </div>
-    @auth('dealer')
-        {{-- bannerSetting --}}
-        @if (auth('dealer')->user()->bannerSetting && auth('dealer')->user()->is_customer_mode_active)
-            {{-- Dealer Banner --}}
-            <div class="container">
-                <div class="alert text-center py-1"
-                    style="background-color: {{ auth('dealer')->user()->bannerSetting()?->first()?->bg_color }}; color: {{ auth('dealer')->user()->bannerSetting()?->first()?->text_color }};">
-                    <p>
-                        {{ auth('dealer')->user()->bannerSetting()?->first()?->text }}
-                    </p>
-                </div>
-            </div>
-        @endif
-    @endauth
+    {{-- The dealer's Customer Mode banner now sits at the very top of the page (see the start of this file) --}}
     @if (auth('representative')->check() || auth('web')->check())
         <div class="container alert alert-info alert-dismissible show d-block" role="alert">
             <div class="alert-body">

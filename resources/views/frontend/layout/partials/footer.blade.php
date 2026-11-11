@@ -2,7 +2,8 @@
     $canSeeShop = showCategoryAndShopPages() || auth('dealer')->check() || auth('representative')->check() || auth('web')->check();
 @endphp
 <footer class="footer-section">
-    <div class="container">
+    <div class="gr-kilim" aria-hidden="true"></div>
+    <div class="container" style="padding-top: 56px;">
         <div class="footer-menu-wrap">
             <div class="row gy-5">
                 <div class="col-lg-4 col-md-6 col-sm-8">
