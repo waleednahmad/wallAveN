@@ -6,7 +6,7 @@
     <div class="container" style="padding-top: 56px;">
         <div class="footer-menu-wrap">
             <div class="row gy-5">
-                <div class="col-lg-4 col-md-6 col-sm-8">
+                <div class="col-lg-4 col-12">
                     <div class="footer-content-area">
                         <a href="{{ route('frontend.home') }}" class="footer-logo">
                             <img alt="Golden Rugs" class="img-fluid dark" src="{{ getMainImage() }}" style="width: 150px;">
@@ -18,7 +18,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-2 col-md-3 col-sm-4 d-flex justify-content-lg-end justify-content-md-center justify-content-sm-end">
+                <div class="col-lg-2 col-md-4 col-6">
                     <div class="footer-widget">
                         <div class="widget-title">
                             <h5>Company</h5>
@@ -40,7 +40,7 @@
                 </div>
 
                 @if ($canSeeShop)
-                    <div class="col-lg-2 col-md-3 col-sm-5 d-flex justify-content-md-end">
+                    <div class="col-lg-2 col-md-4 col-6">
                         <div class="footer-widget">
                             <div class="widget-title">
                                 <h5>Shop</h5>
@@ -57,7 +57,7 @@
                     </div>
                 @endif
 
-                <div class="col-lg-4 col-md-6 col-sm-7 d-flex justify-content-lg-end justify-content-md-center justify-content-sm-end">
+                <div class="col-lg-4 col-md-4 col-12">
                     <div class="footer-widget">
                         <div class="widget-title">
                             <h5>Contact</h5>
