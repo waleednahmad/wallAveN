@@ -69,8 +69,8 @@ trait  UploadImageTrait
             return "storage/$file_path";
         }
 
-        // Main image: longest side up to 1600px, WebP. Plus a 600px thumbnail next to it for cards,
-        // the cart and thumbnail strips (see App\Support\ImageOptimizer and thumb()).
+        // Main image: longest side up to 1600px, WebP. Plus 600px and 240px thumbnails next to it for cards,
+        // swatches, the cart and thumbnail strips (see App\Support\ImageOptimizer and thumb()).
         $image = ImageOptimizer::load($file->path());
         $main = ImageOptimizer::fit($image, ImageOptimizer::MAIN_MAX);
         if ($main !== $image) {
@@ -81,7 +81,7 @@ trait  UploadImageTrait
         ImageOptimizer::saveWebp($main, $file_path, ImageOptimizer::MAIN_QUALITY);
 
         try {
-            ImageOptimizer::makeThumb($file_path, $main);
+            ImageOptimizer::makeThumbs($file_path, $main, true);
         } catch (Exception $e) {
             // The page falls back to the main image when a thumbnail is missing.
             report($e);

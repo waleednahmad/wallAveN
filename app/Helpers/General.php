@@ -70,11 +70,11 @@ function getMinimumDealerSalePercentage()
 }
 
 /**
- * URL of the small (600px) copy of an image when it exists, else the image itself.
- * Use where images are shown small: product cards, cart lines, thumbnail strips.
+ * URL of a small copy of an image when it exists, else the image itself.
+ * $size 600: product cards, thumbnail strips. $size 240: colour swatches, quick add thumbnail strip.
  * Thumbnails are written on upload and by `php artisan images:optimize` for older images.
  */
-function thumb(?string $path): string
+function thumb(?string $path, int $size = 600): string
 {
     if (!$path) {
         return '';
@@ -84,7 +84,7 @@ function thumb(?string $path): string
     }
 
     static $seen = [];
-    $thumb = \App\Support\ImageOptimizer::thumbPathFor(ltrim($path, '/'));
+    $thumb = \App\Support\ImageOptimizer::thumbPathFor(ltrim($path, '/'), $size);
     if (!array_key_exists($thumb, $seen)) {
         $seen[$thumb] = is_file(public_path($thumb));
     }

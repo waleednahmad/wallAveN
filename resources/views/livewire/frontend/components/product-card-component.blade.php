@@ -17,7 +17,7 @@
         <div class="gr-product-swatches" aria-hidden="true">
             @foreach ($variantImages as $image)
                 @if (file_exists($image))
-                    <img src="{{ thumb($image) }}" loading="lazy" decoding="async" alt="">
+                    <img src="{{ thumb($image, 240) }}" loading="lazy" decoding="async" alt="">
                 @endif
             @endforeach
         </div>

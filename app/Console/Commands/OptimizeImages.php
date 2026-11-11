@@ -9,7 +9,7 @@ use Throwable;
 /**
  * One-off (and safe to re-run) image clean-up for public/storage:
  *   php artisan images:optimize --dry-run        report only, change nothing
- *   php artisan images:optimize                   create missing 600px thumbnails, delete orphaned ones
+ *   php artisan images:optimize                   create missing thumbnails (600px, 240px), delete orphaned ones
  *   php artisan images:optimize --shrink          also re-encode big .webp originals in place
  *                                                 (longest side 1600px, quality 78; kept only if smaller)
  * Originals keep their file names, so database paths don't change. Take a backup before --shrink.
@@ -99,9 +99,11 @@ class OptimizeImages extends Command
                                 imagedestroy($image);
                                 $image = $fitted;
                             }
-                            // The thumbnail is rebuilt from the new original below.
+                            // Thumbnails are rebuilt from the new original below.
                             if (!$dry) {
-                                @unlink(ImageOptimizer::thumbPathFor($path));
+                                foreach (array_keys(ImageOptimizer::THUMB_SIZES) as $size) {
+                                    @unlink(ImageOptimizer::thumbPathFor($path, $size));
+                                }
                             }
                         } elseif ($fitted !== $image) {
                             imagedestroy($fitted);
@@ -110,13 +112,12 @@ class OptimizeImages extends Command
                     }
                 }
 
-                $thumbPath = ImageOptimizer::thumbPathFor($path);
-                if (!is_file($thumbPath)) {
-                    if (!$dry) {
-                        ImageOptimizer::makeThumb($path, $image);
-                        @chmod($thumbPath, 0644);
+                if ($dry) {
+                    foreach (array_keys(ImageOptimizer::THUMB_SIZES) as $size) {
+                        $made += is_file(ImageOptimizer::thumbPathFor($path, $size)) ? 0 : 1;
                     }
-                    $made++;
+                } else {
+                    $made += ImageOptimizer::makeThumbs($path, $image);
                 }
 
                 if ($image) {
@@ -133,7 +134,7 @@ class OptimizeImages extends Command
 
         // Thumbnails whose original was deleted from the admin.
         foreach ($thumbs as $thumbPath) {
-            $stem = substr($thumbPath, 0, -strlen(ImageOptimizer::THUMB_SUFFIX));
+            $stem = ImageOptimizer::thumbStem($thumbPath);
             if (!glob($stem . '.*')) {
                 if (!$dry) {
                     @unlink($thumbPath);

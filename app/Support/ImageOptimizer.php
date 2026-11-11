@@ -8,26 +8,31 @@ use Exception;
  * Resizes and re-encodes images with GD (no extra packages needed on the server).
  *
  * - Main images: longest side up to MAIN_MAX, WebP quality MAIN_QUALITY.
- * - Thumbnails: longest side up to THUMB_MAX, saved next to the image as "<name>_w600.webp".
- *   Used where images are shown small (product cards, cart, thumbnail strips): see thumb() in Helpers/General.php.
+ * - Thumbnails saved next to the image: "<name>_w600.webp" (cards, thumbnail strips) and
+ *   "<name>_w240.webp" (colour swatches, quick add thumbnail strip). See thumb() in Helpers/General.php.
  */
 class ImageOptimizer
 {
     public const MAIN_MAX = 1600;
     public const MAIN_QUALITY = 78;
-    public const THUMB_MAX = 600;
-    public const THUMB_QUALITY = 72;
-    public const THUMB_SUFFIX = '_w600.webp';
+    /** Thumbnail widths (longest side) => WebP quality. */
+    public const THUMB_SIZES = [600 => 72, 240 => 70];
 
     /** "storage/products/1/123.webp" -> "storage/products/1/123_w600.webp" (any source extension). */
-    public static function thumbPathFor(string $path): string
+    public static function thumbPathFor(string $path, int $size = 600): string
     {
-        return preg_replace('/\.[A-Za-z0-9]+$/', '', $path) . self::THUMB_SUFFIX;
+        return preg_replace('/\.[A-Za-z0-9]+$/', '', $path) . '_w' . $size . '.webp';
     }
 
     public static function isThumb(string $path): bool
     {
-        return str_ends_with($path, self::THUMB_SUFFIX);
+        return (bool) preg_match('/_w\d+\.webp$/', $path);
+    }
+
+    /** "…/123_w600.webp" -> "…/123" */
+    public static function thumbStem(string $thumbPath): string
+    {
+        return preg_replace('/_w\d+\.webp$/', '', $thumbPath);
     }
 
     /** Load any GD-supported image; JPEG photos are turned upright using their EXIF orientation. */
@@ -110,20 +115,33 @@ class ImageOptimizer
         }
     }
 
-    /** Write the small copy for an image already on disk. Returns the thumbnail path. */
-    public static function makeThumb(string $sourcePath, ?\GdImage $loaded = null): string
+    /**
+     * Write the missing small copies of an image already on disk (all sizes unless $force).
+     * Returns how many were written.
+     */
+    public static function makeThumbs(string $sourcePath, ?\GdImage $loaded = null, bool $force = false): int
     {
+        $missing = array_filter(
+            array_keys(self::THUMB_SIZES),
+            fn ($size) => $force || !is_file(self::thumbPathFor($sourcePath, $size))
+        );
+        if (!$missing) {
+            return 0;
+        }
+
         $image = $loaded ?? self::load($sourcePath);
-        $small = self::fit($image, self::THUMB_MAX);
-        $thumbPath = self::thumbPathFor($sourcePath);
-        self::saveWebp($small, $thumbPath, self::THUMB_QUALITY);
-        if ($small !== $image) {
-            imagedestroy($small);
+        foreach ($missing as $size) {
+            $small = self::fit($image, $size);
+            self::saveWebp($small, self::thumbPathFor($sourcePath, $size), self::THUMB_SIZES[$size]);
+            @chmod(self::thumbPathFor($sourcePath, $size), 0644);
+            if ($small !== $image) {
+                imagedestroy($small);
+            }
         }
         if (!$loaded) {
             imagedestroy($image);
         }
 
-        return $thumbPath;
+        return count($missing);
     }
 }
