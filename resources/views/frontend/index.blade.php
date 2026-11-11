@@ -10,7 +10,7 @@
         $isSignedIn = auth('dealer')->check() || auth('representative')->check() || auth('web')->check();
         $canSeeShop = showCategoryAndShopPages() || $isSignedIn;
 
-        $heroProduct = $products->first();
+        $heroProduct = $products->first(fn ($p) => str_contains(strtolower($p->name), 'rug')) ?? $products->first();
         $rugsCategory = $categories->firstWhere('slug', 'rugs');
         $otherCategories = $categories->reject(fn ($c) => in_array($c->slug, ['rugs', 'new-arrivals']))->take(4);
 
@@ -72,19 +72,19 @@
     <section class="gr-stats">
         <div class="gr-container">
             <div class="gr-reveal">
-                <p class="gr-stat-num" aria-label="Since 2015"><span class="gr-count" aria-hidden="true" style="--to: 2015"></span></p>
+                <p class="gr-stat-num" ><span class="gr-count" data-to="2015">2015</span></p>
                 <p class="gr-stat-label">Supplying retailers for over a decade</p>
             </div>
             <div class="gr-reveal">
-                <p class="gr-stat-num" aria-label="{{ $productCountLabel }} plus"><span class="gr-count" aria-hidden="true" style="--to: {{ $productCountLabel }}"></span><span aria-hidden="true">+</span></p>
+                <p class="gr-stat-num" ><span class="gr-count" data-to="{{ $productCountLabel }}">{{ $productCountLabel }}</span><span>+</span></p>
                 <p class="gr-stat-label">Rugs, furniture and décor designs</p>
             </div>
             <div class="gr-reveal">
-                <p class="gr-stat-num" aria-label="{{ $categories->count() }}"><span class="gr-count" aria-hidden="true" style="--to: {{ $categories->count() }}"></span></p>
+                <p class="gr-stat-num" ><span class="gr-count" data-to="{{ $categories->count() }}">{{ $categories->count() }}</span></p>
                 <p class="gr-stat-label">Categories to fill a whole showroom</p>
             </div>
             <div class="gr-reveal">
-                <p class="gr-stat-num" aria-label="7 days"><span class="gr-count" aria-hidden="true" style="--to: 7"></span><span aria-hidden="true"> days</span></p>
+                <p class="gr-stat-num" ><span class="gr-count" data-to="7">7</span><span> days</span></p>
                 <p class="gr-stat-label">A week our team picks up the phone</p>
             </div>
         </div>
@@ -205,3 +205,31 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <script>
+        // Count the stats up once they scroll into view. The real number is already in the page,
+        // so nothing breaks if this doesn't run; skipped for people who prefer reduced motion.
+        (function () {
+            var els = document.querySelectorAll('.gr-count[data-to]');
+            if (!els.length || !('IntersectionObserver' in window)) return;
+            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) return;
+                    io.unobserve(entry.target);
+                    var el = entry.target, to = parseInt(el.getAttribute('data-to'), 10) || 0, start = null, dur = 1400;
+                    function step(t) {
+                        if (start === null) start = t;
+                        var p = Math.min(1, (t - start) / dur), eased = 1 - Math.pow(1 - p, 3);
+                        el.textContent = Math.round(to * eased);
+                        if (p < 1) requestAnimationFrame(step);
+                    }
+                    el.textContent = '0';
+                    requestAnimationFrame(step);
+                });
+            }, { threshold: 0.4 });
+            els.forEach(function (el) { io.observe(el); });
+        })();
+    </script>
+@endpush
