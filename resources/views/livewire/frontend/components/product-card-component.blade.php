@@ -46,15 +46,15 @@
             <div class="gr-product-actions">
                 <button type="button" wire:click='openProductOptions()' class="gr-btn gr-btn-dark gr-btn-sm" wire:loading.attr="disabled">
                     <span wire:loading><i class="fas fa-spinner fa-spin" aria-hidden="true"></i></span>
-                    <span wire:loading.remove>Quick add</span>
+                    <span wire:loading.remove><i class="fas fa-cart-plus" aria-hidden="true"></i> Quick add</span>
                 </button>
-                <a href="{{ route('frontend.product', $product->slug) }}" class="gr-btn gr-btn-outline gr-btn-sm">Details</a>
+                <a href="{{ route('frontend.product', $product->slug) }}" class="gr-btn gr-btn-outline gr-btn-sm">Details <i class="fas fa-arrow-right gr-btn-arrow" aria-hidden="true"></i></a>
             </div>
         </div>
     @else
         <div class="gr-product-foot">
             <p class="gr-product-login"><a href="{{ route('login') }}">Log in to see trade price</a></p>
-            <a href="{{ route('frontend.product', $product->slug) }}" class="gr-btn gr-btn-outline gr-btn-sm w-100">Details</a>
+            <a href="{{ route('frontend.product', $product->slug) }}" class="gr-btn gr-btn-outline gr-btn-sm w-100">Details <i class="fas fa-arrow-right gr-btn-arrow" aria-hidden="true"></i></a>
         </div>
     @endif
     </div>

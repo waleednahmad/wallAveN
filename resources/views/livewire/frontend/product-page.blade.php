@@ -114,7 +114,11 @@
                     @endphp
 
                     @if (isset($groupedAttributes) && count($groupedAttributes) && !$hasNoneAttribute)
-                        <div class="mt-3 quantity-area position-relative">
+                        <div class="mt-3 quantity-area position-relative" wire:loading.class="gr-busy" wire:target="selectAttributeValue,setDefaultAttributeValues">
+                            {{-- Light loading state while the variant updates (the old white overlay covered the whole page) --}}
+                            <div class="gr-updating" wire:loading.flex wire:target="selectAttributeValue,setDefaultAttributeValues" role="status">
+                                <span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Updating
+                            </div>
                             @foreach ($groupedAttributes as $attribute => $values)
                                 @php
                                     $attribute_id = $values['id'];
@@ -135,15 +139,6 @@
                             @endforeach
                         </div>
                     @endif
-                    {{-- loading spinner --}}
-                    <div wire:loading>
-                        <div class="loading-spinner"
-                            style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center; background-color: rgba(255, 255, 255, 0.8);">
-                            <div class="spinner-border text-secondary" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 @if ($variantNotFound)
@@ -168,6 +163,7 @@
                                 </div>
                                 <button type="button" class="gr-btn gr-btn-primary gr-buy-btn" wire:click="addToCart" wire:loading.attr="disabled" wire:target="addToCart" @disabled($variantNotFound)>
                                     <span wire:loading wire:target="addToCart" class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                                    <i class="fas fa-shopping-bag" wire:loading.remove wire:target="addToCart" aria-hidden="true"></i>
                                     Add to cart
                                 </button>
                             </div>

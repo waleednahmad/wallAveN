@@ -6,6 +6,7 @@
    ========================================================================== */
 
 :root {
+  --gr-radius-btn: 10px; /* buttons, quantity steppers, search fields. Tags and badges stay round */
   /* Brand tokens */
   --gr-linen: #F5EFE6;      /* page background */
   --gr-paper: #FFFCF7;      /* cards, header */
@@ -62,7 +63,7 @@ a:hover { color: var(--gr-madder); }
    -------------------------------------------------------------------------- */
 .gr-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-  min-height: 52px; padding: 0 28px; border-radius: 999px; border: 1px solid transparent;
+  min-height: 52px; padding: 0 28px; border-radius: var(--gr-radius-btn); border: 1px solid transparent;
   font-family: var(--gr-font-body); font-weight: 600; font-size: 15px; line-height: 1;
   text-decoration: none; cursor: pointer; transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
 }
@@ -83,13 +84,13 @@ a:hover { color: var(--gr-madder); }
 
 /* Template buttons re-skinned */
 .primary-btn1, .primary-btn2, .primary-btn3, .header-btn, .view-all-btn, .custom-button {
-  border-radius: 999px !important;
+  border-radius: var(--gr-radius-btn) !important;
 }
 .header-btn, .primary-btn1 { background-color: var(--gr-madder) !important; border-color: var(--gr-madder) !important; color: #fff !important; }
 .header-btn:hover, .primary-btn1:hover { background-color: var(--gr-madder-dark) !important; }
 .view-all-btn { color: var(--gr-madder) !important; font-weight: 600; }
 .custom-button { background: var(--gr-ink) !important; color: #fff !important; min-height: 48px; padding: 0 28px !important; border: 0 !important; font-weight: 600; }
-.btn-dark, .btn-primary { background-color: var(--gr-ink); border-color: var(--gr-ink); border-radius: 999px; }
+.btn-dark, .btn-primary { background-color: var(--gr-ink); border-color: var(--gr-ink); border-radius: var(--gr-radius-btn); }
 .btn-dark:hover, .btn-primary:hover { background-color: var(--gr-madder); border-color: var(--gr-madder); }
 
 /* --------------------------------------------------------------------------
@@ -142,7 +143,7 @@ textarea.form-control { min-height: 120px; padding-top: 12px; }
 
 .topbar { background: var(--gr-paper) !important; border-bottom: 1px solid var(--gr-line-soft); }
 .topbar .search-area .form-inner input, .search-area .form-inner input {
-  border-radius: 999px !important; background: var(--gr-linen) !important; border: 1px solid var(--gr-line) !important;
+  border-radius: var(--gr-radius-btn) !important; background: var(--gr-linen) !important; border: 1px solid var(--gr-line) !important;
 }
 .header-area { background: var(--gr-paper) !important; border-bottom: 1px solid var(--gr-line); }
 .header-area .main-menu .menu-list > li > a { font-family: var(--gr-font-body); font-weight: 500; font-size: 15px; color: var(--gr-ink); text-transform: none; }
@@ -243,8 +244,8 @@ textarea.form-control { min-height: 120px; padding-top: 12px; }
 .filter-container-label { min-height: 44px; display: flex; align-items: center; font-size: 15px; color: var(--gr-ink); }
 .filter-container-label input { accent-color: var(--gr-madder); }
 .widget-title h5, .sidebar-widget h5, .shop-sidebar h5 { font-family: var(--gr-font-body) !important; font-weight: 600 !important; font-size: 15px !important; }
-.wp-block-search__input { border-radius: 999px !important; background: var(--gr-paper) !important; }
-.wp-block-search__button { border-radius: 999px !important; background: var(--gr-ink) !important; }
+.wp-block-search__input { border-radius: var(--gr-radius-btn) !important; background: var(--gr-paper) !important; }
+.wp-block-search__button { border-radius: var(--gr-radius-btn) !important; background: var(--gr-ink) !important; }
 
 /* Shop banner (category / page breadcrumb image) as a rounded indigo card */
 .breadcrumb-section2 {
@@ -280,7 +281,7 @@ textarea.form-control { min-height: 120px; padding-top: 12px; }
 }
 .values-container span:hover { border-color: var(--gr-madder); }
 .values-container span.active { border: 2px solid var(--gr-madder); background: var(--gr-madder-tint); color: var(--gr-madder); font-weight: 600; }
-.auction-details-section .btn, #quickAddOffcanva .btn { border-radius: 999px; }
+.auction-details-section .btn, #quickAddOffcanva .btn { border-radius: var(--gr-radius-btn); }
 .auction-details-img img, .splide__slide img { border-radius: 16px; }
 .thumbnails .thumbnail img, .thumbnail-image { border-radius: 10px; }
 
@@ -301,7 +302,7 @@ textarea.form-control { min-height: 120px; padding-top: 12px; }
 .gr-cart-item .gr-cart-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
 .gr-cart-name { font-family: var(--gr-font-display); font-size: 18px; margin: 0; }
 .gr-cart-meta { font-size: 13px; color: var(--gr-muted); margin: 0; }
-.gr-qty { display: inline-flex; align-items: center; border: 1px solid var(--gr-line); border-radius: 999px; height: 44px; }
+.gr-qty { display: inline-flex; align-items: center; border: 1px solid var(--gr-line); border-radius: var(--gr-radius-btn); height: 44px; }
 .gr-qty button { width: 40px; height: 42px; border: 0; background: transparent; font-size: 18px; color: var(--gr-ink); }
 .gr-qty span, .gr-qty input { min-width: 28px; width: 36px; text-align: center; font-weight: 600; border: 0; background: transparent; }
 .gr-text-btn { border: 0; background: transparent; color: var(--gr-madder); font-size: 13px; text-decoration: underline; min-height: 44px; padding: 0 6px; }
@@ -448,3 +449,14 @@ textarea.form-control { min-height: 120px; padding-top: 12px; }
   header .main-menu > ul.menu-list > li { padding-right: 10px; }
   header .main-menu > ul.menu-list > li > a { font-size: 14px; }
 }
+
+/* Variant options: light loading state instead of a full-page white overlay */
+.quantity-area.gr-busy .values-container span { opacity: .6; pointer-events: none; }
+.gr-updating { position: absolute; top: 0; right: 0; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--gr-linen); color: var(--gr-muted); font-size: 12px; font-weight: 500; z-index: 2; }
+.gr-updating .spinner-border { width: 12px; height: 12px; border-width: 2px; color: var(--gr-madder); }
+
+/* Button icons */
+.gr-btn i { font-size: .95em; }
+.gr-btn .gr-btn-arrow { font-size: .8em; transition: transform .2s ease; }
+.gr-btn:hover .gr-btn-arrow { transform: translateX(3px); }
+@media (prefers-reduced-motion: reduce) { .gr-btn:hover .gr-btn-arrow { transform: none; } }

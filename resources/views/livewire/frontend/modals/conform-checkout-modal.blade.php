@@ -35,6 +35,7 @@
     <div class="modal-footer" style="border-top: 0; padding: 12px 28px 28px; display: flex; flex-direction: column; gap: 10px; align-items: stretch;">
         <button type="button" class="gr-btn gr-btn-dark w-100" wire:click="checkout" wire:loading.attr="disabled">
             <span wire:loading wire:target="checkout" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <i class="fas fa-check" wire:loading.remove wire:target="checkout" aria-hidden="true"></i>
             Place order · {{ $grTotalLabel }}
         </button>
         <button type="button" class="gr-btn gr-btn-outline w-100" data-bs-dismiss="modal">Back to cart</button>

@@ -72,7 +72,7 @@
             <p style="margin: 0 0 16px; font-size: 12px; color: var(--gr-muted);">Shipping is arranged after the order is confirmed.</p>
             <button type="button" class="gr-btn gr-btn-primary w-100" wire:click="checkout" wire:loading.attr="disabled">
                 <span wire:loading wire:target="checkout"><i class="fas fa-spinner fa-spin" aria-hidden="true"></i></span>
-                Continue to checkout
+                Continue to checkout <i class="fas fa-arrow-right gr-btn-arrow" aria-hidden="true"></i>
             </button>
         </div>
     @endif
