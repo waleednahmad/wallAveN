@@ -53,7 +53,10 @@
             <div class="topbar-right">
                 {{-- Cart Offcanva Button --}}
 
-                @include('frontend.layout.partials.cart-button')
+                {{-- Cart only for signed-in accounts (guests can't add to cart) --}}
+                @if ($grLogoutRoute)
+                    @include('frontend.layout.partials.cart-button')
+                @endif
 
                 <a @auth('dealer')
                         href="{{ route('dealer.dashboard') }}"
@@ -191,7 +194,8 @@
                             </a>
                         </li>
                     @endif
-                    <li><a href="{{ route('login') }}">Login</a></li>
+                    {{-- Phones only: on desktop the Login button sits in the top bar --}}
+                    <li class="d-lg-none"><a href="{{ route('login') }}">Login</a></li>
                 @endif
 
 
@@ -242,7 +246,9 @@
         </div>
 
         <div class="nav-right">
-            @include('frontend.layout.partials.cart-button', ['class' => 'gr-cart-btn-mobile d-lg-none'])
+            @if ($grLogoutRoute)
+                @include('frontend.layout.partials.cart-button', ['class' => 'gr-cart-btn-mobile d-lg-none'])
+            @endif
             <div class="sidebar-button mobile-menu-btn">
                 <span></span>
             </div>
