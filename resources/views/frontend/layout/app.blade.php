@@ -38,9 +38,9 @@
     <!-- Home1 Footer Section End -->
 
     {{-- ================ OFFCANVAS ================= --}}
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanva" aria-labelledby="cartOffcanva">
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanva" aria-labelledby="cartOffcanvaLabel">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="cartOffcanva">
+            <h5 class="offcanvas-title" id="cartOffcanvaLabel">
                 Your Cart
             </h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -50,9 +50,9 @@
         </div>
     </div>
     {{-- quick add --}}
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="quickAddOffcanva" aria-labelledby="quickAddOffcanva">
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="quickAddOffcanva" aria-labelledby="quickAddOffcanvaLabel">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="quickAddOffcanva">
+            <h5 class="offcanvas-title" id="quickAddOffcanvaLabel">
                 Quick Add
             </h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>

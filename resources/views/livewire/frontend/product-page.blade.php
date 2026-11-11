@@ -1,7 +1,7 @@
 <div class="auction-details-section mb-120">
     <div class="container">
         <div class="row gy-5">
-            <div class="col-md-9 ">
+            <div class="col-lg-7">
                 <div class="auction-details-img d-flex justify-content-center align-items-center flex-column"
                     wire:ignore>
 
@@ -53,7 +53,7 @@
                     </ul> --}}
                 </div>
             </div>
-            <div class="col-md-3 wow animate fadeInRight" data-wow-delay="200ms" data-wow-duration="1500ms">
+            <div class="col-lg-5 wow animate fadeInRight" data-wow-delay="200ms" data-wow-duration="1500ms">
                 <div class="auction-details-content">
                     <div class="batch">
                         <h6>

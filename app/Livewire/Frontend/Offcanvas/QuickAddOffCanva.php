@@ -282,6 +282,8 @@ class QuickAddOffCanva extends Component
 
         $this->reset('quantity');
         $this->dispatch('notify');
+        // Re-render the cart so its contents and the header count are current.
+        $this->dispatch('refresh');
         $this->resetToDefaultVariant();
     }
 
