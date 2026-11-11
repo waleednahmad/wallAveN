@@ -160,8 +160,8 @@
 
     @unless ($isSignedIn)
         {{-- ===================== Become a dealer ===================== --}}
-        <section class="gr-steps">
-            <div class="gr-container gr-section">
+        <section class="gr-steps gr-section">
+            <div class="gr-container">
                 <div class="gr-head-row" style="margin-bottom: 48px;">
                     <h2 class="gr-h2" style="max-width: 640px;">Become a Golden Rugs dealer in three steps.</h2>
                     <a href="{{ route('frontend.register') }}" class="gr-btn gr-btn-light">Start your application</a>
