@@ -12,7 +12,8 @@ class ConfirmCancelOrderModal extends Component
     #[On('setOrderId')]
     public function setOrderId($order)
     {
-        $order = Order::find($order);
+        // Only look up orders that belong to the signed-in dealer
+        $order = auth('dealer')->user()->orders()->find($order);
         if (!$order) {
             $this->dispatch('error', 'Order not found');
             $this->dispatch('closeConfirmModal');
@@ -23,6 +24,12 @@ class ConfirmCancelOrderModal extends Component
 
     public function cancelOrder()
     {
+        if (!$this->order || (int) $this->order->dealer_id !== (int) auth('dealer')->id()) {
+            $this->dispatch('error', 'Order not found');
+            $this->dispatch('closeConfirmModal');
+            return;
+        }
+
         $this->order->update(['status' => 'canceled']);
         $this->dispatch('success', 'Order canceled successfully');
         $this->dispatch('closeConfirmModal');
