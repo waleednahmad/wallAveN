@@ -53,7 +53,8 @@ class FrontController extends Controller
         if (showCategoryAndShopPages() || auth('dealer')->check() || auth('representative')->check() || auth('web')->check()) {
             return view('frontend.shop', compact('seoContent'));
         }
-        return redirect()->route('frontend.home')->with('error', 'Shop page is disabled.');
+        // Guests (catalog hidden by the admin setting): explain and offer log in / apply, instead of bouncing home.
+        return view('frontend.catalog-locked', ['kind' => 'shop', 'search' => (string) request()->query('search', '')]);
     }
 
     public function showProduct($slug)
@@ -68,7 +69,7 @@ class FrontController extends Controller
             return view('frontend.product', compact('product', 'firstCategory'));
         }
 
-        return redirect()->route('frontend.home')->with('error', 'Product page is disabled.');
+        return view('frontend.catalog-locked', ['kind' => 'product', 'search' => '']);
     }
 
 

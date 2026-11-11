@@ -1,4 +1,7 @@
 @php
+    $grLogoutRoute = auth('dealer')->check()
+        ? 'frontend.logout'
+        : (auth('representative')->check() ? 'representative.logout' : (auth('web')->check() ? 'logout' : null));
     $grCartCount = (auth('dealer')->check() || auth('representative')->check() || auth('web')->check())
         ? (int) \App\Livewire\Frontend\CartOffcanva::currentItems()->sum('quantity')
         : 0;
@@ -90,6 +93,11 @@
                     </span>
                     <strong></strong>
                 </a>
+                @if ($grLogoutRoute)
+                    <a href="{{ route($grLogoutRoute) }}" class="gr-icon-btn" aria-label="Log out" title="Log out">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4h3a2 2 0 012 2v12a2 2 0 01-2 2h-3"/><path d="M10 17l5-5-5-5"/><path d="M15 12H4"/></svg>
+                    </a>
+                @endif
             </div>
         </div>
     </div>
@@ -169,19 +177,7 @@
                 @endif
                 <li><a href="{{ route('frontend.contactUs') }}">Contact us</a></li>
                 @if (auth('dealer')->check() || auth('representative')->check() || auth('web')->check())
-                    {{-- The Dashboard link lives in the header button (desktop) and the mobile menu button --}}
-                    @php
-                        $logoutPath = auth('dealer')->check()
-                            ? 'frontend.logout'
-                            : (auth('representative')->check() ? 'representative.logout' : 'logout');
-                    @endphp
-
-                    {{-- Logout --}}
-                    <li>
-                        <a href="{{ route($logoutPath) }}">
-                            Logout
-                        </a>
-                    </li>
+                    {{-- Dashboard and Log out live in the header (icon next to Dashboard; buttons in the mobile menu) --}}
                 @else
                     <li>
                         <a href="{{ route('frontend.register') }}">
@@ -235,6 +231,12 @@
                         <span>Dashboard</span>
                         <strong></strong>
                     </a>
+                    @if ($grLogoutRoute)
+                        <a href="{{ route($grLogoutRoute) }}" class="gr-btn gr-btn-outline gr-logout-mobile">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4h3a2 2 0 012 2v12a2 2 0 01-2 2h-3"/><path d="M10 17l5-5-5-5"/><path d="M15 12H4"/></svg>
+                            Log out
+                        </a>
+                    @endif
                 </div>
             @endif
         </div>
