@@ -143,22 +143,25 @@
                     @else
                         @if (isset($publicActiveCategories) && $publicActiveCategories->count() > 0)
                             @foreach ($publicActiveCategories as $category)
-                                <li class="menu-item-has-children">
+                                @php $grHasSubs = $category->subCategories && count($category->subCategories) > 0; @endphp
+                                {{-- Dropdown (and its arrow) only when the category has sub categories;
+                                     an empty one showed a long gold line on hover --}}
+                                <li @class(['menu-item-has-children' => $grHasSubs])>
                                     <a href="{{ route('frontend.shop', ['category' => $category->slug]) }}"
-                                        class="drop-down">{{ $category->name }}</a>
-                                    @if ($category->subCategories && count($category->subCategories) > 0)
+                                        @class(['drop-down' => $grHasSubs])>{{ $category->name }}</a>
+                                    @if ($grHasSubs)
                                         <i class="bi bi-plus dropdown-icon"></i>
+                                        <ul class="sub-menu two" style="z-index: 9999;">
+                                            @foreach ($category->subCategories as $subCategory)
+                                                <li>
+                                                    <a
+                                                        href="{{ route('frontend.shop', ['sub_category' => $subCategory->slug]) }}">
+                                                        {{ $subCategory->name }}
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
                                     @endif
-                                    <ul class="sub-menu two" style="z-index: 9999;">
-                                        @foreach ($category->subCategories as $subCategory)
-                                            <li>
-                                                <a
-                                                    href="{{ route('frontend.shop', ['sub_category' => $subCategory->slug]) }}">
-                                                    {{ $subCategory->name }}
-                                                </a>
-                                            </li>
-                                        @endforeach
-                                    </ul>
                                 </li>
                             @endforeach
                         @endif
