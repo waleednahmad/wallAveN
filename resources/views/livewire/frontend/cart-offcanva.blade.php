@@ -24,6 +24,8 @@
                 $attributes = json_decode($item->attributes, true) ?: [];
                 $filteredAttributes = array_filter($attributes, fn ($value) => strtolower((string) $value) !== 'none');
                 $values = implode(' · ', array_map('ucwords', array_values($filteredAttributes)));
+                // Sizes are in feet (5' x 8'), matching the shop and product pages.
+                $values = str_replace('"', "'", $values);
             }
             $itemPrice = (float) $item->price * $grMultiplier;
             $itemTotal = (float) $item->total * $grMultiplier;

@@ -387,3 +387,52 @@ textarea.form-control { min-height: 120px; padding-top: 12px; }
 @media (prefers-reduced-motion: reduce) {
   .wow { visibility: visible !important; animation: none !important; }
 }
+
+/* --------------------------------------------------------------------------
+   Quick add gallery, quantity + add to cart row, cart count badge
+   -------------------------------------------------------------------------- */
+.gr-qa-gallery { margin-bottom: 20px; }
+.gr-qa-main { background: var(--gr-linen); border-radius: 14px; overflow: hidden; aspect-ratio: 4 / 5; display: flex; align-items: center; justify-content: center; }
+.gr-qa-main img { width: 100%; height: 100%; object-fit: contain; }
+.gr-qa-thumbs { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; padding-bottom: 4px; }
+.gr-qa-thumbs button { flex: 0 0 60px; height: 72px; padding: 0; border: 2px solid transparent; border-radius: 10px; overflow: hidden; background: var(--gr-linen); cursor: pointer; transition: border-color .2s ease; }
+.gr-qa-thumbs button.is-active, .gr-qa-thumbs button:hover { border-color: var(--gr-madder); }
+.gr-qa-thumbs img { width: 100%; height: 100%; object-fit: cover; }
+
+.gr-buy-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+.gr-qty-lg { height: 52px; background: var(--gr-paper); }
+.gr-qty-lg button { width: 48px; height: 50px; font-size: 20px; }
+.gr-qty-lg button:hover { color: var(--gr-madder); }
+.gr-qty input { width: 48px; height: 100%; padding: 0; font-size: 16px; color: var(--gr-ink); -moz-appearance: textfield; appearance: textfield; }
+.gr-qty input:focus { outline: none; }
+.gr-qty input::-webkit-outer-spin-button, .gr-qty input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.gr-qty:focus-within { border-color: var(--gr-ink); }
+.gr-buy-btn { flex: 1 1 180px; max-width: 320px; }
+.gr-buy-btn:disabled { opacity: .55; cursor: not-allowed; }
+
+.gr-cart-btn { position: relative; }
+.gr-cart-badge { position: absolute; top: -6px; right: -8px; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: var(--gr-madder); color: #fff; font-size: 11px; font-weight: 700; line-height: 20px; text-align: center; font-family: var(--gr-font-body); box-shadow: 0 0 0 2px var(--gr-paper); }
+.gr-cart-badge.gr-bump { animation: grBump .35s ease; }
+@keyframes grBump { 50% { transform: scale(1.25); } }
+@media (prefers-reduced-motion: reduce) { .gr-cart-badge.gr-bump { animation: none; } }
+
+/* Product card as one framed unit: photo, name, price and buttons belong together */
+.gr-product-card { background: var(--gr-paper); border: 1px solid var(--gr-line); border-radius: 16px; padding: 10px; transition: box-shadow .25s ease, border-color .25s ease, transform .25s ease; }
+.gr-product-card:hover { border-color: #D4C5B0; box-shadow: 0 14px 30px rgba(35,26,20,.08); transform: translateY(-2px); }
+.gr-product-card .gr-product-media { border-radius: 10px; }
+.gr-product-body { display: flex; flex-direction: column; flex: 1; padding: 0 6px 6px; }
+.gr-product-card .gr-product-name { font-size: 19px; margin-top: 12px; }
+.gr-product-card .gr-product-foot { flex-direction: column; align-items: stretch; gap: 10px; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--gr-line); }
+.gr-product-card .gr-product-price { font-size: 17px; }
+.gr-product-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.gr-product-actions .gr-btn, .gr-product-card .gr-product-foot .gr-btn { min-height: 42px; padding: 0 12px; font-size: 14px; }
+.gr-product-card .gr-product-login { margin: 0; }
+.gr-product-card .gr-product-name { margin-bottom: 4px; }
+.gr-product-card .gr-product-meta + .gr-product-foot, .gr-product-card .gr-product-name + .gr-product-foot { margin-top: auto; }
+@media (prefers-reduced-motion: reduce) { .gr-product-card:hover { transform: none; } }
+.checkbox-container .filter-container-label.active .check-icon { background: var(--gr-madder) !important; border-color: var(--gr-madder) !important; color: #fff; }
+.checkbox-container .filter-container-label:focus-visible { outline: 2px solid var(--gr-madder); outline-offset: 2px; border-radius: 6px; }
+.gr-cart-btn-mobile { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin-right: 6px; }
+.gr-cart-btn-mobile svg { width: 24px; height: 24px; fill: var(--gr-ink); }
+.gr-cart-btn-mobile .gr-cart-badge { top: 2px; right: 0; }
+@media (min-width: 992px) { .gr-cart-btn-mobile { display: none !important; } }

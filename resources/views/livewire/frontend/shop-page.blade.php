@@ -141,18 +141,19 @@
                                     <ul>
                                         @foreach ($this->categories as $category)
                                             <li>
-                                                <label @class([
-                                                    'filter-container-label',
-                                                    'active' =>
-                                                        isset($selectedCategory) &&
-                                                        $selectedCategory &&
-                                                        $selectedCategory->id === $category->id,
-                                                ])
+                                                @php
+                                                    $grCatOn = isset($selectedCategory) && $selectedCategory && $selectedCategory->id === $category->id;
+                                                @endphp
+                                                {{-- Looks like the checkboxes below, but still picks one category at a time --}}
+                                                <label @class(['filter-container-label', 'active' => $grCatOn])
+                                                    role="radio" aria-checked="{{ $grCatOn ? 'true' : 'false' }}" tabindex="0"
+                                                    x-on:keydown.enter.prevent="$el.click()" x-on:keydown.space.prevent="$el.click()"
                                                     wire:click="selectCategory('{{ $category->slug }}')">
-                                                    <input type="radio" name="selectedCategory"
-                                                        value="{{ $category->id }}"
-                                                        @if (isset($selectedCategory) && $selectedCategory && $selectedCategory->id === $category->id) checked @endif
-                                                        style="margin-right: 6px;" readonly>
+                                                    <span class="check-icon">
+                                                        @if ($grCatOn)
+                                                            <i class="fas fa-check"></i>
+                                                        @endif
+                                                    </span>
                                                     <span>{{ $category->name }} </span>
                                                 </label>
                                             </li>

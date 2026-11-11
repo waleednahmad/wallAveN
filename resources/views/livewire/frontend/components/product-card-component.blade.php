@@ -23,6 +23,7 @@
         </div>
     @endif
 
+    <div class="gr-product-body">
     <h3 class="gr-product-name">
         <a href="{{ route('frontend.product', $product->slug) }}">{{ $product->name }}</a>
     </h3>
@@ -42,12 +43,19 @@
                 @endif
                 <strong>{{ $grMoney($price) }}</strong>
             </p>
-            <button type="button" wire:click='openProductOptions()' class="gr-btn gr-btn-outline gr-btn-sm" wire:loading.attr="disabled">
-                <span wire:loading><i class="fas fa-spinner fa-spin" aria-hidden="true"></i></span>
-                <span wire:loading.remove>Quick add</span>
-            </button>
+            <div class="gr-product-actions">
+                <button type="button" wire:click='openProductOptions()' class="gr-btn gr-btn-dark gr-btn-sm" wire:loading.attr="disabled">
+                    <span wire:loading><i class="fas fa-spinner fa-spin" aria-hidden="true"></i></span>
+                    <span wire:loading.remove>Quick add</span>
+                </button>
+                <a href="{{ route('frontend.product', $product->slug) }}" class="gr-btn gr-btn-outline gr-btn-sm">Details</a>
+            </div>
         </div>
     @else
-        <p class="gr-product-login"><a href="{{ route('login') }}">Log in to see trade price</a></p>
+        <div class="gr-product-foot">
+            <p class="gr-product-login"><a href="{{ route('login') }}">Log in to see trade price</a></p>
+            <a href="{{ route('frontend.product', $product->slug) }}" class="gr-btn gr-btn-outline gr-btn-sm w-100">Details</a>
+        </div>
     @endif
+    </div>
 </article>

@@ -1,25 +1,30 @@
 <div>
 
-    <div id="carouselExampleControlsNoTouching" class="carousel slide" data-bs-touch="false" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            @foreach ($imagesGallery as $galleryItem)
-                <div @class(['carousel-item', 'active' => $loop->first]) data-bs-interval="3000">
-                    <img src="{{ $galleryItem->image }}" alt="" loading="lazy" class="d-block h-100"
-                        style="object-fit: contain; width: 100%;" alt="...">
+    {{-- Gallery: the main image follows the selected color/size (Livewire sets $image);
+         thumbnails let the dealer look at other photos. No auto-sliding. --}}
+    @php
+        $grMainImage = $image ?: ($product?->image ?? null);
+        $grThumbs = collect([$grMainImage])->merge(collect($imagesGallery ?? [])->pluck('image'))->filter()->unique()->values();
+    @endphp
+    @if ($grMainImage || $grThumbs->count())
+        <div class="gr-qa-gallery" wire:key="qa-gallery-{{ md5((string) $grMainImage) }}"
+            x-data="{ shown: @js($grMainImage ? asset($grMainImage) : asset($grThumbs->first())) }">
+            <div class="gr-qa-main">
+                <img x-bind:src="shown" src="{{ $grMainImage ? asset($grMainImage) : asset($grThumbs->first()) }}" alt="{{ $product?->name }}">
+            </div>
+            @if ($grThumbs->count() > 1)
+                <div class="gr-qa-thumbs">
+                    @foreach ($grThumbs as $thumb)
+                        <button type="button" x-on:click="shown = @js(asset($thumb))"
+                            x-bind:class="shown === @js(asset($thumb)) ? 'is-active' : ''"
+                            aria-label="Show photo {{ $loop->iteration }}">
+                            <img src="{{ asset($thumb) }}" alt="" loading="lazy">
+                        </button>
+                    @endforeach
                 </div>
-            @endforeach
+            @endif
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControlsNoTouching"
-            data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControlsNoTouching"
-            data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
+    @endif
 
     <div class="auction-details-content">
         <div class="batch">
@@ -121,13 +126,16 @@
             {{-- ========== Add To Cart ========= --}}
             <div class="add-to-cart">
                 @if (!$variantNotFound)
-                    <div style="display: flex; gap: 10px; align-items: center;" wire:tranistion>
-                        <button class="btn" wire:click="decreaseQuantity"
-                            style="background-color: #f5f5f5; color: #000;">-</button>
-                        <input type="number" style="min-width: max-content; padding: 5px; border: none"
-                            wire:model="quantity" min="1">
-                        <button class="btn" wire:click="increaseQuantity"
-                            style="background-color: #f5f5f5; color: #000;">+</button>
+                    <div class="gr-buy-row">
+                        <div class="gr-qty gr-qty-lg" role="group" aria-label="Quantity">
+                            <button type="button" wire:click="decreaseQuantity" aria-label="Decrease quantity">−</button>
+                            <input type="number" inputmode="numeric" wire:model="quantity" min="1" aria-label="Quantity">
+                            <button type="button" wire:click="increaseQuantity" aria-label="Increase quantity">+</button>
+                        </div>
+                        <button type="button" class="gr-btn gr-btn-primary gr-buy-btn" wire:click="addToCart" wire:loading.attr="disabled" wire:target="addToCart" @disabled($variantNotFound)>
+                            <span wire:loading wire:target="addToCart" class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            Add to cart
+                        </button>
                     </div>
                     <!-- Notification message (hidden by default) -->
                     <div x-data="{ showNotification: false }"
@@ -154,10 +162,6 @@
                             x
                         </button>
                     </div>
-                    <button class="mt-3 btn" wire:click="addToCart" @disabled($variantNotFound)
-                        style="background-color: #000; color: #fff; max-width: fit-content; padding: 10px 20px;">
-                        Add to Cart
-                    </button>
                 @endif
             </div>
             {{-- ========== End Add To Cart ========= --}}

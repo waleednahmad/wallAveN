@@ -160,18 +160,17 @@
                     {{-- ========== Add To Cart ========= --}}
                     <div class="add-to-cart">
                         @if (!$variantNotFound)
-                            <div style="display: flex; gap: 10px; align-items: center;" wire:tranistion>
-                                <button class="btn" wire:click="decreaseQuantity"
-                                    style="background-color: #f5f5f5; color: #000;">-</button>
-                                <input type="number" style="min-width: max-content; padding: 5px; border: none"
-                                    wire:model="quantity" min="1">
-                                <button class="btn" wire:click="increaseQuantity"
-                                    style="background-color: #f5f5f5; color: #000;">+</button>
+                            <div class="gr-buy-row">
+                                <div class="gr-qty gr-qty-lg" role="group" aria-label="Quantity">
+                                    <button type="button" wire:click="decreaseQuantity" aria-label="Decrease quantity">−</button>
+                                    <input type="number" inputmode="numeric" wire:model="quantity" min="1" aria-label="Quantity">
+                                    <button type="button" wire:click="increaseQuantity" aria-label="Increase quantity">+</button>
+                                </div>
+                                <button type="button" class="gr-btn gr-btn-primary gr-buy-btn" wire:click="addToCart" wire:loading.attr="disabled" wire:target="addToCart" @disabled($variantNotFound)>
+                                    <span wire:loading wire:target="addToCart" class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                                    Add to cart
+                                </button>
                             </div>
-                            <button class="mt-3 btn" wire:click="addToCart" @disabled($variantNotFound)
-                                style="background-color: #000; color: #fff; max-width: fit-content; padding: 10px 20px;">
-                                Add to Cart
-                            </button>
                         @endif
                     </div>
                     {{-- ========== End Add To Cart ========= --}}

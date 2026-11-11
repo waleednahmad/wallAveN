@@ -1,4 +1,9 @@
 @php
+    $grCartCount = (auth('dealer')->check() || auth('representative')->check() || auth('web')->check())
+        ? (int) \App\Livewire\Frontend\CartOffcanva::currentItems()->sum('quantity')
+        : 0;
+@endphp
+@php
     $grDealer = auth('dealer')->user();
     $grCustomerMode = $grDealer && $grDealer->is_customer_mode_active;
     $grBanner = $grCustomerMode ? $grDealer->bannerSetting()?->first() : null;
@@ -45,13 +50,7 @@
             <div class="topbar-right">
                 {{-- Cart Offcanva Button --}}
 
-                <a href="#" class="wishlist-btn" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanva"
-                    aria-controls="cartOffcanva">
-                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm0 2c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm10-2c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zm0 2c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zM7.82 14.18l.03-.12L9.1 10H19c.55 0 1-.45 1-1s-.45-1-1-1H9.42l-.94-4.34C8.39 3.26 7.74 3 7.05 3H4c-.55 0-1 .45-1 1s.45 1 1 1h2.05l1.1 5.06L5.6 14.59c-.09.26-.14.54-.14.83 0 1.1.9 2 2 2h12c.55 0 1-.45 1-1s-.45-1-1-1H7.82z" />
-                    </svg>
-                </a>
+                @include('frontend.layout.partials.cart-button')
 
                 <a @auth('dealer')
                         href="{{ route('dealer.dashboard') }}"
@@ -238,9 +237,7 @@
         </div>
 
         <div class="nav-right">
-            <div class="dark-light-switch d-lg-none d-block">
-                <i class="bi bi-brightness-low-fill"></i>
-            </div>
+            @include('frontend.layout.partials.cart-button', ['class' => 'gr-cart-btn-mobile d-lg-none'])
             <div class="sidebar-button mobile-menu-btn">
                 <span></span>
             </div>

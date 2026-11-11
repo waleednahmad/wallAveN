@@ -470,8 +470,9 @@
 		}
 	});
 
+	// The new storefront theme is light only; the mobile day/night switch was replaced by the cart button.
 	const dayNight = document.querySelector(".dark-light-switch");
-	dayNight.addEventListener("click", () => {
+	if (dayNight) dayNight.addEventListener("click", () => {
 		dayNight.querySelector("i").classList.toggle("bi-brightness-low-fill");
 		dayNight.querySelector("i").classList.toggle("bi-moon");
 		document.body.classList.toggle("dark");
@@ -496,7 +497,8 @@
 	var artmart_theme = localStorage.getItem("artmart_theme");
 
 	if (artmart_theme === "dark") {
-		$("body").addClass("dark");
+		// Old setting from the template's dark mode, which no longer exists: clear it.
+		localStorage.removeItem("artmart_theme");
 	}
 
 

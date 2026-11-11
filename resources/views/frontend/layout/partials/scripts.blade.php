@@ -19,7 +19,7 @@
 <!-- Marquee  JS -->
 <script src="{{ asset('assets/js/jquery.marquee.min.js') }}"></script>
 
-<script src="{{ asset('assets/js/main.js') }}"></script>
+<script src="{{ asset('assets/js/main.js') }}?v={{ filemtime(public_path('assets/js/main.js')) }}"></script>
 
 
 @vite('resources/front/js/app.js')

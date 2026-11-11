@@ -115,37 +115,48 @@ class CartOffcanva extends Component
         $this->dispatch('openConfirmCheckoutModal');
     }
 
-    #[On('openCartOffcanva')]
-    #[On('closeCartOffcanva')]
-    #[On('refresh')]
-    public function render()
+    /**
+     * Cart lines for whoever is signed in (dealer, sales rep or admin).
+     * Shared by the offcanvas and the header cart count.
+     */
+    public static function currentItems()
     {
         if (auth('dealer')->check()) {
-            $cartTemps = CartTemp::where('dealer_id', auth('dealer')->user()->id)
+            return CartTemp::where('dealer_id', auth('dealer')->user()->id)
                 ->whereNull('representative_id')
                 ->whereNull('admin_id')
                 ->get();
-            $total = $cartTemps->sum('total');
-        } elseif (auth('representative')->check()) {
-            $cartTemps = CartTemp::where('representative_id', auth('representative')->user()->id)
+        }
+        if (auth('representative')->check()) {
+            return CartTemp::where('representative_id', auth('representative')->user()->id)
                 ->when(auth('representative')->user()->buyingFor()->exists(), function ($query) {
                     $query->where('dealer_id', auth('representative')->user()->buyingFor->id);
                 })
                 ->whereNull('admin_id')
                 ->get();
-            $total = $cartTemps->sum('total');
-        } elseif (auth('web')->check()) { // admin check
-            $cartTemps = CartTemp::where('admin_id', auth('web')->user()->id)
+        }
+        if (auth('web')->check()) { // admin
+            return CartTemp::where('admin_id', auth('web')->user()->id)
                 ->when(auth('web')->user()->buyingFor()->exists(), function ($query) {
                     $query->where('dealer_id', auth('web')->user()->buyingFor->id);
                 })
                 ->whereNull('representative_id')
                 ->get();
-            $total = $cartTemps->sum('total');
-        } else {
-            $cartTemps = [];
-            $total = 0;
         }
+
+        return collect();
+    }
+
+    #[On('openCartOffcanva')]
+    #[On('closeCartOffcanva')]
+    #[On('refresh')]
+    public function render()
+    {
+        $cartTemps = static::currentItems();
+        $total = $cartTemps->sum('total');
+
+        // Keeps the badge on the header cart icon in sync.
+        $this->dispatch('cart-count', count: (int) $cartTemps->sum('quantity'));
 
         return view('livewire.frontend.cart-offcanva')->with([
             'cartTemps' => $cartTemps,
