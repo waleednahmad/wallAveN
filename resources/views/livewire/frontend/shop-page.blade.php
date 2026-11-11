@@ -32,9 +32,18 @@
                                         </svg>
                                     </a>
                                 </li>
-                                <li>
-                                    {{ $selectedCategory->name }}
-                                </li>
+                                @if ($this->activeSubCategory)
+                                    <li>
+                                        <a href="{{ route('frontend.shop', ['category' => $selectedCategory->slug]) }}">{{ $selectedCategory->name }}</a>
+                                    </li>
+                                    <li>
+                                        {{ $this->activeSubCategory->name }}
+                                    </li>
+                                @else
+                                    <li>
+                                        {{ $selectedCategory->name }}
+                                    </li>
+                                @endif
                             </ul>
                         </div>
                     </div>
@@ -43,11 +52,15 @@
                     <div class="col-lg-12">
                         <div class="breadcrumb-content text-white">
                             <h1>
-                                {{ $selectedCategory->name }}
+                                {{ $this->activeSubCategory?->name ?? $selectedCategory->name }}
                             </h1>
-                            <p class="text-white">
-                                {{ $selectedCategory->description }}
-                            </p>
+                            @if ($this->activeSubCategory)
+                                <p class="text-white">{{ $selectedCategory->name }} collection</p>
+                            @elseif ($selectedCategory->description)
+                                <p class="text-white">
+                                    {{ $selectedCategory->description }}
+                                </p>
+                            @endif
                         </div>
                     </div>
                 </div>

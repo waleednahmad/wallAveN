@@ -59,6 +59,8 @@ class ShopPage extends Component
             if ($subCategory) {
                 $this->selectedCategories = [$subCategory->category_id];
                 $this->selectedSubCategories = [$subCategory->id];
+                // Parent category drives the sidebar (sub category list) and the banner breadcrumb.
+                $this->selectedCategory = $subCategory->category;
             } else {
                 $this->selectedSubCategories = [];
             }
@@ -158,7 +160,7 @@ class ShopPage extends Component
                     })->withCount(['products' => function ($query) {
                         $query->where('status', 1)->whereHas('variants');
                     }])->orderBy('name');
-                }])->get()->pluck('productTypes')->flatten();
+                }])->get()->pluck('productTypes')->flatten()->pipeInto(\Illuminate\Database\Eloquent\Collection::class);
         }
     }
 
@@ -204,6 +206,17 @@ class ShopPage extends Component
             $this->subCategories = [];
             $this->productTypes = [];
         }
+    }
+
+    /** The one selected sub category (for the banner title and breadcrumb), or null. */
+    #[Computed()]
+    public function activeSubCategory()
+    {
+        if (count($this->selectedSubCategories) !== 1) {
+            return null;
+        }
+
+        return SubCategory::find(reset($this->selectedSubCategories));
     }
 
     #[Computed()]
