@@ -246,6 +246,44 @@ textarea.form-control { min-height: 120px; padding-top: 12px; }
 .wp-block-search__input { border-radius: 999px !important; background: var(--gr-paper) !important; }
 .wp-block-search__button { border-radius: 999px !important; background: var(--gr-ink) !important; }
 
+/* Shop banner (category / page breadcrumb image) as a rounded indigo card */
+.breadcrumb-section2 {
+  position: relative; max-width: 1256px; margin: 28px auto 0; border-radius: var(--gr-radius-lg);
+  overflow: hidden; min-height: 240px; padding: 40px 0 !important; background-size: cover; background-position: center;
+}
+.breadcrumb-section2::before { content: ""; position: absolute; inset: 0; background: rgba(31, 46, 69, .62); }
+.breadcrumb-section2 > .container { position: relative; z-index: 1; }
+.breadcrumb-section2 h1 { font-family: var(--gr-font-display); font-weight: 400; color: #fff; font-size: clamp(36px, 5vw, 56px); }
+.breadcrumb-section2 p { color: #E4DED3 !important; max-width: 560px; }
+.breadcrumb-section2 .top-content ul li, .breadcrumb-section2 .top-content ul li a { color: #E4DED3; font-size: 13px; }
+@media (max-width: 1290px) { .breadcrumb-section2 { margin-left: 16px; margin-right: 16px; } }
+
+/* Shop sidebar */
+.sidebar-area .single-widgets { background: var(--gr-paper); border: 1px solid var(--gr-line); border-radius: 16px; padding: 20px; margin-bottom: 16px !important; }
+.sidebar-area .widget-title { margin-bottom: 12px; }
+.checkbox-container { min-height: 40px; }
+.checkbox-container .check-icon { border-color: var(--gr-line) !important; border-radius: 6px; }
+.checkbox-container input:checked + .check-icon, .checkbox-container .check-icon.checked { background: var(--gr-madder) !important; border-color: var(--gr-madder) !important; }
+
+/* Product page + quick add */
+.auction-details-section { padding-top: 24px; }
+.auction-details-content h3 { font-family: var(--gr-font-display); font-weight: 400; font-size: clamp(34px, 4vw, 52px); line-height: 1.04; }
+.auction-details-content .batch h6 { font-family: var(--gr-font-body); font-weight: 400; color: var(--gr-muted); }
+.auction-details-content .artist-info { list-style: none; padding: 16px 0; margin: 16px 0 8px; border-top: 1px solid var(--gr-line); border-bottom: 1px solid var(--gr-line); }
+.auction-details-content .artist-info strong, .auction-details-content .artist-info .price { font-family: var(--gr-font-display); font-weight: 400; font-size: 34px; color: var(--gr-ink); }
+.quantity-area h6 { font-family: var(--gr-font-body); font-weight: 600; font-size: 15px; color: var(--gr-ink); }
+.values-container { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+.values-container span {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 48px; min-width: 88px; padding: 0 16px;
+  border: 1px solid var(--gr-line); border-radius: 12px; background: var(--gr-paper); color: var(--gr-ink);
+  font-weight: 500; cursor: pointer; transition: border-color .2s ease, background-color .2s ease;
+}
+.values-container span:hover { border-color: var(--gr-madder); }
+.values-container span.active { border: 2px solid var(--gr-madder); background: var(--gr-madder-tint); color: var(--gr-madder); font-weight: 600; }
+.auction-details-section .btn, #quickAddOffcanva .btn { border-radius: 999px; }
+.auction-details-img img, .splide__slide img { border-radius: 16px; }
+.thumbnails .thumbnail img, .thumbnail-image { border-radius: 10px; }
+
 /* --------------------------------------------------------------------------
    Offcanvas (cart, quick add) and modals
    -------------------------------------------------------------------------- */
@@ -303,9 +341,15 @@ textarea.form-control { min-height: 120px; padding-top: 12px; }
 /* --------------------------------------------------------------------------
    Dealer dashboard
    -------------------------------------------------------------------------- */
-.dashboard-sidebar, .dealer-sidebar { background: var(--gr-indigo) !important; border-radius: var(--gr-radius-lg); color: #F1E6D2; }
-.dashboard-sidebar a, .dealer-sidebar a { color: #E4DED3 !important; }
-.dashboard-sidebar a.active, .dealer-sidebar a.active { color: #fff !important; background: rgba(233, 201, 139, .16); border-radius: 10px; }
+.dashboard-section { padding-top: 40px; }
+.dashboard-sidebar-menu ul { background: var(--gr-indigo) !important; border: 0 !important; border-radius: var(--gr-radius-lg) !important; padding: 16px !important; }
+.dashboard-sidebar-menu ul li a { border: 0 !important; border-radius: 10px !important; background: transparent !important; min-height: 46px; }
+.dashboard-sidebar-menu ul li a, .dashboard-sidebar-menu ul li a h5 { color: #E4DED3 !important; font-family: var(--gr-font-body) !important; font-weight: 500; font-size: 15px; }
+.dashboard-sidebar-menu ul li a svg, .dashboard-sidebar-menu ul li a svg path { fill: #E4DED3 !important; stroke: #E4DED3; }
+.dashboard-sidebar-menu ul li.active a { background: rgba(233, 201, 139, .16) !important; }
+.dashboard-sidebar-menu ul li.active a, .dashboard-sidebar-menu ul li.active a h5 { color: #fff !important; font-weight: 600; }
+.dashboard-content-wrap { background: transparent !important; border: 0 !important; padding: 0 !important; }
+.dashboard-content-wrap .single-content, .dashboard-profile-content { background: var(--gr-paper); border: 1px solid var(--gr-line); border-radius: var(--gr-radius-lg); }
 .gr-stat-card { display: block; background: var(--gr-paper); border: 1px solid var(--gr-line); border-radius: 16px; padding: 20px; text-decoration: none; color: var(--gr-ink); }
 .gr-stat-card .gr-dot { width: 8px; height: 8px; border-radius: 4px; display: inline-block; }
 .gr-status { display: inline-flex; padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 600; text-transform: capitalize; }

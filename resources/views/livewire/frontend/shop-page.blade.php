@@ -95,8 +95,14 @@
     <div class="auction-card-sidebar-section pt-5 mb-120">
         <div class="container">
             <div class="row gy-5">
-                <div class="order-1 col-xl-3 order-xl-1">
-                    <div class="sidebar-area" style="position: sticky; top: 20px;">
+                <div class="order-1 col-xl-3 order-xl-1" x-data="{ filtersOpen: false }">
+                    {{-- Phones/tablets: filters fold behind a button so products show first --}}
+                    <button type="button" class="gr-btn gr-btn-dark w-100 d-xl-none" style="margin-bottom: 16px;"
+                        x-on:click="filtersOpen = !filtersOpen" x-bind:aria-expanded="filtersOpen.toString()">
+                        <i class="bi bi-sliders" aria-hidden="true"></i>
+                        <span x-text="filtersOpen ? 'Hide filters' : 'Filters & search'">Filters &amp; search</span>
+                    </button>
+                    <div class="sidebar-area d-xl-block" x-bind:class="filtersOpen ? '' : 'd-none'" style="position: sticky; top: 20px;">
                         <div class="single-widgets widget_search mb-50">
                             <form>
                                 <div class="wp-block-search__inside-wrapper ">
