@@ -578,3 +578,24 @@ dl dt, dl dd, dl dd a { font-size: var(--gr-fs-base); }
 @keyframes grToastBump { 50% { transform: scale(1.02); } }
 @media (max-width: 575px) { .gr-toasts { left: 16px; right: 16px; bottom: 16px; width: auto; } }
 @media (prefers-reduced-motion: reduce) { .gr-toast, .gr-toast.is-leaving, .gr-toast.gr-toast-bump { animation: none; } }
+
+/* Header search: one field (the template wrapped a bordered input in a grey box, icon outside) */
+.topbar .topbar-wrap .search-area form .form-inner, .search-area form .form-inner {
+  display: flex; align-items: center; gap: 8px; height: 48px; padding: 0 4px 0 16px;
+  background: var(--gr-paper) !important; border: 1px solid var(--gr-line); border-radius: var(--gr-radius-btn);
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.search-area form .form-inner:focus-within { border-color: var(--gr-ink); box-shadow: 0 0 0 3px rgba(35,26,20,.08); }
+.topbar .search-area .form-inner input, .search-area .form-inner input {
+  flex: 1; min-width: 0; height: 100%; padding: 0 !important; border: 0 !important; border-radius: 0 !important;
+  background: transparent !important; box-shadow: none !important; outline: none;
+  font-family: var(--gr-font-body); font-size: var(--gr-fs-sm); color: var(--gr-ink);
+}
+.search-area .form-inner input::placeholder { color: #8C8178; }
+.search-area form .form-inner button {
+  flex: 0 0 40px; width: 40px; height: 40px; padding: 0; margin: 0; border: 0; border-radius: 8px;
+  background: var(--gr-ink) !important; display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+  transition: background-color .2s ease;
+}
+.search-area form .form-inner button:hover { background: var(--gr-madder) !important; }
+.search-area form .form-inner button svg { width: 16px; height: 16px; fill: #fff !important; }
