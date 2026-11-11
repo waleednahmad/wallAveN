@@ -38,6 +38,12 @@
 
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 
+<!-- 2026 redesign: brand fonts + theme (loaded after the template stylesheet so it wins) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="{{ asset('assets/css/gr-theme.css') }}?v={{ filemtime(public_path('assets/css/gr-theme.css')) }}">
+
 <link rel="stylesheet" href="{{ asset('dashboard/plugins/fontawesome-free/css/all.min.css') }}">
 <!-- Title -->
 <title>

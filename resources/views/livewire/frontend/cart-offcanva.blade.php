@@ -1,108 +1,77 @@
-<div>
+@php
+    // Customer Mode shows the dealer's retail prices. Apply the multiplier once
+    // (the old template multiplied the order total again for every line).
+    $grMultiplier = 1;
+    if (auth('dealer')->check() && auth('dealer')->user()->is_customer_mode_active) {
+        $grMultiplier = (float) auth('dealer')->user()->fake_sale_percentage ?: 1;
+    }
+    $grMoney = fn ($n) => '$' . number_format((float) $n, 2);
+    $grCount = collect($cartTemps)->sum('quantity');
+    $grOrderingFor = auth('representative')->user()?->buyingFor ?? auth('web')->user()?->buyingFor;
+@endphp
+<div class="gr-cart">
+    @if ($grOrderingFor)
+        <div style="margin: 12px 0 4px; padding: 12px 14px; background: var(--gr-linen); border-radius: 12px; font-size: 13px;">
+            Ordering for <strong>{{ $grOrderingFor->company_name ?? $grOrderingFor->name }}</strong>
+            · <a href="#" class="gr-link" data-bs-toggle="modal" data-bs-target="#DealerSelection">Change</a>
+        </div>
+    @endif
+
     @forelse ($cartTemps as $item)
-        <div class="p-2 mb-1 cart-item d-flex border-bottom align-items-center">
-            <div class="mr-3 cart-item-image" style="width:130px !important">
-                <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" class="img-thumbnail"
-                    style="width: 100% !important">
-            </div>
-            <div class="p-2 cart-item-content flex-grow-1">
-                <h6 class="mb-1">{{ $item->name }}</h6>
-                @if ($item->item_type == 'variant')
-                    @php
-                        $attributes = json_decode($item->attributes, true);
-                        $filteredAttributes = array_filter($attributes, function ($value) {
-                            return strtolower($value) !== 'none';
-                        });
-                        $values = implode(' | ', array_map('ucwords', array_values($filteredAttributes)));
-                    @endphp
-                    @if (isset($values) && !empty($values))
-                        <p>
-                            <small class="text-muted">({{ $values }})</small>
-                        </p>
-                    @endif
+        @php
+            $values = null;
+            if ($item->item_type == 'variant') {
+                $attributes = json_decode($item->attributes, true) ?: [];
+                $filteredAttributes = array_filter($attributes, fn ($value) => strtolower((string) $value) !== 'none');
+                $values = implode(' · ', array_map('ucwords', array_values($filteredAttributes)));
+            }
+            $itemPrice = (float) $item->price * $grMultiplier;
+            $itemTotal = (float) $item->total * $grMultiplier;
+        @endphp
+        <div class="gr-cart-item" wire:key="cart-{{ $item->id }}">
+            <img src="{{ asset($item->image) }}" alt="{{ $item->name }}">
+            <div class="gr-cart-body">
+                <div class="d-flex justify-content-between" style="gap: 8px;">
+                    <p class="gr-cart-name">{{ $item->name }}</p>
+                    <strong style="font-weight: 600; white-space: nowrap;">{{ $grMoney($itemTotal) }}</strong>
+                </div>
+                @if ($values)
+                    <p class="gr-cart-meta">{{ $values }}</p>
                 @endif
-                @php
-                    $cartQuantity = $item->quantity;
-                    $itemPrice = $item->price;
-                    $itemTotal = $item->total;
-                @endphp
-
-                @auth('dealer')
-                    @php
-                        if (auth('dealer')->user()->is_customer_mode_active) {
-                            $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
-                            $itemPrice = (float) $itemPrice * (float) $dealerPercentage;
-                            $itemTotal = (float) $itemTotal * (float) $dealerPercentage;
-                            $total = (float) $total * (float) $dealerPercentage;
-                        }
-                    @endphp
-                @endauth
-
-                {{-- Quantity Controls (Hidden by default) --}}
-                @if (in_array((string)$item->id, $showQuantityControls))
-                    <div class="d-flex align-items-center mb-2">
-                        <span class="me-2">Qty:</span>
-                        <div class="d-flex align-items-center">
-                            <button wire:click="decreaseQuantity('{{ $item->id }}')" type="button"
-                                class="btn btn-outline-secondary btn-sm" style="padding: 2px 6px; font-size: 12px;"
-                                wire:loading.attr="disabled">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <input type="number" value="{{ $item->quantity }}" readonly
-                                class="form-control mx-1 text-center" style="width: 50px; padding: 2px; font-size: 12px;"
-                                min="1">
-                            <button wire:click="increaseQuantity('{{ $item->id }}')" type="button"
-                                class="btn btn-outline-secondary btn-sm" style="padding: 2px 6px; font-size: 12px;"
-                                wire:loading.attr="disabled">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
+                <p class="gr-cart-meta">{{ $grMoney($itemPrice) }} each @if ($item->sku) · SKU {{ $item->sku }} @endif</p>
+                <div class="d-flex justify-content-between align-items-center" style="margin-top: auto; padding-top: 6px;">
+                    <div class="gr-qty">
+                        <button type="button" wire:click="decreaseQuantity('{{ $item->id }}')" wire:loading.attr="disabled" aria-label="Decrease quantity of {{ $item->name }}">−</button>
+                        <span aria-live="polite">{{ $item->quantity }}</span>
+                        <button type="button" wire:click="increaseQuantity('{{ $item->id }}')" wire:loading.attr="disabled" aria-label="Increase quantity of {{ $item->name }}">+</button>
                     </div>
-                @else
-                    {{-- Simple quantity display when controls are hidden --}}
-                    <div class="mb-0">
-                        <span class="text-muted">Qty: {{ $item->quantity }}</span>
-                    </div>
-                @endif
-
-                <p class="mb-0">
-                    <small class="text-muted">${{ $itemPrice ?? 0 }} each</small>
-                </p>
-                <p class="mb-0 fw-bold">
-                    Total: ${{ $itemTotal }}
-                </p>
-            </div>
-            <div class="ml-3 cart-item-action d-flex flex-column align-items-center">
-                {{-- Toggle Quantity Controls Button --}}
-                <button wire:click="toggleQuantityControls('{{ $item->id }}')" 
-                        class="btn btn-success btn-sm mb-1"
-                        wire:loading.attr="disabled" 
-                        title="{{ in_array((string)$item->id, $showQuantityControls) ? 'Hide quantity controls' : 'Show quantity controls' }}">
-                    <i class="fas {{ in_array((string)$item->id, $showQuantityControls) ? 'fa-eye-slash' : 'fa-edit' }}"></i>
-                </button>
-                
-                {{-- Remove Button --}}
-                <button wire:click="removeFromCart('{{ $item->id }}')" class="btn btn-danger btn-sm mb-1"
-                    wire:loading.attr="disabled" title="Remove item">
-                    <i class="fas fa-trash"></i>
-                </button>
-                
-                {{-- Loading Spinner --}}
-                <div wire:loading wire:target="increaseQuantity, decreaseQuantity, updateQuantity, toggleQuantityControls"
-                    class="spinner-border spinner-border-sm" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                    <button type="button" class="gr-text-btn" wire:click="removeFromCart('{{ $item->id }}')" wire:loading.attr="disabled">Remove</button>
                 </div>
             </div>
         </div>
     @empty
-        <p class="text-center">Your cart is empty.</p>
+        <div style="padding: 56px 0; text-align: center;">
+            <p style="font-family: var(--gr-font-display); font-size: 24px; margin: 0 0 8px;">Your cart is empty</p>
+            <p style="color: var(--gr-muted); margin: 0 0 20px;">Browse the catalog to add rugs and furniture.</p>
+            <a href="{{ route('frontend.shop') }}" class="gr-btn gr-btn-outline gr-btn-sm">Back to the catalog</a>
+        </div>
     @endforelse
 
     @if (count($cartTemps))
-        <div class="mt-3 d-flex justify-content-between align-items-center">
-            <h6 class="mb-0">Total: $ {{ $total }}</h6>
-            <button class="btn btn-sm" style="background-color: #000; color: #fff; padding: 5px 10px; font-size: 14px;"
-                wire:click="checkout">Checkout</button>
+        <div class="gr-cart-total">
+            <div class="d-flex justify-content-between" style="font-size: 15px; margin-bottom: 4px;">
+                <span style="color: var(--gr-muted);">Subtotal ({{ $grCount }} {{ $grCount == 1 ? 'item' : 'items' }})</span>
+                <span>{{ $grMoney((float) $total * $grMultiplier) }}</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-baseline" style="margin-bottom: 6px;">
+                <span style="font-weight: 600;">Order total</span>
+                <span class="gr-amount">{{ $grMoney((float) $total * $grMultiplier) }}</span>
+            </div>
+            <p style="margin: 0 0 16px; font-size: 12px; color: var(--gr-muted);">Shipping is arranged after the order is confirmed.</p>
+            <button type="button" class="gr-btn gr-btn-primary w-100" wire:click="checkout" wire:loading.attr="disabled">
+                <span wire:loading wire:target="checkout"><i class="fas fa-spinner fa-spin" aria-hidden="true"></i></span>
+                Continue to checkout
+            </button>
         </div>
     @endif
 </div>

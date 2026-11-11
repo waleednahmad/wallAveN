@@ -65,6 +65,18 @@ class ShopPage extends Component
         }
 
 
+        // ?size=8x11 (from the homepage "Shop rugs by size" boxes) pre-selects that size.
+        // Size values are stored like 8" x 11" or 8' x 11', so match any unit character.
+        $size = (string) request()->input('size', '');
+        if (preg_match('/^(\d{1,2})x(\d{1,2})$/', $size, $m)) {
+            $sizeValueIds = \App\Models\AttributeValue::whereHas('attribute', function ($query) {
+                $query->whereRaw('TRIM(name) = ?', ['Size']);
+            })->where('value', 'like', $m[1] . '_ x ' . $m[2] . '_')->pluck('id')->all();
+            if ($sizeValueIds) {
+                $this->selectedAttributeValues = $sizeValueIds;
+            }
+        }
+
         $this->breadcrumpData = DB::table('page_breadcrumps')->where('name', 'shop')->first();
 
 

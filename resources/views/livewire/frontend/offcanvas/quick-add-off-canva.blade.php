@@ -88,7 +88,7 @@
                         @forelse($values as $value)
                             <span @class(['active' => in_array($value['id'], $selectedAttributeValues)])
                                 wire:click='selectAttributeValue("{{ $attribute_id }}", "{{ $value['id'] }}")'>
-                                {{ $value['value'] }}
+                                {{ trim($attribute) === 'Size' ? str_replace('"', "'", $value['value']) : $value['value'] }}
                             </span>
                         @empty
                             <p>No values found</p>

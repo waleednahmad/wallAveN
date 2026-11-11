@@ -1,96 +1,53 @@
-<div class="auction-card general-art">
-    <div class="auction-details-section">
+@php
+    $grSignedIn = auth()->guard('representative')->check() || auth()->guard('dealer')->check() || auth('web')->check();
+    $grCustomerMode = auth('dealer')->check() && auth('dealer')->user()->is_customer_mode_active;
+    if ($grCustomerMode) {
+        $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
+        $compare_at_price = (float) $compare_at_price * (float) $dealerPercentage;
+        $price = (float) $price * (float) $dealerPercentage;
+    }
+    $grMoney = fn ($n) => '$' . number_format((float) $n, 2);
+@endphp
+<article class="gr-product-card">
+    <a href="{{ route('frontend.product', $product->slug) }}" class="gr-product-media gr-zoom" aria-label="{{ $product->name }}">
+        <img src="{{ asset($product->image) }}" loading="lazy" alt="{{ $product->name }}">
+    </a>
 
-        <div class="auction-card-img-wrap" style="height: 200px; overflow: hidden; border-radius: 10px;">
-            <a href="{{ route('frontend.product', $product->slug) }}" class="card-img h-100">
-                <img src="{{ asset($product->image) }}" loading="lazy"
-                    style="object-fit: contain; width: 100%; height: 100%;" alt="{{ $product->name }}">
-            </a>
+    @if (isset($variantImages) && count($variantImages) > 1)
+        <div class="gr-product-swatches" aria-hidden="true">
+            @foreach ($variantImages as $image)
+                @if (file_exists($image))
+                    <img src="{{ asset($image) }}" loading="lazy" alt="">
+                @endif
+            @endforeach
         </div>
+    @endif
 
-        <div class="auction-card-content pt-1">
-            <div class="imgs-thumbnail-container">
-                @if (isset($variantImages) && count($variantImages) > 0)
-                    @foreach ($variantImages as $image)
-                        @if (file_exists($image))
-                            <a href="{{ route('frontend.product', $product->slug) }}" class="card-img img-thumbnail">
-                                <img src="{{ asset($image) }}" loading="lazy"
-                                    style="object-fit: contain; width: 100%; height: 100%;" alt="{{ $product->name }}">
-                            </a>
-                        @endif
-                    @endforeach
+    <h3 class="gr-product-name">
+        <a href="{{ route('frontend.product', $product->slug) }}">{{ $product->name }}</a>
+    </h3>
+
+    @if (isVendorActivated() && $product->vendor)
+        <p class="gr-product-meta">{{ $product->vendor->name }}</p>
+    @endif
+
+    @if ($grSignedIn)
+        <div class="gr-product-foot">
+            <p class="gr-product-price">
+                @if ($hasManyVariants)
+                    <span class="gr-product-from">from</span>
                 @endif
-            </div>
-
-            <h6 class="pt-2">
-                <a href="{{ route('frontend.product', $product->slug) }}">
-                    {{ $product->name }}
-
-                </a>
-            </h6>
-            <ul>
-                @if (isVendorActivated())
-                    @if ($product->vendor)
-                        <li>
-                            <span>
-                                Vendor :
-                            </span>
-                            {{ $product->vendor ? $product->vendor->name : '-' }}
-                        </li>
-                    @else
-                        <li class="d-block" style="height: 25px">
-                        </li>
-                    @endif
+                @if ($compare_at_price && $compare_at_price > $price)
+                    <s class="gr-product-was">{{ $grMoney($compare_at_price) }}</s>
                 @endif
-                @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check() || auth('web')->check())
-
-                    {{-- dump the ath guard --}}
-                    <li>
-                        @if ($hasManyVariants)
-                            <span>From </span>
-                        @endif
-
-                        @auth('dealer')
-                            @if (auth('dealer')->user()->is_customer_mode_active)
-                                @php
-                                    $dealerPercentage = auth('dealer')->user()->fake_sale_percentage;
-                                    $compare_at_price = (float) $compare_at_price * (float) $dealerPercentage;
-                                    $price = (float) $price * (float) $dealerPercentage;
-                                @endphp
-                            @endif
-                        @endauth
-                        @if ($compare_at_price && $compare_at_price > $price)
-                            <span style="text-decoration: line-through; color: #999999">
-                                ${{ $compare_at_price }}
-                            </span>
-                            <strong>
-                                ${{ $price }}
-                            </strong>
-                        @else
-                            <strong>${{ $price }}</strong>
-                        @endif
-                    </li>
-                @endif
-            </ul>
-            <div class="d-flex align-items-center" style="gap: 10px;">
-                {{-- Details --}}
-                <a href="{{ route('frontend.product', $product->slug) }}" class="custom-white-btn">
-                    <span>
-                        View Details
-                    </span>
-                </a>
-                @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check() || auth('web')->check())
-                    <button wire:click='openProductOptions()' class="custom-black-btn" wire:loading.attr="disabled">
-                        <span wire:loading>
-                            <i class="fas fa-spinner fa-spin"></i>
-                        </span>
-
-                        <span wire:loading.remove>
-                            <i class="fas fa-plus"></i> Quick Add
-                        </span>
-                    </button>
-                @endif
-            </div>
+                <strong>{{ $grMoney($price) }}</strong>
+            </p>
+            <button type="button" wire:click='openProductOptions()' class="gr-btn gr-btn-outline gr-btn-sm" wire:loading.attr="disabled">
+                <span wire:loading><i class="fas fa-spinner fa-spin" aria-hidden="true"></i></span>
+                <span wire:loading.remove>Quick add</span>
+            </button>
         </div>
-    </div>
-</div>
+    @else
+        <p class="gr-product-login"><a href="{{ route('login') }}">Log in to see trade price</a></p>
+    @endif
+</article>

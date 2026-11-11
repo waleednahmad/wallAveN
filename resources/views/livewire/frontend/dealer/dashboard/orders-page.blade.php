@@ -102,15 +102,15 @@
 
                             <td data-label="Status">
                                 @if ($order->status == 'pending')
-                                    <span class="badge bg-warning">Pending</span>
+                                    <span class="gr-status gr-status-pending">Pending</span>
                                 @elseif ($order->status == 'processing')
-                                    <span class="badge bg-primary">Processing</span>
+                                    <span class="gr-status gr-status-processing">Processing</span>
                                 @elseif ($order->status == 'completed')
-                                    <span class="badge bg-success">Completed</span>
+                                    <span class="gr-status gr-status-completed">Completed</span>
                                 @elseif ($order->status == 'declined')
-                                    <span class="badge bg-danger">Declined</span>
+                                    <span class="gr-status gr-status-declined">Declined</span>
                                 @elseif ($order->status == 'canceled')
-                                    <span class="badge bg-secondary">Canceled</span>
+                                    <span class="gr-status gr-status-canceled">Canceled</span>
                                 @endif
                             </td>
                             <td data-label="Certificate" style="font-size: 10px !important">
