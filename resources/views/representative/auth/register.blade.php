@@ -1,18 +1,23 @@
 @extends('frontend.layout.app')
 
-@section('content')
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <h2 class="mb-4 text-center">
-                    Become a Sales Representative
-                </h2>
+@section('title', 'Become a sales rep')
 
-                @csrf
-                <div class="pb-4 card">
-                    <div class="card-body">
-                        <form class="row g-4" action="{{ route('representative.submitRegister') }}" method="POST"
-                            enctype="multipart/form-data">
+@section('content')
+    <div class="gr-container" style="padding-top: 48px; padding-bottom: 80px;">
+        <div class="d-flex flex-wrap align-items-start" style="gap: 48px;">
+            <aside style="flex: 1 1 320px; max-width: 400px; min-width: 0;">
+                <p class="gr-eyebrow no-rule">Sales rep program</p>
+                <h1 class="gr-h2" style="margin-bottom: 16px;">Sell Golden Rugs to retailers</h1>
+                <p style="color: var(--gr-muted); line-height: 1.6; margin: 0 0 28px;">Place orders for the dealers you manage from one account and see every order you placed.</p>
+                <div class="gr-secure">
+                    <i class="bi bi-lock" aria-hidden="true" style="font-size: 18px;"></i>
+                    <span>Tax and bank details are only used to pay you and to file tax forms. They're sent over a secure connection.</span>
+                </div>
+                <p style="margin: 20px 0 0; font-size: 14px; color: var(--gr-muted);">Questions? Call <a href="tel:+17734903801" class="gr-link">(773) 490-3801</a></p>
+            </aside>
+
+            <div class="gr-card" style="flex: 999 1 560px; min-width: 0; padding: clamp(24px, 4vw, 40px);">
+                <form class="row g-4" action="{{ route('representative.submitRegister') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="col-md-6">
                                 <div class="mb-1">
@@ -267,12 +272,12 @@
                                 </div>
                             @endif
 
-                            <button type="submit" class="mt-4 btn btn-secondary"
-                                style="max-width: 200px; margin: 0 auto; display: block;">Register</button>
-                        </form>
-                    </div>
 
-                </div>
+                    <div class="col-12 d-flex flex-wrap justify-content-between align-items-center" style="gap: 16px; margin-top: 8px; padding-top: 24px; border-top: 1px solid var(--gr-line-soft);">
+                        <p class="mb-0" style="font-size: 14px; color: var(--gr-muted);">Already a rep? <a href="{{ route('login') }}" class="gr-link">Sign in</a></p>
+                        <button type="submit" class="gr-btn gr-btn-primary">Submit application</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
