@@ -281,7 +281,8 @@ class QuickAddOffCanva extends Component
         }
 
         $this->reset('quantity');
-        $this->dispatch('notify');
+        // Toast with a 'View cart' button (gr-toast.js)
+        $this->dispatch('cart-added', 'Added to cart');
         // Re-render the cart so its contents and the header count are current.
         $this->dispatch('refresh');
         $this->resetToDefaultVariant();

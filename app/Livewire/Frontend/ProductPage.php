@@ -283,7 +283,7 @@ class ProductPage extends Component
 
         $this->reset('quantity');
         $this->dispatch('openCartOffcanva');
-        $this->dispatch('success', 'Item added to cart successfully');
+        $this->dispatch('success', 'Added to cart');
         $this->resetToDefaultVariant();
     }
     public function render()

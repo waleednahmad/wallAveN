@@ -553,3 +553,28 @@ dl dt, dl dd, dl dd a { font-size: var(--gr-fs-base); }
 .gr-product-card .gr-product-name, .gr-product-name { font-size: var(--gr-fs-lg); }
 .gr-lead { font-size: var(--gr-fs-lg); }
 .gr-feature-card h3 { font-size: var(--gr-fs-lg); }
+
+/* --------------------------------------------------------------------------
+   Toasts (gr-toast.js): bottom-left on desktop, bottom full-width on phones
+   -------------------------------------------------------------------------- */
+.gr-toasts { position: fixed; left: 24px; bottom: 24px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; width: min(380px, calc(100vw - 32px)); pointer-events: none; }
+.gr-toast { pointer-events: auto; display: flex; align-items: center; gap: 12px; padding: 12px 10px 12px 14px; border-radius: 12px; background: var(--gr-ink); color: #F5EFE6; border: 1px solid rgba(245,239,230,.14); box-shadow: 0 16px 36px rgba(35,26,20,.22); font-family: var(--gr-font-body); animation: grToastIn .24s ease-out both; }
+.gr-toast.is-leaving { animation: grToastOut .2s ease-in both; }
+.gr-toast.gr-toast-bump { animation: grToastBump .3s ease; }
+.gr-toast-icon { flex: 0 0 28px; width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; }
+.gr-toast-icon svg { width: 16px; height: 16px; }
+.gr-toast-success .gr-toast-icon { background: var(--gr-saffron); color: var(--gr-ink); }
+.gr-toast-error .gr-toast-icon { background: #C4574B; color: #fff; }
+.gr-toast-warning .gr-toast-icon { background: #E3A23B; color: var(--gr-ink); }
+.gr-toast-info .gr-toast-icon { background: #3B5577; color: #fff; }
+.gr-toast-msg { flex: 1; margin: 0; font-size: var(--gr-fs-sm); line-height: 1.4; color: inherit; }
+.gr-toast-action { flex: 0 0 auto; min-height: 32px; padding: 0 12px; border: 1px solid rgba(245,239,230,.35); border-radius: 8px; background: transparent; color: #fff; font-size: var(--gr-fs-sm); font-weight: 600; cursor: pointer; transition: background-color .2s ease, border-color .2s ease; }
+.gr-toast-action:hover { background: rgba(245,239,230,.12); border-color: rgba(245,239,230,.6); }
+.gr-toast-close { flex: 0 0 32px; width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: rgba(245,239,230,.7); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+.gr-toast-close:hover { color: #fff; background: rgba(245,239,230,.1); }
+.gr-toast button:focus-visible { outline: 2px solid var(--gr-saffron); outline-offset: 2px; }
+@keyframes grToastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes grToastOut { to { opacity: 0; transform: translateY(6px); } }
+@keyframes grToastBump { 50% { transform: scale(1.02); } }
+@media (max-width: 575px) { .gr-toasts { left: 16px; right: 16px; bottom: 16px; width: auto; } }
+@media (prefers-reduced-motion: reduce) { .gr-toast, .gr-toast.is-leaving, .gr-toast.gr-toast-bump { animation: none; } }

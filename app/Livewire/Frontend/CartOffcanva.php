@@ -22,7 +22,7 @@ class CartOffcanva extends Component
             }));
         }
 
-        $this->dispatch('success', 'Item removed from cart');
+        $this->dispatch('success', 'Removed from cart');
     }
 
     public function toggleQuantityControls($id)
@@ -51,7 +51,6 @@ class CartOffcanva extends Component
             $cartItem->quantity += 1;
             $cartItem->total = $cartItem->quantity * $cartItem->price;
             $cartItem->save();
-            $this->dispatch('success', 'Quantity updated');
             $this->dispatch('refresh');
         }
     }
@@ -63,7 +62,6 @@ class CartOffcanva extends Component
             $cartItem->quantity -= 1;
             $cartItem->total = $cartItem->quantity * $cartItem->price;
             $cartItem->save();
-            $this->dispatch('success', 'Quantity updated');
             $this->dispatch('refresh');
         } else {
             $this->dispatch('error', 'Minimum quantity is 1');
@@ -78,7 +76,6 @@ class CartOffcanva extends Component
             $cartItem->quantity = $quantity;
             $cartItem->total = $cartItem->quantity * $cartItem->price;
             $cartItem->save();
-            $this->dispatch('success', 'Quantity updated');
             // Force re-render to update the view
             $this->dispatch('refresh');
         } else {

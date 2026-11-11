@@ -113,14 +113,7 @@
         });
 
         $wire.on('emailSent', (event) => {
-            Swal.fire({
-                icon: 'success',
-                title: event[0],
-                timer: 6000,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-right'
-            });
+            grToast('success', event);
             // make the submit button disable  for 1.4 seconds then redirect to the home page
             setTimeout(() => {
                 window.location.href = "{{ route('frontend.home') }}";

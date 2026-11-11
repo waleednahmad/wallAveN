@@ -118,31 +118,6 @@
                             Add to cart
                         </button>
                     </div>
-                    <!-- Notification message (hidden by default) -->
-                    <div x-data="{ showNotification: false }"
-                        x-on:notify.window="showNotification = true; setTimeout(() => showNotification = false, 4000);"
-                        x-show="showNotification" style="display: none;"
-                        x-transition:enter="transition ease-out duration-300"
-                        x-transition:enter-start="opacity-0 transform translate-y-4"
-                        x-transition:enter-end="opacity-100 transform translate-y-0"
-                        x-transition:leave="transition ease-in duration-300"
-                        x-transition:leave-start="opacity-100 transform translate-y-0"
-                        x-transition:leave-end="opacity-0 transform translate-y-4"
-                        class="bottom-0 p-3 m-3 text-white rounded shadow bg-success position-relative">
-                        <span>
-                            Item added to cart!
-                        </span>
-                        <br>
-                        <a href="javascript:void(0)" wire:click='previewCart()'>
-                            <span style="color: #fff; text-decoration: underline">
-                                View Cart
-                            </span>
-                        </a>
-                        <button @click="showNotification = false" class="btn"
-                            style="background: none; border: none; color: white; font-size: 1.2em; position: absolute; top: 10px; right: 10px;">
-                            x
-                        </button>
-                    </div>
                 @endif
             </div>
             {{-- ========== End Add To Cart ========= --}}
