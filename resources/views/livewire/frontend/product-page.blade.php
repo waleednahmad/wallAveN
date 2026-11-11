@@ -31,7 +31,7 @@
                                     <ul class="splide__list">
                                         @foreach ($imagesGallery as $galleryItem)
                                             <li class="splide__slide thumbnail">
-                                                <img src="{{ thumb($galleryItem->image) }}" class="thumbnail-image" decoding="async"
+                                                <img src="{{ thumb($galleryItem->image) }}" data-full="{{ $galleryItem->image }}" class="thumbnail-image" decoding="async"
                                                     alt="" loading="lazy">
                                             </li>
                                         @endforeach
@@ -46,7 +46,7 @@
                     {{-- <ul id="thumbnails" class="thumbnails">
                         @foreach ($imagesGallery as $galleryItem)
                             <li class="thumbnail">
-                                <img src="{{ thumb($galleryItem->image) }}" class="thumbnail-image" decoding="async" alt=""
+                                <img src="{{ thumb($galleryItem->image) }}" data-full="{{ $galleryItem->image }}" class="thumbnail-image" decoding="async" alt=""
                                     loading="lazy">
                             </li>
                         @endforeach
@@ -368,13 +368,12 @@
 
         $wire.on('activateVariantThumbnail', (event) => {
             let variantImage = event[0].image; // the image path of the selected variant
-            let variantImageSrc = "{{ asset('') }}" + variantImage; // the full image path
+            if (!variantImage) return;
 
-            // Find the index of the variant image in the thumbnails
+            // Thumbnails show the small copy (…_w600.webp); data-full holds the original path to match on.
             let variantIndex = Array.from(thumbnails).findIndex((thumbnail) => {
                 let thumbnailImage = thumbnail.querySelector('.thumbnail-image');
-                return thumbnailImage.src.includes(
-                    variantImage); // Check if the thumbnail image contains the variant image
+                return thumbnailImage && thumbnailImage.dataset.full.replace(/^\//, '') === variantImage.replace(/^\//, '');
             });
 
             if (variantIndex !== -1) {
