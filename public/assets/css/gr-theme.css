@@ -523,3 +523,33 @@ h1, h2, h3, h4, h5, h6, .gr-display, .gr-h2, .offcanvas-title, .modal-title { fo
 /* Cart */
 .gr-cart-name { font-size: 18px; line-height: 1.25; }
 .gr-cart-meta { font-size: var(--gr-fs-xs); }
+
+/* Type system, round 2: leftovers found by measuring the live pages */
+/* Headings the template forced heavy (shop banner was 900, product title 600) */
+.breadcrumb-section2 h1, .breadcrumb-content h1, .auction-details-content h3, #quickAddOffcanva h3 { font-weight: 400 !important; }
+.gr-cart-badge { font-weight: 600; }
+
+/* 13px -> 14px (text) or 12px (uppercase labels / tiny meta) */
+.gr-announce, .gr-announce span, .gr-announce a, .gr-announce strong { font-size: var(--gr-fs-sm); }
+.gr-text-btn, .gr-cart > div, .gr-cart .gr-link, .gr-cart > div > strong { font-size: var(--gr-fs-sm); }
+.gr-filter-head, .gr-filter-head span, .gr-clear-btn, .gr-clear-chip { font-size: var(--gr-fs-sm); }
+.breadcrumb-section2 .top-content li, .breadcrumb-section2 .top-content li a { font-size: var(--gr-fs-sm); }
+.gr-eyebrow, .gr-hero-tag p, .gr-hero-tag { font-size: var(--gr-fs-xs); }
+.d-flex.flex-wrap > a.d-flex.flex-column > span { font-size: var(--gr-fs-xs); }
+
+/* 15px -> 16px (buttons, nav, contact details) or 14px (dense lists, small labels) */
+.gr-btn { font-size: var(--gr-fs-base); }
+.gr-btn-sm { font-size: var(--gr-fs-sm); }
+.header-area .main-menu .menu-list > li > a { font-size: var(--gr-fs-base); }
+dl dt, dl dd, dl dd a { font-size: var(--gr-fs-base); }
+.filter-container-label span, .checkbox-container label span { font-size: var(--gr-fs-sm) !important; }
+.widget-title h5, .sidebar-widget h5, .shop-sidebar h5 { font-size: var(--gr-fs-sm) !important; }
+.gr-stat-label { font-size: var(--gr-fs-sm); }
+.gr-cart-total > div:first-child, .gr-cart-total > div:first-child span { font-size: var(--gr-fs-sm) !important; }
+.footer-section .widget-title h5, .footer-widget .widget-title h5 { font-size: var(--gr-fs-xs) !important; letter-spacing: .12em; text-transform: uppercase; }
+
+/* 17px -> 16px, 19px -> 20px */
+.footer-content-area p, .gr-head-row p { font-size: var(--gr-fs-base); }
+.gr-product-card .gr-product-name, .gr-product-name { font-size: var(--gr-fs-lg); }
+.gr-lead { font-size: var(--gr-fs-lg); }
+.gr-feature-card h3 { font-size: var(--gr-fs-lg); }
