@@ -68,3 +68,26 @@ function getMinimumDealerSalePercentage()
 {
     return PublicSetting::where('key', 'minimum-dealer-sale-percentage')->first()->value ?? 1;
 }
+
+/**
+ * URL of the small (600px) copy of an image when it exists, else the image itself.
+ * Use where images are shown small: product cards, cart lines, thumbnail strips.
+ * Thumbnails are written on upload and by `php artisan images:optimize` for older images.
+ */
+function thumb(?string $path): string
+{
+    if (!$path) {
+        return '';
+    }
+    if (preg_match('#^(https?:)?//#', $path) || str_ends_with(strtolower($path), '.svg')) {
+        return asset($path);
+    }
+
+    static $seen = [];
+    $thumb = \App\Support\ImageOptimizer::thumbPathFor(ltrim($path, '/'));
+    if (!array_key_exists($thumb, $seen)) {
+        $seen[$thumb] = is_file(public_path($thumb));
+    }
+
+    return asset($seen[$thumb] ? $thumb : $path);
+}

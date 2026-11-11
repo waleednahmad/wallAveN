@@ -10,14 +10,14 @@
 @endphp
 <article class="gr-product-card">
     <a href="{{ route('frontend.product', $product->slug) }}" class="gr-product-media gr-zoom" aria-label="{{ $product->name }}">
-        <img src="{{ asset($product->image) }}" loading="lazy" alt="{{ $product->name }}">
+        <img src="{{ thumb($product->image) }}" loading="lazy" decoding="async" alt="{{ $product->name }}">
     </a>
 
     @if (isset($variantImages) && count($variantImages) > 1)
         <div class="gr-product-swatches" aria-hidden="true">
             @foreach ($variantImages as $image)
                 @if (file_exists($image))
-                    <img src="{{ asset($image) }}" loading="lazy" alt="">
+                    <img src="{{ thumb($image) }}" loading="lazy" decoding="async" alt="">
                 @endif
             @endforeach
         </div>

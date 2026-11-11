@@ -31,7 +31,7 @@
             $itemTotal = (float) $item->total * $grMultiplier;
         @endphp
         <div class="gr-cart-item" wire:key="cart-{{ $item->id }}">
-            <img src="{{ asset($item->image) }}" alt="{{ $item->name }}">
+            <img src="{{ thumb($item->image) }}" loading="lazy" decoding="async" alt="{{ $item->name }}">
             <div class="gr-cart-body">
                 <div class="d-flex justify-content-between" style="gap: 8px;">
                     <p class="gr-cart-name">{{ $item->name }}</p>

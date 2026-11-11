@@ -18,7 +18,7 @@
                         <button type="button" x-on:click="shown = @js(asset($thumb))"
                             x-bind:class="shown === @js(asset($thumb)) ? 'is-active' : ''"
                             aria-label="Show photo {{ $loop->iteration }}">
-                            <img src="{{ asset($thumb) }}" alt="" loading="lazy">
+                            <img src="{{ thumb($thumb) }}" alt="" loading="lazy" decoding="async">
                         </button>
                     @endforeach
                 </div>

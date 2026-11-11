@@ -54,7 +54,7 @@
                 </ul>
             </div>
             <div class="gr-hero-media">
-                <div class="gr-hero-arch gr-rise gr-d2"><img src="{{ $heroMain }}" alt="{{ $heroProduct?->name ?? 'Golden Rugs' }}"></div>
+                <div class="gr-hero-arch gr-rise gr-d2"><img src="{{ $heroMain }}" fetchpriority="high" alt="{{ $heroProduct?->name ?? 'Golden Rugs' }}"></div>
                 <div class="gr-hero-inset gr-rise gr-d3"><img src="{{ $heroInset }}" alt="Rug styled in a living room"></div>
                 @if ($heroProduct)
                     <div class="gr-hero-tag gr-rise gr-d4">
@@ -107,7 +107,7 @@
                     @endif
                     @foreach ($otherCategories as $category)
                         <a href="{{ route('frontend.shop', ['category' => $category->slug]) }}" class="gr-zoom gr-reveal">
-                            <img src="{{ asset($category->image) }}" alt="{{ $category->name }}" loading="lazy">
+                            <img src="{{ thumb($category->image) }}" alt="{{ $category->name }}" loading="lazy" decoding="async">
                             <span class="gr-plate">{{ $category->name }} <span aria-hidden="true">→</span></span>
                         </a>
                     @endforeach

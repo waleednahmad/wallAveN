@@ -31,7 +31,7 @@
                                     <ul class="splide__list">
                                         @foreach ($imagesGallery as $galleryItem)
                                             <li class="splide__slide thumbnail">
-                                                <img src="{{ asset($galleryItem->image) }}" class="thumbnail-image"
+                                                <img src="{{ thumb($galleryItem->image) }}" class="thumbnail-image" decoding="async"
                                                     alt="" loading="lazy">
                                             </li>
                                         @endforeach
@@ -46,7 +46,7 @@
                     {{-- <ul id="thumbnails" class="thumbnails">
                         @foreach ($imagesGallery as $galleryItem)
                             <li class="thumbnail">
-                                <img src="{{ asset($galleryItem->image) }}" class="thumbnail-image" alt=""
+                                <img src="{{ thumb($galleryItem->image) }}" class="thumbnail-image" decoding="async" alt=""
                                     loading="lazy">
                             </li>
                         @endforeach

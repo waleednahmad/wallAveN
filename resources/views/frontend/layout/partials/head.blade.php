@@ -36,7 +36,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
-<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ filemtime(public_path('assets/css/style.css')) }}">
 
 <!-- 2026 redesign: brand fonts + theme (loaded after the template stylesheet so it wins) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">

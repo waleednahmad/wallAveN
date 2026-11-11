@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Support\ImageOptimizer;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -68,93 +69,24 @@ trait  UploadImageTrait
             return "storage/$file_path";
         }
 
-        // Get image info
-        $image_info = getimagesize($file->path());
-        if ($image_info === false) {
-            throw new Exception('Invalid image file');
-        }
-
-        // Create image resource based on file type
-        switch ($image_info[2]) { // mime type identifier
-            case IMAGETYPE_JPEG:
-            case IMAGETYPE_JPEG2000: // Adding JPEG2000
-                $image = imagecreatefromjpeg($file->path());
-                break;
-            case IMAGETYPE_PNG:
-                $image = imagecreatefrompng($file->path());
-                break;
-            case IMAGETYPE_GIF:
-                $image = imagecreatefromgif($file->path());
-                break;
-            case IMAGETYPE_BMP:
-                $image = imagecreatefrombmp($file->path());
-                break;
-            case IMAGETYPE_WEBP:
-                $image = imagecreatefromwebp($file->path());
-                break;
-            case IMAGETYPE_WBMP: // Wireless Bitmap
-                $image = imagecreatefromwbmp($file->path());
-                break;
-            case IMAGETYPE_XBM: // X Bitmap
-                $image = imagecreatefromxbm($file->path());
-                break;
-            default:
-                throw new Exception('Unsupported image format: ' . $image_info['mime']);
-        }
-
-        if ($image === false) {
-            throw new Exception('Failed to create image resource');
-        }
-
-        // Get original dimensions
-        $original_width = imagesx($image);
-        $original_height = imagesy($image);
-
-        // Check if width exceeds 2000px
-        if ($original_width > 2000) {
-            // Calculate new height maintaining aspect ratio
-            $new_width = 2000;
-            $new_height = ($original_height * $new_width) / $original_width;
-
-            // Create a new image with resized dimensions
-            $resized_image = imagecreatetruecolor($new_width, $new_height);
-
-            // Preserve transparency for applicable formats
-            if (in_array($image_info[2], [IMAGETYPE_PNG, IMAGETYPE_WEBP, IMAGETYPE_GIF])) {
-                imagealphablending($resized_image, false);
-                imagesavealpha($resized_image, true);
-            }
-
-            imagecopyresampled(
-                $resized_image,
-                $image,
-                0,
-                0,
-                0,
-                0,
-                $new_width,
-                $new_height,
-                $original_width,
-                $original_height
-            );
-
-            // Replace the original image with resized one
+        // Main image: longest side up to 1600px, WebP. Plus a 600px thumbnail next to it for cards,
+        // the cart and thumbnail strips (see App\Support\ImageOptimizer and thumb()).
+        $image = ImageOptimizer::load($file->path());
+        $main = ImageOptimizer::fit($image, ImageOptimizer::MAIN_MAX);
+        if ($main !== $image) {
             imagedestroy($image);
-            $image = $resized_image;
         }
 
         $file_path = $folder . '/' . $file_name . '.webp';
-        imagepalettetotruecolor($image);
+        ImageOptimizer::saveWebp($main, $file_path, ImageOptimizer::MAIN_QUALITY);
 
-        // Save as WebP with quality setting
-        $success = imagewebp($image, $file_path, 80); // 80 is quality (0-100)
-
-        // Clean up memory
-        imagedestroy($image);
-
-        if (!$success) {
-            throw new Exception('Failed to save image as WebP');
+        try {
+            ImageOptimizer::makeThumb($file_path, $main);
+        } catch (Exception $e) {
+            // The page falls back to the main image when a thumbnail is missing.
+            report($e);
         }
+        imagedestroy($main);
 
         return $file_path;
     }
