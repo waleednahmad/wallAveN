@@ -40,17 +40,17 @@
                     <div class="col-md-6">
                         <label for="c_name" class="form-label">Full name <span class="gr-required">*</span></label>
                         <input type="text" class="form-control" id="c_name" wire:model='name' autocomplete="name">
-                        @error('name') <span class="text-danger" style="font-size: 13px;">{{ $message }}</span> @enderror
+                        @error('name') <span class="text-danger" style="font-size: 14px;">{{ $message }}</span> @enderror
                     </div>
                     <div class="col-md-6">
                         <label for="phone" class="form-label">Phone <span class="gr-required">*</span></label>
                         <input type="text" class="form-control" id="phone" wire:model='phone' autocomplete="tel">
-                        @error('phone') <span class="text-danger" style="font-size: 13px;">{{ $message }}</span> @enderror
+                        @error('phone') <span class="text-danger" style="font-size: 14px;">{{ $message }}</span> @enderror
                     </div>
                     <div class="col-12">
                         <label for="c_email" class="form-label">Email <span class="gr-required">*</span></label>
                         <input type="email" class="form-control" id="c_email" wire:model='email' autocomplete="email">
-                        @error('email') <span class="text-danger" style="font-size: 13px;">{{ $message }}</span> @enderror
+                        @error('email') <span class="text-danger" style="font-size: 14px;">{{ $message }}</span> @enderror
                     </div>
                     <div class="col-12">
                         <label for="c_subject" class="form-label">Subject <span class="gr-required">*</span></label>
@@ -60,12 +60,12 @@
                             <option value="An existing order"></option>
                             <option value="Product question"></option>
                         </datalist>
-                        @error('emailSubject') <span class="text-danger" style="font-size: 13px;">{{ $message }}</span> @enderror
+                        @error('emailSubject') <span class="text-danger" style="font-size: 14px;">{{ $message }}</span> @enderror
                     </div>
                     <div class="col-12">
                         <label for="c_message" class="form-label">Message <span class="gr-required">*</span></label>
                         <textarea class="form-control" id="c_message" rows="5" wire:model='emailMessage' placeholder="How can we help?"></textarea>
-                        @error('emailMessage') <span class="text-danger" style="font-size: 13px;">{{ $message }}</span> @enderror
+                        @error('emailMessage') <span class="text-danger" style="font-size: 14px;">{{ $message }}</span> @enderror
                     </div>
                     <div class="col-12 d-flex justify-content-end">
                         <button type="submit" class="gr-btn gr-btn-dark" wire:loading.attr="disabled">

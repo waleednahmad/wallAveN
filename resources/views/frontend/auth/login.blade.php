@@ -32,7 +32,7 @@
                         <div style="position: relative;">
                             <input type="password" class="form-control" id="password" name="password" required autocomplete="current-password" style="padding-right: 72px;">
                             <button type="button" id="grTogglePw" aria-label="Show password" aria-controls="password"
-                                style="position: absolute; right: 4px; top: 2px; height: 44px; padding: 0 12px; border: 0; background: transparent; font-size: 13px; font-weight: 600; color: var(--gr-muted);">Show</button>
+                                style="position: absolute; right: 4px; top: 2px; height: 44px; padding: 0 12px; border: 0; background: transparent; font-size: 14px; font-weight: 600; color: var(--gr-muted);">Show</button>
                         </div>
                     </div>
 

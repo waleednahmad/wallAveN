@@ -60,7 +60,7 @@
                     <div class="gr-hero-tag gr-rise gr-d4">
                         <p style="font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--gr-madder); font-weight: 600;">Just arrived</p>
                         <p style="font-family: var(--gr-font-display); font-size: 20px; margin: 2px 0 4px;">{{ $heroProduct->name }}</p>
-                        <p style="font-size: 13px; color: var(--gr-muted);">New in the catalog</p>
+                        <p style="font-size: 14px; color: var(--gr-muted);">New in the catalog</p>
                     </div>
                 @endif
             </div>
@@ -129,7 +129,7 @@
                             <a href="{{ route('frontend.shop', ['category' => 'rugs', 'size' => $s['w'] . 'x' . $s['h']]) }}" class="d-flex flex-column align-items-center text-decoration-none" style="gap: 10px; color: var(--gr-ink);">
                                 <span aria-hidden="true" style="width: {{ $s['box'][0] }}px; height: {{ $s['box'][1] }}px; border: 2px solid var(--gr-ink); border-radius: 4px; background: var(--gr-linen);"></span>
                                 <span style="font-weight: 600;">{{ $s['w'] }}' × {{ $s['h'] }}'</span>
-                                <span style="font-size: 13px; color: var(--gr-muted); margin-top: -6px;">{{ $s['label'] }}</span>
+                                <span style="font-size: 14px; color: var(--gr-muted); margin-top: -6px;">{{ $s['label'] }}</span>
                             </a>
                         @endforeach
                     </div>
@@ -143,7 +143,7 @@
                 <div class="gr-head-row gr-reveal">
                     <div>
                         <h2 class="gr-h2">New arrivals</h2>
-                        <p style="color: var(--gr-muted); margin: 8px 0 0; font-size: 17px;">The latest additions to our catalog.</p>
+                        <p style="color: var(--gr-muted); margin: 8px 0 0; font-size: 16px;">The latest additions to our catalog.</p>
                     </div>
                     <a href="{{ route('frontend.shop', ['new_arrivals' => 1]) }}" class="gr-link">See all new arrivals →</a>
                 </div>

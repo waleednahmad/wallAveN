@@ -599,3 +599,7 @@ dl dt, dl dd, dl dd a { font-size: var(--gr-fs-base); }
 }
 .search-area form .form-inner button:hover { background: var(--gr-madder) !important; }
 .search-area form .form-inner button svg { width: 16px; height: 16px; fill: #fff !important; }
+
+/* Type system, round 3: template rules that beat the earlier ones */
+.footer-section .footer-content-area p, .footer-content-area p { font-size: var(--gr-fs-base) !important; }
+.breadcrumb-section2 .top-content ul li, .breadcrumb-section2 .top-content ul li a { font-size: var(--gr-fs-sm) !important; }

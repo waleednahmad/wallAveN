@@ -11,7 +11,7 @@
 @endphp
 <div class="gr-cart">
     @if ($grOrderingFor)
-        <div style="margin: 12px 0 4px; padding: 12px 14px; background: var(--gr-linen); border-radius: 12px; font-size: 13px;">
+        <div style="margin: 12px 0 4px; padding: 12px 14px; background: var(--gr-linen); border-radius: 12px; font-size: 14px;">
             Ordering for <strong>{{ $grOrderingFor->company_name ?? $grOrderingFor->name }}</strong>
             · <a href="#" class="gr-link" data-bs-toggle="modal" data-bs-target="#DealerSelection">Change</a>
         </div>
@@ -61,7 +61,7 @@
 
     @if (count($cartTemps))
         <div class="gr-cart-total">
-            <div class="d-flex justify-content-between" style="font-size: 15px; margin-bottom: 4px;">
+            <div class="d-flex justify-content-between" style="font-size: 16px; margin-bottom: 4px;">
                 <span style="color: var(--gr-muted);">Subtotal ({{ $grCount }} {{ $grCount == 1 ? 'item' : 'items' }})</span>
                 <span>{{ $grMoney((float) $total * $grMultiplier) }}</span>
             </div>

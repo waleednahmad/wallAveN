@@ -11,22 +11,22 @@
     @endphp
     <style>
         .gr-about { --gr-ink: #231A14; --gr-muted: #5F534A; --gr-accent: #7B2D26; --gr-line: #E3D8C8; color: var(--gr-ink); }
-        .gr-about .gr-eyebrow { font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--gr-accent); font-weight: 600; margin-bottom: 14px; }
+        .gr-about .gr-eyebrow { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gr-accent); font-weight: 600; margin-bottom: 14px; }
         .gr-about h1, .gr-about h2 { font-family: var(--font-playfair); color: var(--gr-ink); }
         .gr-about h1 { font-size: clamp(36px, 5vw, 60px); line-height: 1.08; margin-bottom: 20px; }
         .gr-about h2 { font-size: clamp(28px, 3.5vw, 40px); line-height: 1.15; margin-bottom: 20px; }
         .gr-about h1 em, .gr-about h2 em { color: var(--gr-accent); }
-        .gr-about p { color: var(--gr-muted); font-size: 17px; line-height: 1.75; }
+        .gr-about p { color: var(--gr-muted); font-size: 16px; line-height: 1.75; }
         .gr-about .gr-img { width: 100%; height: 100%; min-height: 320px; object-fit: cover; border-radius: 16px; }
         .gr-about .gr-card { height: 100%; border: 1px solid var(--gr-line); border-radius: 16px; padding: 28px; background: #fff; }
-        .gr-about .gr-card h3 { font-size: 20px; font-weight: 600; margin: 14px 0 8px; color: var(--gr-ink); }
-        .gr-about .gr-card p { font-size: 15px; margin: 0; }
+        .gr-about .gr-card h3 { font-family: var(--gr-font-body); font-size: 20px; font-weight: 600; margin: 14px 0 8px; color: var(--gr-ink); }
+        .gr-about .gr-card p { font-size: 16px; margin: 0; }
         .gr-about .gr-band { background: #1F2E45; border-radius: 20px; padding: clamp(28px, 5vw, 56px); }
         .gr-about .gr-band h2, .gr-about .gr-band h3 { color: #fff; }
         .gr-about .gr-band h3 { font-family: var(--font-playfair); font-size: 24px; color: #E9C98B; margin-bottom: 8px; }
-        .gr-about .gr-band p { color: #D9D3C8; font-size: 15px; margin: 0; }
+        .gr-about .gr-band p { color: #D9D3C8; font-size: 16px; margin: 0; }
         .gr-about .gr-band .col-md-4 { border-top: 1px solid rgba(255,255,255,.2); padding-top: 20px; }
-        .gr-about .gr-btn { display: inline-flex; align-items: center; height: 52px; padding: 0 28px; border-radius: 26px; font-weight: 600; text-decoration: none; }
+        .gr-about .gr-btn { display: inline-flex; align-items: center; height: 52px; padding: 0 28px; border-radius: var(--gr-radius-btn); font-weight: 600; text-decoration: none; }
         .gr-about .gr-btn-primary { background: var(--gr-accent); color: #fff; }
         .gr-about .gr-btn-primary:hover { background: #5E211B; color: #fff; }
         .gr-about .gr-btn-outline { border: 1px solid var(--gr-ink); color: var(--gr-ink); }

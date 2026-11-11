@@ -54,7 +54,7 @@
                             <p style="margin: 0; font-weight: 600;">Order #{{ $order->id }}
                                 <span style="font-weight: 400; color: var(--gr-muted);">· {{ $order->order_items_count }} {{ $order->order_items_count == 1 ? 'item' : 'items' }}</span>
                             </p>
-                            <p style="margin: 2px 0 0; font-size: 13px; color: var(--gr-muted);">{{ $order->created_at?->format('M j, Y') }}@if ($order->po_number) · {{ $order->po_number }}@endif</p>
+                            <p style="margin: 2px 0 0; font-size: 14px; color: var(--gr-muted);">{{ $order->created_at?->format('M j, Y') }}@if ($order->po_number) · {{ $order->po_number }}@endif</p>
                         </div>
                         <span class="gr-status gr-status-{{ $order->status }}">{{ $order->status }}</span>
                         <span style="min-width: 90px; text-align: right; font-weight: 600;">${{ number_format((float) $order->total, 2) }}</span>
@@ -69,14 +69,14 @@
         <div class="col-lg-5 d-flex flex-column" style="gap: 20px;">
             <div style="background: var(--gr-madder); color: #fff; border-radius: 18px; padding: 24px;">
                 <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 10px;">
-                    <h2 style="font-family: var(--gr-font-body); font-size: 17px; font-weight: 600; margin: 0; color: #fff;">Customer Mode</h2>
+                    <h2 style="font-family: var(--gr-font-body); font-size: 16px; font-weight: 600; margin: 0; color: #fff;">Customer Mode</h2>
                     <span style="padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,.18); font-size: 12px; font-weight: 600;">{{ $grDealer->is_customer_mode_active ? 'On' : 'Off' }}</span>
                 </div>
                 <p style="margin: 0 0 16px; font-size: 14px; line-height: 1.55; color: #F1DCD5;">Show the catalog to shoppers in your store with your retail prices and your store's banner.</p>
                 <a href="{{ route('dealer.customerMode') }}" class="gr-btn gr-btn-sm" style="background: #fff; color: var(--gr-madder);">Customer Mode settings</a>
             </div>
             <div class="gr-card" style="padding: 24px;">
-                <h2 style="font-family: var(--gr-font-body); font-size: 17px; font-weight: 600; margin: 0 0 6px;">Need help with an order?</h2>
+                <h2 style="font-family: var(--gr-font-body); font-size: 16px; font-weight: 600; margin: 0 0 6px;">Need help with an order?</h2>
                 <p style="margin: 0 0 12px; font-size: 14px; color: var(--gr-muted);">Our team picks up 7 days a week.</p>
                 <a href="tel:+17734903801" style="font-family: var(--gr-font-display); font-size: 24px; color: var(--gr-ink); text-decoration: none;">(773) 490-3801</a>
             </div>

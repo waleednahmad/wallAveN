@@ -19,32 +19,32 @@
                         <option value="1">On — shoppers see retail prices</option>
                         <option value="0">Off — you see your trade prices</option>
                     </select>
-                    @error('is_customer_mode_active') <span class="text-danger" style="font-size: 13px;">{{ $message }}</span> @enderror
+                    @error('is_customer_mode_active') <span class="text-danger" style="font-size: 14px;">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
                     <label for="fake_sale_percentage" class="form-label">Sale percentage (price multiplier)</label>
                     <input id="fake_sale_percentage" type="number" step=".01" min="1" max="100" wire:model="fake_sale_percentage" class="form-control" x-on:input="pct = $event.target.value">
                     <p class="gr-help">A <span x-text="money(75)">$75.00</span> trade price shows as <strong style="color: var(--gr-ink);" x-text="money(75 * pct)"></strong> to your shopper.</p>
-                    @error('fake_sale_percentage') <span class="text-danger" style="font-size: 13px;">{{ $message }}</span> @enderror
+                    @error('fake_sale_percentage') <span class="text-danger" style="font-size: 14px;">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
                     <label for="text" class="form-label">Banner text</label>
                     <textarea id="text" rows="2" placeholder="e.g. Welcome to our store — ask our team about delivery" wire:model="text" class="form-control" style="min-height: 80px;" x-on:input="text = $event.target.value"></textarea>
-                    @error('text') <span class="text-danger" style="font-size: 13px;">{{ $message }}</span> @enderror
+                    @error('text') <span class="text-danger" style="font-size: 14px;">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="row g-3">
                     <div class="col-6">
                         <label for="bg_color" class="form-label">Banner color</label>
                         <input id="bg_color" type="color" wire:model="bg_color" class="form-control form-control-color w-100" x-on:input="bg = $event.target.value">
-                        @error('bg_color') <span class="text-danger" style="font-size: 13px;">{{ $message }}</span> @enderror
+                        @error('bg_color') <span class="text-danger" style="font-size: 14px;">{{ $message }}</span> @enderror
                     </div>
                     <div class="col-6">
                         <label for="text_color" class="form-label">Text color</label>
                         <input id="text_color" type="color" wire:model="text_color" class="form-control form-control-color w-100" x-on:input="fg = $event.target.value">
-                        @error('text_color') <span class="text-danger" style="font-size: 13px;">{{ $message }}</span> @enderror
+                        @error('text_color') <span class="text-danger" style="font-size: 14px;">{{ $message }}</span> @enderror
                     </div>
                 </div>
 
@@ -65,10 +65,10 @@
                     <span style="width: 10px; height: 10px; border-radius: 5px; background: #CFC3B1;"></span>
                 </div>
                 <template x-if="on">
-                    <div x-show="text" x-text="text" x-bind:style="'background:' + bg + ';color:' + fg" style="text-align: center; padding: 10px 14px; font-size: 13px; font-weight: 500;"></div>
+                    <div x-show="text" x-text="text" x-bind:style="'background:' + bg + ';color:' + fg" style="text-align: center; padding: 10px 14px; font-size: 14px; font-weight: 500;"></div>
                 </template>
                 <template x-if="!on">
-                    <div style="background: var(--gr-indigo); color: #F1E6D2; text-align: center; padding: 10px 14px; font-size: 13px;"><strong style="color: var(--gr-saffron);">Wholesale only</strong> — trade pricing for registered retailers</div>
+                    <div style="background: var(--gr-indigo); color: #F1E6D2; text-align: center; padding: 10px 14px; font-size: 14px;"><strong style="color: var(--gr-saffron);">Wholesale only</strong> — trade pricing for registered retailers</div>
                 </template>
                 <div style="background: var(--gr-paper); border-bottom: 1px solid var(--gr-line); padding: 10px 16px; display: flex; justify-content: space-between; align-items: center;">
                     <img src="{{ getMainImage() }}" alt="" style="height: 30px; width: auto;">
