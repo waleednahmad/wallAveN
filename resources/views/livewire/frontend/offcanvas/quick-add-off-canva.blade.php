@@ -108,7 +108,7 @@
                 @if (!$variantNotFound)
                     <div class="gr-buy-row">
                         <div class="gr-qty gr-qty-lg" role="group" aria-label="Quantity">
-                            <button type="button" wire:click="decreaseQuantity" aria-label="Decrease quantity">−</button>
+                            <button type="button" wire:click="decreaseQuantity" aria-label="Decrease quantity" @disabled($quantity <= 1)>−</button>
                             <input type="number" inputmode="numeric" wire:model="quantity" min="1" aria-label="Quantity">
                             <button type="button" wire:click="increaseQuantity" aria-label="Increase quantity">+</button>
                         </div>

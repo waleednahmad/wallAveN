@@ -43,7 +43,7 @@
                 <p class="gr-cart-meta">{{ $grMoney($itemPrice) }} each @if ($item->sku) · SKU {{ $item->sku }} @endif</p>
                 <div class="d-flex justify-content-between align-items-center" style="margin-top: auto; padding-top: 6px;">
                     <div class="gr-qty">
-                        <button type="button" wire:click="decreaseQuantity('{{ $item->id }}')" wire:loading.attr="disabled" aria-label="Decrease quantity of {{ $item->name }}">−</button>
+                        <button type="button" wire:click="decreaseQuantity('{{ $item->id }}')" wire:loading.attr="disabled" @disabled($item->quantity <= 1) aria-label="Decrease quantity of {{ $item->name }}">−</button>
                         <span aria-live="polite">{{ $item->quantity }}</span>
                         <button type="button" wire:click="increaseQuantity('{{ $item->id }}')" wire:loading.attr="disabled" aria-label="Increase quantity of {{ $item->name }}">+</button>
                     </div>

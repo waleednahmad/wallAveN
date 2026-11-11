@@ -603,3 +603,4 @@ dl dt, dl dd, dl dd a { font-size: var(--gr-fs-base); }
 /* Type system, round 3: template rules that beat the earlier ones */
 .footer-section .footer-content-area p, .footer-content-area p { font-size: var(--gr-fs-base) !important; }
 .breadcrumb-section2 .top-content ul li, .breadcrumb-section2 .top-content ul li a { font-size: var(--gr-fs-sm) !important; }
+.gr-qty button:disabled { color: #C9BEB0; cursor: default; }
