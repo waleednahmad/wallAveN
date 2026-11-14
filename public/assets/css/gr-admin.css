@@ -71,7 +71,7 @@ hr { border-color: var(--brand-line-soft); opacity: 1; }
 .sidebar { padding: 0 10px 24px; }
 .sidebar .user-panel { border-bottom: 1px solid rgba(255, 255, 255, .08) !important; padding: 14px 6px !important; margin: 0 0 8px !important; }
 .sidebar .user-panel .info { width: 100%; justify-content: space-between; padding: 0 !important; }
-.sidebar .user-panel .info > a.d-block { color: var(--brand-nav-text) !important; font-weight: 600; font-size: 14px; white-space: normal; }
+.sidebar .user-panel .info > a.d-block { color: var(--brand-nav-text) !important; font-weight: 600; font-size: 14px; white-space: normal; text-decoration: none !important; }
 .sidebar .user-panel .btn-danger {
   background: transparent !important; border: 1px solid rgba(255, 255, 255, .18) !important; color: var(--brand-nav-text) !important;
   border-radius: 8px; width: 34px; height: 34px; padding: 0 !important; display: inline-flex; align-items: center; justify-content: center;
@@ -111,8 +111,9 @@ hr { border-color: var(--brand-line-soft); opacity: 1; }
 }
 .nav-sidebar > .nav-item.menu-open > .nav-link .nav-icon,
 .nav-sidebar > .nav-item > .nav-link.active[href="#"] .nav-icon { color: var(--brand-accent) !important; }
-.nav-sidebar .nav-treeview { padding: 4px 0 6px 12px; }
-.nav-sidebar .nav-treeview .nav-link { font-size: 14px !important; padding: 7px 12px !important; }
+/* Sub-items: indent with the link's own padding (AdminLTE gives links a fixed width, so padding the list overflows) */
+.nav-sidebar .nav-treeview { padding: 4px 0 6px; }
+.nav-sidebar .nav-treeview .nav-link { font-size: 14px !important; padding: 7px 12px 7px 26px !important; }
 .nav-sidebar .nav-treeview .nav-icon { font-size: 9px !important; }
 .nav-sidebar .nav-link > p > .right { color: var(--brand-nav-muted); }
 
