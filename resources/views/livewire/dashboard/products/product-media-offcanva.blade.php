@@ -38,7 +38,7 @@
                         <div class="card" style="background: rgba(208, 208, 208, 0.466)">
                             <div class="card-body d-flex flex-column align-items-center">
                                 {{-- image preview --}}
-                                <img src="{{ asset($image['image']) }}" class="img-fluid" alt="file"
+                                <img src="{{ thumb($image['image'], 240) }}" class="img-fluid" alt="file"
                                     style="height: 100px; width: 100%;object-fit: contain;">
 
                                 <div class="mt-1 d-flex" style="gap: 5px">

@@ -53,7 +53,7 @@ final class ProductTypeTable extends PowerGridComponent
             ->add('id')
             ->add('image', function ($value) {
                 if (file_exists($value->image) && $value->image != null) {
-                    return '<img src="' . asset($value->image) . '" alt=" Image" style="width: 90px; height: 90px; object-fit: contain;" loading="lazy" class="img-thumbnail">';
+                    return '<img src="' . thumb($value->image, 240) . '" alt=" Image" style="width: 90px; height: 90px; object-fit: contain;" loading="lazy" class="img-thumbnail">';
                 }
                 return '<img src="' . asset('dashboard/images/default.webp') . '" alt=" Image" style="width: 90px; height: 90px; object-fit: contain;" loading="lazy" class="img-thumbnail">';
             })

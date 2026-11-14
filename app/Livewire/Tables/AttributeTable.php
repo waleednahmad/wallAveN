@@ -47,7 +47,7 @@ final class AttributeTable extends PowerGridComponent
             ->add('values', function (Attribute $model) {
                 $values = '<ul style="display: flex; flex-wrap: wrap;">';
                 foreach ($model->values as $value) {
-                    $values .= "<li class='mb-2 table-li-item' >{$value->value}</li>";
+                    $values .= "<li class='mb-2 table-li-item' >" . e($value->value) . "</li>";
                 }
                 $values .= '</ul>';
                 return $values;

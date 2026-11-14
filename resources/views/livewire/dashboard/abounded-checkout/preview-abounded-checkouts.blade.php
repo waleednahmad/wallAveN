@@ -110,7 +110,7 @@
                                             </td>
                                             <td>
                                                 @if ($item->image && file_exists($item->image))
-                                                    <img src="{{ asset($item->image) }}" alt="{{ $item->name }}"
+                                                    <img src="{{ thumb($item->image, 240) }}" alt="{{ $item->name }}"
                                                         class="img-thumbnail" style="width: 90px; height: 90px;">
                                                 @else
                                                     <img src="{{ asset('dashboard/images/default.webp') }}"

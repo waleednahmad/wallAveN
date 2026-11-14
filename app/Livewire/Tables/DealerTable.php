@@ -142,8 +142,11 @@ final class DealerTable extends PowerGridComponent
                 ->hidden()
                 ->visibleInExport(true),
 
+            // Kept for search and export; the full address is in the dealer details (eye button).
             Column::make('Address', 'address')
-                ->searchable(),
+                ->searchable()
+                ->hidden()
+                ->visibleInExport(true),
 
             Column::make('Phone', 'phone')
 

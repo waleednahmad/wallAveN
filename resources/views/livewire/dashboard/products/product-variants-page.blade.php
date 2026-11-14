@@ -98,7 +98,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
                                     @if ($variant->image && file_exists($variant->image))
-                                        <img src="{{ asset($variant->image) }}" alt="Variant Image"
+                                        <img src="{{ thumb($variant->image, 240) }}" alt="Variant Image"
                                             class="img-thumbnail"
                                             style="width: 90px; height: 90px;background-color: #f8f9fa;">
                                     @else

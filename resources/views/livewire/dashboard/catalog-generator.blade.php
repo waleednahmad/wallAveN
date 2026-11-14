@@ -9,9 +9,9 @@
     @if ($this->hasInProgress) wire:poll.5s @endif
 >
     <style>
-        .catalog-card { border: 0; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .catalog-card { border-radius: var(--brand-radius-card); box-shadow: none; border: 1px solid var(--brand-line) !important; }
         .catalog-card .card-header {
-            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+            background: var(--brand-nav);
             color: #fff;
             border-radius: 14px 14px 0 0 !important;
             border: 0;
@@ -19,20 +19,20 @@
         }
         .catalog-card .card-header .card-title { color: #fff; font-weight: 600; margin: 0; }
         .catalog-cover-drop {
-            border: 2px dashed #cbd5e1;
+            border: 2px dashed var(--brand-line);
             border-radius: 10px;
             padding: 1rem;
             text-align: center;
-            background: #f8fafc;
+            background: var(--brand-bg);
             transition: all 0.2s ease;
             cursor: pointer;
         }
-        .catalog-cover-drop:hover { border-color: #2563eb; background: #eff6ff; }
-        .catalog-cover-drop .icon { font-size: 1.75rem; color: #94a3b8; margin-bottom: 0.5rem; }
+        .catalog-cover-drop:hover { border-color: var(--brand-primary); background: var(--brand-primary-tint); }
+        .catalog-cover-drop .icon { font-size: 1.75rem; color: var(--brand-muted); margin-bottom: 0.5rem; }
         .catalog-cover-drop input[type=file] { display: none; }
         .catalog-cover-preview { max-height: 110px; border-radius: 8px; }
         .catalog-stat {
-            background: #f1f5f9;
+            background: var(--brand-bg);
             border-radius: 10px;
             padding: 0.75rem 1rem;
             display: flex;
@@ -42,28 +42,28 @@
         .catalog-stat .stat-icon {
             width: 36px; height: 36px; border-radius: 8px;
             display: flex; align-items: center; justify-content: center;
-            background: #2563eb; color: #fff;
+            background: var(--brand-primary); color: #fff;
         }
-        .catalog-stat .stat-label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
-        .catalog-stat .stat-value { font-size: 1.1rem; font-weight: 600; color: #0f172a; }
+        .catalog-stat .stat-label { font-size: 0.75rem; color: var(--brand-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+        .catalog-stat .stat-value { font-size: 1.1rem; font-weight: 600; color: var(--brand-ink); }
         .layout-option {
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--brand-line);
             border-radius: 10px;
             padding: 0.75rem;
             cursor: pointer;
             transition: all 0.15s ease;
             text-align: center;
-            background: #fff;
+            background: var(--brand-surface);
         }
-        .layout-option:hover { border-color: #93c5fd; }
-        .layout-option.active { border-color: #2563eb; background: #eff6ff; }
+        .layout-option:hover { border-color: var(--brand-ink); }
+        .layout-option.active { border-color: var(--brand-primary); background: var(--brand-primary-tint); }
         .layout-option .grid-preview {
             display: grid; gap: 3px;
             margin: 0 auto 0.5rem; width: 60px;
         }
-        .layout-option .grid-preview > div { background: #2563eb; aspect-ratio: 1; border-radius: 2px; opacity: 0.85; }
+        .layout-option .grid-preview > div { background: var(--brand-primary); aspect-ratio: 1; border-radius: 2px; opacity: 0.85; }
         .catalog-row { transition: background 0.15s ease; }
-        .catalog-row:hover { background: #f8fafc; }
+        .catalog-row:hover { background: var(--brand-bg); }
         .status-pill {
             font-size: 0.7rem; padding: 0.25rem 0.6rem; border-radius: 999px;
             font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase;
@@ -78,7 +78,7 @@
         .empty-catalogs {
             padding: 3rem 1rem;
             text-align: center;
-            color: #94a3b8;
+            color: var(--brand-muted);
         }
         .empty-catalogs .icon { font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.5; }
     </style>

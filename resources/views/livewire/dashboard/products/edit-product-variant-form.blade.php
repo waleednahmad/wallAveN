@@ -22,7 +22,7 @@
                                 'single-file-card',
                                 'active' => $prImage['id'] == $selectedImageId,
                             ]) wire:click="setMainImage({{ $prImage['id'] }})">
-                                <img src="{{ asset($prImage['image']) }}" class="img-fluid" alt="file"
+                                <img src="{{ thumb($prImage['image'], 240) }}" class="img-fluid" alt="file"
                                     style="height: 100%; width: 100%; object-fit: contain;">
 
                                 @if ($prImage['id'] == $selectedImageId)

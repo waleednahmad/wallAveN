@@ -116,6 +116,14 @@ hr { border-color: var(--brand-line-soft); opacity: 1; }
 .nav-sidebar .nav-treeview .nav-link { font-size: 14px !important; padding: 7px 12px 7px 26px !important; }
 .nav-sidebar .nav-treeview .nav-icon { font-size: 9px !important; }
 .nav-sidebar .nav-link > p > .right { color: var(--brand-nav-muted); }
+.nav-sidebar > .nav-item > .nav-link > p { padding-right: 18px; }
+/* Group arrow: points right when closed, down when open (AdminLTE's icon is fa-angle-left) */
+.nav-sidebar .nav-link > p > i.right,
+.nav-sidebar .nav-link > i.right { transform: rotate(180deg) !important; transition: transform .2s ease !important; }
+.nav-sidebar .menu-open > .nav-link > p > i.right,
+.nav-sidebar .menu-is-opening > .nav-link > p > i.right,
+.nav-sidebar .menu-open > .nav-link > i.right,
+.nav-sidebar .menu-is-opening > .nav-link > i.right { transform: rotate(270deg) !important; }
 
 /* Collapsed sidebar (sidebar-mini) */
 .sidebar-mini.sidebar-collapse .main-sidebar .brand-link img { max-height: 32px; }
@@ -324,6 +332,11 @@ textarea.form-control { min-height: 96px; }
 .table-bordered, .table-bordered td, .table-bordered th { border-color: var(--brand-line-soft) !important; }
 .table-responsive { border-radius: var(--brand-radius-card); }
 .power-grid-table { background: var(--brand-surface); }
+/* PowerGrid puts text-nowrap on every cell, so long names stretch tables far past the screen.
+   Long text wraps instead; short values (ids, phones, dates, prices, buttons) still fit on one line. */
+.power-grid-table tbody td { white-space: normal !important; max-width: 280px; overflow-wrap: anywhere; }
+.power-grid-table tbody td:has(> .btn), .power-grid-table tbody td:has(.pg-actions), .power-grid-table tbody td:has(.form-switch) { white-space: nowrap !important; max-width: none; overflow-wrap: normal; }
+.power-grid-table thead .form-control, .power-grid-table thead .form-select { min-width: 0; max-width: 220px; }
 /* PowerGrid filter row inputs in the header */
 .power-grid-table thead .form-control, .power-grid-table thead .form-select { text-transform: none; letter-spacing: 0; font-weight: 400; }
 .img-thumbnail { border-color: var(--brand-line); border-radius: 8px; background: var(--brand-surface); padding: 2px; }
@@ -419,7 +432,51 @@ textarea.form-control { min-height: 96px; }
 /* --------------------------------------------------------------------------
    Page-specific bits found in the admin views
    -------------------------------------------------------------------------- */
-.category-card { border-radius: var(--brand-radius-card); border-color: var(--brand-line); background: var(--brand-surface); }
+/* Product form: category / sub category / type / attribute chips (resources/css/app.css used blue) */
+.category-container { gap: 8px !important; }
+.category-card {
+  border: 1px solid var(--brand-line) !important;
+  border-radius: 999px !important;
+  background: var(--brand-surface) !important;
+  color: var(--brand-ink) !important;
+  padding: 6px 14px !important;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: border-color .15s ease, background-color .15s ease, color .15s ease !important;
+}
+.category-card p { margin: 0; color: inherit; }
+.category-card:hover { border-color: var(--brand-ink) !important; background: var(--brand-surface) !important; color: var(--brand-ink) !important; }
+.category-card.active { border-color: var(--brand-primary) !important; background: var(--brand-primary) !important; color: var(--brand-on-primary) !important; }
+
+/* Product form: image picker */
+.images-container {
+  border: 1px dashed var(--brand-line) !important;
+  border-radius: var(--brand-radius-card) !important;
+  background: var(--brand-bg) !important;
+  gap: 10px !important;
+}
+.images-container .single-file-card, .other-images-container > div {
+  background: var(--brand-surface) !important;
+  border: 1px solid var(--brand-line);
+  border-radius: var(--brand-radius-control) !important;
+}
+.single-file-card:hover { background: var(--brand-surface) !important; border-color: var(--brand-ink); }
+.single-file-card.active { background: var(--brand-primary-tint) !important; border: 2px solid var(--brand-primary); }
+.single-file-card .checked-icon { background-color: var(--brand-primary) !important; box-shadow: none !important; }
+input[type="file"].customized {
+  border: 1px dashed var(--brand-line) !important;
+  border-radius: var(--brand-radius-card) !important;
+  background: var(--brand-bg) !important;
+}
+input[type="file"].customized:hover { border-color: var(--brand-ink) !important; }
+input[type="file"].customized::file-selector-button {
+  background: var(--brand-ink) !important;
+  border-radius: var(--brand-radius-control) !important;
+  font-family: var(--brand-font-body);
+  font-weight: 600;
+  padding: 6px 14px;
+}
+input[type="file"].customized:hover::file-selector-button { background: var(--brand-primary) !important; }
 .invoice { background: var(--brand-surface); border: 1px solid var(--brand-line); border-radius: var(--brand-radius-card); }
 
 /* --------------------------------------------------------------------------
@@ -455,3 +512,17 @@ a.adm-kpi:hover { color: var(--brand-ink); text-decoration: none; box-shadow: 0 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
+
+/* Attributes table: values as compact chips instead of long bulleted columns */
+.power-grid-table td ul:has(> .table-li-item) { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0; list-style: none; max-width: 640px; }
+.power-grid-table td ul > .table-li-item {
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+  padding: 3px 10px;
+  border: 1px solid var(--brand-line);
+  border-radius: 999px;
+  background: var(--brand-bg);
+  font-size: 13px;
+  line-height: 1.4;
+}
+.power-grid-table tbody td:has(ul > .table-li-item) { max-width: 660px; }

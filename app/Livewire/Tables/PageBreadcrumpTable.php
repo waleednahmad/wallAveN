@@ -45,7 +45,7 @@ final class PageBreadcrumpTable extends PowerGridComponent
             ->add('id')
             ->add('image', function ($value) {
                 if (file_exists($value->image) && $value->image != null) {
-                    return '<img src="' . asset($value->image) . '" alt=" Image" style="width: 200px; height: 90px; object-fit: contain;" loading="lazy" class="img-thumbnail">';
+                    return '<img src="' . thumb($value->image) . '" alt=" Image" style="width: 200px; height: 90px; object-fit: contain;" loading="lazy" class="img-thumbnail">';
                 }
                 return '-';
             });
