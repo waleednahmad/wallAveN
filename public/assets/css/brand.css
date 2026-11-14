@@ -1,0 +1,52 @@
+/* ==========================================================================
+   Brand tokens: the only place a company's look is defined.
+   The storefront (gr-theme.css), the dealer dashboard and the admin panel
+   (gr-admin.css) read these variables, so a new company only needs its own
+   values here (later: generated from that company's settings).
+   Names describe the job of a colour, not the colour itself.
+   Current values: Golden Rugs.
+   ========================================================================== */
+
+:root {
+  /* Main action colour: primary buttons, links, active menu items */
+  --brand-primary: #7B2D26;
+  --brand-primary-hover: #5E211B;
+  --brand-primary-tint: #F3E3DC;   /* light background behind primary text */
+  --brand-on-primary: #FFFFFF;     /* text on primary */
+
+  /* Dark surfaces: admin/dealer sidebars, footer, announcement bar */
+  --brand-nav: #1F2E45;
+  --brand-nav-text: #E4DED3;
+  --brand-nav-muted: #A9B1BF;
+  --brand-accent: #E9C98B;         /* highlights on dark surfaces */
+  --brand-accent-strong: #C9973F;
+
+  /* Page and text */
+  --brand-ink: #231A14;            /* headings, body text, dark buttons */
+  --brand-muted: #5F534A;          /* secondary text */
+  --brand-bg: #F5EFE6;             /* page background */
+  --brand-surface: #FFFCF7;        /* cards, header, inputs */
+  --brand-line: #E3D8C8;           /* borders */
+  --brand-line-soft: #EFE6D8;      /* dividers inside cards */
+
+  /* Status colours (orders, approvals, alerts) */
+  --brand-success: #2F7A4A;
+  --brand-success-tint: #DDEFE3;
+  --brand-warning: #8A6116;
+  --brand-warning-tint: #F6E7C8;
+  --brand-danger: #A3392E;
+  --brand-danger-tint: #F6DEDA;
+  --brand-info: #2B4466;
+  --brand-info-tint: #DCE6F2;
+  --brand-neutral: #5F534A;
+  --brand-neutral-tint: #EAE5DE;
+
+  /* Type */
+  --brand-font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --brand-font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Shape */
+  --brand-radius-control: 10px;    /* buttons, inputs */
+  --brand-radius-card: 14px;
+  --brand-radius-lg: 20px;
+}

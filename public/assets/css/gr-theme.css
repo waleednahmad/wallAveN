@@ -1,30 +1,30 @@
 /* ==========================================================================
-   Golden Rugs storefront theme (2026 redesign)
-   Loaded after assets/css/style.css. Overrides the original template's
-   variables and adds gr-* components used by the new Blade views.
-   Palette: traditional rug dyes — madder red, indigo, saffron gold on linen.
+   Storefront theme (2026 redesign)
+   Loaded after assets/css/style.css and brand.css. Overrides the original
+   template's variables and adds gr-* components used by the new Blade views.
+   Colours, fonts and corners come from brand.css.
    ========================================================================== */
 
 :root {
-  --gr-radius-btn: 10px; /* buttons, quantity steppers, search fields. Tags and badges stay round */
-  /* Brand tokens */
-  --gr-linen: #F5EFE6;      /* page background */
-  --gr-paper: #FFFCF7;      /* cards, header */
-  --gr-ink: #231A14;        /* text, dark buttons */
-  --gr-muted: #5F534A;      /* secondary text (7:1 on linen) */
-  --gr-line: #E3D8C8;       /* borders */
-  --gr-line-soft: #EFE6D8;
-  --gr-madder: #7B2D26;     /* primary accent */
-  --gr-madder-dark: #5E211B;
-  --gr-madder-tint: #F3E3DC;
-  --gr-indigo: #1F2E45;     /* dark sections */
-  --gr-saffron: #E9C98B;    /* highlights on dark */
-  --gr-brass: #C9973F;
-  --gr-radius: 14px;
-  --gr-radius-lg: 20px;
+  /* Storefront aliases for the brand tokens in brand.css (loaded first). Change colours there, not here. */
+  --gr-radius-btn: var(--brand-radius-control); /* buttons, quantity steppers, search fields. Tags and badges stay round */
+  --gr-linen: var(--brand-bg);            /* page background */
+  --gr-paper: var(--brand-surface);       /* cards, header */
+  --gr-ink: var(--brand-ink);             /* text, dark buttons */
+  --gr-muted: var(--brand-muted);         /* secondary text */
+  --gr-line: var(--brand-line);           /* borders */
+  --gr-line-soft: var(--brand-line-soft);
+  --gr-madder: var(--brand-primary);      /* primary accent */
+  --gr-madder-dark: var(--brand-primary-hover);
+  --gr-madder-tint: var(--brand-primary-tint);
+  --gr-indigo: var(--brand-nav);          /* dark sections */
+  --gr-saffron: var(--brand-accent);      /* highlights on dark */
+  --gr-brass: var(--brand-accent-strong);
+  --gr-radius: var(--brand-radius-card);
+  --gr-radius-lg: var(--brand-radius-lg);
   --gr-ease: cubic-bezier(.2, .7, .2, 1);
-  --gr-font-display: "Fraunces", Georgia, "Times New Roman", serif;
-  --gr-font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --gr-font-display: var(--brand-font-display);
+  --gr-font-body: var(--brand-font-body);
 
   /* Re-map the original template variables so every existing page picks up the new look */
   --font-playfair: var(--gr-font-display);
