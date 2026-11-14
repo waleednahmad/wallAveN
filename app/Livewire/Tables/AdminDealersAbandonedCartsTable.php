@@ -66,10 +66,10 @@ final class AdminDealersAbandonedCartsTable extends PowerGridComponent
     {
         return [
             Column::make('#', 'row_num'),
-            Column::make('Name', 'company_name')->searchable(),
+            Column::make('Name', 'company_name')->bodyAttribute('gr-wrap')->searchable(),
             Column::make('Quantity', 'total_cart_quantity')->sortable(),
-            Column::make('Total', 'total_cart_amount')->sortable(),
-            Column::make('Added At', 'created_at')->sortable()->searchable(),
+            Column::make('Total', 'total_cart_amount')->bodyAttribute('gr-nowrap')->sortable(),
+            Column::make('Added At', 'created_at')->bodyAttribute('gr-nowrap')->sortable()->searchable(),
             Column::action('Action')
         ];
     }

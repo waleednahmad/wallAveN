@@ -59,16 +59,16 @@ final class AdminTable extends PowerGridComponent
     {
         return [
             Column::make('#', 'row_num'),
-            Column::make('Name', 'name')
+            Column::make('Name', 'name')->bodyAttribute('gr-wrap')
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Email', 'email')
+            Column::make('Email', 'email')->bodyAttribute('gr-wrap')
                 ->sortable()
                 ->searchable(),
 
 
-            Column::make('Created at', 'created_at')
+            Column::make('Created at', 'created_at')->bodyAttribute('gr-nowrap')
                 ->sortable()
                 ->searchable(),
 

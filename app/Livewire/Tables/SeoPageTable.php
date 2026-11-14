@@ -50,8 +50,8 @@ final class SeoPageTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('Name', 'name')->searchable(),
-            Column::make('Title', 'title')->searchable(),
+            Column::make('Name', 'name')->bodyAttribute('gr-wrap')->searchable(),
+            Column::make('Title', 'title')->bodyAttribute('gr-wrap')->searchable(),
             Column::action('Action')
         ];
     }

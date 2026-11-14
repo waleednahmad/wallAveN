@@ -64,13 +64,13 @@ final class PublicSettingTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('Key', 'key')
+            Column::make('Key', 'key')->bodyAttribute('gr-wrap')
                 ->searchable(),
 
-            Column::make('Value', 'value')
+            Column::make('Value', 'value')->bodyAttribute('gr-wrap')
                 ->searchable(),
 
-            Column::make('Description', 'description'),
+            Column::make('Description', 'description')->bodyAttribute('gr-wrap'),
 
 
             Column::action('Action')

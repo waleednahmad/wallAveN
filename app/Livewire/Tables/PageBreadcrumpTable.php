@@ -54,11 +54,11 @@ final class PageBreadcrumpTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('page name', 'name')
+            Column::make('page name', 'name')->bodyAttribute('gr-wrap')
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Title ', 'title'),
+            Column::make('Title ', 'title')->bodyAttribute('gr-wrap'),
 
             Column::make('Breadcrumb image', 'image')->sortable(),
 

@@ -114,13 +114,13 @@ final class RepresentativeTable extends PowerGridComponent
     {
         return [
             Column::make('#', 'row_num'),
-            Column::make('Name', 'name')
+            Column::make('Name', 'name')->bodyAttribute('gr-wrap')
                 ->searchable(),
 
-            Column::make('Email', 'email')
+            Column::make('Email', 'email')->bodyAttribute('gr-wrap')
                 ->searchable(),
 
-            Column::make('Phone', 'phone')
+            Column::make('Phone', 'phone')->bodyAttribute('gr-nowrap')
                 ->searchable(),
 
             Column::make('Status', 'status_label')
@@ -134,10 +134,10 @@ final class RepresentativeTable extends PowerGridComponent
                 ->hidden()
                 ->visibleInExport(true),
 
-            Column::make('Approved at', 'approved_at')
+            Column::make('Approved at', 'approved_at')->bodyAttribute('gr-nowrap')
                 ->searchable(),
 
-            Column::make('Addresss', 'address')
+            Column::make('Addresss', 'address')->bodyAttribute('gr-wrap')
                 ->hidden()
                 ->visibleInExport(true),
 

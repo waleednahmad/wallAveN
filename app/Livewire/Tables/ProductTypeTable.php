@@ -72,7 +72,7 @@ final class ProductTypeTable extends PowerGridComponent
             Column::make('#', 'row_num'),
 
             Column::make('Image', 'image'),
-            Column::make('Name', 'name')
+            Column::make('Name', 'name')->bodyAttribute('gr-wrap')
                 ->sortable()
                 ->searchable(),
 

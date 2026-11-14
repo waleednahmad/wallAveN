@@ -132,10 +132,10 @@ final class DealerTable extends PowerGridComponent
         return [
             Column::make('#', 'row_num'),
 
-            Column::make('Name', 'company_name')
+            Column::make('Name', 'company_name')->bodyAttribute('gr-wrap')
                 ->searchable(),
 
-            Column::make('Email', 'email')
+            Column::make('Email', 'email')->bodyAttribute('gr-wrap')
                 ->searchable(),
 
             Column::make('Status', 'status_label')
@@ -143,13 +143,13 @@ final class DealerTable extends PowerGridComponent
                 ->visibleInExport(true),
 
             // Kept for search and export; the full address is in the dealer details (eye button).
-            Column::make('Address', 'address')
+            Column::make('Address', 'address')->bodyAttribute('gr-wrap')
                 ->searchable()
                 ->hidden()
                 ->visibleInExport(true),
 
             Column::make('Phone', 'phone')
-
+                ->bodyAttribute('gr-nowrap')
                 ->searchable(),
 
             Column::make('Price List', 'price_list_id'),
@@ -162,6 +162,7 @@ final class DealerTable extends PowerGridComponent
                 ->visibleInExport(true),
 
             Column::make('Approved at', 'approved_at')
+                ->bodyAttribute('gr-nowrap')
                 ->searchable(),
 
 

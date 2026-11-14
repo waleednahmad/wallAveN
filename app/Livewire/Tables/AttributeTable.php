@@ -63,7 +63,7 @@ final class AttributeTable extends PowerGridComponent
         return [
             Column::make('#', 'row_num'),
 
-            Column::make('Name', 'name')
+            Column::make('Name', 'name')->bodyAttribute('gr-wrap')
                 ->sortable()
                 ->searchable(),
 

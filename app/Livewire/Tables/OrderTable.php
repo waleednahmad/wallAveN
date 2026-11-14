@@ -132,17 +132,17 @@ final class OrderTable extends PowerGridComponent
         return [
             Column::make('Id', 'id'),
 
-            Column::make("Company Name", 'company_name', 'dealers.company_name')
+            Column::make("Company Name", 'company_name', 'dealers.company_name')->bodyAttribute('gr-wrap')
                 ->searchable()
                 ->sortable(),
             // ->searchableRaw('company_name like ?'),
 
-            Column::make('Dealer Email', 'dealer_email', 'dealers.email')
+            Column::make('Dealer Email', 'dealer_email', 'dealers.email')->bodyAttribute('gr-wrap')
                 ->searchable()
                 ->sortable(),
             // ->searchableRaw('dealer.email like ?'),
 
-            Column::make('Dealer Phone', 'dealer_phone', 'dealers.phone')
+            Column::make('Dealer Phone', 'dealer_phone', 'dealers.phone')->bodyAttribute('gr-nowrap')
                 ->searchable()
                 ->sortable(),
             // ->searchableRaw('dealer.phone like ?'),
@@ -155,7 +155,7 @@ final class OrderTable extends PowerGridComponent
                 ->hidden()
                 ->visibleInExport(true),
 
-            Column::make('Total', 'total')
+            Column::make('Total', 'total')->bodyAttribute('gr-nowrap')
                 ->withSum('total', header: false, footer: true)
                 ->searchable(),
 
@@ -163,11 +163,11 @@ final class OrderTable extends PowerGridComponent
                 ->withSum('quantity', header: false, footer: true)
                 ->searchable(),
 
-            Column::make('Created at', 'created_at')
+            Column::make('Created at', 'created_at')->bodyAttribute('gr-nowrap')
                 ->searchable()
                 ->visibleInExport(false),
 
-            Column::make('Created at', 'created_at_formatted', 'created_at')
+            Column::make('Created at', 'created_at_formatted', 'created_at')->bodyAttribute('gr-nowrap')
                 ->searchable()
                 ->hidden()
                 ->visibleInExport(true),

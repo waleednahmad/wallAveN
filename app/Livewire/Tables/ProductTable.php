@@ -69,7 +69,7 @@ final class ProductTable extends PowerGridComponent
 
             Column::make('image', 'image'),
 
-            Column::make('name', 'name')
+            Column::make('name', 'name')->bodyAttribute('gr-wrap')
                 ->searchable(),
 
             Column::make('SKU', 'sku')

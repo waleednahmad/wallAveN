@@ -102,7 +102,7 @@ final class AboundedCheckoutTable extends PowerGridComponent
         return [
             Column::make('#', 'row_unique_id'),
 
-            Column::make('Name', 'company_name')
+            Column::make('Name', 'company_name')->bodyAttribute('gr-wrap')
                 ->searchable(),
 
             Column::make('Quantity', 'total_cart_quantity'),

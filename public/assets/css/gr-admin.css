@@ -334,19 +334,16 @@ textarea.form-control { min-height: 96px; }
 .power-grid-table { background: var(--brand-surface); }
 /* PowerGrid puts text-nowrap on every cell, so long names stretch tables far past the screen.
    Long text wraps instead; short values (ids, phones, dates, prices, buttons) still fit on one line. */
-.power-grid-table tbody td { white-space: normal !important; max-width: 280px; overflow-wrap: anywhere; }
-.power-grid-table tbody td:has(> .btn), .power-grid-table tbody td:has(.pg-actions), .power-grid-table tbody td:has(.form-switch) { white-space: nowrap !important; max-width: none; overflow-wrap: normal; }
-.power-grid-table thead .form-control, .power-grid-table thead .form-select { min-width: 0; max-width: 220px; }
+/* Cells stay on one line (PowerGrid's text-nowrap). Columns with naturally long text
+   (names, emails, descriptions, titles, addresses) opt in to wrapping with
+   Column::bodyAttribute('gr-wrap'). gr-nowrap marks phones, dates and money explicitly. */
+.power-grid-table tbody td.gr-wrap { white-space: normal !important; min-width: 170px; max-width: 320px; overflow-wrap: break-word; }
+.power-grid-table tbody td.gr-nowrap { white-space: nowrap !important; }
+.power-grid-table thead .form-control, .power-grid-table thead .form-select { min-width: 0; max-width: 160px; }
 /* PowerGrid filter row inputs in the header */
 .power-grid-table thead .form-control, .power-grid-table thead .form-select { text-transform: none; letter-spacing: 0; font-weight: 400; }
 .img-thumbnail { border-color: var(--brand-line); border-radius: 8px; background: var(--brand-surface); padding: 2px; }
 
-/* Wrap PowerGrid tables in a card look */
-.card-body > div > .table-responsive, .content .table-responsive {
-  border: 1px solid var(--brand-line);
-  background: var(--brand-surface);
-}
-.card .card-body > div > .table-responsive { border: 0; }
 
 /* Pagination */
 .pagination { gap: 4px; }
@@ -526,3 +523,118 @@ a.adm-kpi:hover { color: var(--brand-ink); text-decoration: none; box-shadow: 0 
   line-height: 1.4;
 }
 .power-grid-table tbody td:has(ul > .table-li-item) { max-width: 660px; }
+
+/* ==========================================================================
+   Data tables: one look for every PowerGrid table in the admin
+   (toolbar, filter row, header, rows, images, row actions, footer, empty state)
+   ========================================================================== */
+
+/* Toolbar above the table: export / bulk buttons on the left, search on the right */
+.dt--top-section { margin-bottom: 14px; }
+.dt--top-section > .row { align-items: center; row-gap: 10px; }
+.dt--top-section .btn-group .btn, .dt--top-section > .row .btn { min-height: 38px; }
+.dt--top-section .input-group { max-width: 320px; margin-left: auto; flex-wrap: nowrap; }
+.dt--top-section .input-group .input-group-text { background: var(--brand-surface); border-right: 0; color: var(--brand-muted); }
+.dt--top-section .input-group .form-control { border-left: 0; min-height: 38px; }
+.dt--top-section .input-group:focus-within .input-group-text,
+.dt--top-section .input-group:focus-within .form-control { border-color: var(--brand-ink); }
+
+/* Table frame */
+.power-grid-table { margin: 0 !important; }
+div:has(> .power-grid-table) { border-radius: var(--brand-radius-card); }
+.table-responsive:has(.power-grid-table) {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid var(--brand-line);
+  border-radius: var(--brand-radius-card);
+  background: var(--brand-surface);
+  overflow: auto;
+}
+
+/* Header */
+.power-grid-table > thead > tr > th {
+  padding: 12px 14px !important;
+  background: var(--brand-bg) !important;
+  border-bottom: 1px solid var(--brand-line) !important;
+  vertical-align: middle;
+}
+.power-grid-table > thead > tr > th:first-child { border-top-left-radius: var(--brand-radius-card); }
+.power-grid-table > thead > tr > th:last-child { border-top-right-radius: var(--brand-radius-card); }
+.power-grid-table > thead th svg { opacity: .55; }
+
+/* Filter row (PowerGrid renders it as the first body row): a compact strip, not a blank data row */
+.power-grid-table > tbody > tr:has(> td[wire\:key^="column-filter"]) > td {
+  background: var(--brand-surface) !important;
+  padding: 8px 14px !important;
+  border-bottom: 1px solid var(--brand-line) !important;
+  --bs-table-accent-bg: transparent;
+}
+.power-grid-table > tbody > tr:has(> td[wire\:key^="column-filter"]):hover > td { background: var(--brand-surface) !important; }
+.power-grid-table > tbody > tr:has(> td[wire\:key^="column-filter"]) .mb-2 { margin-bottom: 0 !important; }
+.power-grid-table > tbody > tr:has(> td[wire\:key^="column-filter"]) .form-control,
+.power-grid-table > tbody > tr:has(> td[wire\:key^="column-filter"]) .form-select,
+.power-grid-table > tbody > tr:has(> td[wire\:key^="column-filter"]) .ts-control {
+  min-height: 34px !important;
+  height: 34px;
+  font-size: 13px !important;
+  padding-top: 4px; padding-bottom: 4px;
+  border-radius: 8px !important;
+  max-width: 170px;
+}
+
+/* Data rows */
+.power-grid-table > tbody > tr > td { padding: 12px 14px !important; font-size: 14px; vertical-align: middle; line-height: 1.4; }
+.power-grid-table > tbody > tr:last-child > td { border-bottom: 0 !important; }
+.power-grid-table > tbody > tr > td:has(> .form-check:only-child), .power-grid-table > thead > tr > th:first-child { width: 44px; }
+.power-grid-table > tbody > tr:nth-of-type(odd):not(:has(> td[wire\:key^="column-filter"])) > td { --bs-table-accent-bg: transparent; }
+.table-striped > tbody > tr:nth-of-type(odd) { background-color: transparent; }
+.power-grid-table > tbody > tr:not(:has(> td[wire\:key^="column-filter"])):hover > td { background: var(--adm-hover) !important; }
+
+/* Images inside tables: one size everywhere (inline styles made rows 90px+ tall) */
+.power-grid-table td img {
+  width: 56px !important;
+  height: 56px !important;
+  object-fit: cover;
+  border-radius: 8px;
+  padding: 0 !important;
+  border: 1px solid var(--brand-line-soft);
+  background: var(--brand-bg);
+}
+.power-grid-table td img[style*="width: 140px"], .power-grid-table td img[style*="width: 200px"], .power-grid-table td img[alt*="Breadcrumb"] { width: 96px !important; }
+.power-grid-table td img[alt="Logo"] { object-fit: contain; width: 72px !important; height: 40px !important; background: transparent; border: 0; }
+
+/* Row actions: same size and calm style in every table; colour only on the icon */
+.power-grid-table .pg-actions .d-flex, .power-grid-table td .d-flex.gap-1 { gap: 6px !important; flex-wrap: nowrap; }
+.power-grid-table td .btn, .power-grid-table td .btn-sm {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 10px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  border-radius: 8px !important;
+  background: var(--brand-surface) !important;
+  border: 1px solid var(--brand-line) !important;
+  color: var(--brand-ink) !important;
+  filter: none !important;
+}
+.power-grid-table td .btn i { font-size: 13px; }
+.power-grid-table td .btn:hover { border-color: var(--brand-ink) !important; }
+.power-grid-table td .btn-primary i, .power-grid-table td .btn-info i { color: var(--brand-primary); }
+.power-grid-table td .btn-danger { color: var(--brand-danger) !important; }
+.power-grid-table td .btn-danger:hover { background: var(--brand-danger-tint) !important; border-color: var(--brand-danger) !important; }
+.power-grid-table td .btn-success { color: var(--brand-success) !important; }
+.power-grid-table td .btn-success:hover { background: var(--brand-success-tint) !important; border-color: var(--brand-success) !important; }
+.power-grid-table td .btn-warning { color: var(--brand-warning) !important; }
+.power-grid-table td .btn-warning:hover { background: var(--brand-warning-tint) !important; border-color: var(--brand-warning) !important; }
+
+/* Empty state */
+.power-grid-table > tbody > tr > td[colspan] { text-align: center; color: var(--brand-muted); padding: 36px 14px !important; font-size: 14px; }
+
+/* Footer: rows per page + "Showing x to y of z" + pagination */
+footer:has(.pagination), .power-grid-table ~ footer, div:has(> .table-responsive .power-grid-table) + .row footer { margin-top: 14px !important; padding: 0 2px !important; align-items: center !important; row-gap: 10px; }
+footer:has(.pagination) label, footer:has(.pagination) small, footer:has(.pagination) span { font-size: 13px; color: var(--brand-muted); font-weight: 400; }
+footer:has(.pagination) .form-select { min-height: 34px; height: 34px; padding-top: 4px; padding-bottom: 4px; font-size: 13px; width: auto; }
+footer:has(.pagination) .pagination { margin: 0; }

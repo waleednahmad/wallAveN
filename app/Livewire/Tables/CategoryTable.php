@@ -74,10 +74,10 @@ final class CategoryTable extends PowerGridComponent
             Column::make('#', 'row_num'),
             Column::make('Image', 'image'),
             Column::make('Breadcrumb', 'breadcrumb_image'),
-            Column::make('Name', 'name')
+            Column::make('Name', 'name')->bodyAttribute('gr-wrap')
                 ->sortable()
                 ->searchable(),
-            Column::make('Description', 'description'),
+            Column::make('Description', 'description')->bodyAttribute('gr-wrap'),
             Column::make('status', 'status')
                 ->toggleable(
                     hasPermission: auth()->check(),
