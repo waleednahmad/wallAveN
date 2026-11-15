@@ -1,46 +1,39 @@
 <form wire:submit.prevent="save" novalidate>
     <div class="row">
 
-        {{-- Image --}}
+        {{-- Variant photo: pick one of the product's photos (click again to clear).
+             The old file input here never worked (the upload was not saved), so it was replaced by this note. --}}
         <div class="col-12">
             <div class="form-group">
-                <label for="image">Image
-                </label>
-                <input type="file" @class(['form-control', 'is-invalid' => $errors->has('image')]) id="image" name="image" value="{{ old('image') }}"
-                    wire:model="image" accept="image/*">
-                @error('image')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                @enderror
+                <div class="adm-photos-head mt-0">
+                    <span class="adm-photos-title">Variant photo</span>
+                    <span class="adm-photos-hint">Pick the photo dealers see for this option. Click it again to clear.</span>
+                </div>
 
                 @if (isset($productImages) && count($productImages))
-                    <div class="images-container variant">
+                    <div class="adm-photo-grid adm-photo-pick">
                         @foreach ($productImages as $prImage)
-                            <!-- Skip the current main image -->
-                            <div @class([
-                                'single-file-card',
-                                'active' => $prImage['id'] == $selectedImageId,
-                            ]) wire:click="setMainImage({{ $prImage['id'] }})">
-                                <img src="{{ thumb($prImage['image'], 240) }}" class="img-fluid" alt="file"
-                                    style="height: 100%; width: 100%; object-fit: contain;">
-
-                                @if ($prImage['id'] == $selectedImageId)
-                                    {{-- Checked icon --}}
-                                    <div class="checked-icon">
-                                        <i class="fas fa-check"></i>
-                                    </div>
+                            @php $grPicked = $prImage['id'] == $selectedImageId; @endphp
+                            <button type="button" wire:key="pick-{{ $prImage['id'] }}" wire:click="setMainImage({{ $prImage['id'] }})"
+                                @class(['adm-photo', 'is-picked' => $grPicked]) aria-pressed="{{ $grPicked ? 'true' : 'false' }}"
+                                aria-label="Use photo {{ $loop->iteration }} for this variant">
+                                <img src="{{ thumb($prImage['image'], 240) }}" alt="" loading="lazy">
+                                @if ($grPicked)
+                                    <span class="adm-photo-check" aria-hidden="true"><i class="fas fa-check"></i></span>
                                 @endif
-                            </div>
+                            </button>
                         @endforeach
                     </div>
+                @else
+                    <div class="adm-hint">This product has no photos yet.</div>
                 @endif
 
-                {{-- @if ($image)
-                    <img src="{{ $image->temporaryUrl() }}" alt="Image" class="mt-2 img-fluid img-thumbnail"
-                        style="max-height: 200px;">
-                @endif --}}
-
+                @if ($product?->id)
+                    <p class="adm-hint-line mt-2">
+                        Need a different photo? Add it to the product's photos first
+                        (<a href="{{ route('dashboard.products.edit', $product->id) }}" target="_blank" rel="noopener">open the product</a>), then pick it here.
+                    </p>
+                @endif
             </div>
         </div>
 

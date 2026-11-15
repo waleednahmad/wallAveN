@@ -993,3 +993,39 @@ body:has(.adm-savebar) .gr-toasts { bottom: 88px; }
 .adm-photo-btn.is-danger { color: var(--brand-danger) !important; }
 /* Livewire sortable ghost while dragging */
 .adm-photo.sortable-ghost { opacity: .4; }
+
+/* Variant photo picker */
+.adm-photo-pick { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
+button.adm-photo { padding: 0; cursor: pointer; }
+.adm-photo.is-picked { border: 2px solid var(--brand-primary); box-shadow: 0 0 0 3px var(--brand-primary-tint); }
+.adm-photo-check {
+  position: absolute; right: 6px; top: 6px; width: 24px; height: 24px; border-radius: 50%;
+  background: var(--brand-primary); color: var(--brand-on-primary); display: inline-flex; align-items: center; justify-content: center; font-size: 11px;
+}
+.adm-photo:focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 2px; }
+.adm-hint-line { margin: 6px 0 0; font-size: 13px; color: var(--brand-muted); }
+.adm-hint-line i { color: var(--brand-accent-strong); margin-right: 4px; }
+
+/* Every file input in the admin (categories, types, banners, settings, quick-create panels):
+   brand button instead of the browser default / Bootstrap blue (app.css). */
+body input[type="file"].form-control,
+body input[type="file"].customized {
+  min-height: 46px; height: auto !important; padding: 6px !important;
+  border: 1px dashed var(--brand-line) !important; border-radius: var(--brand-radius-control) !important;
+  background: var(--brand-bg) !important; color: var(--brand-muted); font-size: 13.5px; cursor: pointer;
+}
+body input[type="file"].form-control:hover,
+body input[type="file"].customized:hover { border-color: var(--brand-ink) !important; }
+body input[type="file"].form-control::file-selector-button,
+body input[type="file"].customized::file-selector-button,
+body input[type="file"].form-control::-webkit-file-upload-button {
+  margin: 0 12px 0 0 !important; padding: 7px 14px !important; height: auto !important;
+  border: 0 !important; border-radius: 8px !important;
+  background: var(--brand-ink) !important; color: #fff !important;
+  font: 600 13px var(--brand-font-body) !important; cursor: pointer; transition: background-color .15s ease;
+}
+body input[type="file"].form-control:hover::file-selector-button,
+body input[type="file"].customized:hover::file-selector-button { background: var(--brand-primary) !important; }
+body input[type="file"].form-control.is-invalid { border-color: var(--brand-danger) !important; }
+/* Image previews under those inputs */
+form .img-thumbnail { padding: 3px; border-radius: 10px; background: var(--brand-surface); }
