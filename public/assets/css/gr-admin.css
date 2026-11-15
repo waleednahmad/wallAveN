@@ -180,12 +180,13 @@ body.layout-fixed .main-sidebar .sidebar::-webkit-scrollbar-thumb { background: 
 .content { padding: 8px 16px 32px; }
 
 .main-footer {
-  background: var(--brand-surface);
-  border-top: 1px solid var(--brand-line);
-  color: var(--brand-muted);
-  font-size: 13px;
-  padding: 14px 20px;
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px;
+  background: transparent; border-top: 1px solid var(--brand-line-soft);
+  color: var(--brand-muted); font-size: 12.5px;
+  padding: 14px 32px;
 }
+.main-footer a { color: var(--brand-muted); text-decoration: underline; text-underline-offset: 2px; }
+.main-footer a:hover { color: var(--brand-primary); }
 .main-footer strong { font-weight: 500; }
 
 /* --------------------------------------------------------------------------
@@ -466,18 +467,27 @@ textarea.form-control { min-height: 96px; }
 /* Product form: category / sub category / type / attribute chips (resources/css/app.css used blue) */
 .category-container { gap: 8px !important; }
 .category-card {
+  display: inline-flex; align-items: center; gap: 7px;
   border: 1px solid var(--brand-line) !important;
-  border-radius: 999px !important;
+  border-radius: 8px !important;
   background: var(--brand-surface) !important;
   color: var(--brand-ink) !important;
-  padding: 6px 14px !important;
-  font-size: 13.5px;
-  font-weight: 500;
+  padding: 6px 12px !important;
+  font-size: 13.5px; font-weight: 500; line-height: 1.35;
+  cursor: pointer; user-select: none;
   transition: border-color .15s ease, background-color .15s ease, color .15s ease !important;
 }
 .category-card p { margin: 0; color: inherit; }
-.category-card:hover { border-color: var(--brand-ink) !important; background: var(--brand-surface) !important; color: var(--brand-ink) !important; }
-.category-card.active { border-color: var(--brand-primary) !important; background: var(--brand-primary) !important; color: var(--brand-on-primary) !important; }
+.category-card:hover { border-color: var(--brand-muted) !important; background: var(--brand-surface) !important; color: var(--brand-ink) !important; }
+.category-card:focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 2px; }
+/* Selected: soft tint with a check, so a long list of picks stays calm and readable */
+.category-card.active { border-color: var(--brand-primary) !important; background: var(--brand-primary-tint) !important; color: var(--brand-primary) !important; font-weight: 600; }
+.category-card.active::before { content: "\f00c"; font-family: "Font Awesome 5 Free"; font-weight: 900; font-size: 11px; }
+/* Section headings inside the picker cards */
+.card-body:has(> .category-container) > h5 { font-size: 15px; font-weight: 600; font-family: var(--brand-font-body); margin-bottom: 12px; gap: 12px; }
+.card-body:has(> .category-container) > h5 small { color: var(--brand-muted); font-weight: 500; font-size: 13px; }
+.card-body:has(> .category-container) > h5 .form-control { font-size: 13.5px; min-height: 34px; }
+.card-body:has(> .category-container) > hr { margin: 18px 0; border-color: var(--brand-line-soft); }
 
 /* Product form: image picker */
 .images-container {
@@ -591,9 +601,12 @@ a.adm-kpi:hover { color: var(--brand-ink); text-decoration: none; box-shadow: 0 
 /* Filter panel under the toolbar */
 .adm-fpanel { margin: -4px 0 14px; padding: 16px 16px 12px; border: 1px solid var(--brand-line); border-radius: var(--brand-radius-card); background: var(--brand-surface); }
 .adm-fpanel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 4px 16px; }
-.adm-fpanel-item .form-label { display: block; margin-bottom: 5px !important; font-size: 12px; font-weight: 600 !important; color: var(--brand-muted); text-transform: none; }
+.adm-fpanel-item label::first-letter { text-transform: uppercase; }
+.adm-fpanel-item label, .adm-fpanel-item .form-label { display: block; margin-bottom: 5px !important; font-size: 12px; font-weight: 600 !important; color: var(--brand-muted); text-transform: none; }
 .adm-fpanel-item .form-control, .adm-fpanel-item .form-select, .adm-fpanel-item select { width: 100%; min-height: 36px; font-size: 13.5px; }
 .adm-fpanel-item .mb-2 { margin-bottom: 8px !important; }
+.adm-fpanel-item .ts-wrapper { margin-bottom: 8px; }
+.adm-fpanel-item .ts-control { min-height: 36px; font-size: 13.5px; }
 .adm-fpanel-item .d-flex.flex-row > div { flex: 1; }
 .adm-fpanel-foot { display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-top: 6px; padding-top: 10px; border-top: 1px solid var(--brand-line); }
 .adm-fpanel-foot .btn-link { color: var(--brand-muted); }
@@ -958,19 +971,23 @@ body.layout-fixed.sidebar-collapse .gr-toasts { left: 98px; }
 /* --------------------------------------------------------------------------
    Product editor: save bar fixed at the bottom of the screen; neutral empty hints
    -------------------------------------------------------------------------- */
+/* Floating card, inset from the sidebar and the screen edges, so it reads as part of the page and not of the menu */
 .adm-savebar {
-  position: fixed; left: 250px; right: 0; bottom: 0; z-index: 1030;
+  position: fixed; left: calc(250px + 24px); right: 24px; bottom: 16px; z-index: 1030;
   display: flex; align-items: center; justify-content: flex-end; gap: 10px; flex-wrap: wrap;
-  padding: 12px 28px; background: var(--brand-nav); color: #fff;
-  box-shadow: 0 -8px 24px rgba(35, 26, 20, .12);
+  padding: 10px 10px 10px 18px; border: 1px solid var(--brand-line); border-radius: var(--brand-radius-card);
+  background: var(--brand-surface); color: var(--brand-ink);
+  box-shadow: 0 12px 32px rgba(35, 26, 20, .16), 0 2px 6px rgba(35, 26, 20, .06);
 }
-.sidebar-collapse .adm-savebar { left: 74px; }
-@media (max-width: 991px) { .adm-savebar { left: 0; } }
-.adm-savebar-text { margin-right: auto; font-size: 14px; font-weight: 600; color: var(--brand-nav-text); }
-.adm-savebar .btn-primary { background: var(--brand-accent) !important; border-color: var(--brand-accent) !important; color: var(--brand-nav) !important; min-width: 140px; }
-.adm-savebar .btn-secondary { background: transparent !important; border-color: rgba(255, 255, 255, .3) !important; color: #fff !important; }
+.sidebar-collapse .adm-savebar { left: calc(74px + 24px); }
+@media (max-width: 991px) { .adm-savebar { left: 12px; right: 12px; bottom: 12px; } }
+.adm-savebar-text { margin-right: auto; display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 500; color: var(--brand-muted); }
+.adm-savebar-text i { color: var(--brand-primary); }
+.adm-savebar-text strong { color: var(--brand-ink); }
+.adm-savebar .btn-primary { min-width: 140px; min-height: 40px; }
 .adm-savebar .alert { margin: 0; padding: 6px 12px; }
-.content-wrapper:has(.adm-savebar) { padding-bottom: 76px; }
+.content-wrapper:has(.adm-savebar) { padding-bottom: 24px; }
+body:has(.adm-savebar) .main-footer { padding-bottom: 96px; }
 .adm-hint { padding: 10px 12px; border-radius: 10px; background: var(--brand-bg); border: 1px dashed var(--brand-line); color: var(--brand-muted); font-size: 13.5px; }
 /* Toasts sit above the product editor's fixed save bar */
 body:has(.adm-savebar) .gr-toasts { bottom: 88px; }

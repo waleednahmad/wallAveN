@@ -33,7 +33,7 @@
             $value = $raw;
         }
 
-        return trim(strip_tags((string) $enabled['label'])) . ($value !== null && $value !== '' ? ': ' . ucfirst((string) $value) : '');
+        return ucfirst(trim(strip_tags((string) $enabled['label']))) . ($value !== null && $value !== '' ? ': ' . ucfirst((string) $value) : '');
     };
 @endphp
 <div>

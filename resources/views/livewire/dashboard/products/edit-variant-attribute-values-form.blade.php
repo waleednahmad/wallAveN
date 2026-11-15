@@ -14,7 +14,7 @@
                     {{-- values --}}
                     <div class="flex-wrap gap-2 d-flex">
                         @foreach ($attribute['values'] as $value)
-                            <div wire:click="selectAttributeValue({{ $attribute['id'] }},{{ $value['id'] }})"
+                            <div role="button" tabindex="0" x-on:keydown.enter.prevent="$el.click()" x-on:keydown.space.prevent="$el.click()" wire:click="selectAttributeValue({{ $attribute['id'] }},{{ $value['id'] }})"
                                 @class([
                                     'category-card ',
                                     'active' => in_array($value['id'], $this->selectedAttributeValues),

@@ -1,10 +1,5 @@
-<footer class="main-footer">
-    <!-- To the right -->
-    <div class="float-right d-none d-sm-inline">
-
-    </div>
-    <!-- Default to the left -->
-    <strong>Copyright &copy;{{ date('Y') }} Golden Rugs |  Designed & Developed by
-        <a href="https://zenith-tech.digital/" target="_blank">Zenith Tech</a>.
-    </strong>
+{{-- Admin footer: company on the left, developer credit on the right (quiet, never competes with the page) --}}
+<footer class="main-footer adm-footer">
+    <span>&copy; {{ date('Y') }} {{ getWebsiteTitle() ?: config('app.name') }}</span>
+    <span class="adm-footer-credit">Designed &amp; developed by <a href="https://zenith-tech.digital/" target="_blank" rel="noopener">Zenith Tech</a></span>
 </footer>

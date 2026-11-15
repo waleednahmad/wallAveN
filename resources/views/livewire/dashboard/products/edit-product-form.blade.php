@@ -138,7 +138,7 @@
                     </h5>
                     <div class="category-container">
                         @forelse ($this->categories as $item)
-                            <div wire:click="toggleCategory({{ $item->id }})" @class([
+                            <div role="button" tabindex="0" x-on:keydown.enter.prevent="$el.click()" x-on:keydown.space.prevent="$el.click()" wire:click="toggleCategory({{ $item->id }})" @class([
                                 'category-card ',
                                 'active' => in_array($item->id, $this->selectedCategories),
                             ])>
@@ -166,7 +166,7 @@
                         </h5>
                         <div class="category-container w-100">
                             @forelse ($this->subCategories as $item)
-                                <div wire:click="toggleSubCategory({{ $item->id }})" @class([
+                                <div role="button" tabindex="0" x-on:keydown.enter.prevent="$el.click()" x-on:keydown.space.prevent="$el.click()" wire:click="toggleSubCategory({{ $item->id }})" @class([
                                     'category-card ',
                                     'active' => in_array($item->id, $this->selectedSubCategories),
                                 ])>
@@ -198,7 +198,7 @@
                         </h5>
                         <div class="category-container w-100">
                             @forelse ($this->productTypes as $item)
-                                <div wire:click="toggleProductType({{ $item->id }})" @class([
+                                <div role="button" tabindex="0" x-on:keydown.enter.prevent="$el.click()" x-on:keydown.space.prevent="$el.click()" wire:click="toggleProductType({{ $item->id }})" @class([
                                     'category-card ',
                                     'active' => in_array($item->id, $this->selectedProductTypes),
                                 ])>
@@ -235,7 +235,7 @@
                     </h5>
                     <div class="category-container">
                         @forelse ($this->productAttributes as $attribute)
-                            <div wire:click="toggleAttribute({{ $attribute->id }})" @class([
+                            <div role="button" tabindex="0" x-on:keydown.enter.prevent="$el.click()" x-on:keydown.space.prevent="$el.click()" wire:click="toggleAttribute({{ $attribute->id }})" @class([
                                 'category-card ',
                                 'active' => in_array($attribute->id, $this->selectedAttributes),
                             ])>
@@ -334,6 +334,7 @@
                                         @endforeach
                                     </div>
                                 @endif
+                            </div>
 
                             <div x-show="isUploading">
                                 <span max="100" x-text="`${progress}%`"></span>
@@ -350,7 +351,7 @@
 
 
             <div class="adm-savebar">
-                <span class="adm-savebar-text">Save to apply your changes</span>
+                <span class="adm-savebar-text"><i class="fas fa-info-circle" aria-hidden="true"></i> Changes are applied when you click <strong>Save</strong></span>
                 <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:loading.remove
                     wire:target="save, uploadedImages" x-bind:disabled="isUploading"
                     x-bind:class="{ 'btn-secondary': isUploading }" x-text="isUploading ? 'Uploading...' : 'Save'">
