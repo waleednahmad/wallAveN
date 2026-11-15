@@ -96,6 +96,20 @@ final class RepresentativeTable extends PowerGridComponent
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
+            // Plain fields are escaped by PowerGrid; columns not listed here would print raw HTML
+            ->add('name')
+            ->add('email')
+            ->add('phone')
+            ->add('address')
+            ->add('city')
+            ->add('state')
+            ->add('zip_code')
+            ->add('taxpayer_identification_number')
+            ->add('social_security_number')
+            ->add('employer_identification_number')
+            ->add('bank_account_type')
+            ->add('bank_routing_number')
+            ->add('bank_account_number')
             ->add('orders_count')
             ->add('sales_cell', fn ($row) => $row->sales_total ? '$' . number_format((float) $row->sales_total, 0) : '<span class="text-muted">—</span>')
             ->add('id')

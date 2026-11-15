@@ -46,6 +46,8 @@ final class PriceListTable extends PowerGridComponent
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
+            // Plain fields are escaped by PowerGrid; columns not listed here would print raw HTML
+            ->add('dealers_count')
             ->add('id')
             ->add('name')
             ->add('percentage', function (PriceList $model) {

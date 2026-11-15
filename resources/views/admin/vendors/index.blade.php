@@ -1,5 +1,10 @@
 @extends('admin.layout.app')
 
+@section('page-actions')
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#createVendor"
+                    aria-controls="createVendor"><i class="fas fa-plus" aria-hidden="true"></i> Add vendor</button>
+@endsection
+
 @section('breadcrumb')
     @include('admin.layout.partials.page-header', [
         'title' => 'Vendors',
@@ -18,14 +23,6 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header">
-            <div class="d-flex align-items-center">
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#createVendor"
-                    aria-controls="createVendor">
-                    Add new vendor
-                </button>
-            </div>
-        </div>
         <div class="card-body">
             <livewire:tables.vendor-table />
         </div>

@@ -1,16 +1,14 @@
-<div class="moda-body">
-    {{-- will be a form with three fields [key,value,description] --}}
+{{-- One store setting: its value (text, number, on/off or image) and what it is for --}}
+<div>
     <form wire:submit.prevent="update">
-        <h6 class="mb-3">
-            {{ $key }}
-        </h6>
+        <p class="adm-static mb-3"><strong>{{ $key ? ucfirst(str_replace(['-', '_'], ' ', $key)) : '' }}</strong></p>
         <div class="mb-3">
             <label for="value" class="form-label">Value</label>
 
             @if ($type == 'select')
                 <select class="form-control" id="value" wire:model="value">
-                    <option value="1">active</option>
-                    <option value="0">inactive</option>
+                    <option value="1">On</option>
+                    <option value="0">Off</option>
                 </select>
             @elseif($type == 'image')
                 <input type="file" class="form-control" id="value" wire:model="image" accept="image/*">
@@ -41,12 +39,20 @@
                 <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>
-        <div class="mb-3">
-            @if ($type == 'image')
+        @if ($type == 'image')
+            <div class="mb-3">
                 {{-- reset main image --}}
-                <button type="button" class="btn btn-danger" wire:click="resetImage">Reset Image</button>
-            @endif
+                <button type="button" class="btn btn-secondary btn-sm" wire:click="resetImage" wire:confirm="Go back to the default image?">
+                    <i class="fas fa-undo" aria-hidden="true"></i> Use the default image
+                </button>
+            </div>
+        @endif
+        <div class="adm-form-actions">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+            <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:target="update, image">
+                <span wire:loading wire:target="update" class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                Save
+            </button>
         </div>
-        <button type="submit" class="btn btn-primary">Update</button>
     </form>
 </div>

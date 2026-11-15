@@ -60,6 +60,9 @@ final class ProductTable extends PowerGridComponent
         $money = fn ($n) => '$' . number_format((float) $n, 2);
 
         return PowerGrid::fields()
+            // Plain fields are escaped by PowerGrid; columns not listed here would print raw HTML
+            ->add('name')
+            ->add('sku')
             ->add('image', function ($value) {
                 $src = ($value->image && file_exists($value->image)) ? thumb($value->image, 240) : asset('dashboard/images/default.webp');
                 return '<img src="' . $src . '" alt="" loading="lazy" class="img-thumbnail">';

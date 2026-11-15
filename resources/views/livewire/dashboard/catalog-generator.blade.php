@@ -10,14 +10,7 @@
 >
     <style>
         .catalog-card { border-radius: var(--brand-radius-card); box-shadow: none; border: 1px solid var(--brand-line) !important; }
-        .catalog-card .card-header {
-            background: var(--brand-nav);
-            color: #fff;
-            border-radius: 14px 14px 0 0 !important;
-            border: 0;
-            padding: 1rem 1.25rem;
-        }
-        .catalog-card .card-header .card-title { color: #fff; font-weight: 600; margin: 0; }
+        .catalog-card .card-header i { color: var(--brand-primary); margin-right: 8px; }
         .catalog-cover-drop {
             border: 2px dashed var(--brand-line);
             border-radius: 10px;
@@ -254,17 +247,17 @@
                         <h5 class="card-title mb-0">Recent Catalogs</h5>
                     </div>
                     @if ($this->hasInProgress)
-                        <span class="badge bg-light text-primary">
+                        <span class="badge badge-info">
                             <span class="spinner-mini"></span> Live updating
                         </span>
                     @endif
                 </div>
 
                 {{-- Filter bar --}}
-                <div class="p-3 border-bottom" style="background:#f8fafc;">
+                <div class="p-3 border-bottom" style="background:var(--brand-bg);">
                     <div class="position-relative mb-2">
                         <i class="fas fa-search position-absolute"
-                           style="top:50%; left:.75rem; transform:translateY(-50%); color:#94a3b8; font-size:.8rem;"></i>
+                           style="top:50%; left:.75rem; transform:translateY(-50%); color:var(--brand-muted); font-size:.8rem;"></i>
                         <input type="text" class="form-control form-control-sm"
                                style="padding-left:2rem;"
                                wire:model.live.debounce.400ms="search"

@@ -1,5 +1,10 @@
 @extends('admin.layout.app')
 
+@section('page-actions')
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#createProductType"
+                    aria-controls="createProductType"><i class="fas fa-plus" aria-hidden="true"></i> Add product type</button>
+@endsection
+
 @section('breadcrumb')
     @include('admin.layout.partials.page-header', [
         'title' => 'Product types',
@@ -18,14 +23,6 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header">
-            <div class="d-flex align-items-center">
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#createProductType"
-                    aria-controls="createProductType">
-                    Add new product type
-                </button>
-            </div>
-        </div>
         <div class="card-body">
             <livewire:tables.product-type-table />
         </div>

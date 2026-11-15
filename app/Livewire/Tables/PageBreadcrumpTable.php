@@ -42,6 +42,9 @@ final class PageBreadcrumpTable extends PowerGridComponent
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
+            // Plain fields are escaped by PowerGrid; columns not listed here would print raw HTML
+            ->add('name')
+            ->add('title')
             ->add('id')
             ->add('image', function ($value) {
                 if (file_exists($value->image) && $value->image != null) {
@@ -54,13 +57,13 @@ final class PageBreadcrumpTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('page name', 'name')->bodyAttribute('gr-wrap')
+            Column::make('Page', 'name')->bodyAttribute('gr-wrap')
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Title ', 'title')->bodyAttribute('gr-wrap'),
+            Column::make('Heading', 'title')->bodyAttribute('gr-wrap'),
 
-            Column::make('Breadcrumb image', 'image')->sortable(),
+            Column::make('Banner', 'image'),
 
             Column::action('Action')
         ];

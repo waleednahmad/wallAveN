@@ -1,5 +1,9 @@
 @extends('admin.layout.app')
 
+@section('page-actions')
+    <a class="btn btn-primary" href="{{ route('dashboard.products.create') }}"><i class="fas fa-plus" aria-hidden="true"></i> Add product</a>
+@endsection
+
 @section('breadcrumb')
     @include('admin.layout.partials.page-header', [
         'title' => 'Products',
@@ -20,14 +24,6 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header">
-            <div class="d-flex align-items-center">
-                <a class="btn btn-primary" href="{{ route('dashboard.products.create') }}">
-                    <i class="fas fa-plus"></i>
-                    Add new product
-                </a>
-            </div>
-        </div>
         <div class="card-body">
             <livewire:tables.product-table />
         </div>

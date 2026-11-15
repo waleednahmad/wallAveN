@@ -1,5 +1,10 @@
 @extends('admin.layout.app')
 
+@section('page-actions')
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#createCategory"
+                    aria-controls="createCategory"><i class="fas fa-plus" aria-hidden="true"></i> Add category</button>
+@endsection
+
 @section('breadcrumb')
     @include('admin.layout.partials.page-header', [
         'title' => 'Categories',
@@ -18,14 +23,6 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header">
-            <div class="d-flex align-items-center">
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#createCategory"
-                    aria-controls="createCategory">
-                    Add new category
-                </button>
-            </div>
-        </div>
         <div class="card-body">
             <livewire:tables.category-table />
         </div>

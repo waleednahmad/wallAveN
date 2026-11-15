@@ -1,21 +1,18 @@
 @extends('admin.layout.app')
 
+@section('page-actions')
+    <a class="btn btn-secondary" href="{{ route('frontend.product', $product->slug) }}" target="_blank" rel="noopener"><i class="fas fa-external-link-alt" aria-hidden="true"></i> View in store</a>
+    <a class="btn btn-secondary" href="{{ route('dashboard.products.edit', $product->id) }}"><i class="fas fa-pen" aria-hidden="true"></i> Edit product</a>
+@endsection
+
 @section('breadcrumb')
     @include('admin.layout.partials.page-header', [
-        'title' => 'Product Variants',
+        'title' => 'Variants',
         'links' => [
-            [
-                'name' => 'Dashboard',
-                'url' => route('dashboard'),
-            ],
-            [
-                'name' => 'Products',
-                'url' => route('dashboard.products.index'),
-            ],
-    
-            [
-                'name' => 'Create Variant',
-            ],
+            ['name' => 'Dashboard', 'url' => route('dashboard')],
+            ['name' => 'Products', 'url' => route('dashboard.products.index')],
+            ['name' => e(\Illuminate\Support\Str::limit($product->name, 40)), 'url' => route('dashboard.products.edit', $product->id)],
+            ['name' => 'Variants'],
         ],
     ])
 @endsection

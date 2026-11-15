@@ -111,6 +111,13 @@ final class DealerTable extends PowerGridComponent
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
+            // Plain fields are escaped by PowerGrid; columns not listed here would print raw HTML
+            ->add('company_name')
+            ->add('email')
+            ->add('address')
+            ->add('phone')
+            ->add('city')
+            ->add('state')
             ->add('id')
             // Approved date, or where the application stands
             ->add('approved_cell', function ($row) {

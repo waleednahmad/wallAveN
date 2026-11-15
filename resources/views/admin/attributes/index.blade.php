@@ -1,5 +1,9 @@
 @extends('admin.layout.app')
 
+@section('page-actions')
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createAttributeModal"><i class="fas fa-plus" aria-hidden="true"></i> Add attribute</button>
+@endsection
+
 @section('breadcrumb')
     @include('admin.layout.partials.page-header', [
         'title' => 'Attributes',
@@ -17,14 +21,6 @@
 @endsection
 @section('content')
     <div class="card">
-        <div class="card-header">
-            <div class="d-flex align-items-center">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createAttributeModal">
-                    Add new Attribute
-                </button>
-
-            </div>
-        </div>
         <div class="card-body">
             <livewire:tables.attribute-table />
         </div>

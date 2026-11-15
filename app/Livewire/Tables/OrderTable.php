@@ -176,6 +176,11 @@ final class OrderTable extends PowerGridComponent
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
+            // Plain fields are escaped by PowerGrid; columns not listed here would print raw HTML
+            ->add('po_number')
+            ->add('dealer_email')
+            ->add('dealer_phone')
+            ->add('quantity')
             ->add('id')
             // ->add('company_name', function (Order $order) {
             //     return $order->dealer ? $order->dealer->company_name : '';

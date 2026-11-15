@@ -46,9 +46,11 @@
             </div>
         </div>
 
-        <!-- /.card-body -->
-        <button type="submit" class="btn btn-success" wire:loading.attr="disabled">
-            Update
+        <div class="adm-form-actions">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+            <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
+            Update password
         </button>
+        </div>
     </div>
 </form>

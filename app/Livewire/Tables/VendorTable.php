@@ -67,6 +67,8 @@ final class VendorTable extends PowerGridComponent
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
+            // Plain fields are escaped by PowerGrid; columns not listed here would print raw HTML
+            ->add('name')
             ->add('id')
             ->add('status_label', function ($row) {
                 return $row->status ? "Active" : "Inactive";

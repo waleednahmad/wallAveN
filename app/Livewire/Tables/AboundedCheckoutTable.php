@@ -62,6 +62,11 @@ final class AboundedCheckoutTable extends PowerGridComponent
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
+            // Plain fields are escaped by PowerGrid; columns not listed here would print raw HTML
+            ->add('company_name')
+            ->add('email')
+            ->add('phone')
+            ->add('total_cart_quantity')
             ->add('id')
             ->add('dealer_cell', function ($row) {
                 $sub = array_map(fn ($v) => '<span class="adm-nowrap">' . e($v) . '</span>', array_filter([$row->email, $row->phone]));

@@ -44,27 +44,37 @@ final class PublicSettingTable extends PowerGridComponent
 
     public function fields(): PowerGridFields
     {
+        $switches = ['activate vendor', 'show become a rep in the menu', 'toggle show category & shop pages', 'activate-large-menu'];
+        $images = ['main logo', 'favicon'];
+
         return PowerGrid::fields()
             ->add('id')
-            ->add('value', function ($value) {
-                if ($value->key == 'activate vendor' || $value->key == 'show become a rep in the menu' || $value->key == 'toggle show category & shop pages' || $value->key == 'activate-large-menu') {
-                    return $value->value == 1 ? "<span class='badge badge-success'>Active</span>" : "<span class='badge badge-danger'>Inactive</span>";
-                } elseif ($value->key == "main logo" || $value->key == "favicon") {
-                    return "<img src='" . asset($value->value) . "' alt='Logo' class='img-thumbnail' style='width: 90px;'>";
-                } else {
-                    return $value->value;
+            // "activate-large-menu" -> "Activate large menu" (the key itself stays as the code expects it)
+            ->add('setting_name', fn ($row) => e(ucfirst(str_replace(['-', '_'], ' ', (string) $row->key))))
+            ->add('value', function ($row) use ($switches, $images) {
+                if (in_array($row->key, $switches, true)) {
+                    return $row->value == 1 ? "<span class='badge badge-success'>On</span>" : "<span class='badge badge-secondary'>Off</span>";
                 }
+                if (in_array($row->key, $images, true)) {
+                    return "<img src='" . e(asset($row->value)) . "' alt='' class='img-thumbnail' loading='lazy'>";
+                }
+                // Escaped: values can hold code (e.g. the analytics snippet) that must not run in the admin
+                $text = trim((string) $row->value);
+                if ($text === '') {
+                    return '<span class="text-muted">Not set</span>';
+                }
+                return str_contains($text, '<')
+                    ? '<code class="adm-code">' . e(\Illuminate\Support\Str::limit($text, 80)) . '</code>'
+                    : e(\Illuminate\Support\Str::limit($text, 120));
             })
-            ->add('description', function ($row) {
-                return "<p style='max-width: 350px ; text-wrap: wrap'>$row->description</p>";
-            })
+            ->add('description', fn ($row) => e((string) $row->description))
             ->add('created_at');
     }
 
     public function columns(): array
     {
         return [
-            Column::make('Key', 'key')->bodyAttribute('gr-wrap')
+            Column::make('Setting', 'setting_name', 'key')->bodyAttribute('gr-wrap')
                 ->searchable(),
 
             Column::make('Value', 'value')->bodyAttribute('gr-wrap')

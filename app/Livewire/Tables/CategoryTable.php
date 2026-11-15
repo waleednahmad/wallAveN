@@ -45,6 +45,9 @@ final class CategoryTable extends PowerGridComponent
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
+            // Plain fields are escaped by PowerGrid; columns not listed here would print raw HTML
+            ->add('name')
+            ->add('products_count')
             ->add('id')
 
             ->add('image', function ($value) {
@@ -69,7 +72,7 @@ final class CategoryTable extends PowerGridComponent
     {
         return [
             Column::make('Image', 'image'),
-            Column::make('Breadcrumb', 'breadcrumb_image'),
+            Column::make('Banner', 'breadcrumb_image'),
             Column::make('Name', 'name')->bodyAttribute('gr-wrap')
                 ->sortable()
                 ->searchable(),

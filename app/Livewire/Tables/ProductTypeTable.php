@@ -50,6 +50,9 @@ final class ProductTypeTable extends PowerGridComponent
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
+            // Plain fields are escaped by PowerGrid; columns not listed here would print raw HTML
+            ->add('name')
+            ->add('products_count')
             ->add('id')
             ->add('image', function ($value) {
                 if (file_exists($value->image) && $value->image != null) {
