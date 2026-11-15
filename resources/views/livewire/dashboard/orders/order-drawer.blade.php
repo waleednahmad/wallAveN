@@ -38,10 +38,14 @@
             @else
                 <ol class="adm-steps" aria-label="Order progress">
                     @foreach ($steps as $key => $label)
-                        @php $i = $loop->index; @endphp
-                        <li @class(['adm-step', 'is-done' => $stepIndex !== false && $i < $stepIndex, 'is-on' => $i === $stepIndex])>
+                        @php
+                            $i = $loop->index;
+                            // A completed order shows every step ticked, including the last one
+                            $isDone = $stepIndex !== false && ($i < $stepIndex || $order->status === 'completed');
+                        @endphp
+                        <li @class(['adm-step', 'is-done' => $isDone, 'is-on' => $i === $stepIndex])>
                             <span class="adm-step-dot" aria-hidden="true">
-                                @if ($stepIndex !== false && $i < $stepIndex)
+                                @if ($isDone)
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12.5l4.2 4.2L19 7"/></svg>
                                 @else
                                     {{ $i + 1 }}
