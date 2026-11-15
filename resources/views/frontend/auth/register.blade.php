@@ -26,6 +26,7 @@
             <div class="gr-card" style="flex: 999 1 560px; min-width: 0; padding: clamp(24px, 4vw, 40px);">
                 <form action="{{ route('frontend.submitRegister') }}" method="POST" id="demo-form" enctype="multipart/form-data">
                     @csrf
+                    @include('partials.form-guard')
                     <input type="hidden" id="ref" name="ref" value="{{ request()->get('ref') }}">
 
                     @if ($errors->any())

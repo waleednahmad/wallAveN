@@ -12,7 +12,9 @@ Route::controller(RepresentativeController::class)
     ->group(
         function () {
             Route::get('/register', 'register')->name('register');
-            Route::post('submit-register', 'submitRegister')->name('submitRegister');
+            // Bot guard (honeypot + timing) and at most 5 attempts a minute per visitor
+            Route::post('submit-register', 'submitRegister')->name('submitRegister')
+                ->middleware([\App\Http\Middleware\BlockFormBots::class, 'throttle:5,1']);
         }
     );
 

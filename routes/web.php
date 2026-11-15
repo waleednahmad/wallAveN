@@ -33,7 +33,9 @@ Route::controller(FrontController::class)
                 CheckIsDealerLoggedIn::class
             ])->group(function () {
                 Route::get('register', 'register')->name('frontend.register');
-                Route::post('submit-register', 'submitRegister')->name('frontend.submitRegister');
+                // Bot guard (honeypot + timing) and at most 5 attempts a minute per visitor
+                Route::post('submit-register', 'submitRegister')->name('frontend.submitRegister')
+                    ->middleware([\App\Http\Middleware\BlockFormBots::class, 'throttle:5,1']);
 
                 Route::get('login', 'login')->name('login');
                 Route::post('submit-login', 'submitLogin')->name('frontend.submitLogin');

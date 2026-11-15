@@ -19,6 +19,7 @@
             <div class="gr-card" style="flex: 999 1 560px; min-width: 0; padding: clamp(24px, 4vw, 40px);">
                 <form class="row g-4" action="{{ route('representative.submitRegister') }}" method="POST" enctype="multipart/form-data">
                             @csrf
+                            @include('partials.form-guard')
                             <div class="col-md-6">
                                 <div class="mb-1">
                                     <label for="name" class="form-label">Name
