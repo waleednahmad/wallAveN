@@ -19,11 +19,39 @@
 
 
 @section('content')
-    <div class="card">
-        <div class="card-body">
-            <livewire:tables.dealer-table />
+    @php
+        $grTab = in_array(request('tab'), ['applications', 'approved', 'inactive', 'declined'], true) ? request('tab') : 'all';
+        $grCounts = [
+            'all' => \App\Models\Dealer::count(),
+            'applications' => \App\Models\Dealer::pendingApplication()->count(),
+            'approved' => \App\Models\Dealer::where('is_approved', true)->count(),
+            'inactive' => \App\Models\Dealer::where('status', false)->count(),
+            'declined' => \App\Models\Dealer::whereNotNull('rejected_at')->count(),
+        ];
+        $grLabels = ['all' => 'All', 'applications' => 'Applications', 'approved' => 'Approved', 'inactive' => 'Inactive', 'declined' => 'Declined'];
+    @endphp
+
+    {{-- Tabs: counts move live when an application is approved or declined --}}
+    <nav class="adm-tabs" aria-label="Dealer status"
+        x-data="{ c: @js($grCounts) }"
+        x-on:dealer-applications-changed.window="c.applications = Math.max(0, c.applications - 1); c[$event.detail.result] = (c[$event.detail.result] || 0) + 1">
+        @foreach ($grLabels as $grKey => $grLabel)
+            <a href="{{ route('dashboard.dealers.index', $grKey === 'all' ? [] : ['tab' => $grKey]) }}"
+                @class(['adm-tab', 'is-on' => $grTab === $grKey]) @if ($grTab === $grKey) aria-current="page" @endif>
+                {{ $grLabel }} <span class="adm-tab-n" x-text="c.{{ $grKey }}">{{ number_format($grCounts[$grKey]) }}</span>
+            </a>
+        @endforeach
+    </nav>
+
+    @if ($grTab === 'applications')
+        <livewire:dashboard.dealers.applications />
+    @else
+        <div class="card">
+            <div class="card-body">
+                <livewire:tables.dealer-table />
+            </div>
         </div>
-    </div>
+    @endif
 
     {{-- Update Password --}}
     <div class="offcanvas offcanvas-end" tabindex="-1" id="updatePassword" aria-labelledby="updatePasswordLabel">

@@ -9,6 +9,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
@@ -24,6 +25,10 @@ final class DealerTable extends PowerGridComponent
 {
     use WithExport;
     public string $tableName = 'dealer-table-davd0q-table';
+
+    /** Tab on the dealers page (?tab=approved). "applications" shows review cards instead of this table. */
+    #[Url(as: 'tab', except: 'all')]
+    public string $tab = 'all';
     public $fileName = '';
 
     public function setUp(): array
@@ -83,7 +88,11 @@ final class DealerTable extends PowerGridComponent
     #[On('reloadDealers')]
     public function datasource(): Builder
     {
-        return Dealer::with('priceList')->orderBy('created_at', 'desc');
+        return Dealer::with('priceList')
+            ->when($this->tab === 'approved', fn ($q) => $q->where('is_approved', true))
+            ->when($this->tab === 'inactive', fn ($q) => $q->where('status', false))
+            ->when($this->tab === 'declined', fn ($q) => $q->whereNotNull('rejected_at'))
+            ->orderBy('created_at', 'desc');
     }
 
     public function relationSearch(): array
@@ -226,28 +235,15 @@ final class DealerTable extends PowerGridComponent
     public function approve($rowId): void
     {
         $dealer = Dealer::find($rowId);
-        $dealerEmail = $dealer->email;
         if (!$dealer) {
-            $this->js('toastr.error("Dealer not found")');
+            $this->dispatch('error', 'Dealer not found');
             return;
         }
 
-        $dealer->update([
-            'is_approved' => true,
-            'approved_at' => now(),
-        ]);
+        // Approval, default password (if none) and the "Dealer Accepted" email live on the model
+        $dealer->approveApplication();
 
-        // Update the password if the password was empty or null
-        if (empty($dealer->password)) {
-            $dealer->update([
-                'password' => Hash::make('Password123')
-            ]);
-        }
-
-        // Send email to dealer with password
-        Mail::to($dealerEmail)->send(new DealerAccepted($dealer));
-
-        $this->js('toastr.success("Dealer approved successfully")');
+        $this->dispatch('success', 'Dealer approved and emailed');
         $this->refresh();
     }
 

@@ -771,3 +771,55 @@ footer:has(.pagination) .pagination { margin: 0; }
 
 /* "Open" button in the orders table */
 .power-grid-table td .btn span { font-weight: 600; }
+
+/* --------------------------------------------------------------------------
+   Dealer applications review (Dealers page, Applications tab)
+   -------------------------------------------------------------------------- */
+a.adm-tab { text-decoration: none; }
+.adm-apps-tools { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.adm-apps-search {
+  flex: 1 1 260px; max-width: 380px; display: flex; align-items: center; gap: 8px;
+  height: 40px; padding: 0 12px; margin: 0;
+  border: 1px solid var(--brand-line); border-radius: var(--brand-radius-control); background: var(--brand-surface);
+  color: var(--brand-muted); font-weight: 400;
+}
+.adm-apps-search:focus-within { border-color: var(--brand-ink); box-shadow: var(--adm-focus-ring); }
+.adm-apps-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: 14px var(--brand-font-body); color: var(--brand-ink); }
+.adm-apps-hint { margin-left: auto; font-size: 13px; color: var(--brand-muted); }
+
+.adm-apps { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 16px; }
+@media (max-width: 575px) { .adm-apps { grid-template-columns: 1fr; } }
+.adm-app {
+  display: flex; flex-direction: column; gap: 14px; padding: 20px;
+  background: var(--brand-surface); border: 1px solid var(--brand-line); border-radius: var(--brand-radius-card);
+}
+.adm-app.is-declining { border-color: var(--brand-primary); box-shadow: 0 0 0 3px var(--brand-primary-tint); }
+.adm-app-head { display: flex; align-items: flex-start; gap: 12px; }
+.adm-app-title { min-width: 0; }
+.adm-app-title h3 { margin: 0; font-family: var(--brand-font-display); font-weight: 400 !important; font-size: 22px; line-height: 1.2; }
+.adm-app-title p { margin: 3px 0 0; font-size: 13px; color: var(--brand-muted); }
+.adm-age { margin-left: auto; flex: none; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+.adm-age.is-old { background: var(--brand-danger-tint); color: var(--brand-danger); }
+.adm-age.is-mid { background: var(--brand-warning-tint); color: var(--brand-warning); }
+.adm-age.is-new { background: var(--brand-success-tint); color: var(--brand-success); }
+.adm-app-meta { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 16px; }
+.adm-app-meta dt { font-size: 12px; font-weight: 500; color: var(--brand-muted); margin: 0 0 2px; }
+.adm-app-meta dd { margin: 0; font-size: 14px; overflow-wrap: anywhere; }
+.adm-app-meta dd a { text-decoration: none; }
+.adm-app-msg { margin: 0; font-size: 14px; color: var(--brand-muted); font-style: italic; line-height: 1.5; }
+.adm-app-doc {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  border: 1px dashed var(--brand-line); border-radius: 10px; background: var(--brand-bg);
+  font-size: 13px; color: var(--brand-ink); text-decoration: none;
+}
+.adm-app-doc:hover { border-color: var(--brand-ink); color: var(--brand-ink); }
+.adm-app-doc.is-missing { border-style: solid; border-color: var(--brand-warning-tint); background: var(--brand-warning-tint); color: var(--brand-warning); }
+.adm-app-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; }
+.adm-app-actions .btn { min-height: 40px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.adm-app-decline { display: flex; flex-direction: column; gap: 6px; margin: 0; }
+.adm-app-decline-q { margin: 0 0 4px; font-weight: 600; font-size: 15px; }
+
+/* Empty state (neutral, never red) */
+.adm-empty { text-align: center; padding: 48px 20px; background: var(--brand-surface); border: 1px solid var(--brand-line); border-radius: var(--brand-radius-card); }
+.adm-empty-title { margin: 0 0 6px; font-family: var(--brand-font-display); font-size: 22px; }
+.adm-empty-text { margin: 0; color: var(--brand-muted); font-size: 14px; }

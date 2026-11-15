@@ -39,7 +39,7 @@
             </a>
         </div>
         <div class="col-lg-3 col-sm-6 mb-3">
-            <a href="{{ route('dashboard.dealers.index') }}" @class(['adm-kpi', 'is-alert' => $pendingDealersCount > 0])>
+            <a href="{{ route('dashboard.dealers.index', ['tab' => 'applications']) }}" @class(['adm-kpi', 'is-alert' => $pendingDealersCount > 0])>
                 <p class="adm-kpi-label"><i class="fas fa-user-clock"></i> Dealer applications</p>
                 <p class="adm-kpi-value">{{ number_format($pendingDealersCount) }}</p>
                 <p class="adm-kpi-sub">waiting for approval · {{ number_format($approvedDealers) }} approved dealers</p>
@@ -112,7 +112,7 @@
             <div class="card h-100 mb-0">
                 <div class="card-header d-flex align-items-center">
                     <h3 class="card-title mb-0">Applications waiting</h3>
-                    <a href="{{ route('dashboard.dealers.index') }}" class="ml-auto small">All dealers →</a>
+                    <a href="{{ route('dashboard.dealers.index', ['tab' => 'applications']) }}" class="ml-auto small">Review all →</a>
                 </div>
                 <div class="card-body p-0">
                     <ul class="list-group list-group-flush">
