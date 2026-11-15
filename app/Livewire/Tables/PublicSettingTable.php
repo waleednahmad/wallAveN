@@ -50,9 +50,12 @@ final class PublicSettingTable extends PowerGridComponent
         return PowerGrid::fields()
             ->add('id')
             // "activate-large-menu" -> "Activate large menu" (the key itself stays as the code expects it)
-            ->add('setting_name', fn ($row) => $row->key === 'toggle show category & shop pages'
-                ? 'Catalog for visitors'
-                : e(ucfirst(str_replace(['-', '_'], ' ', (string) $row->key))))
+            ->add('setting_name', fn ($row) => match ($row->key) {
+                'toggle show category & shop pages' => 'Catalog for visitors',
+                'opening hours mon-sat' => 'Opening hours (Mon – Sat)',
+                'opening hours sunday' => 'Opening hours (Sunday)',
+                default => e(ucfirst(str_replace(['-', '_'], ' ', (string) $row->key))),
+            })
             ->add('value', function ($row) use ($switches, $images) {
                 if ($row->key === 'toggle show category & shop pages') {
                     return match ((string) $row->value) {
