@@ -149,7 +149,7 @@ class FrontController extends Controller
         // Confirmation to the applicant. The admins are told by DealerObserver::created (one place only).
         // A mail problem must not turn a saved application into an error page.
         try {
-            Mail::to($dealer->email)->send(new DealerApplicationReceived());
+            Mail::to($dealer->email)->send(new DealerApplicationReceived($dealer));
         } catch (\Throwable $e) {
             report($e);
         }

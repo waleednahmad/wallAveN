@@ -16,16 +16,19 @@ class RepresentativeObserver
     public function created(Representative $representative): void
     {
 
-        // Send a welcome email to the dealer
-        Mail::to($representative->email)->send(new RepresentativeApplicationReceived());
+        // Confirmation to the applicant, then tell the admins. A mail problem never blocks the sign-up.
+        try {
+            Mail::to($representative->email)->send(new RepresentativeApplicationReceived($representative));
+        } catch (\Throwable $e) {
+            report($e);
+        }
 
-        // Verify the dealer's email address (from the laravel auth)
-        // event(new Registered($dealer)); 
-
-        // Send a notification email to the admin
-        $admins =  User::all();
-        foreach ($admins as $admin) {
-            Mail::to($admin->email)->send(new NewRepresentativeApplicationReceived($representative));
+        foreach (User::whereNotNull('email')->pluck('email') as $adminEmail) {
+            try {
+                Mail::to($adminEmail)->send(new NewRepresentativeApplicationReceived($representative));
+            } catch (\Throwable $e) {
+                report($e);
+            }
         }
     }
 

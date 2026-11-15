@@ -1,259 +1,73 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="UTF-8">
-    <title>New Order Placed - {{ getWebsiteTitle() }}</title>
-
-    <style>
-        .text-end {
-            text-align: right;
+@extends('emails.layout')
+@php
+    // One email, three readers: the dealer, their sales rep and the admins
+    $audience = $audience ?? 'dealer';
+    $dealer = $order->dealer;
+    $dealerName = $dealer?->company_name ?: ($dealer?->name ?: 'a dealer');
+    $items = $order->orderItems;
+    $shown = $items->take(10);
+    $more = $items->count() - $shown->count();
+    $money = fn ($n) => '$' . number_format((float) $n, 2);
+    $placedBy = $order->representative_id ? 'Sales rep' : ($order->admin_id ? 'Our team' : 'Online by the dealer');
+    $specs = function ($item) {
+        $attrs = is_array($item->attributes) ? $item->attributes : (json_decode((string) $item->attributes, true) ?: []);
+        $parts = [];
+        foreach ($attrs as $k => $v) {
+            if ($v === null || $v === '' || strtolower((string) $v) === 'none' || strtolower((string) $k) === 'none') continue;
+            $parts[] = ucwords((string) $k) . ' ' . str_replace('"', "'", (string) $v);
         }
-    </style>
-</head>
+        return implode(' · ', $parts);
+    };
+    [$heading, $intro, $btnUrl, $btnLabel] = match ($audience) {
+        'admin' => ['New order #' . $order->id, $dealerName . ' placed an order. It is waiting in Pending.', route('dashboard.orders.index', ['order' => $order->id]), 'Open the order'],
+        'rep' => ['New order from ' . $dealerName, 'One of your dealers placed order #' . $order->id . '.', route('representative.dashboard'), 'Open your dashboard'],
+        default => ['Thanks, we received your order', 'Order #' . $order->id . ' is in. We will review it and let you know as soon as it moves to processing.', route('dealer.orders.print', $order->id), 'View the invoice'],
+    };
+@endphp
 
-<body style="font-family: Arial, sans-serif; background-color: #F5EFE6; padding: 20px; text-align: center;">
-    <div style="max-width: 900px; background: #FFFCF7; padding: 28px; border-radius: 14px; border: 1px solid #E3D8C8; margin: auto;">
-        <header style="text-align: center; margin-bottom: 20px;">
-            <img src="{{ getMainImage() }}" alt="{{ getWebsiteTitle() }}" style="max-width: 200px;">
-            <h2 style="color: #231A14;">New Order Placed</h2>
-            <p style="font-size: 16px; color: #5F534A;">
-                A new order has been placed on the <strong>{{ getWebsiteTitle() }}</strong> website.
-            </p>
+@section('preheader', 'Order #' . $order->id . ' · ' . number_format((int) $items->sum('quantity')) . ' items · ' . $money($order->total))
+@section('eyebrow', 'Order #' . $order->id)
+@section('heading', $heading)
 
-        </header>
-        @php
-            $address = $order?->dealer->address ? explode(',', $order->dealer->address)[0] : '---';
-            $city = $order?->dealer->city ?? '---';
-            $state = $order?->dealer->state ?? '---';
-            $zip_code = $order?->dealer->zip_code ?? '---';
-        @endphp
+@section('content')
+    <p style="margin: 0;">{{ $intro }}</p>
 
+    @include('emails.partials.details', ['rows' => [
+        'Dealer' => $audience === 'dealer' ? null : $dealerName,
+        'Order' => '#' . $order->id,
+        'PO number' => $order->po_number,
+        'Placed' => $order->created_at?->format('M j, Y · g:i A'),
+        'Placed by' => $audience === 'dealer' ? null : $placedBy,
+    ]])
 
-        <div
-            style="border: 1px solid #E3D8C8; padding: 10px; margin-bottom: 20px; border-radius: 10px; overflow: hidden; text-align: left !important;">
-            {{-- Bill to --}}
-            <section style="float: left; width: 32%; margin-right: 2%;">
-                <p>
-                    <strong>Name:</strong> {{ $name }} <br>
-                    <span
-                        style="font-weight: bold; color: #231A14; display: block; margin-bottom: 4px; font-size: 14px; margin-top: 7px;">
-                        BILL TO
-                    </span>
-                    {{ $address }}<br>
-                    {{ $city }}{{ $city != '---' ? ',' : '' }}
-                    {{ $state }}{{ $state != '---' ? ' ' : '' }}
-                    {{ $zip_code }}
-                </p>
-            </section>
-            <section style="float: left; width: 32%; margin-right: 2%;">
-                <p>
-                    <strong>Phone:</strong> <a href="tel:{{ $phone }}">{{ $phone }}</a> <br>
-                    <span
-                        style="font-weight: bold; color: #231A14; display: block; margin-bottom: 4px; font-size: 14px; margin-top: 7px;">
-                        SHIP TO
-                    </span>
-                    @if ($order?->shipping_address)
-                        <strong>
-                            {{ $order?->shipping_address }}
-                        </strong>
-                    @else
-                        <strong>
-                            {{ $address }}<br>
-                            {{ $city }}{{ $city != '---' ? ',' : '' }}
-                            {{ $state }}{{ $state != '---' ? ' ' : '' }}
-                            {{ $zip_code }}
-                        </strong>
-                    @endif
-                </p>
-            </section>
-            <section style="float: left; width: 32%;">
-                <table style="text-align: left; width: 100%; border-collapse: collapse;">
-                    <tr>
-                        <th style="font-size: 14px;">INVOICE</th>
-                        <td>{{ $order?->id }}</td>
-                    </tr>
-                    <tr>
-                        <th style="font-size: 14px;">DATE</th>
-                        <td>{{ $order?->created_at->format('m/d/Y') }}</td>
-                    </tr>
-                    <tr>
-                        <th style="font-size: 14px;">DUE DATE</th>
-                        <td>{{ $order?->created_at->format('m/d/Y') }}</td>
-                    </tr>
-                    <tr>
-                        <th style="font-size: 14px;">PLACED BY</th>
-                        @if ($order?->representative_id)
-                            <td>
-                                Sales Rep
-                            </td>
-                        @elseif($order?->admin_id)
-                            <td>
-                                Admin
-                            </td>
-                        @else
-                            <td>
-                                Dealer
-                            </td>
-                        @endif
-                    </tr>
-                </table>
-            </section>
-            <div style="clear: both;"></div>
-        </div>
-        <br>
+    {{-- Lines (first 10) --}}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 18px 0 0;">
+        @foreach ($shown as $item)
+            <tr>
+                <td style="padding: 10px 0; border-bottom: 1px solid #EFE6D8; font-family: Helvetica, Arial, sans-serif; vertical-align: top;">
+                    <span style="font-size: 14px; color: #231A14; font-weight: bold;">{{ $item->name }}</span><br>
+                    <span style="font-size: 12.5px; color: #8C8178;">{{ trim(implode(' · ', array_filter([$item->sku ? 'SKU ' . $item->sku : null, $specs($item)]))) }}</span>
+                </td>
+                <td style="padding: 10px 0 10px 12px; border-bottom: 1px solid #EFE6D8; font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #5F534A; white-space: nowrap; text-align: right; vertical-align: top;">
+                    {{ (int) $item->quantity }} × {{ $money($item->price) }}<br>
+                    <strong style="color: #231A14; font-size: 14px;">{{ $money($item->total) }}</strong>
+                </td>
+            </tr>
+        @endforeach
+        @if ($more > 0)
+            <tr>
+                <td colspan="2" style="padding: 10px 0; border-bottom: 1px solid #EFE6D8; font-family: Helvetica, Arial, sans-serif; font-size: 13px; color: #5F534A;">
+                    and {{ $more }} more {{ \Illuminate\Support\Str::plural('line', $more) }} — see the full order.
+                </td>
+            </tr>
+        @endif
+        <tr>
+            <td style="padding: 14px 0 0; font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: #231A14;">
+                <strong>Total</strong> <span style="color: #8C8178; font-size: 13px;">· {{ number_format((int) $items->sum('quantity')) }} items</span>
+            </td>
+            <td style="padding: 14px 0 0; font-family: Georgia, serif; font-size: 22px; color: #7B2D26; text-align: right; white-space: nowrap;">{{ $money($order->total) }}</td>
+        </tr>
+    </table>
 
-
-        <!-- Main content -->
-        <div style="text-align: center;">
-            <!-- title row -->
-            {{-- <div class="row">
-                        <div class="col-12">
-                            <h4 class="py-2 d-flex align-items-center justify-content-between">
-                                {{ getWebsiteTitle() }}.
-                                <small class="float-right">
-                                    <b>Ordered At:</b>
-                                    @if ($order?->created_at)
-                                        {{ $order?->created_at->format('m/d/Y') }}
-                                    @endif
-                                    <span class="ps-4">
-                                        <b>Invoice #</b>{{ $order?->id }}
-                                    </span>
-                                </small>
-                            </h4>
-                        </div>
-                        <!-- /.col -->
-                    </div> --}}
-
-            <!-- Table row -->
-
-            @if (isset($items) && count($items) > 0)
-                @php
-                    $attributeKeys = [];
-                    $attributeValues = [];
-                    foreach ($items as $item) {
-                        if ($item->item_type == 'variant') {
-                            $attributes = json_decode($item->attributes, true);
-                            $attributes = array_filter($attributes, function ($value) {
-                                return strtolower($value) !== 'none';
-                            });
-                            foreach ($attributes as $key => $value) {
-                                if (!in_array($key, $attributeKeys)) {
-                                    $attributeKeys[] = $key;
-                                }
-                                if (!in_array($value, $attributeValues)) {
-                                    $attributeValues[] = $value;
-                                }
-                            }
-                        }
-                    }
-                @endphp
-                <div style="display: flex; justify-content: center;">
-                    <div style="width: 100%; overflow-x: auto;">
-                        <table style="width: 100%; border: 1px solid #E3D8C8; border-collapse: collapse; margin: auto;">
-                            <thead>
-                                <tr>
-                                    <th style="border: 1px solid #E3D8C8; padding: 3px;">#</th>
-                                    <th style="border: 1px solid #E3D8C8; padding: 3px;">Image</th>
-                                    <th style="border: 1px solid #E3D8C8; padding: 3px;">SKU</th>
-                                    <th style="border: 1px solid #E3D8C8; padding: 3px;">Name</th>
-                                    @foreach ($attributeKeys as $key)
-                                        <th style="border: 1px solid #E3D8C8; padding: 3px; ">
-                                            {{ ucwords($key) }}</th>
-                                    @endforeach
-
-                                    <th style="border: 1px solid #E3D8C8; padding: 3px;">Qty</th>
-                                    <th style="border: 1px solid #E3D8C8; padding: 3px;">Price</th>
-                                    <th style="border: 1px solid #E3D8C8; padding: 3px;">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                    $itemsQuantity = 0;
-                                @endphp
-                                @foreach ($items as $item)
-                                    @php
-                                        $itemsQuantity += $item->quantity;
-                                    @endphp
-                                    <tr>
-                                        <td style="border: 1px solid #E3D8C8; padding: 3px;">
-                                            {{ $loop->iteration }}
-                                        </td>
-                                        <td style="border: 1px solid #E3D8C8; padding: 3px;">
-                                            @if ($item->image && file_exists($item->image))
-                                                <img src="{{ asset($item->image) }}" alt="{{ $item->name }}"
-                                                    style="width: 70px; height: 70px; border-radius: 15px; object-fit: contain;">
-                                            @else
-                                                <img src="{{ asset($item->product->image) }}"
-                                                    alt="{{ $item->name }}"
-                                                    style="width: 70px; height: 70px; border-radius: 15px; object-fit: contain;">
-                                            @endif
-                                        </td>
-                                        <td style="border: 1px solid #E3D8C8; padding: 3px; max-width: fit-content;">
-                                            <small>
-                                                {{ $item->sku ?? '---' }}
-                                            </small>
-                                        </td>
-                                        <td
-                                            style="border: 1px solid #E3D8C8; padding: 3px; max-width: 110px; word-wrap: break-word;">
-                                            @php
-                                                $slug = $item?->product?->slug;
-                                            @endphp
-                                            <a href="{{ route('frontend.product', $slug) }}" target="_blank">
-                                                {{ $item->name ?? '---' }}
-                                            </a>
-                                        </td>
-
-                                        @foreach ($attributeKeys as $key)
-                                            <td style="border: 1px solid #E3D8C8; padding: 3px;">
-                                                @php
-                                                    $value = json_decode($item->attributes, true)[$key] ?? ' ';
-                                                @endphp
-                                                {{ $value }}
-                                            </td>
-                                        @endforeach
-                                        <td style="border: 1px solid #E3D8C8; padding: 3px;">
-                                            {{ $item->quantity }}
-                                        </td>
-                                        <td style="border: 1px solid #E3D8C8; padding: 3px;">
-                                            <b>$</b>{{ $item->price ?? '---' }}
-                                        </td>
-                                        <td style="border: 1px solid #E3D8C8; padding: 3px;">
-                                            <b>$</b>{{ $item->total ?? '---' }}
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td>
-                                        <b>
-                                            Total
-                                        </b>
-                                    </td>
-                                    <td colspan="{{ 3 + count($attributeKeys) }}"></td>
-                                    <td><b>{{ $itemsQuantity }}</b></td>
-                                    <td></td>
-                                    <td><b>${{ number_format($order?->total, 2) }}</b></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-            @endif
-        </div>
-
-
-        <br>
-        <hr>
-        <br>
-        <footer style="text-align: center;">
-            <p style="font-size: 16px; color: #5F534A;">
-                @include('emails.partials.contact')
-            </p>
-            <p style="font-size: 16px; color: #5F534A;">Best regards, <br> <strong>{{ getWebsiteTitle() }}</strong></p>
-        </footer>
-    </div>
-</body>
-
-</html>
+    @include('emails.partials.button', ['url' => $btnUrl, 'label' => $btnLabel])
+@endsection

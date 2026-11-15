@@ -1,46 +1,22 @@
-<!DOCTYPE html>
-<html>
+@extends('emails.layout')
+@php
+    $place = trim(implode(', ', array_filter([$dealer->city, trim(($dealer->state ?? '') . ' ' . ($dealer->zip_code ?? ''))])));
+@endphp
 
-<head>
-    <meta charset="UTF-8">
-    <title>New Dealer Application Received - {{ getWebsiteTitle() }}</title>
-</head>
+@section('preheader', ($dealer->company_name ?: $dealer->name) . ($place ? ' from ' . $place : '') . ' applied for a dealer account.')
+@section('eyebrow', 'New dealer application')
+@section('heading', $dealer->company_name ?: ($dealer->name ?: 'New applicant'))
 
-<body style="font-family: Arial, sans-serif; background-color: #F5EFE6; padding: 20px; text-align: center;">
-    <div style="max-width: 600px; background: #FFFCF7; padding: 28px; border-radius: 14px; border: 1px solid #E3D8C8; margin: auto;">
-        <img src="{{ getMainImage() }}" alt="{{ getWebsiteTitle() }}" style="max-width: 200px;">
-        <h2 style="color: #231A14;">New Dealer Application Received</h2>
-        <p style="font-size: 16px; color: #5F534A;">
-            A new dealer application has been submitted on the <strong>{{ getWebsiteTitle() }}</strong> website.
-        </p>
-        <p style="font-size: 16px; color: #5F534A;">
-            Please review the application details in the admin panel and take the necessary actions.
-        </p>
-        <p style="font-size: 16px; color: #5F534A;">
-            <strong>Dealer Details:</strong><br>
-            👤 <strong>Name:</strong> {{ $name }} <br>
-            ✉️ <strong>Email:</strong> <a href="mailto:{{ $email }}"
-                style="color: #7B2D26; text-decoration: none;">{{ $email }}</a> <br>
-            📞 <strong>Phone:</strong> <a href="tel:{{ $phone }}">{{ $phone }}</a> <br>
-            🏠 <strong>Address:</strong>
-            {{ $address }}<br>
-            {{ $city }}{{ $city != '---' ? ',' : '' }}
-            {{ $state }}{{ $state != '---' ? ' ' : '' }}
-            {{ $zip_code }}
-        </p>
-
-        <a href="{{ route('dashboard.dealers.index', ['dealer' => $dealer->id]) }}"
-            style="display: inline-block; background: #7B2D26; color: #ffffff; padding: 12px 20px; text-decoration: none; font-size: 16px; border-radius: 10px;">
-            Review Application
-        </a>
-        <br>
-        <hr>
-        <br>
-        <p style="font-size: 16px; color: #5F534A;">
-            @include('emails.partials.contact')
-        </p>
-        <p style="font-size: 16px; color: #5F534A;">Best regards, <br> <strong>{{ getWebsiteTitle() }}</strong></p>
-    </div>
-</body>
-
-</html>
+@section('content')
+    <p style="margin: 0;">A business applied for a dealer account. Approve or decline it from the Applications tab.</p>
+    @include('emails.partials.details', ['rows' => [
+        'Contact' => $dealer->name,
+        'Email' => $dealer->email,
+        'Phone' => $dealer->phone,
+        'Location' => $place,
+        'Business type' => $dealer->business_type,
+        'Years in business' => $dealer->years_in_business,
+        'Applied' => $dealer->created_at?->format('M j, Y · g:i A'),
+    ]])
+    @include('emails.partials.button', ['url' => route('dashboard.dealers.index', ['dealer' => $dealer->id]), 'label' => 'Review the application'])
+@endsection

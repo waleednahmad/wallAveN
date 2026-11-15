@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-/** Sent when an admin declines a dealer application; includes the reason when one was given. */
+/** To the applicant when the dealer application is declined (layout: emails/layout.blade.php) */
 class DealerDeclined extends Mailable
 {
     use Queueable, SerializesModels;
@@ -18,19 +18,11 @@ class DealerDeclined extends Mailable
 
     public function envelope(): Envelope
     {
-        return new Envelope(subject: 'Your dealer application with ' . (getWebsiteTitle() ?: config('app.name')));
+        return new Envelope(subject: 'About your dealer application · ' . (getWebsiteTitle() ?: config('app.name')));
     }
 
     public function content(): Content
     {
-        return new Content(
-            view: 'emails.dealer-declined',
-            with: ['dealer' => $this->dealer],
-        );
-    }
-
-    public function attachments(): array
-    {
-        return [];
+        return new Content(view: 'emails.dealer-declined');
     }
 }

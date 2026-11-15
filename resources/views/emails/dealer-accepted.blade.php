@@ -1,35 +1,13 @@
-<!DOCTYPE html>
-<html>
+@extends('emails.layout')
+@php $site = getWebsiteTitle() ?: config('app.name'); @endphp
 
-<head>
-    <meta charset="UTF-8">
-    <title>Dealer Account Approved - {{ getWebsiteTitle() }}</title>
-</head>
+@section('preheader', 'You can now sign in, see your trade prices and order online.')
+@section('eyebrow', 'Account approved')
+@section('heading', 'Welcome to ' . $site . ($dealer->company_name ? ', ' . $dealer->company_name : ''))
 
-<body style="font-family: Arial, sans-serif; background-color: #F5EFE6; padding: 20px; text-align: center;">
-    <div style="max-width: 600px; background: #FFFCF7; padding: 28px; border-radius: 14px; border: 1px solid #E3D8C8; margin: auto;">
-        <img src="{{ getMainImage() }}" alt="{{ getWebsiteTitle() }}" style="max-width: 200px;">
-        <h2 style="color: #231A14;">Your Dealer Account is Approved!</h2>
-        <p style="font-size: 16px; color: #5F534A;">
-            Congratulations! Your dealer application for <strong>{{ getWebsiteTitle() }}</strong> has been approved.
-            You can now log in to browse our products and place orders.
-        </p>
-        <p style="font-size: 16px; color: #5F534A;">
-            Click below to log in and start shopping:
-        </p>
-        <a href="{{ route('login') }}?email={{ $dealer->email }}"
-            style="display: inline-block; background: #7B2D26; color: #ffffff; padding: 12px 20px; text-decoration: none; font-size: 16px; border-radius: 10px;">Login
-            to Your Account
-        </a>
-        <p style="font-size: 16px; color: #5F534A;">
-            If you have any questions, contact us.
-        </p>
-        <hr>
-        <p style="font-size: 16px; color: #5F534A;">
-            @include('emails.partials.contact')
-        </p>
-        <p style="font-size: 16px; color: #5F534A;">Best regards, <br> <strong>{{ getWebsiteTitle() }}</strong></p>
-    </div>
-</body>
-
-</html>
+@section('content')
+    <p style="margin: 0 0 14px;">Good news: your dealer account is approved. Sign in with <strong style="color: #231A14;">{{ $dealer->email }}</strong> and the password you chose when you applied.</p>
+    <p style="margin: 0;">Once you're in you can browse the full catalog with your trade prices, order online any time and follow every order from your dashboard.</p>
+    @include('emails.partials.button', ['url' => route('login'), 'label' => 'Sign in and start ordering'])
+    <p style="margin: 14px 0 0; font-size: 13px;">Forgot your password? Use “Forgot password?” on the sign-in page.</p>
+@endsection

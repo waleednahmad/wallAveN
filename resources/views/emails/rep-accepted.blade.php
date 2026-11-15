@@ -1,36 +1,12 @@
-<!DOCTYPE html>
-<html>
+@extends('emails.layout')
+@php $site = getWebsiteTitle() ?: config('app.name'); @endphp
 
-<head>
-    <meta charset="UTF-8">
-    <title>Sales Rep Account Approved - {{ getWebsiteTitle() }}</title>
-</head>
+@section('preheader', 'You can now sign in and order for your dealers.')
+@section('eyebrow', 'Account approved')
+@section('heading', 'Welcome aboard, ' . ($rep->name ?: 'and welcome'))
 
-<body style="font-family: Arial, sans-serif; background-color: #F5EFE6; padding: 20px; text-align: center;">
-    <div style="max-width: 600px; background: #FFFCF7; padding: 28px; border-radius: 14px; border: 1px solid #E3D8C8; margin: auto;">
-        <img src="{{ getMainImage() }}" alt="{{ getWebsiteTitle() }}" style="max-width: 200px;">
-        <h2 style="color: #231A14;">Your Sales Rep Account Account is Approved!</h2>
-        <p style="font-size: 16px; color: #5F534A;">
-            Congratulations! Your sales rep account application for <strong>{{ getWebsiteTitle() }}</strong> has been
-            approved.
-            You can now log in to browse our products and place orders.
-        </p>
-        <p style="font-size: 16px; color: #5F534A;">
-            Click below to log in and start shopping:
-        </p>
-        <a
-            href="{{ route('login') }}?email={{ $rep->email }}" style="display: inline-block; background: #7B2D26; color: #ffffff; padding: 12px 20px; text-decoration: none; font-size: 16px; border-radius: 10px;">Log
-            In to Your Account
-        </a>
-        <p style="font-size: 16px; color: #5F534A;">
-            If you have any questions, contact us.
-        </p>
-        <hr>
-        <p style="font-size: 16px; color: #5F534A;">
-            @include('emails.partials.contact')
-        </p>
-        <p style="font-size: 16px; color: #5F534A;">Best regards, <br> <strong>{{ getWebsiteTitle() }}</strong></p>
-    </div>
-</body>
-
-</html>
+@section('content')
+    <p style="margin: 0 0 14px;">Your sales rep account with {{ $site }} is approved. Sign in with <strong style="color: #231A14;">{{ $rep->email }}</strong> and the password you chose when you applied.</p>
+    <p style="margin: 0;">From your account you can pick a dealer, build their cart and place orders for them.</p>
+    @include('emails.partials.button', ['url' => route('login'), 'label' => 'Sign in'])
+@endsection

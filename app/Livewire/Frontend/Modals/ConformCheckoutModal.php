@@ -131,28 +131,37 @@ class ConformCheckoutModal extends Component
                     $cartTemp->delete();
                 }
 
-                $this->dispatch('success', 'Order placed successfully');
-                $this->dispatch('closeCartOffcanva');
-
-                $dealer = $order->dealer;
-                $representative = $dealer->referalTo ?? null;
-                // Send a email to the dealer
-                Mail::to($dealer->email)->send(new NewOrderPlacedForDealer($order));
-                // Send a email to the represenataive
-                if ($representative) {
-                    Mail::to($representative->email)->send(new NewOrderPlacedForDealer($order));
-                }
-
-                // Send to all admins
-                $admins = User::all();
-                foreach ($admins as $admin) {
-                    Mail::to($admin->email)->send(new NewOrderPlacedForDealer($order));
-                }
-                // Send Email for the admin
+                // Save the order first: a mail problem must never cancel a placed order
                 DB::commit();
             } catch (\Exception $e) {
                 DB::rollBack();
                 $this->dispatch('error', $e->getMessage());
+                $this->dispatch('closeConfirmCheckoutModal');
+                return;
+            }
+
+            $this->dispatch('success', 'Order placed successfully');
+            $this->dispatch('closeCartOffcanva');
+
+            // Order emails: the dealer, the sales rep who referred them, and every admin.
+            // Each is sent on its own so one failure doesn't stop the others.
+            $dealer = $order->dealer;
+            $recipients = [[$dealer?->email, 'dealer']];
+            if ($dealer?->referalTo?->email) {
+                $recipients[] = [$dealer->referalTo->email, 'rep'];
+            }
+            foreach (User::whereNotNull('email')->pluck('email') as $adminEmail) {
+                $recipients[] = [$adminEmail, 'admin'];
+            }
+            foreach ($recipients as [$to, $audience]) {
+                if (!$to) {
+                    continue;
+                }
+                try {
+                    Mail::to($to)->send(new NewOrderPlacedForDealer($order, $audience));
+                } catch (\Throwable $mailError) {
+                    report($mailError);
+                }
             }
         } else {
             $this->dispatch('error', 'Please login to place an order');

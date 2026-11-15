@@ -1,36 +1,16 @@
-<!DOCTYPE html>
-<html>
+@extends('emails.layout')
 
-<head>
-    <meta charset="UTF-8">
-    <title>New Representative Rep Application Received - {{ getWebsiteTitle() }}</title>
-</head>
+@section('preheader', $representative->name . ' applied to become a sales rep.')
+@section('eyebrow', 'New sales rep application')
+@section('heading', $representative->name ?: 'New applicant')
 
-<body style="font-family: Arial, sans-serif; background-color: #F5EFE6; padding: 20px; text-align: center;">
-    <div style="max-width: 600px; background: #FFFCF7; padding: 28px; border-radius: 14px; border: 1px solid #E3D8C8; margin: auto;">
-        <img src="{{ getMainImage() }}" alt="{{ getWebsiteTitle() }}" style="max-width: 200px;">
-        <h2 style="color: #231A14;">New Representative Rep Application Received</h2>
-        <p style="font-size: 16px; color: #5F534A;">
-            A new representative rep application has been submitted on the <strong>{{ getWebsiteTitle() }}</strong> website.
-        </p>
-        <p style="font-size: 16px; color: #5F534A;">
-            Please review the application details in the admin panel and take the necessary actions.
-        </p>
-        <p style="font-size: 16px; color: #5F534A;">
-            <strong>Representative Rep Details:</strong><br>
-            👤 <strong>Name:</strong> {{ $name }} <br>
-            ✉️ <strong>Email:</strong> <a href="mailto:{{ $email }}"
-                style="color: #7B2D26; text-decoration: none;">{{ $email }}</a> <br>
-            📞 <strong>Phone:</strong> <a href="tel:{{ $phone }}">{{ $phone }}</a>
-        </p>
-        <br>
-        <hr>
-        <br>
-        <p style="font-size: 16px; color: #5F534A;">
-            @include('emails.partials.contact')
-        </p>
-        <p style="font-size: 16px; color: #5F534A;">Best regards, <br> <strong>{{ getWebsiteTitle() }}</strong></p>
-    </div>
-</body>
-
-</html>
+@section('content')
+    <p style="margin: 0;">Someone applied to become a sales rep. Approve them from the Sales reps page, or delete the application if it's spam.</p>
+    @include('emails.partials.details', ['rows' => [
+        'Email' => $representative->email,
+        'Phone' => $representative->phone,
+        'Location' => trim(implode(', ', array_filter([$representative->city, $representative->state]))),
+        'Applied' => $representative->created_at?->format('M j, Y · g:i A'),
+    ]])
+    @include('emails.partials.button', ['url' => route('dashboard.representatives.index'), 'label' => 'Open sales reps'])
+@endsection

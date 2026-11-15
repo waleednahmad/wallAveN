@@ -2,52 +2,27 @@
 
 namespace App\Mail;
 
+use App\Models\Dealer;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
+/** To the applicant right after the dealer sign-up (layout: emails/layout.blade.php) */
 class DealerApplicationReceived extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct()
-    {
-        //
-    }
+    public function __construct(public ?Dealer $dealer = null) {}
 
-    /**
-     * Get the message envelope.
-     */
     public function envelope(): Envelope
     {
-        return new Envelope(
-            subject: 'Dealer Application Received',
-        );
+        return new Envelope(subject: 'We received your dealer application · ' . (getWebsiteTitle() ?: config('app.name')));
     }
 
-    /**
-     * Get the message content definition.
-     */
     public function content(): Content
     {
-        return new Content(
-            view: 'emails.dealer-application-received',
-        );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
-    {
-        return [];
+        return new Content(view: 'emails.dealer-application-received');
     }
 }

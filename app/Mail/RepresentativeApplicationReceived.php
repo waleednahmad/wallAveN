@@ -2,52 +2,27 @@
 
 namespace App\Mail;
 
+use App\Models\Representative;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
+/** To the applicant right after the sales rep sign-up (layout: emails/layout.blade.php) */
 class RepresentativeApplicationReceived extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct()
-    {
-        //
-    }
+    public function __construct(public ?Representative $representative = null) {}
 
-    /**
-     * Get the message envelope.
-     */
     public function envelope(): Envelope
     {
-        return new Envelope(
-            subject: 'Representative Application Received',
-        );
+        return new Envelope(subject: 'We received your sales rep application · ' . (getWebsiteTitle() ?: config('app.name')));
     }
 
-    /**
-     * Get the message content definition.
-     */
     public function content(): Content
     {
-        return new Content(
-            view: 'emails.representative-application-received',
-        );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
-    {
-        return [];
+        return new Content(view: 'emails.representative-application-received');
     }
 }

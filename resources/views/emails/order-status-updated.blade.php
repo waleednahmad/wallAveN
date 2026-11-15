@@ -1,42 +1,31 @@
-<!DOCTYPE html>
-<html>
+@extends('emails.layout')
+@php
+    $status = strtolower((string) $order->status);
+    $lines = [
+        'processing' => 'We are preparing your order now.',
+        'completed' => 'Your order is complete. Thank you for ordering with us.',
+        'declined' => 'We could not accept this order. Please get in touch if you have questions.',
+        'canceled' => 'This order was canceled.',
+        'pending' => 'Your order is back in our queue and will be reviewed shortly.',
+    ];
+    $tone = ['processing' => ['#2B4466', '#DCE6F2'], 'completed' => ['#2F7A4A', '#DDEFE3'], 'declined' => ['#A3392E', '#F6DEDA'], 'canceled' => ['#5F534A', '#EAE5DE']][$status] ?? ['#8A6116', '#F6E7C8'];
+@endphp
 
-<head>
-    <meta charset="UTF-8">
-    <title>Order Status Update - {{ getWebsiteTitle() }}</title>
-</head>
+@section('preheader', 'Order #' . $order->id . ' is now ' . $status . '. ' . ($lines[$status] ?? ''))
+@section('eyebrow', 'Order update')
+@section('heading', 'Order #' . $order->id . ' is now ' . $status)
 
-<body style="font-family: Arial, sans-serif; background-color: #F5EFE6; padding: 20px; text-align: center;">
-    <div style="max-width: 600px; background: #FFFCF7; padding: 28px; border-radius: 14px; border: 1px solid #E3D8C8; margin: auto;">
-        <img src="{{ getMainImage() }}" alt="{{ getWebsiteTitle() }}" style="max-width: 200px;">
-        <h2 style="color: #231A14;">Your Order Status Has Been Updated</h2>
-        <p style="font-size: 16px; color: #5F534A;">
-            Hello <strong>{{ $order->dealer->name }}</strong>,
-        </p>
-        <p style="font-size: 16px; color: #5F534A;">
-            The status of your order <strong>#{{ $order->id }}</strong> has been updated to:
-        </p>
-        <p style="font-size: 18px; color: #7B2D26; font-weight: bold;">
-            {{ ucfirst($order->status) }}
-        </p>
-        <p style="font-size: 16px; color: #5F534A;">
-            You can view your order details and track updates from your account.
-        </p>
-        <a href="{{ route('dealer.orders') }}"
-            style="display: inline-block; background: #7B2D26; color: #ffffff; padding: 12px 20px; text-decoration: none; font-size: 16px; border-radius: 10px;">View
-            My Order</a>
-        <p style="font-size: 16px; color: #5F534A;">
-            If you have any questions or need assistance, feel free to contact us.
-        </p>
-        <br />
-        <hr /><br />
-        <p style="font-size: 16px; color: #5F534A;">
-            @include('emails.partials.contact')
-        </p>
-        <p style="font-size: 16px; color: #5F534A;">Best regards, <br>
-            <strong>{{ getWebsiteTitle() }}</strong>
-        </p>
-    </div>
-</body>
-
-</html>
+@section('content')
+    <p style="margin: 0 0 14px;">
+        <span style="display: inline-block; padding: 4px 12px; border-radius: 12px; background: {{ $tone[1] }}; color: {{ $tone[0] }}; font-size: 12px; font-weight: bold; letter-spacing: .5px; text-transform: uppercase;">{{ ucfirst($status) }}</span>
+    </p>
+    <p style="margin: 0;">Hello {{ $order->dealer?->name ?: ($order->dealer?->company_name ?: 'there') }}, {{ $lines[$status] ?? 'The status of your order changed.' }}</p>
+    @include('emails.partials.details', ['rows' => [
+        'Order' => '#' . $order->id,
+        'PO number' => $order->po_number,
+        'Placed' => $order->created_at?->format('M j, Y'),
+        'Items' => number_format((int) $order->quantity),
+        'Total' => '$' . number_format((float) $order->total, 2),
+    ]])
+    @include('emails.partials.button', ['url' => route('dealer.orders'), 'label' => 'View your orders'])
+@endsection

@@ -1,27 +1,11 @@
-<!DOCTYPE html>
-<html>
+@extends('emails.layout')
+@php $site = getWebsiteTitle() ?: config('app.name'); @endphp
 
-<head>
-    <meta charset="UTF-8">
-    <title>Representative Rep Application Received - {{ getWebsiteTitle() }}</title>
-</head>
+@section('preheader', 'Thanks for applying to represent ' . $site . '.')
+@section('eyebrow', 'Application received')
+@section('heading', 'Thanks for applying' . ($representative?->name ? ', ' . $representative->name : ''))
 
-<body style="font-family: Arial, sans-serif; background-color: #F5EFE6; padding: 20px; text-align: center;">
-    <div style="max-width: 600px; background: #FFFCF7; padding: 28px; border-radius: 14px; border: 1px solid #E3D8C8; margin: auto;">
-        <img src="{{ getMainImage() }}" alt="{{ getWebsiteTitle() }}" style="max-width: 200px;">
-        <h2 style="color: #231A14;">Thank You for Registering!</h2>
-        <p style="font-size: 16px; color: #5F534A;">
-            We have received your representative rep application at <strong>{{ getWebsiteTitle() }}</strong>
-            Our team will review your information and get back to you shortly.
-        </p>
-        <p style="font-size: 16px; color: #5F534A;">
-            If you have any questions, feel free to contact us.
-        </p>
-        <p style="font-size: 16px; color: #5F534A;">
-            @include('emails.partials.contact')
-        </p>
-        <p style="font-size: 16px; color: #5F534A;">Best regards, <br> <strong>{{ getWebsiteTitle() }}</strong></p>
-    </div>
-</body>
-
-</html>
+@section('content')
+    <p style="margin: 0 0 14px;">We received your application to become a sales rep for {{ $site }}. Our team will review it and get back to you, usually within a few business days.</p>
+    <p style="margin: 0;">Questions in the meantime? Just reply to this email{{ companyPhone() ? ' or call ' . companyPhone() : '' }}.</p>
+@endsection
