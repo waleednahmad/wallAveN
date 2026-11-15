@@ -22,6 +22,10 @@
                 ];
             });
             $admItem = function (string $route, string $pattern, string $icon, string $label, ?int $count = null, array $params = []) {
+                // Skip links whose route isn't registered (e.g. a stale route cache right after a deploy)
+                if (!\Illuminate\Support\Facades\Route::has($route)) {
+                    return null;
+                }
                 return [
                     'url' => route($route, $params),
                     'active' => request()->routeIs($pattern),
@@ -33,6 +37,7 @@
             $admMenu = [
                 ['header' => null, 'items' => [
                     $admItem('dashboard', 'dashboard', 'fas fa-home', 'Overview'),
+                    $admItem('dashboard.reports', 'dashboard.reports', 'fas fa-chart-bar', 'Reports'),
                 ]],
                 ['header' => 'Sales', 'items' => [
                     $admItem('dashboard.orders.index', 'dashboard.orders.*', 'fas fa-receipt', 'Orders', $admCounts['orders']),
@@ -70,7 +75,7 @@
                     @if ($admGroup['header'])
                         <li class="nav-header adm-nav-header">{{ $admGroup['header'] }}</li>
                     @endif
-                    @foreach ($admGroup['items'] as $admLink)
+                    @foreach (array_filter($admGroup['items']) as $admLink)
                         <li class="nav-item">
                             <a href="{{ $admLink['url'] }}" @class(['nav-link', 'active' => $admLink['active']]) @if ($admLink['active']) aria-current="page" @endif>
                                 <i class="nav-icon {{ $admLink['icon'] }}" aria-hidden="true"></i>

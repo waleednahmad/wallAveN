@@ -137,6 +137,9 @@ Route::prefix('super_admin')
 
                 // Catalog Routes :
                 // ---------------------
+                // Reports: sales, trend, top dealers/products, channels, sales reps, CSV export (Livewire)
+                Route::view('reports', 'admin.reports.index')->name('reports');
+
                 Route::get('catalog', [CatalogController::class, 'index'])->name('catalog.index');
                 Route::get('catalog/{catalog}/download', [CatalogController::class, 'download'])->name('catalog.download');
 
