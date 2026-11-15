@@ -15,16 +15,21 @@
     <div class="modal fade" id="previewOrder" tabindex="-1" aria-labelledby="previewOrderLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <div class="modal-header position-relative">
+                <div class="modal-header d-flex align-items-center">
                     <h1 class="modal-title fs-5" id="previewOrderLabel">
                         Order Details
                     </h1>
 
-                    <button type="button" class="btn btn-primary me-2 float-end position-absolute" style="right: 45px"
-                        onclick="openPrintOrder()">
-                        <i class="bi bi-printer"></i>
-                    </button>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    {{-- Invoice: open the printable page or download the PDF --}}
+                    <div class="ms-auto me-2 d-flex gap-2">
+                        <button type="button" class="gr-btn gr-btn-outline gr-btn-sm" onclick="openOrderInvoice('print')">
+                            <i class="bi bi-printer" aria-hidden="true"></i> View invoice
+                        </button>
+                        <button type="button" class="gr-btn gr-btn-dark gr-btn-sm" onclick="openOrderInvoice('pdf')">
+                            <i class="bi bi-download" aria-hidden="true"></i> Download PDF
+                        </button>
+                    </div>
+                    <button type="button" class="btn-close ms-0" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <livewire:frontend.dealer.dashboard.preview-order-modal />
             </div>
@@ -52,9 +57,14 @@
     <script>
         let currentOrderId = null;
 
-        function openPrintOrder() {
-            if (currentOrderId) {
-                window.open(`orders/${currentOrderId}/print`, '_blank');
+        // 'print' opens the invoice page in a new tab, 'pdf' downloads it
+        function openOrderInvoice(kind) {
+            if (!currentOrderId) return;
+            const base = @js(url('dealer/orders'));
+            if (kind === 'pdf') {
+                window.location.href = `${base}/${currentOrderId}/pdf`;
+            } else {
+                window.open(`${base}/${currentOrderId}/print`, '_blank');
             }
         }
 

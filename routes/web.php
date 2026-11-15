@@ -63,6 +63,7 @@ Route::controller(DealerController::class)
         Route::get('orders', 'orders')->name('orders');
         Route::get('customer-mode', 'customerMode')->name('customerMode');
         Route::get('orders/{order}/print', 'print')->name('orders.print');
+        Route::get('orders/{order}/pdf', 'pdf')->name('orders.pdf');
     });
 
 
