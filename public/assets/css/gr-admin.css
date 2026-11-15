@@ -642,3 +642,35 @@ footer:has(.pagination) .pagination { margin: 0; }
 /* Two-line cells: main value with a muted line under it (Dealer / Representative columns) */
 .adm-cell-main { font-weight: 500; color: var(--brand-ink); }
 .adm-cell-sub { font-size: 13px; color: var(--brand-muted); margin-top: 2px; overflow-wrap: anywhere; }
+
+/* --------------------------------------------------------------------------
+   List status tabs + bulk bar (orders first; reusable for dealers, carts)
+   -------------------------------------------------------------------------- */
+.adm-tabs { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--brand-line); margin: 0 0 16px; }
+.adm-tab {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 14px; margin-bottom: -1px;
+  border: 0; border-bottom: 2px solid transparent; background: transparent;
+  font: 600 14px var(--brand-font-body); color: var(--brand-muted); cursor: pointer;
+  transition: color .15s ease, border-color .15s ease;
+}
+.adm-tab:hover { color: var(--brand-ink); border-bottom-color: var(--brand-line); }
+.adm-tab.is-on { color: var(--brand-primary); border-bottom-color: var(--brand-primary); }
+.adm-tab-n { font-size: 12px; padding: 1px 8px; border-radius: 999px; background: var(--brand-neutral-tint); color: var(--brand-neutral); font-variant-numeric: tabular-nums; }
+.adm-tab.is-on .adm-tab-n { background: var(--brand-primary-tint); color: var(--brand-primary); }
+.adm-tab:focus-visible { outline: 2px solid var(--brand-primary); outline-offset: 2px; border-radius: 6px; }
+
+.adm-bulk {
+  display: flex; align-items: center; gap: 12px 16px; flex-wrap: wrap;
+  padding: 10px 12px 10px 16px; margin: 0 0 14px;
+  border-radius: 12px; background: var(--brand-nav); color: #fff;
+}
+.adm-bulk[style*="display: none"] { display: none !important; }
+.adm-bulk-count { font-size: 14px; font-weight: 600; }
+.adm-bulk-notify { display: inline-flex; align-items: center; gap: 8px; margin: 0; font-size: 13px; font-weight: 500; color: var(--brand-nav-text); cursor: pointer; }
+.adm-bulk-notify input { width: 16px; height: 16px; accent-color: var(--brand-accent); }
+.adm-bulk-actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+.adm-bulk .adm-bulk-btn { background: transparent !important; border: 1px solid rgba(255, 255, 255, .25) !important; color: #fff !important; min-height: 34px; }
+.adm-bulk .adm-bulk-btn:hover { border-color: rgba(255, 255, 255, .6) !important; }
+.adm-bulk .adm-bulk-btn.is-main { background: var(--brand-accent) !important; border-color: var(--brand-accent) !important; color: var(--brand-nav) !important; }
+.power-grid-table td.text-end, .power-grid-table th.text-end { text-align: right !important; }

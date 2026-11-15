@@ -7,7 +7,11 @@ use App\Models\Order;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Number;
+use App\Mail\OrderStatusUpdated;
+use Illuminate\Support\Facades\Mail;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
@@ -23,6 +27,14 @@ final class OrderTable extends PowerGridComponent
     use WithExport;
     public string $tableName = 'order-table-jxuh87-table';
     public $fileName = '';
+
+    /** Status tab above the table (?status=pending). 'all' shows every order. */
+    #[Url(as: 'status', except: 'all')]
+    public string $statusTab = 'all';
+
+    /** Statuses an admin can set in bulk (same as the single-order modal; 'canceled' is the dealer's own action). */
+    private const BULK_STATUSES = ['processing', 'completed', 'declined'];
+    private const TABS = ['all', 'pending', 'processing', 'completed', 'declined', 'canceled'];
 
 
     public function setUp(): array
@@ -46,7 +58,8 @@ final class OrderTable extends PowerGridComponent
                     10 => 20,
                 ]),
             PowerGrid::header()
-                ->showSearchInput(),
+                ->showSearchInput()
+                ->includeViewOnTop('livewire.tables.partials.order-status-bar'),
 
             PowerGrid::footer()
                 ->showPerPage(
@@ -72,7 +85,79 @@ final class OrderTable extends PowerGridComponent
                 'dealers.email as dealer_email',
                 'dealers.phone as dealer_phone',
             ])
+            ->when($this->statusTab !== 'all', fn ($query) => $query->where('orders.status', $this->statusTab))
             ->orderBy('created_at', 'desc');
+    }
+
+    /** Order counts per status for the tabs (same join as the table, so the numbers match). */
+    #[Computed]
+    public function statusCounts(): array
+    {
+        return Order::join('dealers', 'orders.dealer_id', '=', 'dealers.id')
+            ->selectRaw('orders.status as status, COUNT(*) as n')
+            ->groupBy('orders.status')
+            ->pluck('n', 'status')
+            ->map(fn ($n) => (int) $n)
+            ->all();
+    }
+
+    public function setStatusTab(string $tab): void
+    {
+        if (!in_array($tab, self::TABS, true)) {
+            return;
+        }
+        $this->statusTab = $tab;
+        $this->clearSelection();
+        $this->resetPage();
+    }
+
+    public function clearSelection(): void
+    {
+        $this->checkboxValues = [];
+        $this->checkboxAll = false;
+        $this->dispatch('pgBulkActions::clear', $this->tableName);
+    }
+
+    /**
+     * Change the status of the selected orders at once. Orders the dealer canceled are left alone.
+     * Dealers are emailed only when $notify is true (the single-order modal always emails).
+     */
+    public function bulkStatus(string $status, array $ids, bool $notify = false): void
+    {
+        if (!in_array($status, self::BULK_STATUSES, true)) {
+            $this->dispatch('error', 'Unknown status');
+            return;
+        }
+        $ids = array_values(array_filter(array_map('intval', $ids)));
+        if (!$ids) {
+            $this->dispatch('error', 'Select at least one order');
+            return;
+        }
+
+        $orders = Order::with('dealer')
+            ->whereIn('id', $ids)
+            ->where('status', '!=', 'canceled')
+            ->get();
+
+        foreach ($orders as $order) {
+            $order->update(['status' => $status]);
+            if ($notify && $order->dealer?->email) {
+                try {
+                    Mail::to($order->dealer->email)->send(new OrderStatusUpdated($order));
+                } catch (\Throwable $e) {
+                    report($e);
+                }
+            }
+        }
+
+        $skipped = count($ids) - $orders->count();
+        $message = $orders->count() . ' ' . ($orders->count() === 1 ? 'order' : 'orders') . ' marked ' . $status
+            . ($skipped ? " ({$skipped} canceled by the dealer, left as is)" : '')
+            . ($notify ? ' · dealers emailed' : '');
+
+        unset($this->statusCounts);
+        $this->clearSelection();
+        $this->dispatch('success', $message);
     }
 
     public function relationSearch(): array
@@ -132,7 +217,7 @@ final class OrderTable extends PowerGridComponent
             })
 
 
-            ->add('created_at');
+            ->add('created_at', fn (Order $order) => $order->created_at?->format('M j, Y'));
     }
 
     public function columns(): array
@@ -168,11 +253,11 @@ final class OrderTable extends PowerGridComponent
                 ->hidden()
                 ->visibleInExport(true),
 
-            Column::make('Total', 'total')->bodyAttribute('gr-nowrap')
+            Column::make('Total', 'total')->headerAttribute('text-end')->bodyAttribute('gr-nowrap text-end')
                 ->withSum('total', header: false, footer: true)
                 ->searchable(),
 
-            Column::make('Quantity', 'quantity')
+            Column::make('Items', 'quantity')->headerAttribute('text-end')->bodyAttribute('text-end')
                 ->withSum('quantity', header: false, footer: true)
                 ->searchable(),
 
