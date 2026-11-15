@@ -2,7 +2,7 @@
 
 @section('breadcrumb')
     @include('admin.layout.partials.page-header', [
-        'title' => 'Products',
+        'title' => $product->name ?: 'Edit product',
         'links' => [
             [
                 'name' => 'Dashboard',
@@ -13,7 +13,7 @@
                 'url' => route('dashboard.products.index'),
             ],
             [
-                'name' => 'Create',
+                'name' => 'Edit',
             ],
         ],
     ])

@@ -2,7 +2,7 @@
 
 @section('breadcrumb')
     @include('admin.layout.partials.page-header', [
-        'title' => 'Products',
+        'title' => 'New product',
         'links' => [
             [
                 'name' => 'Dashboard',

@@ -205,8 +205,8 @@
                                     </p>
                                 </div>
                             @empty
-                                <div class="alert alert-danger">
-                                    No Sub Categories Found
+                                <div class="adm-hint">
+                                    No sub categories for the selected categories yet.
                                 </div>
                             @endforelse
                         </div>
@@ -252,8 +252,8 @@
                                     </p>
                                 </div>
                             @empty
-                                <div class="alert alert-danger">
-                                    No Product Types Found
+                                <div class="adm-hint">
+                                    No product types for the selected sub categories yet.
                                 </div>
                             @endforelse
                         </div>
@@ -379,7 +379,8 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-center">
+            <div class="adm-savebar">
+                <span class="adm-savebar-text">Save to apply your changes</span>
                 <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:loading.remove
                     wire:target="save, uploadedImages" x-bind:disabled="isUploading"
                     x-bind:class="{ 'btn-secondary': isUploading }" x-text="isUploading ? 'Uploading...' : 'Save'">

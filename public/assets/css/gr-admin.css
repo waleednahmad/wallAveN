@@ -924,3 +924,21 @@ body.layout-fixed.sidebar-collapse .gr-toasts { left: 98px; }
 .adm-profile-orders li { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--brand-line-soft); font-size: 14px; }
 .adm-profile-orders li:last-child { border-bottom: 0; }
 .adm-profile-orders a { font-weight: 600; text-decoration: none; }
+
+/* --------------------------------------------------------------------------
+   Product editor: save bar fixed at the bottom of the screen; neutral empty hints
+   -------------------------------------------------------------------------- */
+.adm-savebar {
+  position: fixed; left: 250px; right: 0; bottom: 0; z-index: 1030;
+  display: flex; align-items: center; justify-content: flex-end; gap: 10px; flex-wrap: wrap;
+  padding: 12px 28px; background: var(--brand-nav); color: #fff;
+  box-shadow: 0 -8px 24px rgba(35, 26, 20, .12);
+}
+.sidebar-collapse .adm-savebar { left: 74px; }
+@media (max-width: 991px) { .adm-savebar { left: 0; } }
+.adm-savebar-text { margin-right: auto; font-size: 14px; font-weight: 600; color: var(--brand-nav-text); }
+.adm-savebar .btn-primary { background: var(--brand-accent) !important; border-color: var(--brand-accent) !important; color: var(--brand-nav) !important; min-width: 140px; }
+.adm-savebar .btn-secondary { background: transparent !important; border-color: rgba(255, 255, 255, .3) !important; color: #fff !important; }
+.adm-savebar .alert { margin: 0; padding: 6px 12px; }
+.content-wrapper:has(.adm-savebar) { padding-bottom: 76px; }
+.adm-hint { padding: 10px 12px; border-radius: 10px; background: var(--brand-bg); border: 1px dashed var(--brand-line); color: var(--brand-muted); font-size: 13.5px; }
