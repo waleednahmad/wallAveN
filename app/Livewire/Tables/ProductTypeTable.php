@@ -35,7 +35,7 @@ final class ProductTypeTable extends PowerGridComponent
     #[On('refreshProductTypes')]
     public function datasource(): Builder
     {
-        return ProductType::with('subCategory');
+        return ProductType::with('subCategory')->withCount('products');
     }
 
     public function relationSearch(): array
@@ -57,9 +57,6 @@ final class ProductTypeTable extends PowerGridComponent
                 }
                 return '<img src="' . asset('dashboard/images/default.webp') . '" alt=" Image" style="width: 90px; height: 90px; object-fit: contain;" loading="lazy" class="img-thumbnail">';
             })
-            ->add('row_num', function ($row) {
-                return $this->getRowNum($row);
-            })
             ->add('sub_category_id', function ($row) {
                 return $row->subCategory ? $row->subCategory->name : '-';
             })
@@ -69,16 +66,18 @@ final class ProductTypeTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('#', 'row_num'),
 
             Column::make('Image', 'image'),
             Column::make('Name', 'name')->bodyAttribute('gr-wrap')
                 ->sortable()
                 ->searchable(),
 
-            Column::make('SubCategory', 'sub_category_id'),
+            Column::make('Sub category', 'sub_category_id'),
             
-            Column::make('status', 'status')
+            Column::make('Products', 'products_count')->headerAttribute('text-end')->bodyAttribute('text-end')
+                ->sortUsing(fn ($query, $dir) => $query->orderBy('products_count', $dir)),
+
+            Column::make('Status', 'status')
                 ->toggleable(
                     hasPermission: auth()->check(),
                     trueLabel: '<span class="text-green-500">Yes</span>',
@@ -91,8 +90,6 @@ final class ProductTypeTable extends PowerGridComponent
     public function filters(): array
     {
         return [
-            Filter::datepicker('created_at', 'created_at'),
-
             Filter::boolean('status')
                 ->label('active', 'inactive'),
 

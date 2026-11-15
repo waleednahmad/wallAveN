@@ -49,16 +49,13 @@ final class AdminTable extends PowerGridComponent
             ->add('id')
             ->add('name')
             ->add('email')
-            ->add('row_num', function ($row) {
-                return $this->getRowNum($row);
-            })
-            ->add('created_at');
+            ->add('created_at')
+            ->add('added_on', fn ($row) => $row->created_at?->format('M j, Y'));
     }
 
     public function columns(): array
     {
         return [
-            Column::make('#', 'row_num'),
             Column::make('Name', 'name')->bodyAttribute('gr-wrap')
                 ->sortable()
                 ->searchable(),
@@ -68,9 +65,8 @@ final class AdminTable extends PowerGridComponent
                 ->searchable(),
 
 
-            Column::make('Created at', 'created_at')->bodyAttribute('gr-nowrap')
-                ->sortable()
-                ->searchable(),
+            Column::make('Added', 'added_on', 'created_at')->bodyAttribute('gr-nowrap')
+                ->sortable(),
 
             Column::action('Action')
         ];
@@ -79,10 +75,7 @@ final class AdminTable extends PowerGridComponent
     public function filters(): array
     {
         return [
-            Filter::datepicker('created_at', 'created_at'),
-
-            Filter::boolean('status')
-                ->label('active', 'inactive'),
+            // A few team members only: search is enough
         ];
     }
 

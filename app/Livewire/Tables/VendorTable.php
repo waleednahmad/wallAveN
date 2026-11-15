@@ -68,9 +68,6 @@ final class VendorTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('row_num', function ($row) {
-                return $this->getRowNum($row);
-            })
             ->add('status_label', function ($row) {
                 return $row->status ? "Active" : "Inactive";
             })
@@ -80,7 +77,6 @@ final class VendorTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('#', 'row_num'),
 
             Column::make('Name', 'name')->bodyAttribute('gr-wrap')
                 ->sortable()
@@ -93,7 +89,7 @@ final class VendorTable extends PowerGridComponent
 
 
 
-            Column::make('status', 'status')
+            Column::make('Status', 'status')
                 ->visibleInExport(false)
                 ->toggleable(
                     hasPermission: auth()->check(),

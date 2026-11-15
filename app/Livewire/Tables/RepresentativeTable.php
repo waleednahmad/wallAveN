@@ -25,6 +25,10 @@ final class RepresentativeTable extends PowerGridComponent
 
     public string $tableName = 'representative-table-lquyl7-table';
 
+    // Newest first by default; clicking a column header sorts by that column instead
+    public string $sortField = 'created_at';
+    public string $sortDirection = 'desc';
+
     public function setUp(): array
     {
 
@@ -77,7 +81,11 @@ final class RepresentativeTable extends PowerGridComponent
     #[On('reloadRepresentatives')]
     public function datasource(): Builder
     {
-        return Representative::orderBy('created_at', 'desc');
+        $sales = fn ($q) => $q->whereIn('orders.status', ['pending', 'processing', 'completed']);
+
+        return Representative::query()
+            ->withCount(['orders as orders_count' => $sales])
+            ->withSum(['orders as sales_total' => $sales], 'total');
     }
 
     public function relationSearch(): array
@@ -88,14 +96,13 @@ final class RepresentativeTable extends PowerGridComponent
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
+            ->add('orders_count')
+            ->add('sales_cell', fn ($row) => $row->sales_total ? '$' . number_format((float) $row->sales_total, 0) : '<span class="text-muted">—</span>')
             ->add('id')
             // Name with the email under it (one column instead of two, so the table fits the screen)
             ->add('rep_cell', function ($row) {
                 return '<div class="adm-cell-main">' . e($row->name ?: '-') . '</div>'
                     . ($row->email ? '<div class="adm-cell-sub">' . e($row->email) . '</div>' : '');
-            })
-            ->add('row_num', function ($row) {
-                return $this->getRowNum($row);
             })
             ->add('is_approved', function ($row) {
                 if ($row->is_approved) {
@@ -118,7 +125,6 @@ final class RepresentativeTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('#', 'row_num'),
             Column::make('Representative', 'rep_cell', 'name')->bodyAttribute('gr-wrap')
                 ->sortable()
                 ->visibleInExport(false),
@@ -140,6 +146,13 @@ final class RepresentativeTable extends PowerGridComponent
             Column::make('Status', 'status_label')
                 ->hidden()
                 ->visibleInExport(true),
+
+            Column::make('Orders', 'orders_count')->headerAttribute('text-end')->bodyAttribute('text-end')
+                ->sortUsing(fn ($query, $dir) => $query->orderBy('orders_count', $dir)),
+
+            Column::make('Sales', 'sales_cell', 'sales_total')->headerAttribute('text-end')->bodyAttribute('gr-nowrap text-end')
+                ->sortUsing(fn ($query, $dir) => $query->orderBy('sales_total', $dir))
+                ->visibleInExport(false),
 
             Column::make('Approved', 'is_approved')
                 ->visibleInExport(false),
@@ -202,7 +215,7 @@ final class RepresentativeTable extends PowerGridComponent
                 ->hidden()
                 ->visibleInExport(true),
 
-            Column::make('status', 'status')
+            Column::make('Status', 'status')
                 ->visibleInExport(false)
                 ->toggleable(
                     hasPermission: auth()->check(),
@@ -217,7 +230,6 @@ final class RepresentativeTable extends PowerGridComponent
     public function filters(): array
     {
         return [
-            Filter::datepicker('created_at', 'created_at'),
 
             Filter::boolean('status')
                 ->label('active', 'inactive')

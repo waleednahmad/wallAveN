@@ -26,6 +26,10 @@ final class DealerTable extends PowerGridComponent
     use WithExport;
     public string $tableName = 'dealer-table-davd0q-table';
 
+    // Newest first by default; clicking a column header sorts by that column instead
+    public string $sortField = 'created_at';
+    public string $sortDirection = 'desc';
+
     /** Tab on the dealers page (?tab=approved). "applications" shows review cards instead of this table. */
     #[Url(as: 'tab', except: 'all')]
     public string $tab = 'all';
@@ -88,11 +92,15 @@ final class DealerTable extends PowerGridComponent
     #[On('reloadDealers')]
     public function datasource(): Builder
     {
+        $sales = fn ($q) => $q->whereIn('orders.status', ['pending', 'processing', 'completed']);
+
         return Dealer::with('priceList')
+            ->withCount(['orders as orders_count' => $sales])
+            ->withSum(['orders as sales_total' => $sales], 'total')
+            ->withMax(['orders as last_order_at' => $sales], 'created_at')
             ->when($this->tab === 'approved', fn ($q) => $q->where('is_approved', true))
             ->when($this->tab === 'inactive', fn ($q) => $q->where('status', false))
-            ->when($this->tab === 'declined', fn ($q) => $q->whereNotNull('rejected_at'))
-            ->orderBy('created_at', 'desc');
+            ->when($this->tab === 'declined', fn ($q) => $q->whereNotNull('rejected_at'));
     }
 
     public function relationSearch(): array
@@ -104,13 +112,26 @@ final class DealerTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('is_approved', function ($row) {
+            // Approved date, or where the application stands
+            ->add('approved_cell', function ($row) {
                 if ($row->is_approved) {
-                    return "<span class='badge badge-success'>Yes</span>";
-                } else {
-                    return "<span class='badge badge-danger'>No</span>";
+                    return $row->approved_at ? Carbon::parse($row->approved_at)->format('M j, Y') : '<span class="badge badge-success">Approved</span>';
                 }
+                return $row->rejected_at ? '<span class="badge badge-danger">Declined</span>' : '<span class="badge badge-warning">Waiting</span>';
             })
+            ->add('orders_count')
+            ->add('sales_cell', fn ($row) => $row->sales_total ? '$' . number_format((float) $row->sales_total, 0) : '<span class="text-muted">—</span>')
+            ->add('sales_plain', fn ($row) => number_format((float) $row->sales_total, 2, '.', ''))
+            // When they last ordered; 90+ days is flagged so quiet dealers stand out
+            ->add('last_order_cell', function ($row) {
+                if (!$row->last_order_at) {
+                    return '<span class="text-muted">Never</span>';
+                }
+                $d = Carbon::parse($row->last_order_at);
+                $txt = '<span title="' . $d->format('M j, Y') . '">' . $d->diffForHumans() . '</span>';
+                return $d->lt(now()->subDays(90)) ? '<span class="adm-quiet">' . $txt . '</span>' : $txt;
+            })
+            ->add('last_order_plain', fn ($row) => $row->last_order_at ? Carbon::parse($row->last_order_at)->format('Y-m-d') : '')
             ->add('resale_certificate', function ($row) {
                 if ($row->resale_certificate && file_exists(public_path($row->resale_certificate))) {
                     return "<a href='" . asset($row->resale_certificate) . "' target='_blank'>View</a>";
@@ -120,16 +141,15 @@ final class DealerTable extends PowerGridComponent
             })
             // Company name with the email under it (one column instead of two, so the table fits the screen)
             ->add('dealer_cell', function ($row) {
+                $place = trim(implode(', ', array_filter([$row->city, $row->state])));
+                $sub = array_map(fn ($v) => '<span class="adm-nowrap">' . e($v) . '</span>', array_filter([$row->email, $place]));
                 return '<div class="adm-cell-main">' . e($row->company_name ?: ($row->name ?: '-')) . '</div>'
-                    . ($row->email ? '<div class="adm-cell-sub">' . e($row->email) . '</div>' : '');
-            })
-            ->add('row_num', function ($row) {
-                return $this->getRowNum($row);
+                    . ($sub ? '<div class="adm-cell-sub">' . implode(' · ', $sub) . '</div>' : '');
             })
             ->add('price_list_id', function ($row) {
                 return $row->priceList ? $row->priceList->name : '-';
             })
-            ->add('approved_at', fn($row) => $row->approved_at ? Carbon::parse($row->approved_at)->format('Y-m-d') : '')
+            ->add('approved_at_plain', fn($row) => $row->approved_at ? Carbon::parse($row->approved_at)->format('Y-m-d') : '')
 
 
             ->add('status_label', function ($row) {
@@ -144,7 +164,6 @@ final class DealerTable extends PowerGridComponent
     public function columns(): array
     {
         return [
-            Column::make('#', 'row_num'),
 
             Column::make('Dealer', 'dealer_cell', 'company_name')->bodyAttribute('gr-wrap')
                 ->sortable()
@@ -175,23 +194,39 @@ final class DealerTable extends PowerGridComponent
                 ->bodyAttribute('gr-nowrap')
                 ->searchable(),
 
-            Column::make('Price List', 'price_list_id'),
+            Column::make('City', 'city')->searchable()->hidden()->visibleInExport(true),
+            Column::make('State', 'state')->searchable()->hidden()->visibleInExport(true),
 
-            Column::make('Approved', 'is_approved')
+            Column::make('Price list', 'price_list_id'),
+
+            Column::make('Orders', 'orders_count')->headerAttribute('text-end')->bodyAttribute('text-end')
+                ->sortUsing(fn ($query, $dir) => $query->orderBy('orders_count', $dir)),
+
+            Column::make('Sales', 'sales_cell', 'sales_total')->headerAttribute('text-end')->bodyAttribute('gr-nowrap text-end')
+                ->sortUsing(fn ($query, $dir) => $query->orderBy('sales_total', $dir))
+                ->visibleInExport(false),
+            Column::make('Sales', 'sales_plain')->hidden()->visibleInExport(true),
+
+            Column::make('Last order', 'last_order_cell', 'last_order_at')->bodyAttribute('gr-nowrap')
+                ->sortUsing(fn ($query, $dir) => $query->orderByRaw('last_order_at IS NULL, last_order_at ' . ($dir === 'asc' ? 'asc' : 'desc')))
+                ->visibleInExport(false),
+            Column::make('Last order', 'last_order_plain')->hidden()->visibleInExport(true),
+
+            Column::make('Approved', 'approved_cell', 'approved_at')->bodyAttribute('gr-nowrap')
+                ->sortable()
                 ->visibleInExport(false),
 
             Column::make('is approved', 'is_approved_label')
                 ->hidden()
                 ->visibleInExport(true),
 
-            Column::make('Approved on', 'approved_at')
-                ->bodyAttribute('gr-nowrap')
-                ->searchable(),
-
+            Column::make('Approved on', 'approved_at_plain')
+                ->hidden()
+                ->visibleInExport(true),
 
             // Column::make('Resale Certificate', 'resale_certificate'),
 
-            Column::make('status', 'status')
+            Column::make('Status', 'status')
                 ->visibleInExport(false)
                 ->toggleable(
                     hasPermission: auth()->check(),
@@ -208,20 +243,41 @@ final class DealerTable extends PowerGridComponent
     public function filters(): array
     {
         return [
-            Filter::datepicker('created_at', 'created_at'),
-
-            Filter::datepicker('approved_at', 'approved_at'),
-
-            Filter::boolean('is_approved')
-                ->label('approved', 'not approved'),
-
-            Filter::boolean('status')
-                ->label('active', 'inactive'),
-
             Filter::multiSelect('price_list_id', 'price_list_id')
                 ->dataSource(PriceList::whereHas('dealers')->get())
                 ->optionValue('id')
                 ->optionLabel('name'),
+
+            Filter::select('state', 'state')
+                ->dataSource(
+                    Dealer::whereNotNull('state')->where('state', '!=', '')
+                        ->distinct()->orderBy('state')->pluck('state')
+                        ->map(fn ($st) => ['value' => $st, 'label' => $st])->values()->all()
+                )
+                ->optionValue('value')
+                ->optionLabel('label'),
+
+            // Who to call: ordered recently, gone quiet, or never ordered
+            Filter::select('last_order_cell', 'activity')
+                ->dataSource([
+                    ['value' => 'recent', 'label' => 'Ordered in the last 90 days'],
+                    ['value' => 'quiet', 'label' => 'No order in 90+ days'],
+                    ['value' => 'never', 'label' => 'Never ordered'],
+                ])
+                ->optionValue('value')
+                ->optionLabel('label')
+                ->builder(function (Builder $query, $value) {
+                    $sales = fn ($q) => $q->whereIn('orders.status', ['pending', 'processing', 'completed']);
+                    $since = now()->subDays(90);
+                    return match ($value) {
+                        'recent' => $query->whereHas('orders', fn ($q) => $sales($q)->where('orders.created_at', '>=', $since)),
+                        'quiet' => $query->whereHas('orders', $sales)->whereDoesntHave('orders', fn ($q) => $sales($q)->where('orders.created_at', '>=', $since)),
+                        'never' => $query->whereDoesntHave('orders', $sales),
+                        default => $query,
+                    };
+                }),
+
+            Filter::datepicker('approved_at', 'approved_at'),
         ];
     }
 

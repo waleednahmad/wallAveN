@@ -35,7 +35,7 @@ final class PriceListTable extends PowerGridComponent
     #[On('refreshPriceLists')]
     public function datasource(): Builder
     {
-        return PriceList::query();
+        return PriceList::query()->withCount('dealers');
     }
 
     public function relationSearch(): array
@@ -62,9 +62,11 @@ final class PriceListTable extends PowerGridComponent
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Discount Percentage', 'percentage')
-                ->sortable()
-                ->searchable(),
+            Column::make('Discount', 'percentage')->headerAttribute('text-end')->bodyAttribute('text-end')
+                ->sortable(),
+
+            Column::make('Dealers', 'dealers_count')->headerAttribute('text-end')->bodyAttribute('text-end')
+                ->sortUsing(fn ($query, $dir) => $query->orderBy('dealers_count', $dir)),
 
             Column::action('Action')
         ];

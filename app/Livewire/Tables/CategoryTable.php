@@ -34,7 +34,7 @@ final class CategoryTable extends PowerGridComponent
     #[On('refreshCategories')]
     public function datasource(): Builder
     {
-        return Category::query();
+        return Category::query()->withCount('products');
     }
 
     public function relationSearch(): array
@@ -62,23 +62,22 @@ final class CategoryTable extends PowerGridComponent
             ->add('description', function ($value) {
                 return $value->description ? str()->limit(strip_tags($value->description), 60) : '-';
             })
-            ->add('row_num', function ($row) {
-                return $this->getRowNum($row);
-            })
             ->add('created_at');
     }
 
     public function columns(): array
     {
         return [
-            Column::make('#', 'row_num'),
             Column::make('Image', 'image'),
             Column::make('Breadcrumb', 'breadcrumb_image'),
             Column::make('Name', 'name')->bodyAttribute('gr-wrap')
                 ->sortable()
                 ->searchable(),
             Column::make('Description', 'description')->bodyAttribute('gr-wrap'),
-            Column::make('status', 'status')
+            Column::make('Products', 'products_count')->headerAttribute('text-end')->bodyAttribute('text-end')
+                ->sortUsing(fn ($query, $dir) => $query->orderBy('products_count', $dir)),
+
+            Column::make('Status', 'status')
                 ->toggleable(
                     hasPermission: auth()->check(),
                     trueLabel: '<span class="text-green-500">Yes</span>',
@@ -100,10 +99,7 @@ final class CategoryTable extends PowerGridComponent
     public function filters(): array
     {
         return [
-            Filter::datepicker('created_at', 'created_at'),
-
-            Filter::boolean('status')
-                ->label('active', 'inactive'),
+            // Only a handful of categories: search is enough
         ];
     }
 

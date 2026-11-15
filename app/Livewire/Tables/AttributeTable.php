@@ -52,24 +52,21 @@ final class AttributeTable extends PowerGridComponent
                 $values .= '</ul>';
                 return $values;
             })
-            ->add('row_num', function ($row) {
-                return $this->getRowNum($row);
-            })
             ->add('created_at');
     }
 
     public function columns(): array
     {
         return [
-            Column::make('#', 'row_num'),
 
             Column::make('Name', 'name')->bodyAttribute('gr-wrap')
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Values count', 'values_count'),
+            Column::make('Values', 'values')->bodyAttribute('gr-wrap'),
 
-            Column::make('values', 'values'),
+            Column::make('Count', 'values_count')->headerAttribute('text-end')->bodyAttribute('text-end')
+                ->sortUsing(fn ($query, $dir) => $query->orderBy('values_count', $dir)),
 
             Column::action('Action')
         ];

@@ -29,6 +29,10 @@ final class OrderTable extends PowerGridComponent
     public $fileName = '';
 
     /** Status tab above the table (?status=pending). 'all' shows every order. */
+    // Newest first by default; clicking a column header sorts by that column instead
+    public string $sortField = 'orders.created_at';
+    public string $sortDirection = 'desc';
+
     #[Url(as: 'status', except: 'all')]
     public string $statusTab = 'all';
 
@@ -75,6 +79,7 @@ final class OrderTable extends PowerGridComponent
     public function datasource(): Builder
     {
         return Order::join('dealers', 'orders.dealer_id', '=', 'dealers.id')
+            ->leftJoin('representatives', 'orders.representative_id', '=', 'representatives.id')
             ->select([
                 'orders.id',
                 'orders.status',
@@ -84,9 +89,12 @@ final class OrderTable extends PowerGridComponent
                 'dealers.company_name as company_name',
                 'dealers.email as dealer_email',
                 'dealers.phone as dealer_phone',
+                'orders.po_number',
+                'orders.admin_id',
+                'orders.representative_id',
+                'representatives.name as rep_name',
             ])
-            ->when($this->statusTab !== 'all', fn ($query) => $query->where('orders.status', $this->statusTab))
-            ->orderBy('created_at', 'desc');
+            ->when($this->statusTab !== 'all', fn ($query) => $query->where('orders.status', $this->statusTab));
     }
 
     /** Order counts per status for the tabs (same join as the table, so the numbers match). */
@@ -219,13 +227,22 @@ final class OrderTable extends PowerGridComponent
 
             // Display copy under its own name: assigning text to created_at itself gets cast back to a date
             ->add('created_at')
+            ->add('placed_by', fn (Order $order) => $order->representative_id
+                ? '<span class="adm-cell-main">' . e($order->rep_name ?: 'Sales rep') . '</span><div class="adm-cell-sub">Sales rep</div>'
+                : ($order->admin_id ? '<span class="text-muted">Admin</span>' : '<span class="text-muted">Dealer</span>'))
+            ->add('placed_by_label', fn (Order $order) => $order->representative_id ? 'Sales rep: ' . $order->rep_name : ($order->admin_id ? 'Admin' : 'Dealer'))
             ->add('placed_on', fn (Order $order) => $order->created_at?->format('M j, Y · g:i A'));
     }
 
     public function columns(): array
     {
         return [
-            Column::make('Id', 'id'),
+            Column::make('Order', 'id')->sortable()->searchable(),
+
+            Column::make('PO number', 'po_number', 'orders.po_number')
+                ->searchable()
+                ->hidden()
+                ->visibleInExport(true),
 
             Column::make('Dealer', 'company_name', 'dealers.company_name')->bodyAttribute('gr-wrap')
                 ->searchable()
@@ -255,16 +272,23 @@ final class OrderTable extends PowerGridComponent
                 ->hidden()
                 ->visibleInExport(true),
 
+            Column::make('Placed by', 'placed_by', 'orders.representative_id')->bodyAttribute('gr-nowrap')
+                ->visibleInExport(false),
+            Column::make('Placed by', 'placed_by_label')
+                ->hidden()
+                ->visibleInExport(true),
+
             Column::make('Total', 'total')->headerAttribute('text-end')->bodyAttribute('gr-nowrap text-end')
                 ->withSum('total', header: false, footer: true)
+                ->sortable()
                 ->searchable(),
 
             Column::make('Items', 'quantity')->headerAttribute('text-end')->bodyAttribute('text-end')
                 ->withSum('quantity', header: false, footer: true)
-                ->searchable(),
+                ->sortable(),
 
             Column::make('Date', 'placed_on', 'orders.created_at')->bodyAttribute('gr-nowrap')
-                ->searchable()
+                ->sortable()
                 ->visibleInExport(false),
 
             Column::make('Created at', 'created_at_formatted', 'created_at')->bodyAttribute('gr-nowrap')
@@ -288,6 +312,21 @@ final class OrderTable extends PowerGridComponent
     {
         return [
             Filter::datepicker('placed_on', 'orders.created_at'),
+
+            Filter::select('placed_by', 'placed_by')
+                ->dataSource([
+                    ['value' => 'dealer', 'label' => 'Dealer (online)'],
+                    ['value' => 'rep', 'label' => 'Sales rep'],
+                    ['value' => 'admin', 'label' => 'Admin'],
+                ])
+                ->optionValue('value')
+                ->optionLabel('label')
+                ->builder(fn (Builder $query, $value) => match ($value) {
+                    'dealer' => $query->whereNull('orders.representative_id')->whereNull('orders.admin_id'),
+                    'rep' => $query->whereNotNull('orders.representative_id'),
+                    'admin' => $query->whereNull('orders.representative_id')->whereNotNull('orders.admin_id'),
+                    default => $query,
+                }),
 
             // Status is picked with the tabs above the table, so it has no filter here
 
