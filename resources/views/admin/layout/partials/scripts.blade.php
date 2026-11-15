@@ -7,6 +7,14 @@
 
 {{-- <script src="{{ asset('dashboard/plugins/popper/umd/popper.min.js') }}"></script> --}}
 <!-- AdminLTE App -->
+{{-- AdminLTE's iframe plugin reads its options from localStorage on every page and throws when they are missing --}}
+<script>
+    try {
+        if (!localStorage.getItem('AdminLTE:IFrame:Options')) {
+            localStorage.setItem('AdminLTE:IFrame:Options', JSON.stringify({ autoIframeMode: false, autoItemActive: false, autoShowNewTab: false, autoDarkMode: false, allowDuplicates: false, allowReload: false, loadingScreen: false, useNavbarItems: false }));
+        }
+    } catch (e) {}
+</script>
 <script src="{{ asset('dashboard/dist/js/adminlte.min.js') }}"></script>
 <script src="{{ asset('assets/js/popper.min.js') }}"></script>
 

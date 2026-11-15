@@ -24,6 +24,8 @@
         .gr-about .gr-band { background: var(--brand-nav); border-radius: 20px; padding: clamp(28px, 5vw, 56px); }
         .gr-about .gr-band h2, .gr-about .gr-band h3 { color: #fff; }
         .gr-about .gr-band h3 { font-family: var(--font-playfair); font-size: 24px; color: var(--brand-accent); margin-bottom: 8px; }
+        /* Phones: the wide g-5 gutters were wider than the page padding and pushed the page sideways */
+        @media (max-width: 575.98px) { .gr-about .row.g-5 { --bs-gutter-x: 1.5rem; } }
         .gr-about .gr-band p { color: var(--brand-on-nav-muted); font-size: 16px; margin: 0; }
         .gr-about .gr-band .col-md-4 { border-top: 1px solid rgba(255,255,255,.2); padding-top: 20px; }
         .gr-about .gr-btn { display: inline-flex; align-items: center; height: 52px; padding: 0 28px; border-radius: var(--gr-radius-btn); font-weight: 600; text-decoration: none; }

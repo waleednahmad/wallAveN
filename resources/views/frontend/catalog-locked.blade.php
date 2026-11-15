@@ -3,7 +3,9 @@
 @extends('frontend.layout.app')
 
 @section('title', 'Catalog for registered retailers')
-@section('meta_desc', 'Golden Rugs sells wholesale to registered retailers. Log in or apply for a dealer account to browse the catalog and see trade prices.')
+@section('meta_desc', (getWebsiteTitle() ?: config('app.name')) . ' sells wholesale to registered retailers. Log in or apply for a dealer account to browse the catalog and see trade prices.')
+{{-- Shown at product URLs while the catalog is closed: keep it out of search results --}}
+@section('robots', 'noindex, follow')
 
 @section('content')
     <section class="gr-locked">

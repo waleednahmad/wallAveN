@@ -1,6 +1,42 @@
 @extends('frontend.layout.app')
 
 @section('title', $product->name)
+@php
+    // Search/share text from the product description (falls back to a short line)
+    $grPlain = trim(preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags((string) $product->description))));
+    $grSite = getWebsiteTitle() ?: config('app.name');
+    $grMetaDesc = $grPlain !== ''
+        ? \Illuminate\Support\Str::limit($grPlain, 155)
+        : 'Wholesale ' . $product->name . ' from ' . $grSite . '. Available to registered retailers.';
+    $grImage = $product->image ? asset($product->image) : null;
+    $grPrices = $product->variants->pluck('price')->filter(fn ($p) => $p !== null && $p > 0);
+@endphp
+@section('meta_desc', $grMetaDesc)
+@section('og_type', 'product')
+@if ($grImage)
+    @section('og_image', $grImage)
+@endif
+
+@push('scripts')
+    <script type="application/ld+json">{!! json_encode(array_filter([
+        '@context' => 'https://schema.org',
+        '@type' => 'Product',
+        'name' => $product->name,
+        'sku' => $product->sku,
+        'image' => $grImage ? [$grImage] : null,
+        'description' => $grMetaDesc,
+        'brand' => ['@type' => 'Brand', 'name' => $grSite],
+        // Prices only when this visitor may see them (catalog setting / signed in)
+        'offers' => canSeePrices() && $grPrices->isNotEmpty() ? [
+            '@type' => 'AggregateOffer',
+            'priceCurrency' => 'USD',
+            'lowPrice' => number_format((float) $grPrices->min(), 2, '.', ''),
+            'highPrice' => number_format((float) $grPrices->max(), 2, '.', ''),
+            'offerCount' => $grPrices->count(),
+            'availability' => 'https://schema.org/InStock',
+        ] : null,
+    ]), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endpush
 
 @push('styles')
     <style>

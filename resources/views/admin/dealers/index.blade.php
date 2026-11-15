@@ -113,7 +113,7 @@
 
             // ============== Close Update Password Offcanvas ==============
             Livewire.on('closeUpdatePasswordOffcanvas', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('updatePassword')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('updatePassword')).hide();
             });
 
             // ============== Deep link: /super_admin/dealers?dealer=12 opens the dealer details ==============
@@ -148,7 +148,7 @@
 
             // ============== Close Accept Order Modal ==============
             Livewire.on('closePriceListMoodal', (event) => {
-                bootstrap.Modal.getInstance(document.getElementById('priceListMoodal')).hide();
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('priceListMoodal')).hide();
             });
         });
     </script>

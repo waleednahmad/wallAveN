@@ -66,7 +66,7 @@
         document.addEventListener('livewire:init', () => {
             // ============== Close Create Modal ==============
             Livewire.on('closeCreateModal', (event) => {
-                bootstrap.Modal.getInstance(document.getElementById('createAttributeModal')).hide();
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('createAttributeModal')).hide();
             });
 
             // ============== Open Edit Modal ==============
@@ -78,7 +78,7 @@
 
             // ============== Close Edit Modal ==============
             Livewire.on('closeEditModal', (event) => {
-                bootstrap.Modal.getInstance(document.getElementById('editAttributeModal')).hide();
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('editAttributeModal')).hide();
             });
 
         });

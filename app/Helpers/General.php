@@ -4,40 +4,89 @@ use App\Models\AppLanguage;
 use App\Models\PublicSetting;
 use Illuminate\Support\Facades\Config;
 
+/**
+ * All store settings, loaded once per request (pages read them many times).
+ * PublicSetting clears the cache when a setting is saved.
+ */
+function publicSettings(): array
+{
+    // Queue workers live for hours: read fresh there so a changed setting is picked up
+    if (app()->runningInConsole()) {
+        return PublicSetting::pluck('value', 'key')->all();
+    }
+
+    return app()->bound('gr.public_settings')
+        ? app('gr.public_settings')
+        : tap(PublicSetting::pluck('value', 'key')->all(), fn ($all) => app()->instance('gr.public_settings', $all));
+}
+
+function publicSetting(string $key, $default = null)
+{
+    return publicSettings()[$key] ?? $default;
+}
+
+/**
+ * Who sees the catalog (setting "toggle show category & shop pages"):
+ *  'closed'      0 = only signed-in dealers, reps and admins
+ *  'open'        1 = everyone sees products; trade prices only after signing in
+ *  'open-prices' 2 = everyone sees products and prices; ordering still needs an account
+ */
+function catalogMode(): string
+{
+    return match ((string) publicSetting('toggle show category & shop pages', '0')) {
+        '1' => 'open',
+        '2' => 'open-prices',
+        default => 'closed',
+    };
+}
+
+/** Signed in as a dealer, sales rep or admin (the people who can order). */
+function isTradeUser(): bool
+{
+    return auth('dealer')->check() || auth('representative')->check() || auth('web')->check();
+}
+
+/** Prices are shown to this visitor. */
+function canSeePrices(): bool
+{
+    return isTradeUser() || catalogMode() === 'open-prices';
+}
+
 function getMinimumnItemsCount()
 {
-    return PublicSetting::where('key', 'minimum items')->first()->value ?? 0;
+    return publicSetting('minimum items', 0);
 }
 
 function getMinimumPrice()
 {
-    return PublicSetting::where('key', 'minimum price')->first()->value ?? 0;
+    return publicSetting('minimum price', 0);
 }
 
 function isVendorActivated()
 {
-    return PublicSetting::where('key', 'activate vendor')->first()->value ?? 0;
+    return publicSetting('activate vendor', 0);
 }
 
 function showBecomeARepInMenu()
 {
-    return PublicSetting::where('key', 'show become a rep in the menu')->first()->value ?? 0;
+    return publicSetting('show become a rep in the menu', 0);
 }
 
 function showCategoryAndShopPages()
 {
-    return PublicSetting::where('key', 'toggle show category & shop pages')->first()->value ?? 0;
+    // Kept for older callers: true when guests may browse the catalog (with or without prices)
+    return catalogMode() !== 'closed';
 }
 
 function isLargeMenuActivated()
 {
-    return PublicSetting::where('key', 'activate-large-menu')->first()->value ?? 0;
+    return publicSetting('activate-large-menu', 0);
 }
 function getMainImage()
 {
-    $value = PublicSetting::where('key', 'main logo')->first();
-    if ($value) {
-        return asset($value->value);
+    $value = publicSetting('main logo');
+    if ($value !== null) {
+        return asset($value);
     } else {
         return asset('assets/img/logo.webp');
     }
@@ -45,9 +94,9 @@ function getMainImage()
 
 function getFavicon()
 {
-    $value = PublicSetting::where('key', 'favicon')->first();
-    if ($value) {
-        return asset($value->value);
+    $value = publicSetting('favicon');
+    if ($value !== null) {
+        return asset($value);
     } else {
         return asset('assets/img/favicon.png');
     }
@@ -55,18 +104,18 @@ function getFavicon()
 
 function getGoogleAnalytics()
 {
-    return PublicSetting::where('key', 'google analytics')->first()->value ?? '';
+    return publicSetting('google analytics', '');
 }
 
 
 function getWebsiteTitle()
 {
-    return PublicSetting::where('key', 'website title')->first()->value ?? '';
+    return publicSetting('website title', '');
 }
 
 function getMinimumDealerSalePercentage()
 {
-    return PublicSetting::where('key', 'minimum-dealer-sale-percentage')->first()->value ?? 1;
+    return publicSetting('minimum-dealer-sale-percentage', 1);
 }
 
 /**

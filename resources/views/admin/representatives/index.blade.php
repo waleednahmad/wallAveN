@@ -57,7 +57,7 @@
 
             // ============== Close Update Password Offcanvas ==============
             Livewire.on('closeUpdatePasswordOffcanvas', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('updatePassword')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('updatePassword')).hide();
             });
         });
 

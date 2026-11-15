@@ -2,37 +2,46 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta name="title" content="@yield('title')">
-<meta name="description" content="@yield('meta_desc')">
+{{-- SEO and sharing. Pages set title / meta_desc / keywords; optional og_image, og_type, robots, canonical. --}}
+@php
+    $grSite = getWebsiteTitle() ?: config('app.name');
+    $grDesc = trim($__env->yieldContent('meta_desc'));
+    $grShareImage = trim($__env->yieldContent('og_image'))
+        ?: (file_exists(public_path('assets/img/home1/about-img1.webp')) ? asset('assets/img/home1/about-img1.webp') : getMainImage());
+    $grCanonical = trim($__env->yieldContent('canonical')) ?: url()->current();
+@endphp
+<meta name="description" content="{!! $grDesc !!}">
 <meta name="keywords" content="@yield('keywords')">
-<meta property="og:url" content="{{ url()->current() }}" />
-<meta property="og:image:width" content="200" />
-<meta property="og:image:height" content="200" />
-<meta name="twitter:card" content="summary" />
-<meta name="twitter:site" content="@goldenRugs" />
-<meta name="twitter:creator" content="@goldenRugs" />
-<meta name="twitter:title" content="@yield('title')">
-<meta name="twitter:description" content="@yield('meta_desc')" />
-<meta name="author" content="golden Rugs">
+<meta name="robots" content="@yield('robots', 'index, follow')">
+<link rel="canonical" href="{{ $grCanonical }}">
+<meta name="author" content="{{ $grSite }}">
+<meta property="og:site_name" content="{{ $grSite }}">
+<meta property="og:type" content="@yield('og_type', 'website')">
+<meta property="og:url" content="{{ $grCanonical }}">
 <meta property="og:title" content="@yield('title')">
-<meta property="og:description" content="@yield('meta_desc')">
-<meta propert="og:keywords" content="@yield('keywords')">
+<meta property="og:description" content="{!! $grDesc !!}">
+<meta property="og:image" content="{{ $grShareImage }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="@yield('title')">
+<meta name="twitter:description" content="{!! $grDesc !!}">
+<meta name="twitter:image" content="{{ $grShareImage }}">
+@if (request()->routeIs('frontend.home'))
+    {{-- Who the business is, for search engines --}}
+    <script type="application/ld+json">{!! json_encode([
+        '@context' => 'https://schema.org',
+        '@type' => 'Organization',
+        'name' => $grSite,
+        'url' => url('/'),
+        'logo' => getMainImage(),
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endif
 
 <!-- Bootstrap CSS -->
 <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
 <!-- Bootstrap Icon CSS -->
 <link href="{{ asset('assets/css/bootstrap-icons.css') }}" rel="stylesheet">
-<!-- Swiper slider CSS -->
-<link rel="stylesheet" href="{{ asset('assets/css/swiper-bundle.min.css') }}">
-<!--Nice Select CSS -->
-<link rel="stylesheet" href="{{ asset('assets/css/nice-select.css') }}">
 
-<!-- Animate CSS -->
-<link rel="stylesheet" href="{{ asset('assets/css/animate.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/jquery.fancybox.min.css') }}">
 
-<!-- BoxIcon  CSS -->
-<link href="{{ asset('assets/css/boxicons.min.css') }}" rel="stylesheet">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 

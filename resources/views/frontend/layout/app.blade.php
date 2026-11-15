@@ -5,7 +5,10 @@
     @include('frontend.layout.partials.head')
     @stack('styles')
     @vite(['resources/front/css/app.css'])
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    {{-- reCAPTCHA only where a sign-up form uses it (it is heavy) --}}
+    @if (request()->routeIs('frontend.register', 'representative.register'))
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    @endif
 </head>
 
 <body id="body">

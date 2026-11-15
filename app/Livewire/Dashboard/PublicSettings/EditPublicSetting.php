@@ -65,6 +65,10 @@ class EditPublicSetting extends Component
             ]);
         }
 
+        if ($this->key === 'toggle show category & shop pages') {
+            $this->validate(['value' => 'required|in:0,1,2']);
+        }
+
         $value = $this->value;
 
         if ($this->type == 'image' && $this->image) {

@@ -58,7 +58,7 @@
 
             // ============== CLose Edit Offcanvas ==============
             Livewire.on('closeMediaOffcanvas', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('mediaOffcanvas')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('mediaOffcanvas')).hide();
             });
 
         });

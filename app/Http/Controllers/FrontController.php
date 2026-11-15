@@ -64,7 +64,8 @@ class FrontController extends Controller
             $firstCategory = $product?->categories->first();
 
             if (!$product) {
-                return redirect()->route('frontend.home')->with('error', 'Product not found.');
+                // A real "not found" (search engines drop the old link) instead of a redirect home
+                abort(404);
             }
             return view('frontend.product', compact('product', 'firstCategory'));
         }

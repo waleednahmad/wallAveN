@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 
 
 
+// Search engines: built from the store settings (domain, catalog visibility)
+Route::get('/robots.txt', [\App\Http\Controllers\SeoController::class, 'robots'])->name('robots');
+Route::get('/sitemap.xml', [\App\Http\Controllers\SeoController::class, 'sitemap'])->name('sitemap');
+
 Route::controller(FrontController::class)->group(function () {
     Route::get('/', 'index')->name('frontend.home');
     Route::get('/product/{slug}', 'showProduct')->name('frontend.product');

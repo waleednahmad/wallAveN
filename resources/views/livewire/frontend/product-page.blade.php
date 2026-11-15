@@ -64,7 +64,8 @@
                     <h3 class="my-3">
                         {{ $product->name }}
                     </h3>
-                    @if (auth()->guard('representative')->check() || auth()->guard('dealer')->check() || auth('web')->check())
+                    {{-- Prices: signed-in trade users always; guests only when the catalog is open with prices --}}
+                    @if (canSeePrices())
                         @auth('dealer')
                             @if (auth('dealer')->user()->is_customer_mode_active)
                                 @php
@@ -151,6 +152,16 @@
                         @endif
                     </div>
                     {{-- ========== End Add To Cart ========= --}}
+                @else
+                    {{-- Guests can browse but ordering needs a trade account --}}
+                    <div class="gr-guest-cta">
+                        <p class="gr-guest-cta-title">{{ canSeePrices() ? 'Ready to order?' : 'Trade prices for registered retailers' }}</p>
+                        <p class="gr-guest-cta-text">{{ canSeePrices() ? 'Log in to your dealer account to order, or apply for one. It takes about five minutes.' : 'Log in to see your price and order, or apply for a dealer account. It takes about five minutes.' }}</p>
+                        <div class="gr-guest-cta-actions">
+                            <a href="{{ route('login') }}" class="gr-btn gr-btn-primary">Log in</a>
+                            <a href="{{ route('frontend.register') }}" class="gr-btn gr-btn-outline">Become a dealer</a>
+                        </div>
+                    </div>
                 @endif
 
             </div>

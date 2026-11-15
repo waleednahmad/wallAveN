@@ -53,7 +53,17 @@
         </div>
     @else
         <div class="gr-product-foot">
-            <p class="gr-product-login"><a href="{{ route('login') }}">Log in to see trade price</a></p>
+            @if (canSeePrices())
+                {{-- Catalog open with prices: show the list price, ordering still needs an account --}}
+                <p class="gr-product-price">
+                    @if ($hasManyVariants)
+                        <span class="gr-product-from">from</span>
+                    @endif
+                    <strong>{{ $grMoney($price) }}</strong>
+                </p>
+            @else
+                <p class="gr-product-login"><a href="{{ route('login') }}">Log in to see trade price</a></p>
+            @endif
             <a href="{{ route('frontend.product', $product->slug) }}" class="gr-btn gr-btn-outline gr-btn-sm w-100">Details <i class="fas fa-arrow-right gr-btn-arrow" aria-hidden="true"></i></a>
         </div>
     @endif

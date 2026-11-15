@@ -56,7 +56,7 @@
 
             // ============== Close Edit Offcanvas ==============
             Livewire.on('closeEditOffcanvas', () => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('editPublicSetting')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('editPublicSetting')).hide();
             });
         });
     </script>

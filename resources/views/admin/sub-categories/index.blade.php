@@ -61,7 +61,7 @@
         document.addEventListener('livewire:init', () => {
             // ============== Close Create Offcanvas ==============
             Livewire.on('closeCreateForm', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('createSubCategory')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('createSubCategory')).hide();
             });
 
             // ============== Edit Offcanvas ==============
@@ -76,7 +76,7 @@
 
             // ============== CLose Edit Offcanvas ==============
             Livewire.on('closeEditOffcanvas', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('editSubCategory')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('editSubCategory')).hide();
             });
 
         });

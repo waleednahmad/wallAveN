@@ -53,7 +53,7 @@
 
             // ============== Close Edit Modal ==============
             Livewire.on('closeEditModal', (event) => {
-                bootstrap.Modal.getInstance(document.getElementById('editBreadcrumpModal')).hide();
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('editBreadcrumpModal')).hide();
             });
 
         });

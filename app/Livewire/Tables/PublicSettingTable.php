@@ -44,15 +44,24 @@ final class PublicSettingTable extends PowerGridComponent
 
     public function fields(): PowerGridFields
     {
-        $switches = ['activate vendor', 'show become a rep in the menu', 'toggle show category & shop pages', 'activate-large-menu'];
+        $switches = ['activate vendor', 'show become a rep in the menu', 'activate-large-menu'];
         $images = ['main logo', 'favicon'];
 
         return PowerGrid::fields()
             ->add('id')
             // "activate-large-menu" -> "Activate large menu" (the key itself stays as the code expects it)
-            ->add('setting_name', fn ($row) => e(ucfirst(str_replace(['-', '_'], ' ', (string) $row->key))))
+            ->add('setting_name', fn ($row) => $row->key === 'toggle show category & shop pages'
+                ? 'Catalog for visitors'
+                : e(ucfirst(str_replace(['-', '_'], ' ', (string) $row->key))))
             ->add('value', function ($row) use ($switches, $images) {
-                if (in_array($row->key, $switches, true)) {
+                if ($row->key === 'toggle show category & shop pages') {
+                    return match ((string) $row->value) {
+                        '1' => "<span class='badge badge-success'>Open · prices after login</span>",
+                        '2' => "<span class='badge badge-success'>Open with prices</span>",
+                        default => "<span class='badge badge-secondary'>Closed</span>",
+                    };
+                }
+                                if (in_array($row->key, $switches, true)) {
                     return $row->value == 1 ? "<span class='badge badge-success'>On</span>" : "<span class='badge badge-secondary'>Off</span>";
                 }
                 if (in_array($row->key, $images, true)) {

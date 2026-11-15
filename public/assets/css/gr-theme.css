@@ -601,3 +601,9 @@ dl dt, dl dd, dl dd a { font-size: var(--gr-fs-base); }
 .gr-locked-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 .gr-locked-help { margin: 22px 0 0; font-size: var(--gr-fs-sm); color: var(--gr-muted); }
 @media (max-width: 575px) { .gr-locked-actions .gr-btn { width: 100%; } }
+
+/* Product page: what a guest sees instead of Add to cart */
+.gr-guest-cta { margin-top: 24px; padding: 20px; border: 1px solid var(--gr-line); border-radius: var(--gr-radius); background: var(--gr-paper); }
+.gr-guest-cta-title { margin: 0 0 6px; font-family: var(--gr-font-display); font-size: 20px; color: var(--gr-ink); }
+.gr-guest-cta-text { margin: 0 0 14px; color: var(--gr-muted); font-size: 14.5px; line-height: 1.55; }
+.gr-guest-cta-actions { display: flex; gap: 10px; flex-wrap: wrap; }

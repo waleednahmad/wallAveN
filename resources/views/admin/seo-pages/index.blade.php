@@ -55,7 +55,7 @@
 
             // ============== Close Edit Offcanvas ==============
             Livewire.on('closeModal', () => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('editSeoPage')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('editSeoPage')).hide();
             });
         });
     </script>

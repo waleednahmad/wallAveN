@@ -3,23 +3,9 @@
 <!-- Popper and Bootstrap JS -->
 <script src="{{ asset('assets/js/popper.min.js') }}"></script>
 <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
-<!-- Swiper slider JS -->
-<script src="{{ asset('assets/js/swiper-bundle.min.js') }}"></script>
-<script src="{{ asset('assets/js/slick.min.js') }}"></script>
-<!-- Waypoints JS -->
-<script src="{{ asset('assets/js/waypoints.min.js') }}"></script>
-<!-- Counterup JS -->
-<script src="{{ asset('assets/js/jquery.counterup.min.js') }}"></script>
-<!-- Nice Select  JS -->
-<script src="{{ asset('assets/js/jquery.nice-select.min.js') }}"></script>
-<!-- Fancybox  JS -->
-<script src="{{ asset('assets/js/jquery.fancybox.min.js') }}"></script>
-<!-- Wow  JS -->
-<script src="{{ asset('assets/js/wow.min.js') }}"></script>
-<!-- Marquee  JS -->
-<script src="{{ asset('assets/js/jquery.marquee.min.js') }}"></script>
-
-<script src="{{ asset('assets/js/main.js') }}?v={{ filemtime(public_path('assets/js/main.js')) }}"></script>
+{{-- Template plugins (Swiper, Slick, CounterUp, WOW, Marquee, Fancybox, Nice Select) were loaded on every
+     page but no page used them; gr-main.js keeps the template behaviour the site does use. --}}
+<script src="{{ asset('assets/js/gr-main.js') }}?v={{ filemtime(public_path('assets/js/gr-main.js')) }}"></script>
 
 
 @vite('resources/front/js/app.js')

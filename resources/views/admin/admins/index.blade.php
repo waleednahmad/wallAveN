@@ -93,12 +93,12 @@
 
             // ============== CLose Edit Offcanvas ==============
             Livewire.on('closeEditOffcanvas', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('editAdmin')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('editAdmin')).hide();
             });
 
             // ============== Close Create Offcanvas ==============
             Livewire.on('closeCreateOffcanvas', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('createAdmin')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('createAdmin')).hide();
             });
 
             // ============== Update Password Offcanvas ==============
@@ -112,7 +112,7 @@
 
             // ============== Close Update Password Offcanvas ==============
             Livewire.on('closeUpdatePasswordOffcanvas', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('updatePassword')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('updatePassword')).hide();
             });
         });
     </script>

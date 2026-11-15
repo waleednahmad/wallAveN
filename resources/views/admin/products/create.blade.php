@@ -77,7 +77,7 @@
 
             // ============== CLose Create Category Offcanvas ==============
             Livewire.on('closeCreateCategoryForm', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('addNewCategory')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('addNewCategory')).hide();
             });
 
             // ============== Open Create SubCatregory Offcanvas ==============
@@ -89,7 +89,7 @@
 
             // ============== CLose Create SubCategory Offcanvas ==============
             Livewire.on('closeCreateSubCategoryForm', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('addNewSubCategory')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('addNewSubCategory')).hide();
             });
 
             // ============== Open Create ProductType Offcanvas ==============
@@ -101,7 +101,7 @@
 
             // ============== CLose Create ProductType Offcanvas ==============
             Livewire.on('closeCreateProductTypeForm', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('addNewProductType')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('addNewProductType')).hide();
             });
         });
     </script>

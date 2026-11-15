@@ -5,7 +5,7 @@
     $grNow = (float) ($price ?? 0);
 @endphp
 <div class="gr-price-block">
-    <span class="gr-price-label">{{ $grIsCustomerMode ? 'Price' : 'Your trade price' }}</span>
+    <span class="gr-price-label">{{ $grIsCustomerMode ? 'Price' : (isTradeUser() ? 'Your trade price' : 'Wholesale price') }}</span>
     <div class="gr-price-row">
         <span class="gr-price">${{ number_format($grNow, 2) }}</span>
         @if ($grWas > 0 && $grWas > $grNow)

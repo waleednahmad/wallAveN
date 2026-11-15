@@ -71,12 +71,12 @@
 
             // ============== CLose Edit Offcanvas ==============
             Livewire.on('closeEditForm', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('editCategory')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('editCategory')).hide();
             });
 
             // ============== Close Create Offcanvas ==============
             Livewire.on('closeCreateForm', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('createCategory')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('createCategory')).hide();
             });
         });
     </script>

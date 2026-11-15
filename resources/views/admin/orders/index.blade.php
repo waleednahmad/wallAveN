@@ -130,7 +130,7 @@
 
             // ============== closeChangeStatusModal  ==============
             Livewire.on('closeChangeStatusModal', () => {
-                bootstrap.Modal.getInstance(document.getElementById('changeStatus')).hide();
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('changeStatus')).hide();
             });
         });
     </script>

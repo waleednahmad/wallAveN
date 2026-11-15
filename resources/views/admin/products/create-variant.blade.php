@@ -96,7 +96,7 @@
 
             // ============== Close Offcanvas ==============
             Livewire.on('closeCreateVariantOffcanvas', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('createVariant')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('createVariant')).hide();
             });
 
             // ============== Open Offcanvas ==============
@@ -110,7 +110,7 @@
 
             // ============== Close Offcanvas ==============
             Livewire.on('closeEditVariantAttributesOffcanvas', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('variantAttributes')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('variantAttributes')).hide();
             });
 
 
@@ -125,7 +125,7 @@
 
             // ============= Close Edit Offcanvas ==============
             Livewire.on('closeEditVariantOffcanvas', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('editVariant')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('editVariant')).hide();
             });
 
             // ============== showConfirmDeleteVariantModal ==============
@@ -137,7 +137,7 @@
 
             // ============== Close Add New Value Modal ==============
             Livewire.on('closeAddNewAttributeValueModal', (event) => {
-                bootstrap.Modal.getInstance(document.getElementById('addNewValueModal')).hide();
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('addNewValueModal')).hide();
             });
         });
 

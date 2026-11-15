@@ -61,7 +61,7 @@
 
             // ============== Close Create Vendor Offcanvas ==============
             Livewire.on('closeCreateOffcanvas', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('createVendor')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('createVendor')).hide();
             });
 
             // ============= Open Edit Vendor Offcanvas ==============
@@ -73,7 +73,7 @@
             });
             // ============== Close Edit Vendor Offcanvas ==============
             Livewire.on('closeEditOffcanvas', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('editVendor')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('editVendor')).hide();
             });
         });
     </script>

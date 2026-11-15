@@ -71,12 +71,12 @@
 
             // ============== Close Edit Offcanvas ==============
             Livewire.on('closeEditForm', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('editPriceList')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('editPriceList')).hide();
             });
 
             // ============== Close Create Offcanvas ==============
             Livewire.on('closeCreateForm', (event) => {
-                bootstrap.Offcanvas.getInstance(document.getElementById('createPriceList')).hide();
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('createPriceList')).hide();
             });
         });
     </script>

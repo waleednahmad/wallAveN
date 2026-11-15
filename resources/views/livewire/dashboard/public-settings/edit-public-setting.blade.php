@@ -5,7 +5,15 @@
         <div class="mb-3">
             <label for="value" class="form-label">Value</label>
 
-            @if ($type == 'select')
+            @if ($key === 'toggle show category & shop pages')
+                {{-- Who sees the catalog: each company decides --}}
+                <select class="form-control" id="value" wire:model="value">
+                    <option value="0">Closed: only signed-in dealers see products</option>
+                    <option value="1">Open: everyone sees products, prices after signing in</option>
+                    <option value="2">Open with prices: everyone sees products and prices</option>
+                </select>
+                <small class="adm-help">Ordering always needs an approved dealer account. Open catalogs can be found on Google.</small>
+            @elseif ($type == 'select')
                 <select class="form-control" id="value" wire:model="value">
                     <option value="1">On</option>
                     <option value="0">Off</option>
