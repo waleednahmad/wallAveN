@@ -2,14 +2,14 @@
 
 @section('breadcrumb')
     @include('admin.layout.partials.page-header', [
-        'title' => 'Representatives',
+        'title' => 'Sales reps',
         'links' => [
             [
                 'name' => 'Dashboard',
                 'url' => route('dashboard'),
             ],
             [
-                'name' => 'Representatives',
+                'name' => 'Sales reps',
                 'url' => '#',
             ],
         ],

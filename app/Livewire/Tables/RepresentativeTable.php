@@ -151,7 +151,7 @@ final class RepresentativeTable extends PowerGridComponent
             Column::make('Approved on', 'approved_at')->bodyAttribute('gr-nowrap')
                 ->searchable(),
 
-            Column::make('Addresss', 'address')->bodyAttribute('gr-wrap')
+            Column::make('Address', 'address')->bodyAttribute('gr-wrap')
                 ->hidden()
                 ->visibleInExport(true),
 

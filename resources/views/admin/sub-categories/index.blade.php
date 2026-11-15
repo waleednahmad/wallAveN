@@ -2,14 +2,14 @@
 
 @section('breadcrumb')
     @include('admin.layout.partials.page-header', [
-        'title' => 'Sub-Categories',
+        'title' => 'Sub categories',
         'links' => [
             [
                 'name' => 'Dashboard',
                 'url' => route('dashboard'),
             ],
             [
-                'name' => 'Sub-Categories',
+                'name' => 'Sub categories',
                 'url' => '#',
             ],
         ],

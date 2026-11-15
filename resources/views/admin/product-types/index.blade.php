@@ -2,14 +2,14 @@
 
 @section('breadcrumb')
     @include('admin.layout.partials.page-header', [
-        'title' => 'Product Types',
+        'title' => 'Product types',
         'links' => [
             [
                 'name' => 'Dashboard',
                 'url' => route('dashboard'),
             ],
             [
-                'name' => 'Product Types',
+                'name' => 'Product types',
                 'url' => '#',
             ],
         ],

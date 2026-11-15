@@ -2,14 +2,14 @@
 
 @section('breadcrumb')
     @include('admin.layout.partials.page-header', [
-        'title' => 'Page Breadcrumps',
+        'title' => 'Page banners',
         'links' => [
             [
                 'name' => 'Dashboard',
                 'url' => route('dashboard'),
             ],
             [
-                'name' => 'Page Breadcrumps',
+                'name' => 'Page banners',
                 'url' => '#',
             ],
         ],
@@ -30,7 +30,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="editBreadcrumpModalLabel">
-                        Edit Breadcrump
+                        Edit page banner
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>

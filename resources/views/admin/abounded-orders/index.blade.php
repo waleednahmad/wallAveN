@@ -2,14 +2,14 @@
 
 @section('breadcrumb')
     @include('admin.layout.partials.page-header', [
-        'title' => 'Abandoned Checkout',
+        'title' => 'Dealer carts',
         'links' => [
             [
                 'name' => 'Dashboard',
                 'url' => route('dashboard'),
             ],
             [
-                'name' => 'Abandoned Checkout',
+                'name' => 'Dealer carts',
                 'url' => '#',
             ],
         ],

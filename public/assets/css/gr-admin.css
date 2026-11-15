@@ -880,3 +880,5 @@ body.layout-fixed.sidebar-collapse .gr-toasts { left: 98px; }
 }
 .nav-sidebar .nav-link.active .adm-nav-count { background: rgba(255, 255, 255, .2); color: #fff; }
 .sidebar-mini.sidebar-collapse .main-sidebar:not(:hover) .adm-nav-header { display: none; }
+/* Card headers are transparent in this theme: never let white header text disappear */
+.card-header.text-white, .card-header.text-white * { color: var(--brand-ink) !important; }

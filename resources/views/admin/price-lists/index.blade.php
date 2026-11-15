@@ -2,14 +2,14 @@
 
 @section('breadcrumb')
     @include('admin.layout.partials.page-header', [
-        'title' => 'Price Lists',
+        'title' => 'Price lists',
         'links' => [
             [
                 'name' => 'Dashboard',
                 'url' => route('dashboard'),
             ],
             [
-                'name' => 'Price Lists',
+                'name' => 'Price lists',
                 'url' => '#',
             ],
         ],

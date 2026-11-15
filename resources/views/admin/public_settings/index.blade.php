@@ -2,14 +2,14 @@
 
 @section('breadcrumb')
     @include('admin.layout.partials.page-header', [
-        'title' => 'Public Settings',
+        'title' => 'Settings',
         'links' => [
             [
                 'name' => 'Dashboard',
                 'url' => route('dashboard'),
             ],
             [
-                'name' => 'Public Settings',
+                'name' => 'Settings',
                 'url' => '#',
             ],
         ],

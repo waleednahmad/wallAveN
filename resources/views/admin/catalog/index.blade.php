@@ -2,10 +2,10 @@
 
 @section('breadcrumb')
     @include('admin.layout.partials.page-header', [
-        'title' => 'Product Catalog',
+        'title' => 'PDF catalogs',
         'links' => [
             ['name' => 'Dashboard', 'url' => route('dashboard')],
-            ['name' => 'Product Catalog', 'url' => '#'],
+            ['name' => 'PDF catalogs', 'url' => '#'],
         ],
     ])
 @endsection

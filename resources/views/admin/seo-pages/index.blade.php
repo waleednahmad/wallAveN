@@ -2,14 +2,14 @@
 
 @section('breadcrumb')
     @include('admin.layout.partials.page-header', [
-        'title' => 'SEO Pages',
+        'title' => 'SEO',
         'links' => [
             [
                 'name' => 'Dashboard',
                 'url' => route('dashboard'),
             ],
             [
-                'name' => 'SEO Pages',
+                'name' => 'SEO',
                 'url' => '#',
             ],
         ],
