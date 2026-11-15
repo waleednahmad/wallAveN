@@ -7,10 +7,10 @@
 
         <div class="row g-4" style="margin-bottom: 32px;">
             <div class="col-md-4">
-                <a href="tel:+17734903801" class="d-block h-100 text-decoration-none" style="background: var(--gr-madder); color: #fff; border-radius: 18px; padding: 28px;">
+                <a href="tel:{{ companyTel() }}" class="d-block h-100 text-decoration-none" style="background: var(--gr-madder); color: #fff; border-radius: 18px; padding: 28px;">
                     <i class="bi bi-telephone" aria-hidden="true" style="font-size: 26px; color: var(--gr-saffron);"></i>
                     <p style="margin: 18px 0 4px; font-size: 14px; color: var(--brand-on-primary-muted);">Call us</p>
-                    <p style="margin: 0; font-family: var(--gr-font-display); font-size: 30px; color: #fff;">(773) 490-3801</p>
+                    <p style="margin: 0; font-family: var(--gr-font-display); font-size: 30px; color: #fff;">{{ companyPhone() }}</p>
                     <p style="margin: 8px 0 0; font-size: 14px; color: var(--brand-on-primary-muted);">The fastest way to reach us</p>
                 </a>
             </div>
@@ -18,15 +18,16 @@
                 <div class="gr-card h-100" style="padding: 28px;">
                     <i class="bi bi-clock" aria-hidden="true" style="font-size: 26px; color: var(--gr-madder);"></i>
                     <p style="margin: 18px 0 8px; font-size: 14px; color: var(--gr-muted);">Opening hours</p>
-                    <p style="margin: 0 0 4px; display: flex; justify-content: space-between;"><span>Mon – Sat</span><strong style="font-weight: 600;">9:00 am – 7:30 pm</strong></p>
-                    <p style="margin: 0; display: flex; justify-content: space-between;"><span>Sunday</span><strong style="font-weight: 600;">9:30 am – 5:30 pm</strong></p>
+                    @foreach (companyHours() as $grDay => $grHours)
+                        <p style="margin: 0 0 4px; display: flex; justify-content: space-between;"><span>{{ $grDay }}</span><strong style="font-weight: 600;">{{ $grHours }}</strong></p>
+                    @endforeach
                 </div>
             </div>
             <div class="col-md-4">
-                <a href="https://www.google.com/maps/search/?api=1&query=Golden+Rugs+Wholesale+Chicago" target="_blank" rel="noopener" class="gr-card d-block h-100 text-decoration-none" style="padding: 28px; color: var(--gr-ink);">
+                <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode(companyAddress() ?: trim((getWebsiteTitle() ?: '') . ' ' . companyCity())) }}" target="_blank" rel="noopener" class="gr-card d-block h-100 text-decoration-none" style="padding: 28px; color: var(--gr-ink);">
                     <i class="bi bi-geo-alt" aria-hidden="true" style="font-size: 26px; color: var(--gr-madder);"></i>
                     <p style="margin: 18px 0 4px; font-size: 14px; color: var(--gr-muted);">Visit the warehouse</p>
-                    <p style="margin: 0; font-family: var(--gr-font-display); font-size: 26px;">Chicago, IL</p>
+                    <p style="margin: 0; font-family: var(--gr-font-display); font-size: 26px;">{{ companyCity() }}</p>
                     <p style="margin: 8px 0 0; font-size: 14px; color: var(--gr-madder); font-weight: 600;">Get directions →</p>
                 </a>
             </div>

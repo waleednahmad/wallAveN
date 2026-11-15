@@ -6,14 +6,14 @@
     <title>Contact Us - {{ getWebsiteTitle() }}</title>
 </head>
 
-<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center;">
-    <div style="max-width: 600px; background: #ffffff; padding: 20px; border-radius: 5px; margin: auto;">
+<body style="font-family: Arial, sans-serif; background-color: #F5EFE6; padding: 20px; text-align: center;">
+    <div style="max-width: 600px; background: #FFFCF7; padding: 28px; border-radius: 14px; border: 1px solid #E3D8C8; margin: auto;">
         <img src="{{ getMainImage() }}" alt="{{ getWebsiteTitle() }}" style="max-width: 200px;">
-        <h2 style="color: #333;">New Contact Us Message</h2>
-        <p style="font-size: 16px; color: #555;">
+        <h2 style="color: #231A14;">New Contact Us Message</h2>
+        <p style="font-size: 16px; color: #5F534A;">
             You have received a new message from the contact form on <strong>{{ getWebsiteTitle() }}</strong>.
         </p>
-        <table style="width: 100%; margin: 20px 0; font-size: 16px; color: #555; text-align: left;">
+        <table style="width: 100%; margin: 20px 0; font-size: 16px; color: #5F534A; text-align: left;">
             <tr>
                 <td style="padding: 8px 0; width: 120px;"><strong>Name:</strong></td>
                 <td>{{ $name }}</td>
@@ -36,13 +36,10 @@
             </tr>
         </table>
         <hr>
-        <p style="font-size: 16px; color: #555;">
-            📍 <strong>Address:</strong> 4528 W 51st St, Chicago, IL 60632 <br>
-            📞 <strong>Phone:</strong> <a href="tel:(773) 490-3801">(773) 490-3801</a> <br>
-            ✉️ <strong>Email:</strong> <a href="mailto:sales@goldenrugsinc.com"
-                style="color: #d19c4b; text-decoration: none;">sales@goldenrugsinc.com</a>
+        <p style="font-size: 16px; color: #5F534A;">
+            @include('emails.partials.contact')
         </p>
-        <p style="font-size: 16px; color: #555;">Best regards, <br> <strong>{{ getWebsiteTitle() }}</strong></p>
+        <p style="font-size: 16px; color: #5F534A;">Best regards, <br> <strong>{{ getWebsiteTitle() }}</strong></p>
     </div>
 </body>
 

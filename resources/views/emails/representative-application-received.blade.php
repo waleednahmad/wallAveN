@@ -6,24 +6,21 @@
     <title>Representative Rep Application Received - {{ getWebsiteTitle() }}</title>
 </head>
 
-<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center;">
-    <div style="max-width: 600px; background: #ffffff; padding: 20px; border-radius: 5px; margin: auto;">
+<body style="font-family: Arial, sans-serif; background-color: #F5EFE6; padding: 20px; text-align: center;">
+    <div style="max-width: 600px; background: #FFFCF7; padding: 28px; border-radius: 14px; border: 1px solid #E3D8C8; margin: auto;">
         <img src="{{ getMainImage() }}" alt="{{ getWebsiteTitle() }}" style="max-width: 200px;">
-        <h2 style="color: #333;">Thank You for Registering!</h2>
-        <p style="font-size: 16px; color: #555;">
+        <h2 style="color: #231A14;">Thank You for Registering!</h2>
+        <p style="font-size: 16px; color: #5F534A;">
             We have received your representative rep application at <strong>{{ getWebsiteTitle() }}</strong>
             Our team will review your information and get back to you shortly.
         </p>
-        <p style="font-size: 16px; color: #555;">
+        <p style="font-size: 16px; color: #5F534A;">
             If you have any questions, feel free to contact us.
         </p>
-        <p style="font-size: 16px; color: #555;">
-            📍 <strong>Address:</strong> 4528 W 51st St, Chicago, IL 60632 <br>
-            📞 <strong>Phone:</strong> <a href="tel:(773) 490-3801">(773) 490-3801</a> <br>
-            ✉️ <strong>Email:</strong> <a href="mailto:sales@goldenrugsinc.com"
-                style="color: #d19c4b; text-decoration: none;">sales@goldenrugsinc.com</a>
+        <p style="font-size: 16px; color: #5F534A;">
+            @include('emails.partials.contact')
         </p>
-        <p style="font-size: 16px; color: #555;">Best regards, <br> <strong>{{ getWebsiteTitle() }}</strong></p>
+        <p style="font-size: 16px; color: #5F534A;">Best regards, <br> <strong>{{ getWebsiteTitle() }}</strong></p>
     </div>
 </body>
 

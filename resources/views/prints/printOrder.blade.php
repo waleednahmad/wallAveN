@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Order Print</title>
+    <title>Order #{{ $order->id }} | {{ getWebsiteTitle() }}</title>
     <style type="text/css">
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -105,7 +105,14 @@
 <body>
     <div class="invoice" id="printableArea">
         <header>
-            <img src="{{ getMainImage() }}" alt="{{ getWebsiteTitle() }}" style="max-width: 200px;">
+            <div>
+                <img src="{{ getMainImage() }}" alt="{{ getWebsiteTitle() }}" style="max-width: 200px;">
+                {{-- Seller details (store settings) --}}
+            <p style="margin: 6px 0 0; font-size: 12.5px; line-height: 1.5; color: #5F534A;">
+                {{ companyAddress() }}@if (companyAddress() && (companyPhone() || companyEmail()))<br>@endif
+                {{ companyPhone() }}{{ companyPhone() && companyEmail() ? ' · ' : '' }}{{ companyEmail() }}
+            </p>
+            </div>
             <div class="bill-ship">
                 <section>
                     <p>

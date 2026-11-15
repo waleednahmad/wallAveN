@@ -19,7 +19,7 @@
                         <li><b>2</b><span>Our team reviews your business details and resale certificate</span></li>
                         <li><b>3</b><span>We email you when your account is approved and your price list is ready</span></li>
                     </ol>
-                    <p style="margin: 22px 0 0; padding-top: 18px; border-top: 1px solid rgba(241,230,210,.2); font-size: 14px; color: #C9C2B6;">Questions? Call <a href="tel:+17734903801" style="color: #fff; font-weight: 600;">(773) 490-3801</a></p>
+                    <p style="margin: 22px 0 0; padding-top: 18px; border-top: 1px solid rgba(241,230,210,.2); font-size: 14px; color: #C9C2B6;">Questions? Call <a href="tel:{{ companyTel() }}" style="color: #fff; font-weight: 600;">{{ companyPhone() }}</a></p>
                 </div>
             </aside>
 

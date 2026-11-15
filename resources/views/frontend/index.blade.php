@@ -195,10 +195,11 @@
                 <p class="gr-eyebrow no-rule">Visit or call</p>
                 <h2 class="gr-h2" style="font-size: clamp(30px, 3.4vw, 44px); margin-bottom: 20px;">See the rugs in person at our Chicago warehouse.</h2>
                 <dl>
-                    <div><dt>Phone</dt><dd><a href="tel:+17734903801">(773) 490-3801</a></dd></div>
-                    <div><dt>Location</dt><dd>Chicago, IL</dd></div>
-                    <div><dt>Mon – Sat</dt><dd>9:00 am – 7:30 pm</dd></div>
-                    <div><dt>Sunday</dt><dd>9:30 am – 5:30 pm</dd></div>
+                    <div><dt>Phone</dt><dd><a href="tel:{{ companyTel() }}">{{ companyPhone() }}</a></dd></div>
+                    @if (companyCity())<div><dt>Location</dt><dd>{{ companyCity() }}</dd></div>@endif
+                    @foreach (companyHours() as $grDay => $grHours)
+                        <div><dt>{{ $grDay }}</dt><dd>{{ $grHours }}</dd></div>
+                    @endforeach
                 </dl>
                 <a href="{{ route('frontend.contactUs') }}" class="gr-btn gr-btn-outline">Contact &amp; directions</a>
             </div>

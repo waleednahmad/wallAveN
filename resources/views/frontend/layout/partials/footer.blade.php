@@ -63,9 +63,10 @@
                             <h5>Contact</h5>
                         </div>
                         <ul class="widget-list">
-                            <li><a href="tel:+17734903801">(773) 490-3801</a></li>
-                            <li>Mon – Sat: 9:00 am – 7:30 pm</li>
-                            <li>Sun: 9:30 am – 5:30 pm</li>
+                            <li><a href="tel:{{ companyTel() }}">{{ companyPhone() }}</a></li>
+                            @foreach (companyHours() as $grDay => $grHours)
+                                <li>{{ $grDay }}: {{ $grHours }}</li>
+                            @endforeach
                             <li><a href="{{ route('frontend.contactUs') }}">Send us a message</a></li>
                         </ul>
                     </div>

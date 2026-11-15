@@ -78,7 +78,7 @@
             <div class="gr-card" style="padding: 24px;">
                 <h2 style="font-family: var(--gr-font-body); font-size: 16px; font-weight: 600; margin: 0 0 6px;">Need help with an order?</h2>
                 <p style="margin: 0 0 12px; font-size: 14px; color: var(--gr-muted);">Our team picks up 7 days a week.</p>
-                <a href="tel:+17734903801" style="font-family: var(--gr-font-display); font-size: 24px; color: var(--gr-ink); text-decoration: none;">(773) 490-3801</a>
+                <a href="tel:{{ companyTel() }}" style="font-family: var(--gr-font-display); font-size: 24px; color: var(--gr-ink); text-decoration: none;">{{ companyPhone() }}</a>
             </div>
         </div>
     </div>

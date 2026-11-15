@@ -99,7 +99,7 @@
                         <div class="gr-card">
                             <i class="bi bi-telephone" style="font-size: 28px; color: var(--brand-primary);"></i>
                             <h3>People you can reach</h3>
-                            <p>Order online any time, and call our team at <a href="tel:+17734903801" style="color: var(--brand-primary); font-weight: 600;">(773) 490-3801</a> seven days a week.</p>
+                            <p>Order online any time, and call our team at <a href="tel:{{ companyTel() }}" style="color: var(--brand-primary); font-weight: 600;">{{ companyPhone() }}</a> seven days a week.</p>
                         </div>
                     </div>
                 </div>

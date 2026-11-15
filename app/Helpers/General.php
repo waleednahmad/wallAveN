@@ -40,6 +40,43 @@ function catalogMode(): string
     };
 }
 
+/* Company contact details (store settings "company phone", "company email", ...) */
+function companyPhone(): string
+{
+    return (string) publicSetting('company phone', '');
+}
+
+/** "tel:" target for the phone: digits only, +1 added to 10-digit US numbers. */
+function companyTel(): string
+{
+    $digits = preg_replace('/\D+/', '', companyPhone());
+    return $digits === '' ? '' : '+' . (strlen($digits) === 10 ? '1' . $digits : $digits);
+}
+
+function companyEmail(): string
+{
+    return (string) publicSetting('company email', '');
+}
+
+function companyAddress(): string
+{
+    return (string) publicSetting('company address', '');
+}
+
+function companyCity(): string
+{
+    return (string) publicSetting('company city', '');
+}
+
+/** ['Mon – Sat' => '9:00 am – 7:30 pm', 'Sunday' => ...] without empty days */
+function companyHours(): array
+{
+    return array_filter([
+        'Mon – Sat' => (string) publicSetting('opening hours mon-sat', ''),
+        'Sunday' => (string) publicSetting('opening hours sunday', ''),
+    ], fn ($v) => trim($v) !== '');
+}
+
 /** Signed in as a dealer, sales rep or admin (the people who can order). */
 function isTradeUser(): bool
 {

@@ -14,7 +14,7 @@
                     <i class="bi bi-lock" aria-hidden="true" style="font-size: 18px;"></i>
                     <span>Tax and bank details are only used to pay you and to file tax forms. They're sent over a secure connection.</span>
                 </div>
-                <p style="margin: 20px 0 0; font-size: 14px; color: var(--gr-muted);">Questions? Call <a href="tel:+17734903801" class="gr-link">(773) 490-3801</a></p>
+                <p style="margin: 20px 0 0; font-size: 14px; color: var(--gr-muted);">Questions? Call <a href="tel:{{ companyTel() }}" class="gr-link">{{ companyPhone() }}</a></p>
             </aside>
 
             <div class="gr-card" style="flex: 999 1 560px; min-width: 0; padding: clamp(24px, 4vw, 40px);">

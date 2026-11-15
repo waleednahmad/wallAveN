@@ -30,6 +30,8 @@
                 @error('image')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
+            @elseif($type == 'string')
+                <input type="text" class="form-control" id="value" wire:model="value">
             @elseif($type == 'text')
                 <textarea class="form-control" id="value" wire:model="value" rows="10"></textarea>
             @else

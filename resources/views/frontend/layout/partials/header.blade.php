@@ -22,7 +22,7 @@
     <div class="gr-announce">
         <div class="gr-container">
             <span><strong>Wholesale only</strong> — trade pricing for registered retailers</span>
-            <span>Call <a href="tel:+17734903801">(773) 490-3801</a> · Open 7 days</span>
+            <span>Call <a href="tel:{{ companyTel() }}">{{ companyPhone() }}</a> · Open 7 days</span>
         </div>
     </div>
 @endif

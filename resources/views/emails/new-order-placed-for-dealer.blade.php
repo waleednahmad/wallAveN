@@ -12,12 +12,12 @@
     </style>
 </head>
 
-<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center;">
-    <div style="max-width: 900px; background: #ffffff; padding: 20px; border-radius: 5px; margin: auto;">
+<body style="font-family: Arial, sans-serif; background-color: #F5EFE6; padding: 20px; text-align: center;">
+    <div style="max-width: 900px; background: #FFFCF7; padding: 28px; border-radius: 14px; border: 1px solid #E3D8C8; margin: auto;">
         <header style="text-align: center; margin-bottom: 20px;">
             <img src="{{ getMainImage() }}" alt="{{ getWebsiteTitle() }}" style="max-width: 200px;">
-            <h2 style="color: #333;">New Order Placed</h2>
-            <p style="font-size: 16px; color: #555;">
+            <h2 style="color: #231A14;">New Order Placed</h2>
+            <p style="font-size: 16px; color: #5F534A;">
                 A new order has been placed on the <strong>{{ getWebsiteTitle() }}</strong> website.
             </p>
 
@@ -31,13 +31,13 @@
 
 
         <div
-            style="border: 1px solid #ddd; padding: 10px; margin-bottom: 20px; border-radius: 5px; overflow: hidden; text-align: left !important;">
+            style="border: 1px solid #E3D8C8; padding: 10px; margin-bottom: 20px; border-radius: 10px; overflow: hidden; text-align: left !important;">
             {{-- Bill to --}}
             <section style="float: left; width: 32%; margin-right: 2%;">
                 <p>
                     <strong>Name:</strong> {{ $name }} <br>
                     <span
-                        style="font-weight: bold; color: #333; display: block; margin-bottom: 4px; font-size: 14px; margin-top: 7px;">
+                        style="font-weight: bold; color: #231A14; display: block; margin-bottom: 4px; font-size: 14px; margin-top: 7px;">
                         BILL TO
                     </span>
                     {{ $address }}<br>
@@ -50,7 +50,7 @@
                 <p>
                     <strong>Phone:</strong> <a href="tel:{{ $phone }}">{{ $phone }}</a> <br>
                     <span
-                        style="font-weight: bold; color: #333; display: block; margin-bottom: 4px; font-size: 14px; margin-top: 7px;">
+                        style="font-weight: bold; color: #231A14; display: block; margin-bottom: 4px; font-size: 14px; margin-top: 7px;">
                         SHIP TO
                     </span>
                     @if ($order?->shipping_address)
@@ -150,21 +150,21 @@
                 @endphp
                 <div style="display: flex; justify-content: center;">
                     <div style="width: 100%; overflow-x: auto;">
-                        <table style="width: 100%; border: 1px solid #ddd; border-collapse: collapse; margin: auto;">
+                        <table style="width: 100%; border: 1px solid #E3D8C8; border-collapse: collapse; margin: auto;">
                             <thead>
                                 <tr>
-                                    <th style="border: 1px solid #ddd; padding: 3px;">#</th>
-                                    <th style="border: 1px solid #ddd; padding: 3px;">Image</th>
-                                    <th style="border: 1px solid #ddd; padding: 3px;">SKU</th>
-                                    <th style="border: 1px solid #ddd; padding: 3px;">Name</th>
+                                    <th style="border: 1px solid #E3D8C8; padding: 3px;">#</th>
+                                    <th style="border: 1px solid #E3D8C8; padding: 3px;">Image</th>
+                                    <th style="border: 1px solid #E3D8C8; padding: 3px;">SKU</th>
+                                    <th style="border: 1px solid #E3D8C8; padding: 3px;">Name</th>
                                     @foreach ($attributeKeys as $key)
-                                        <th style="border: 1px solid #ddd; padding: 3px; ">
+                                        <th style="border: 1px solid #E3D8C8; padding: 3px; ">
                                             {{ ucwords($key) }}</th>
                                     @endforeach
 
-                                    <th style="border: 1px solid #ddd; padding: 3px;">Qty</th>
-                                    <th style="border: 1px solid #ddd; padding: 3px;">Price</th>
-                                    <th style="border: 1px solid #ddd; padding: 3px;">Amount</th>
+                                    <th style="border: 1px solid #E3D8C8; padding: 3px;">Qty</th>
+                                    <th style="border: 1px solid #E3D8C8; padding: 3px;">Price</th>
+                                    <th style="border: 1px solid #E3D8C8; padding: 3px;">Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -176,10 +176,10 @@
                                         $itemsQuantity += $item->quantity;
                                     @endphp
                                     <tr>
-                                        <td style="border: 1px solid #ddd; padding: 3px;">
+                                        <td style="border: 1px solid #E3D8C8; padding: 3px;">
                                             {{ $loop->iteration }}
                                         </td>
-                                        <td style="border: 1px solid #ddd; padding: 3px;">
+                                        <td style="border: 1px solid #E3D8C8; padding: 3px;">
                                             @if ($item->image && file_exists($item->image))
                                                 <img src="{{ asset($item->image) }}" alt="{{ $item->name }}"
                                                     style="width: 70px; height: 70px; border-radius: 15px; object-fit: contain;">
@@ -189,13 +189,13 @@
                                                     style="width: 70px; height: 70px; border-radius: 15px; object-fit: contain;">
                                             @endif
                                         </td>
-                                        <td style="border: 1px solid #ddd; padding: 3px; max-width: fit-content;">
+                                        <td style="border: 1px solid #E3D8C8; padding: 3px; max-width: fit-content;">
                                             <small>
                                                 {{ $item->sku ?? '---' }}
                                             </small>
                                         </td>
                                         <td
-                                            style="border: 1px solid #ddd; padding: 3px; max-width: 110px; word-wrap: break-word;">
+                                            style="border: 1px solid #E3D8C8; padding: 3px; max-width: 110px; word-wrap: break-word;">
                                             @php
                                                 $slug = $item?->product?->slug;
                                             @endphp
@@ -205,20 +205,20 @@
                                         </td>
 
                                         @foreach ($attributeKeys as $key)
-                                            <td style="border: 1px solid #ddd; padding: 3px;">
+                                            <td style="border: 1px solid #E3D8C8; padding: 3px;">
                                                 @php
                                                     $value = json_decode($item->attributes, true)[$key] ?? ' ';
                                                 @endphp
                                                 {{ $value }}
                                             </td>
                                         @endforeach
-                                        <td style="border: 1px solid #ddd; padding: 3px;">
+                                        <td style="border: 1px solid #E3D8C8; padding: 3px;">
                                             {{ $item->quantity }}
                                         </td>
-                                        <td style="border: 1px solid #ddd; padding: 3px;">
+                                        <td style="border: 1px solid #E3D8C8; padding: 3px;">
                                             <b>$</b>{{ $item->price ?? '---' }}
                                         </td>
-                                        <td style="border: 1px solid #ddd; padding: 3px;">
+                                        <td style="border: 1px solid #E3D8C8; padding: 3px;">
                                             <b>$</b>{{ $item->total ?? '---' }}
                                         </td>
                                     </tr>
@@ -248,13 +248,10 @@
         <hr>
         <br>
         <footer style="text-align: center;">
-            <p style="font-size: 16px; color: #555;">
-                📍 <strong>Address:</strong> 4528 W 51st St, Chicago, IL 60632 <br>
-                📞 <strong>Phone:</strong> <a href="tel:(773) 490-3801">(773) 490-3801</a> <br>
-                ✉️ <strong>Email:</strong> <a href="mailto:{{ config('mail.from.address', 'nidal@goldenrugsinc.com') }}"
-                    style="color: #d19c4b; text-decoration: none;">{{ config('mail.from.address', 'nidal@goldenrugsinc.com') }}</a>
+            <p style="font-size: 16px; color: #5F534A;">
+                @include('emails.partials.contact')
             </p>
-            <p style="font-size: 16px; color: #555;">Best regards, <br> <strong>{{ getWebsiteTitle() }}</strong></p>
+            <p style="font-size: 16px; color: #5F534A;">Best regards, <br> <strong>{{ getWebsiteTitle() }}</strong></p>
         </footer>
     </div>
 </body>

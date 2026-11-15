@@ -33,7 +33,7 @@
                 <a href="{{ route('login') }}" class="gr-btn gr-btn-primary">Log in</a>
                 <a href="{{ route('frontend.register') }}" class="gr-btn gr-btn-outline">Apply for a dealer account</a>
             </div>
-            <p class="gr-locked-help">Questions? Call <a href="tel:+17734903801" class="gr-link">(773) 490-3801</a> or <a href="{{ route('frontend.contactUs') }}" class="gr-link">send us a message</a>.</p>
+            <p class="gr-locked-help">Questions? Call <a href="tel:{{ companyTel() }}" class="gr-link">{{ companyPhone() }}</a> or <a href="{{ route('frontend.contactUs') }}" class="gr-link">send us a message</a>.</p>
         </div>
     </section>
 @endsection
