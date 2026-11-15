@@ -61,7 +61,7 @@ final class SeoPageTable extends PowerGridComponent
             ->add('name')
             ->add('page_name', fn ($row) => e(ucwords(str_replace(['_', '-'], ' ', (string) $row->name))))
             ->add('title', fn ($row) => $row->title ? e(\Illuminate\Support\Str::limit($row->title, 90)) : '<span class="text-muted">Not set</span>')
-            ->add('title_check', fn ($row) => $check($row->title, 30, 60))
+            ->add('title_check', fn ($row) => $check($row->title, 20, $row->name === 'home' ? 60 : 60 - mb_strlen(' | ' . (getWebsiteTitle() ?: config('app.name')))))
             ->add('desc_check', fn ($row) => $check($row->meta_desc, 70, 160));
     }
 

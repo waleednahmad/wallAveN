@@ -48,11 +48,13 @@
 
 <link rel="stylesheet" href="{{ asset('dashboard/plugins/fontawesome-free/css/all.min.css') }}">
 <!-- Title -->
+{{-- Home: the SEO title as written (it should include the company name); other pages: "Page title | Company" --}}
+@php $grPageTitle = trim($__env->yieldContent('title')); @endphp
 <title>
     @if (request()->routeIs('frontend.home'))
-        {{ getWebsiteTitle() }}
+        {{ $grPageTitle !== '' && $grPageTitle !== 'Home' ? $grPageTitle : getWebsiteTitle() }}
     @else
-        @yield('title', 'Home') | {{ getWebsiteTitle() }}
+        {{ $grPageTitle !== '' ? $grPageTitle : 'Home' }} | {{ getWebsiteTitle() }}
     @endif
 </title>
 <link rel="icon" href="{{ getFavicon() }}" type="image/gif" sizes="20x20">

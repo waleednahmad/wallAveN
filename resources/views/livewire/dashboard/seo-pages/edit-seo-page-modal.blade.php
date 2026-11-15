@@ -1,4 +1,10 @@
 {{-- SEO for one storefront page: title and description with the lengths search engines show --}}
+@php
+    // Other pages get " | Company" added after the title, so their own title has less room
+    $suffix = ' | ' . (getWebsiteTitle() ?: config('app.name'));
+    $isHome = $name === 'home';
+    $titleMax = $isHome ? 60 : 60 - mb_strlen($suffix);
+@endphp
 <form wire:submit.prevent="update" x-data="{ t: @entangle('title'), d: @entangle('meta_desc') }">
     <div class="card-body">
         <div class="form-group">
@@ -9,9 +15,15 @@
         <div class="form-group">
             <label for="seo_title" class="form-label">Title</label>
             <input type="text" class="form-control @error('title') is-invalid @enderror" id="seo_title" x-model="t">
-            <div class="adm-counter" x-bind:class="{ 'is-over': (t || '').length > 60 }">
-                <span>Shown as the headline in Google · aim for 50–60 characters</span>
-                <span x-text="(t || '').length + ' / 60'"></span>
+            <div class="adm-counter" x-bind:class="{ 'is-over': (t || '').length > {{ $titleMax }} }">
+                <span>
+                    @if ($isHome)
+                        The headline in Google · include the company name · up to 60 characters
+                    @else
+                        The headline in Google · “{{ $suffix }}” is added after it · up to {{ $titleMax }} characters
+                    @endif
+                </span>
+                <span x-text="(t || '').length + ' / {{ $titleMax }}'"></span>
             </div>
             @error('title')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
         </div>
