@@ -313,6 +313,34 @@ final class RepresentativeTable extends PowerGridComponent
         $this->refresh();
     }
 
+    /**
+     * Permanently delete a sign-up that never became a rep (spam/bot applications).
+     * Refused for approved reps and for anyone with orders, referred dealers or a cart.
+     */
+    #[\Livewire\Attributes\On('deleteApplication')]
+    public function deleteApplication($rowId): void
+    {
+        $rep = Representative::find($rowId);
+        if (!$rep) {
+            $this->dispatch('error', 'Sales rep not found');
+            return;
+        }
+
+        $inUse = $rep->is_approved
+            || $rep->orders()->exists()
+            || \App\Models\Dealer::where('referal_id', $rep->id)->exists()
+            || $rep->cartTemps()->exists();
+
+        if ($inUse) {
+            $this->dispatch('error', 'Only applications that were never approved and have no orders, dealers or cart can be deleted.');
+            return;
+        }
+
+        $rep->delete();
+        $this->dispatch('success', 'Application deleted');
+        $this->refresh();
+    }
+
     public function actions(Representative $row): array
     {
         return [
@@ -335,6 +363,12 @@ final class RepresentativeTable extends PowerGridComponent
                 ->slot('<i class="fas fa-eye"></i>')
                 ->class('btn btn-primary btn-sm rounded')
                 ->dispatch('show', ['rowId' => $row->id]),
+
+            Button::add('deleteApplication')
+                ->slot('<i class="fas fa-trash"></i>')
+                ->class('btn btn-danger btn-sm rounded')
+                ->dispatch('deleteApplication', ['rowId' => $row->id])
+                ->confirm('Delete this application permanently? This cannot be undone.'),
         ];
     }
 
@@ -358,6 +392,9 @@ final class RepresentativeTable extends PowerGridComponent
             // Hide button edit for ID 1
             Rule::button('approve')
                 ->when(fn($row) => $row->is_approved)
+                ->hide(),
+            Rule::button('deleteApplication')
+                ->when(fn($row) => $row->is_approved || ($row->orders_count ?? 0) > 0)
                 ->hide(),
         ];
     }
