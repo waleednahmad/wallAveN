@@ -240,6 +240,55 @@ final class DealerTable extends PowerGridComponent
         ];
     }
 
+    private const US_STATES = [
+        'AL' => 'Alabama', 'AK' => 'Alaska', 'AZ' => 'Arizona', 'AR' => 'Arkansas', 'CA' => 'California',
+        'CO' => 'Colorado', 'CT' => 'Connecticut', 'DE' => 'Delaware', 'DC' => 'District of Columbia', 'FL' => 'Florida',
+        'GA' => 'Georgia', 'HI' => 'Hawaii', 'ID' => 'Idaho', 'IL' => 'Illinois', 'IN' => 'Indiana', 'IA' => 'Iowa',
+        'KS' => 'Kansas', 'KY' => 'Kentucky', 'LA' => 'Louisiana', 'ME' => 'Maine', 'MD' => 'Maryland',
+        'MA' => 'Massachusetts', 'MI' => 'Michigan', 'MN' => 'Minnesota', 'MS' => 'Mississippi', 'MO' => 'Missouri',
+        'MT' => 'Montana', 'NE' => 'Nebraska', 'NV' => 'Nevada', 'NH' => 'New Hampshire', 'NJ' => 'New Jersey',
+        'NM' => 'New Mexico', 'NY' => 'New York', 'NC' => 'North Carolina', 'ND' => 'North Dakota', 'OH' => 'Ohio',
+        'OK' => 'Oklahoma', 'OR' => 'Oregon', 'PA' => 'Pennsylvania', 'RI' => 'Rhode Island', 'SC' => 'South Carolina',
+        'SD' => 'South Dakota', 'TN' => 'Tennessee', 'TX' => 'Texas', 'UT' => 'Utah', 'VT' => 'Vermont',
+        'VA' => 'Virginia', 'WA' => 'Washington', 'WV' => 'West Virginia', 'WI' => 'Wisconsin', 'WY' => 'Wyoming',
+    ];
+
+    /** Common misspellings seen in sign-ups. */
+    private const STATE_ALIASES = ['ILL' => 'IL', 'NEWYORK' => 'NY', 'PENNSLYVANIA' => 'PA', 'PENNSYLVANNIA' => 'PA'];
+
+    private static function stateCode(?string $raw): ?string
+    {
+        $key = strtoupper(trim((string) $raw));
+        if ($key === '') {
+            return null;
+        }
+        if (isset(self::US_STATES[$key])) {
+            return $key;
+        }
+        if (isset(self::STATE_ALIASES[str_replace(' ', '', $key)])) {
+            return self::STATE_ALIASES[str_replace(' ', '', $key)];
+        }
+        $byName = array_search($key, array_map('strtoupper', self::US_STATES), true);
+
+        return $byName ?: null;
+    }
+
+    /** @return array<string, string[]> state code => the spellings stored in the database */
+    private static function stateSpellings(): array
+    {
+        static $map = null;
+        if ($map === null) {
+            $map = [];
+            foreach (Dealer::whereNotNull('state')->distinct()->pluck('state') as $raw) {
+                if ($code = self::stateCode($raw)) {
+                    $map[$code][] = $raw;
+                }
+            }
+        }
+
+        return $map;
+    }
+
     public function filters(): array
     {
         return [
@@ -248,14 +297,20 @@ final class DealerTable extends PowerGridComponent
                 ->optionValue('id')
                 ->optionLabel('name'),
 
+            // States are typed freely at sign-up ("IL", "Illinois", "ill"): one option per state
             Filter::select('state', 'state')
                 ->dataSource(
-                    Dealer::whereNotNull('state')->where('state', '!=', '')
-                        ->distinct()->orderBy('state')->pluck('state')
-                        ->map(fn ($st) => ['value' => $st, 'label' => $st])->values()->all()
+                    collect(self::stateSpellings())
+                        ->keys()
+                        ->map(fn ($code) => ['value' => $code, 'label' => self::US_STATES[$code] . ' (' . $code . ')'])
+                        ->sortBy('label')->values()->all()
                 )
                 ->optionValue('value')
-                ->optionLabel('label'),
+                ->optionLabel('label')
+                ->builder(fn (Builder $query, $code) => $query->when(
+                    filled($code),
+                    fn ($q) => $q->whereIn('state', self::stateSpellings()[$code] ?? [$code])
+                )),
 
             // Who to call: ordered recently, gone quiet, or never ordered
             Filter::select('last_order_cell', 'activity')
