@@ -1,6 +1,7 @@
 @extends('frontend.layout.app')
 
 @section('title', 'Sign in')
+@section('meta_desc', 'Sign in to your ' . (getWebsiteTitle() ?: config('app.name')) . ' dealer account to see trade prices, reorder and track your orders.')
 
 @section('content')
     <div class="gr-auth">

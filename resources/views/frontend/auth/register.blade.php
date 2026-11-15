@@ -1,6 +1,7 @@
 @extends('frontend.layout.app')
 
 @section('title', 'Become a dealer')
+@section('meta_desc', 'Open a trade account with ' . (getWebsiteTitle() ?: config('app.name')) . '. Apply in about five minutes; once approved you see wholesale prices and order online.')
 
 @section('content')
     <div class="gr-container" style="padding-top: 48px; padding-bottom: 80px;">

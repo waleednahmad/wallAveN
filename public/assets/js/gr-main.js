@@ -36,8 +36,17 @@
         $(this).parent().siblings().children('.active').removeClass('active');
     });
 
+    // Run now if the page is already parsed (Cloudflare can load scripts after DOMContentLoaded)
+    var onReady = function (fn) {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', fn);
+        } else {
+            fn();
+        }
+    };
+
     // Back-to-top circle that fills as you scroll
-    document.addEventListener('DOMContentLoaded', function () {
+    onReady(function () {
         var circleContainer = document.querySelector('.circle-container');
         var circlePath = document.querySelector('.circle-container path');
         if (!circleContainer || !circlePath) return;
@@ -52,8 +61,8 @@
 
         var update = function () {
             var scrollTop = window.scrollY;
-            var height = document.body.offsetHeight - window.innerHeight;
-            circlePath.style.strokeDashoffset = pathLength - (scrollTop * pathLength / Math.max(height, 1));
+            var height = document.documentElement.scrollHeight - window.innerHeight;
+            circlePath.style.strokeDashoffset = Math.max(0, pathLength - (scrollTop * pathLength / Math.max(height, 1)));
             circleContainer.classList.toggle('active', scrollTop > offset);
         };
         circleContainer.addEventListener('click', function () {

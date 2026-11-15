@@ -1,6 +1,7 @@
 @extends('frontend.layout.app')
 
 @section('title', 'Become a sales rep')
+@section('meta_desc', 'Apply to represent ' . (getWebsiteTitle() ?: config('app.name')) . ' as a sales rep and help retailers in your area order wholesale.')
 
 @section('content')
     <div class="gr-container" style="padding-top: 48px; padding-bottom: 80px;">
