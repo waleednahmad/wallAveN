@@ -17,11 +17,8 @@
         if (!$path || !file_exists(public_path($path))) {
             return null;
         }
-        if (!$forPdf) {
-            return thumb($path, 240);
-        }
-        $small = \App\Support\ImageOptimizer::thumbPathFor(ltrim($path, '/'), 240);
-        return public_path(is_file(public_path($small)) ? $small : $path);
+        // Browser: the 240px thumbnail; PDF: a small JPEG (keeps big orders light and quick)
+        return $forPdf ? \App\Support\Invoice::pdfImage($path) : thumb($path, 240);
     };
     $logo = $forPdf ? ($logoImage ?? null) : getMainImage();
 

@@ -51,6 +51,53 @@ class Invoice
         return $pdf->download($name);
     }
 
+    /**
+     * Small JPEG copy of a product photo for the PDF, made once and reused.
+     * DomPDF stores WebP/PNG decoded (a 100-line order came to ~5 MB and ~9 s); JPEG goes in as it is.
+     * Returns an absolute path inside the allowed folders, or null.
+     */
+    public static function pdfImage(?string $path, int $size = 96): ?string
+    {
+        if (!$path) {
+            return null;
+        }
+        $src = public_path(ltrim($path, '/'));
+        if (!is_file($src)) {
+            return null;
+        }
+
+        $dir = storage_path('app/public/invoice-thumbs');
+        $out = $dir . '/' . md5($path . '|' . filemtime($src) . '|' . $size) . '.jpg';
+        if (is_file($out)) {
+            return $out;
+        }
+
+        try {
+            $im = @imagecreatefromstring((string) file_get_contents($src));
+            if (!$im) {
+                return $src;
+            }
+            if (!is_dir($dir)) {
+                @mkdir($dir, 0755, true);
+            }
+            // Square crop from the centre, on white (JPEG has no transparency)
+            $w = imagesx($im);
+            $h = imagesy($im);
+            $side = min($w, $h);
+            $thumb = imagecreatetruecolor($size, $size);
+            imagefill($thumb, 0, 0, imagecolorallocate($thumb, 255, 255, 255));
+            imagecopyresampled($thumb, $im, 0, 0, (int) (($w - $side) / 2), (int) (($h - $side) / 2), $size, $size, $side, $side);
+            imagejpeg($thumb, $out, 82);
+            imagedestroy($im);
+            imagedestroy($thumb);
+
+            return is_file($out) ? $out : $src;
+        } catch (\Throwable $e) {
+            Log::warning('Invoice PDF: thumbnail failed', ['path' => $path, 'error' => $e->getMessage()]);
+            return $src;
+        }
+    }
+
     /** The logo embedded in the PDF (DomPDF reads local files; a data URI avoids path problems). */
     private static function logoDataUri(): ?string
     {
