@@ -35,6 +35,7 @@
 {{-- Brand tokens + admin theme: loaded last so they win over AdminLTE and Bootstrap --}}
 <link rel="stylesheet" href="{{ asset('assets/css/brand.css') }}?v={{ filemtime(public_path('assets/css/brand.css')) }}">
 <link rel="stylesheet" href="{{ asset('assets/css/gr-admin.css') }}?v={{ filemtime(public_path('assets/css/gr-admin.css')) }}">
+<link rel="stylesheet" href="{{ asset('assets/css/gr-toast.css') }}?v={{ filemtime(public_path('assets/css/gr-toast.css')) }}">
 
 <style>
     .ck-editor__editable[role="textbox"] {

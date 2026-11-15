@@ -24,109 +24,42 @@
     integrity="sha512-MQXduO8IQnJVq1qmySpN87QQkiR1bZHtorbJBD0tzy7/0U9+YIC93QWHeGTEoojMVHWWNkoCp8V6OzVSYrX0oQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+<script src="{{ asset('assets/js/gr-toast.js') }}?v={{ filemtime(public_path('assets/js/gr-toast.js')) }}"></script>
 <script>
     $(function() {
         //Initialize Select2 Elements
         $('.select2').select2()
     });
 
-    // ========== SweetAlert2 Messages ==========
-    // success messages
-    @if (session()->has('success'))
-        Swal.fire({
-            icon: 'success',
-            title: '{{ session()->get('success') }}',
-            timer: 6000,
-            showConfirmButton: false,
-            // toast: true,
-            position: 'top-right'
-        });
-    @endif
-    // error messages
-    @if (session()->has('error'))
-        Swal.fire({
-            icon: 'error',
-            title: '{{ session()->get('error') }}',
-            timer: 6000,
-            showConfirmButton: false,
-            toast: true,
-            position: 'top-right'
-        });
-    @endif
+    // ========== Messages: same toasts as the storefront (gr-toast.js) ==========
+    // toastr was called in a few tables but never loaded; route it to the toast too.
+    window.toastr = {
+        success: (m) => grToast('success', m),
+        error: (m) => grToast('error', m),
+        info: (m) => grToast('info', m),
+        warning: (m) => grToast('warning', m),
+    };
 
-    // error validation messages
-    @if ($errors->any())
-        @foreach ($errors->all() as $error)
-            Swal.fire({
-                icon: 'error',
-                title: '{{ $error }}',
-                timer: 6000,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-right'
-            });
-        @endforeach
-    @endif
-    // ========== End SweetAlert2 Messages ==========
+    document.addEventListener('DOMContentLoaded', () => {
+        @if (session()->has('success'))
+            grToast('success', @js(session()->get('success')));
+        @endif
+        @if (session()->has('error'))
+            grToast('error', @js(session()->get('error')));
+        @endif
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                grToast('error', @js($error));
+            @endforeach
+        @endif
+    });
 
     document.addEventListener('livewire:init', () => {
-        // Success Message
-        Livewire.on('success', (event) => {
-            Swal.fire({
-                icon: 'success',
-                title: event[0],
-                timer: 6000,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-right'
-            });
+        ['success', 'error', 'info', 'warning'].forEach((type) => {
+            Livewire.on(type, (event) => grToast(type, event));
         });
-        // Error Message
-        Livewire.on('error', (event) => {
-            Swal.fire({
-                icon: 'error',
-                title: event[0],
-                timer: 6000,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-right'
-            });
-        });
-        // Info Message
-        Livewire.on('info', (event) => {
-            Swal.fire({
-                icon: 'info',
-                title: event[0],
-                timer: 6000,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-right'
-            });
-        });
-        // Warning Message
-        Livewire.on('warning', (event) => {
-            Swal.fire({
-                icon: 'warning',
-                title: event[0],
-                timer: 6000,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-right'
-            });
-        });
-
-        // Error Validation Message
         Livewire.on('validationFailed', (event) => {
-            event[0].forEach((error) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: error,
-                    timer: 6000,
-                    showConfirmButton: false,
-                    toast: true,
-                    position: 'top-right'
-                });
-            });
+            (Array.isArray(event) ? (event[0] || []) : []).forEach((error) => grToast('error', error));
         });
     });
 </script>

@@ -823,3 +823,8 @@ a.adm-tab { text-decoration: none; }
 .adm-empty { text-align: center; padding: 48px 20px; background: var(--brand-surface); border: 1px solid var(--brand-line); border-radius: var(--brand-radius-card); }
 .adm-empty-title { margin: 0 0 6px; font-family: var(--brand-font-display); font-size: 22px; }
 .adm-empty-text { margin: 0; color: var(--brand-muted); font-size: 14px; }
+
+/* Toasts in the admin: keep them clear of the fixed sidebar */
+body.layout-fixed .gr-toasts { left: 274px; }
+body.layout-fixed.sidebar-collapse .gr-toasts { left: 98px; }
+@media (max-width: 991px) { body.layout-fixed .gr-toasts { left: 16px; } }
