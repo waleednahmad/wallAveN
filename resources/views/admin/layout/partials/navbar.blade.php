@@ -12,8 +12,8 @@
 
     <ul class="ml-auto navbar-nav adm-topbar-right">
         <li class="nav-item">
-            <a href="{{ route('frontend.home') }}" class="btn btn-secondary btn-sm adm-viewstore" target="_blank" rel="noopener">
-                <i class="fas fa-external-link-alt" aria-hidden="true"></i> View store
+            <a href="{{ route('frontend.home') }}" class="btn btn-secondary btn-sm adm-viewstore" target="_blank" rel="noopener" aria-label="View store" title="View store">
+                <i class="fas fa-external-link-alt" aria-hidden="true"></i> <span class="adm-viewstore-text">View store</span>
             </a>
         </li>
     </ul>

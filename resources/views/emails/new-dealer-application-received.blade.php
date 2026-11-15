@@ -29,8 +29,8 @@
             {{ $zip_code }}
         </p>
 
-        <a href="{{ route('dashboard.dealers.index') }}?email={{ $dealer->email }}"
-            style="display: inline-block; background: #000000; color: #ffffff; padding: 12px 20px; text-decoration: none; font-size: 16px; border-radius: 5px;">
+        <a href="{{ route('dashboard.dealers.index', ['dealer' => $dealer->id]) }}"
+            style="display: inline-block; background: #7B2D26; color: #ffffff; padding: 12px 20px; text-decoration: none; font-size: 16px; border-radius: 5px;">
             Review Application
         </a>
         <br>

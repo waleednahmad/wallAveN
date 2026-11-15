@@ -30,11 +30,17 @@ class DealerObserver
         // Verify the dealer's email address (from the laravel auth)
         // event(new Registered($dealer));
 
-        // Send a notification email to the admin
-        // $admins =  User::all();
-        // foreach ($admins as $admin) {
-        //     Mail::to($admin->email)->send(new NewDealerApplicationReceived($dealer));
-        // }
+        // Tell the admins a new application is waiting (not for dealers an admin creates already approved).
+        // A mail problem must never stop the sign-up, so failures are only logged.
+        if (!$dealer->is_approved) {
+            foreach (User::whereNotNull('email')->pluck('email') as $adminEmail) {
+                try {
+                    Mail::to($adminEmail)->send(new NewDealerApplicationReceived($dealer));
+                } catch (\Throwable $e) {
+                    report($e);
+                }
+            }
+        }
     }
 
     /**

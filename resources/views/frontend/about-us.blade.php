@@ -10,7 +10,7 @@
         $isSignedIn = auth('dealer')->check() || auth('representative')->check() || auth('web')->check();
     @endphp
     <style>
-        .gr-about { --gr-ink: #231A14; --gr-muted: #5F534A; --gr-accent: #7B2D26; --gr-line: #E3D8C8; color: var(--gr-ink); }
+        .gr-about { --gr-accent: var(--brand-primary); color: var(--gr-ink); }
         .gr-about .gr-eyebrow { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gr-accent); font-weight: 600; margin-bottom: 14px; }
         .gr-about h1, .gr-about h2 { font-family: var(--font-playfair); color: var(--gr-ink); }
         .gr-about h1 { font-size: clamp(36px, 5vw, 60px); line-height: 1.08; margin-bottom: 20px; }
@@ -21,14 +21,14 @@
         .gr-about .gr-card { height: 100%; border: 1px solid var(--gr-line); border-radius: 16px; padding: 28px; background: #fff; }
         .gr-about .gr-card h3 { font-family: var(--gr-font-body); font-size: 20px; font-weight: 600; margin: 14px 0 8px; color: var(--gr-ink); }
         .gr-about .gr-card p { font-size: 16px; margin: 0; }
-        .gr-about .gr-band { background: #1F2E45; border-radius: 20px; padding: clamp(28px, 5vw, 56px); }
+        .gr-about .gr-band { background: var(--brand-nav); border-radius: 20px; padding: clamp(28px, 5vw, 56px); }
         .gr-about .gr-band h2, .gr-about .gr-band h3 { color: #fff; }
-        .gr-about .gr-band h3 { font-family: var(--font-playfair); font-size: 24px; color: #E9C98B; margin-bottom: 8px; }
-        .gr-about .gr-band p { color: #D9D3C8; font-size: 16px; margin: 0; }
+        .gr-about .gr-band h3 { font-family: var(--font-playfair); font-size: 24px; color: var(--brand-accent); margin-bottom: 8px; }
+        .gr-about .gr-band p { color: var(--brand-on-nav-muted); font-size: 16px; margin: 0; }
         .gr-about .gr-band .col-md-4 { border-top: 1px solid rgba(255,255,255,.2); padding-top: 20px; }
         .gr-about .gr-btn { display: inline-flex; align-items: center; height: 52px; padding: 0 28px; border-radius: var(--gr-radius-btn); font-weight: 600; text-decoration: none; }
         .gr-about .gr-btn-primary { background: var(--gr-accent); color: #fff; }
-        .gr-about .gr-btn-primary:hover { background: #5E211B; color: #fff; }
+        .gr-about .gr-btn-primary:hover { background: var(--brand-primary-hover); color: var(--brand-on-primary); }
         .gr-about .gr-btn-outline { border: 1px solid var(--gr-ink); color: var(--gr-ink); }
         .gr-about .gr-btn-outline:hover { background: var(--gr-ink); color: #fff; }
     </style>
@@ -81,23 +81,23 @@
                 <div class="row g-4">
                     <div class="col-md-4">
                         <div class="gr-card">
-                            <i class="bi bi-shield-check" style="font-size: 28px; color: #7B2D26;"></i>
+                            <i class="bi bi-shield-check" style="font-size: 28px; color: var(--brand-primary);"></i>
                             <h3>Quality first</h3>
                             <p>Every design is chosen for how it looks and how it holds up on a busy floor.</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="gr-card">
-                            <i class="bi bi-grid" style="font-size: 28px; color: #7B2D26;"></i>
+                            <i class="bi bi-grid" style="font-size: 28px; color: var(--brand-primary);"></i>
                             <h3>Variety that sells</h3>
                             <p>Hundreds of designs across rugs, furniture and décor, so you can stock what your customers ask for.</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="gr-card">
-                            <i class="bi bi-telephone" style="font-size: 28px; color: #7B2D26;"></i>
+                            <i class="bi bi-telephone" style="font-size: 28px; color: var(--brand-primary);"></i>
                             <h3>People you can reach</h3>
-                            <p>Order online any time, and call our team at <a href="tel:+17734903801" style="color: #7B2D26; font-weight: 600;">(773) 490-3801</a> seven days a week.</p>
+                            <p>Order online any time, and call our team at <a href="tel:+17734903801" style="color: var(--brand-primary); font-weight: 600;">(773) 490-3801</a> seven days a week.</p>
                         </div>
                     </div>
                 </div>
@@ -107,7 +107,7 @@
         {{-- Call to action --}}
         <section class="pb-90">
             <div class="container">
-                <div class="row g-4 align-items-center" style="border: 1px solid #E3D8C8; border-radius: 20px; padding: clamp(24px, 4vw, 40px); margin: 0; background: #fff;">
+                <div class="row g-4 align-items-center" style="border: 1px solid var(--brand-line); border-radius: 20px; padding: clamp(24px, 4vw, 40px); margin: 0; background: #fff;">
                     <div class="col-lg-7">
                         <h2 class="mb-2">Stock your store with Golden Rugs.</h2>
                         <p class="mb-0">Questions about our range or opening an account? We're happy to help.</p>

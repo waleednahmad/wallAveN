@@ -287,7 +287,7 @@ label, .form-label, .col-form-label { font-weight: 600; font-size: 14px; color: 
 }
 textarea.form-control { min-height: 96px; }
 .form-control-sm, .form-select-sm { min-height: 34px; font-size: 13.5px; border-radius: 8px !important; }
-.form-control::placeholder { color: #9A8E84; }
+.form-control::placeholder { color: var(--brand-placeholder); }
 .form-control:focus, .form-select:focus, .custom-select:focus {
   border-color: var(--brand-ink);
   box-shadow: var(--adm-focus-ring);
@@ -309,7 +309,7 @@ textarea.form-control { min-height: 96px; }
 .input-group > .form-control:not(:last-child), .input-group > .input-group-text:not(:last-child) { border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important; }
 
 /* Checkboxes and switches */
-.form-check-input { border-color: #C9BEB0; }
+.form-check-input { border-color: var(--brand-disabled); }
 .form-check-input:checked { background-color: var(--brand-primary) !important; border-color: var(--brand-primary) !important; }
 .form-check-input:focus { box-shadow: var(--adm-focus-ring); border-color: var(--brand-ink); }
 .form-switch .form-check-input:checked { background-color: var(--brand-success) !important; border-color: var(--brand-success) !important; }
@@ -399,7 +399,7 @@ textarea.form-control { min-height: 96px; }
 }
 .page-link:hover { border-color: var(--brand-ink) !important; }
 .page-item.active .page-link { background: var(--brand-primary) !important; border-color: var(--brand-primary) !important; color: var(--brand-on-primary) !important; }
-.page-item.disabled .page-link { color: #B5AAA0 !important; }
+.page-item.disabled .page-link { color: var(--brand-disabled) !important; }
 
 /* --------------------------------------------------------------------------
    Badges / statuses (Bootstrap 4 and 5 names)
@@ -548,7 +548,7 @@ a.adm-kpi:hover { color: var(--brand-ink); text-decoration: none; box-shadow: 0 
 .adm-tone-processing { background: var(--brand-info); }
 .adm-tone-completed { background: var(--brand-success); }
 .adm-tone-declined { background: var(--brand-danger); }
-.adm-tone-canceled { background: #B5AAA0; }
+.adm-tone-canceled { background: var(--brand-disabled); }
 .list-group-item { background: transparent; border-color: var(--brand-line-soft); padding: 12px 18px; }
 
 /* --------------------------------------------------------------------------
@@ -787,7 +787,7 @@ footer:has(.pagination) .pagination { margin: 0; }
 .adm-step-dot {
   width: 24px; height: 24px; border-radius: 50%; flex: none;
   display: inline-flex; align-items: center; justify-content: center;
-  font-size: 12px; border: 1.5px solid #C9BEB0; background: var(--brand-surface); color: var(--brand-muted);
+  font-size: 12px; border: 1.5px solid var(--brand-disabled); background: var(--brand-surface); color: var(--brand-muted);
 }
 .adm-step.is-on { color: var(--brand-ink); }
 .adm-step.is-on .adm-step-dot, .adm-step.is-done .adm-step-dot { background: var(--brand-primary); border-color: var(--brand-primary); color: var(--brand-on-primary); }
@@ -1133,3 +1133,26 @@ form .img-thumbnail { padding: 3px; border-radius: 10px; background: var(--brand
 .adm-row-btn.is-danger:hover { border-color: var(--brand-danger); background: var(--brand-danger-tint); }
 /* AdminLTE's clearfix pseudo-element takes a slot in flex card headers and pushes buttons to the middle */
 .card-header.d-flex::after { display: none; }
+
+/* --------------------------------------------------------------------------
+   Phones: use the width, keep everything inside the screen
+   -------------------------------------------------------------------------- */
+@media (max-width: 575.98px) {
+  .adm-viewstore-text { display: none; }
+  .adm-viewstore { padding: 0 10px; }
+  .adm-topbar-search { min-width: 0; flex: 1 1 auto; }
+  .content { padding: 4px 8px 24px; }
+  .content-header { padding: 16px 12px 6px; }
+  .content-header h1 { font-size: 28px !important; }
+  .card-body { padding: 14px; }
+  .card-header { padding: 12px 14px; }
+  /* Status tabs: one row that scrolls sideways instead of three rows */
+  .adm-tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .adm-tabs::-webkit-scrollbar { display: none; }
+  .adm-tab { flex: none; white-space: nowrap; }
+  /* Page numbers wrap instead of running off the screen */
+  .pagination { flex-wrap: wrap; row-gap: 6px; }
+  .adm-pagehead-actions { width: 100%; }
+  .adm-pagehead-actions .btn { flex: 1 1 auto; justify-content: center; }
+  .offcanvas.offcanvas-end { width: 100vw !important; }
+}

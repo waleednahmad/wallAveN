@@ -13,6 +13,8 @@
   --brand-primary-hover: #5E211B;
   --brand-primary-tint: #F3E3DC;   /* light background behind primary text */
   --brand-on-primary: #FFFFFF;     /* text on primary */
+  --brand-on-primary-muted: #F1DCD5; /* secondary text on primary */
+  --brand-primary-soft: #F6E9E4;   /* very light primary wash (filter headers, icon circles) */
 
   /* Dark surfaces: admin/dealer sidebars, footer, announcement bar */
   --brand-nav: #1F2E45;
@@ -20,6 +22,10 @@
   --brand-nav-muted: #A9B1BF;
   --brand-accent: #E9C98B;         /* highlights on dark surfaces */
   --brand-accent-strong: #C9973F;
+  --brand-accent-hover: #F0D6A3;   /* light buttons on dark surfaces, hover */
+  --brand-on-dark: #FFFFFF;        /* strong text on dark surfaces, photos and dark buttons */
+  --brand-on-nav: #F1E6D2;         /* text on dark surfaces (footer, stats band) */
+  --brand-on-nav-muted: #C9C2B6;   /* secondary text on dark surfaces */
 
   /* Page and text */
   --brand-ink: #231A14;            /* headings, body text, dark buttons */
@@ -28,6 +34,10 @@
   --brand-surface: #FFFCF7;        /* cards, header, inputs */
   --brand-line: #E3D8C8;           /* borders */
   --brand-line-soft: #EFE6D8;      /* dividers inside cards */
+  --brand-line-strong: #D9CDBB;    /* input borders, hovered cards */
+  --brand-media: #E9DFD0;          /* behind photos while they load */
+  --brand-placeholder: #8C8178;    /* placeholder and struck-through text */
+  --brand-disabled: #C9BEB0;       /* disabled controls */
 
   /* Status colours (orders, approvals, alerts) */
   --brand-success: #2F7A4A;

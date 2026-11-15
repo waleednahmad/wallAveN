@@ -20,7 +20,32 @@ use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 
 final class RepresentativeTable extends PowerGridComponent
 {
-    use WithExport;
+    use WithExport {
+        exportToXLS as private pgExportToXLS;
+        exportToCsv as private pgExportToCsv;
+    }
+
+    /** True only while an export file is being built (not a Livewire property, so it never reaches the browser). */
+    private bool $exportingSensitive = false;
+
+    public function exportToXLS(bool $selected = false): \Symfony\Component\HttpFoundation\BinaryFileResponse|bool
+    {
+        $this->exportingSensitive = true;
+
+        return $this->pgExportToXLS($selected);
+    }
+
+    public function exportToCsv(bool $selected = false): \Symfony\Component\HttpFoundation\BinaryFileResponse|bool
+    {
+        $this->exportingSensitive = true;
+
+        return $this->pgExportToCsv($selected);
+    }
+
+    private function sensitive($row, string $field): string
+    {
+        return $this->exportingSensitive ? (string) data_get($row, $field) : '';
+    }
     public $fileName = '';
 
     public string $tableName = 'representative-table-lquyl7-table';
@@ -104,12 +129,13 @@ final class RepresentativeTable extends PowerGridComponent
             ->add('city')
             ->add('state')
             ->add('zip_code')
-            ->add('taxpayer_identification_number')
-            ->add('social_security_number')
-            ->add('employer_identification_number')
-            ->add('bank_account_type')
-            ->add('bank_routing_number')
-            ->add('bank_account_number')
+            // Tax IDs and bank details: only filled while building the export file, never printed in the page
+            ->add('taxpayer_identification_number', fn ($row) => $this->sensitive($row, 'taxpayer_identification_number'))
+            ->add('social_security_number', fn ($row) => $this->sensitive($row, 'social_security_number'))
+            ->add('employer_identification_number', fn ($row) => $this->sensitive($row, 'employer_identification_number'))
+            ->add('bank_account_type', fn ($row) => $this->sensitive($row, 'bank_account_type'))
+            ->add('bank_routing_number', fn ($row) => $this->sensitive($row, 'bank_routing_number'))
+            ->add('bank_account_number', fn ($row) => $this->sensitive($row, 'bank_account_number'))
             ->add('orders_count')
             ->add('sales_cell', fn ($row) => $row->sales_total ? '$' . number_format((float) $row->sales_total, 0) : '<span class="text-muted">—</span>')
             ->add('id')

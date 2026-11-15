@@ -9,9 +9,9 @@
             <div class="col-md-4">
                 <a href="tel:+17734903801" class="d-block h-100 text-decoration-none" style="background: var(--gr-madder); color: #fff; border-radius: 18px; padding: 28px;">
                     <i class="bi bi-telephone" aria-hidden="true" style="font-size: 26px; color: var(--gr-saffron);"></i>
-                    <p style="margin: 18px 0 4px; font-size: 14px; color: #F1DCD5;">Call us</p>
+                    <p style="margin: 18px 0 4px; font-size: 14px; color: var(--brand-on-primary-muted);">Call us</p>
                     <p style="margin: 0; font-family: var(--gr-font-display); font-size: 30px; color: #fff;">(773) 490-3801</p>
-                    <p style="margin: 8px 0 0; font-size: 14px; color: #F1DCD5;">The fastest way to reach us</p>
+                    <p style="margin: 8px 0 0; font-size: 14px; color: var(--brand-on-primary-muted);">The fastest way to reach us</p>
                 </a>
             </div>
             <div class="col-md-4">
@@ -76,7 +76,7 @@
                 </form>
             </div>
             <div style="flex: 2 1 360px; min-width: 0;">
-                <div style="border-radius: 20px; overflow: hidden; border: 1px solid var(--gr-line); height: 420px; background: #E9DFD0;">
+                <div style="border-radius: 20px; overflow: hidden; border: 1px solid var(--gr-line); height: 420px; background: var(--brand-media);">
                     <iframe title="Golden Rugs Wholesale on Google Maps"
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3710.085197220118!2d-87.7387865232435!3d41.80106127125036!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880e31fb5a7f6027%3A0xb715349c5ce00ca4!2sGolden%20Rugs%20Wholesale!5e1!3m2!1sen!2sus!4v1742868861586!5m2!1sen!2sus"
                         width="100%" height="100%" style="border:0; display: block;" allowfullscreen="" loading="lazy"
