@@ -1131,3 +1131,5 @@ form .img-thumbnail { padding: 3px; border-radius: 10px; background: var(--brand
 .adm-row-btn:hover { border-color: var(--brand-ink); background: var(--brand-bg); }
 .adm-row-btn.is-danger { color: var(--brand-danger); }
 .adm-row-btn.is-danger:hover { border-color: var(--brand-danger); background: var(--brand-danger-tint); }
+/* AdminLTE's clearfix pseudo-element takes a slot in flex card headers and pushes buttons to the middle */
+.card-header.d-flex::after { display: none; }

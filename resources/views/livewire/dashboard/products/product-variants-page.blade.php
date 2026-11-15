@@ -45,7 +45,7 @@
     <section class="card">
         <div class="card-header d-flex align-items-center justify-content-between">
             <h3 class="card-title mb-0">Variants</h3>
-            <button type="button" class="btn btn-primary" wire:click="addVariant">
+            <button type="button" class="btn btn-primary ml-auto" wire:click="addVariant">
                 <i class="fas fa-plus" aria-hidden="true"></i> Add variant
             </button>
         </div>

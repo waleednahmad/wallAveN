@@ -41,17 +41,37 @@ final class SeoPageTable extends PowerGridComponent
 
     public function fields(): PowerGridFields
     {
+        // Lengths Google shows before cutting text off
+        $check = function (?string $text, int $min, int $max): string {
+            $n = mb_strlen(trim((string) $text));
+            if ($n === 0) {
+                return '<span class="badge badge-danger">Missing</span>';
+            }
+            if ($n > $max) {
+                return '<span class="badge badge-warning" title="' . $n . ' characters">Too long · ' . $n . '</span>';
+            }
+            if ($n < $min) {
+                return '<span class="badge badge-secondary" title="' . $n . ' characters">Short · ' . $n . '</span>';
+            }
+            return '<span class="badge badge-success">Good · ' . $n . '</span>';
+        };
+
         return PowerGrid::fields()
             ->add('id')
             ->add('name')
-            ->add('title');
+            ->add('page_name', fn ($row) => e(ucwords(str_replace(['_', '-'], ' ', (string) $row->name))))
+            ->add('title', fn ($row) => $row->title ? e(\Illuminate\Support\Str::limit($row->title, 90)) : '<span class="text-muted">Not set</span>')
+            ->add('title_check', fn ($row) => $check($row->title, 30, 60))
+            ->add('desc_check', fn ($row) => $check($row->meta_desc, 70, 160));
     }
 
     public function columns(): array
     {
         return [
-            Column::make('Name', 'name')->bodyAttribute('gr-wrap')->searchable(),
+            Column::make('Page', 'page_name', 'name')->bodyAttribute('gr-nowrap')->searchable(),
             Column::make('Title', 'title')->bodyAttribute('gr-wrap')->searchable(),
+            Column::make('Title length', 'title_check')->bodyAttribute('gr-nowrap'),
+            Column::make('Description', 'desc_check')->bodyAttribute('gr-nowrap'),
             Column::action('Action')
         ];
     }
