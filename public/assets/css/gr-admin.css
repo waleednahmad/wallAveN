@@ -61,22 +61,52 @@ hr { border-color: var(--brand-line-soft); opacity: 1; }
    Sidebar
    -------------------------------------------------------------------------- */
 .main-sidebar, .main-sidebar::before { background: var(--brand-nav) !important; box-shadow: none !important; }
-.main-sidebar .brand-link {
-  background: var(--brand-surface);
-  border-bottom: 1px solid var(--brand-line) !important;
-  padding: 14px 16px !important;
-  height: auto;
+/* Workspace block at the top of the sidebar (logo tile + company name), as in the approved design */
+.main-sidebar .brand-link.adm-ws {
+  display: flex; align-items: center; gap: 10px;
+  margin: 14px 12px 10px; padding: 10px !important; height: auto;
+  border-radius: 12px; border: 0 !important;
+  background: rgba(255, 255, 255, .06);
+  color: #fff !important; text-decoration: none; white-space: nowrap; overflow: hidden;
+  width: auto !important;
 }
-.main-sidebar .brand-link img { max-height: 64px; }
+.main-sidebar .brand-link.adm-ws:hover { background: rgba(255, 255, 255, .1); }
+.adm-ws-logo {
+  flex: none; width: 40px; height: 40px; border-radius: 9px; background: var(--brand-surface);
+  display: inline-flex; align-items: center; justify-content: center; overflow: hidden; padding: 3px;
+}
+.adm-ws-logo img { width: 100%; height: 100%; object-fit: contain; max-height: none; float: none; margin: 0; opacity: 1 !important; }
+.adm-ws-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; transition: opacity .2s ease; }
+.adm-ws-name { font-weight: 600; font-size: 14px; color: #fff; overflow: hidden; text-overflow: ellipsis; }
+.adm-ws-sub { font-size: 12px; color: var(--brand-nav-muted); }
+.sidebar-mini.sidebar-collapse .main-sidebar:not(:hover) .brand-link.adm-ws { margin: 14px 8px 10px; padding: 6px !important; background: transparent; }
+.sidebar-mini.sidebar-collapse .main-sidebar:not(:hover) .adm-ws-text { opacity: 0; width: 0; }
+
+/* Signed-in admin at the bottom of the sidebar */
+/* AdminLTE sizes the menu for its 57px logo bar; the workspace block is 84px tall (40 + 2x10 padding + 24 margin) */
+.main-sidebar .sidebar { display: flex; flex-direction: column; height: calc(100% - 84px); overflow-y: auto; }
+.sidebar > nav { flex: 1 0 auto; }
+.adm-me {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 16px; padding: 12px 6px 4px; border-top: 1px solid rgba(255, 255, 255, .08);
+}
+.adm-me-avatar {
+  flex: none; width: 32px; height: 32px; border-radius: 50%;
+  background: var(--brand-accent); color: var(--brand-nav);
+  font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; justify-content: center;
+}
+.adm-me-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.adm-me-name { font-size: 14px; font-weight: 600; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.adm-me-role { font-size: 12px; color: var(--brand-nav-muted); }
+.adm-me-out {
+  margin-left: auto; flex: none; width: 34px; height: 34px; border-radius: 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(255, 255, 255, .18); color: var(--brand-nav-text) !important; text-decoration: none;
+}
+.adm-me-out:hover { border-color: var(--brand-accent); color: var(--brand-accent) !important; }
+.sidebar-mini.sidebar-collapse .main-sidebar:not(:hover) .adm-me-text,
+.sidebar-mini.sidebar-collapse .main-sidebar:not(:hover) .adm-me-out { display: none; }
 .sidebar { padding: 0 10px 24px; }
-.sidebar .user-panel { border-bottom: 1px solid rgba(255, 255, 255, .08) !important; padding: 14px 6px !important; margin: 0 0 8px !important; }
-.sidebar .user-panel .info { width: 100%; justify-content: space-between; padding: 0 !important; }
-.sidebar .user-panel .info > a.d-block { color: var(--brand-nav-text) !important; font-weight: 600; font-size: 14px; white-space: normal; text-decoration: none !important; }
-.sidebar .user-panel .btn-danger {
-  background: transparent !important; border: 1px solid rgba(255, 255, 255, .18) !important; color: var(--brand-nav-text) !important;
-  border-radius: 8px; width: 34px; height: 34px; padding: 0 !important; display: inline-flex; align-items: center; justify-content: center;
-}
-.sidebar .user-panel .btn-danger:hover { border-color: var(--brand-accent) !important; color: var(--brand-accent) !important; }
 
 .nav-sidebar .nav-item { margin-bottom: 2px; }
 .nav-sidebar > .nav-item > .nav-link,

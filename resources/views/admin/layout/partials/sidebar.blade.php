@@ -1,25 +1,16 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="{{ route('dashboard') }}" class="brand-link d-flex flex-column justify-items-center align-items-center">
-        <img src="{{ getMainImage() }}" alt="" style="width: 75%; object-fit: contain;">
-
+    {{-- Workspace block: the company's logo tile + name (SaaS: one per company) --}}
+    <a href="{{ route('dashboard') }}" class="brand-link adm-ws">
+        <span class="adm-ws-logo"><img src="{{ getMainImage() }}" alt=""></span>
+        <span class="adm-ws-text">
+            <span class="adm-ws-name">{{ getWebsiteTitle() ?: config('app.name') }}</span>
+            <span class="adm-ws-sub">Wholesale workspace</span>
+        </span>
     </a>
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <!-- Sidebar user panel (optional) -->
-        <div class="pb-3 mt-3 mb-3 user-panel d-flex">
-            <div class="info d-flex align-items-center">
-                <a href="#" class="d-block">
-                    {{ auth()->user()->name }}
-                </a>
-                <a class="py-1 ml-3 btn btn-sm btn-danger" href="{{ route('logout') }}">
-                    <i class="fas fa-sign-out-alt"></i>
-                </a>
-            </div>
-        </div>
-
-
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
@@ -429,6 +420,18 @@
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
+
+        {{-- Signed-in admin at the bottom of the menu --}}
+        <div class="adm-me">
+            <span class="adm-me-avatar" aria-hidden="true">{{ strtoupper(mb_substr(auth()->user()->name ?? '?', 0, 1)) }}</span>
+            <span class="adm-me-text">
+                <span class="adm-me-name">{{ auth()->user()->name }}</span>
+                <span class="adm-me-role">Admin</span>
+            </span>
+            <a class="adm-me-out" href="{{ route('logout') }}" title="Log out" aria-label="Log out">
+                <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+            </a>
+        </div>
     </div>
     <!-- /.sidebar -->
 </aside>
