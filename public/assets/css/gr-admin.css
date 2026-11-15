@@ -942,3 +942,5 @@ body.layout-fixed.sidebar-collapse .gr-toasts { left: 98px; }
 .adm-savebar .alert { margin: 0; padding: 6px 12px; }
 .content-wrapper:has(.adm-savebar) { padding-bottom: 76px; }
 .adm-hint { padding: 10px 12px; border-radius: 10px; background: var(--brand-bg); border: 1px dashed var(--brand-line); color: var(--brand-muted); font-size: 13.5px; }
+/* Toasts sit above the product editor's fixed save bar */
+body:has(.adm-savebar) .gr-toasts { bottom: 88px; }

@@ -44,7 +44,10 @@ class DashboardController extends Controller
             ->get(['id', 'name', 'company_name', 'email', 'city', 'state', 'created_at']);
 
         // Carts with items that haven't been checked out yet, grouped by dealer.
+        // Same carts as the "Dealer carts" page (carts admins or reps started are listed separately)
         $openCarts = CartTemp::whereNotNull('dealer_id')
+            ->whereNull('representative_id')
+            ->whereNull('admin_id')
             ->selectRaw('dealer_id, SUM(total) as amount, SUM(quantity) as items, MAX(updated_at) as last_activity')
             ->groupBy('dealer_id')
             ->get();
