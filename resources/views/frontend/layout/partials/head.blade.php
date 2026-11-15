@@ -48,13 +48,14 @@
 
 <link rel="stylesheet" href="{{ asset('dashboard/plugins/fontawesome-free/css/all.min.css') }}">
 <!-- Title -->
-{{-- Home: the SEO title as written (it should include the company name); other pages: "Page title | Company" --}}
+{{-- Home: the SEO title as written (it should include the company name); other pages: "Page title | Company".
+     The title section is already escaped by @section('title', ...), so it is printed as-is, like @yield. --}}
 @php $grPageTitle = trim($__env->yieldContent('title')); @endphp
 <title>
     @if (request()->routeIs('frontend.home'))
-        {{ $grPageTitle !== '' && $grPageTitle !== 'Home' ? $grPageTitle : getWebsiteTitle() }}
+        {!! $grPageTitle !== '' && $grPageTitle !== 'Home' ? $grPageTitle : e(getWebsiteTitle()) !!}
     @else
-        {{ $grPageTitle !== '' ? $grPageTitle : 'Home' }} | {{ getWebsiteTitle() }}
+        {!! $grPageTitle !== '' ? $grPageTitle : 'Home' !!} | {{ getWebsiteTitle() }}
     @endif
 </title>
 <link rel="icon" href="{{ getFavicon() }}" type="image/gif" sizes="20x20">
