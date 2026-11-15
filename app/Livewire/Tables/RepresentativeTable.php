@@ -89,6 +89,11 @@ final class RepresentativeTable extends PowerGridComponent
     {
         return PowerGrid::fields()
             ->add('id')
+            // Name with the email under it (one column instead of two, so the table fits the screen)
+            ->add('rep_cell', function ($row) {
+                return '<div class="adm-cell-main">' . e($row->name ?: '-') . '</div>'
+                    . ($row->email ? '<div class="adm-cell-sub">' . e($row->email) . '</div>' : '');
+            })
             ->add('row_num', function ($row) {
                 return $this->getRowNum($row);
             })
@@ -114,11 +119,20 @@ final class RepresentativeTable extends PowerGridComponent
     {
         return [
             Column::make('#', 'row_num'),
-            Column::make('Name', 'name')->bodyAttribute('gr-wrap')
-                ->searchable(),
+            Column::make('Representative', 'rep_cell', 'name')->bodyAttribute('gr-wrap')
+                ->sortable()
+                ->visibleInExport(false),
 
-            Column::make('Email', 'email')->bodyAttribute('gr-wrap')
-                ->searchable(),
+            // Hidden on screen (shown inside the Representative column) but still searched and exported.
+            Column::make('Name', 'name')
+                ->searchable()
+                ->hidden()
+                ->visibleInExport(true),
+
+            Column::make('Email', 'email')
+                ->searchable()
+                ->hidden()
+                ->visibleInExport(true),
 
             Column::make('Phone', 'phone')->bodyAttribute('gr-nowrap')
                 ->searchable(),
@@ -127,14 +141,14 @@ final class RepresentativeTable extends PowerGridComponent
                 ->hidden()
                 ->visibleInExport(true),
 
-            Column::make('is approved', 'is_approved')
+            Column::make('Approved', 'is_approved')
                 ->visibleInExport(false),
 
             Column::make('is approved', 'is_approved_label')
                 ->hidden()
                 ->visibleInExport(true),
 
-            Column::make('Approved at', 'approved_at')->bodyAttribute('gr-nowrap')
+            Column::make('Approved on', 'approved_at')->bodyAttribute('gr-nowrap')
                 ->searchable(),
 
             Column::make('Addresss', 'address')->bodyAttribute('gr-wrap')

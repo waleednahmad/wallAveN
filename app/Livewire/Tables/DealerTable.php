@@ -109,6 +109,11 @@ final class DealerTable extends PowerGridComponent
                     return '-';
                 }
             })
+            // Company name with the email under it (one column instead of two, so the table fits the screen)
+            ->add('dealer_cell', function ($row) {
+                return '<div class="adm-cell-main">' . e($row->company_name ?: ($row->name ?: '-')) . '</div>'
+                    . ($row->email ? '<div class="adm-cell-sub">' . e($row->email) . '</div>' : '');
+            })
             ->add('row_num', function ($row) {
                 return $this->getRowNum($row);
             })
@@ -132,11 +137,20 @@ final class DealerTable extends PowerGridComponent
         return [
             Column::make('#', 'row_num'),
 
-            Column::make('Name', 'company_name')->bodyAttribute('gr-wrap')
-                ->searchable(),
+            Column::make('Dealer', 'dealer_cell', 'company_name')->bodyAttribute('gr-wrap')
+                ->sortable()
+                ->visibleInExport(false),
 
-            Column::make('Email', 'email')->bodyAttribute('gr-wrap')
-                ->searchable(),
+            // Hidden on screen (shown inside the Dealer column) but still searched and exported.
+            Column::make('Name', 'company_name')
+                ->searchable()
+                ->hidden()
+                ->visibleInExport(true),
+
+            Column::make('Email', 'email')
+                ->searchable()
+                ->hidden()
+                ->visibleInExport(true),
 
             Column::make('Status', 'status_label')
                 ->hidden()
@@ -154,14 +168,14 @@ final class DealerTable extends PowerGridComponent
 
             Column::make('Price List', 'price_list_id'),
 
-            Column::make('is approved', 'is_approved')
+            Column::make('Approved', 'is_approved')
                 ->visibleInExport(false),
 
             Column::make('is approved', 'is_approved_label')
                 ->hidden()
                 ->visibleInExport(true),
 
-            Column::make('Approved at', 'approved_at')
+            Column::make('Approved on', 'approved_at')
                 ->bodyAttribute('gr-nowrap')
                 ->searchable(),
 

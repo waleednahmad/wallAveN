@@ -94,6 +94,14 @@ final class OrderTable extends PowerGridComponent
             //     return $order->dealer ? $order->dealer->phone : '';
             // })
 
+            // Company with email and phone under it, so the table fits the screen. The column keeps
+            // its field name, so the Company filter, search and sorting work as before.
+            ->add('company_name', function (Order $order) {
+                $sub = array_filter([$order->dealer_email, $order->dealer_phone]);
+                return '<div class="adm-cell-main">' . e($order->company_name ?: '-') . '</div>'
+                    . ($sub ? '<div class="adm-cell-sub">' . e(implode(' · ', $sub)) . '</div>' : '');
+            })
+            ->add('company_name_plain', fn (Order $order) => $order->company_name)
             ->add('status', function (Order $order) {
                 switch ($order->status) {
                     case 'pending':
@@ -132,20 +140,25 @@ final class OrderTable extends PowerGridComponent
         return [
             Column::make('Id', 'id'),
 
-            Column::make("Company Name", 'company_name', 'dealers.company_name')->bodyAttribute('gr-wrap')
+            Column::make('Dealer', 'company_name', 'dealers.company_name')->bodyAttribute('gr-wrap')
                 ->searchable()
-                ->sortable(),
-            // ->searchableRaw('company_name like ?'),
+                ->sortable()
+                ->visibleInExport(false),
 
-            Column::make('Dealer Email', 'dealer_email', 'dealers.email')->bodyAttribute('gr-wrap')
-                ->searchable()
-                ->sortable(),
-            // ->searchableRaw('dealer.email like ?'),
+            // Plain-text copies for the export; email and phone are also searched while hidden.
+            Column::make('Company Name', 'company_name_plain', 'dealers.company_name')
+                ->hidden()
+                ->visibleInExport(true),
 
-            Column::make('Dealer Phone', 'dealer_phone', 'dealers.phone')->bodyAttribute('gr-nowrap')
+            Column::make('Dealer Email', 'dealer_email', 'dealers.email')
                 ->searchable()
-                ->sortable(),
-            // ->searchableRaw('dealer.phone like ?'),
+                ->hidden()
+                ->visibleInExport(true),
+
+            Column::make('Dealer Phone', 'dealer_phone', 'dealers.phone')
+                ->searchable()
+                ->hidden()
+                ->visibleInExport(true),
 
             Column::make('Status', 'status')
                 ->searchable()
@@ -163,7 +176,7 @@ final class OrderTable extends PowerGridComponent
                 ->withSum('quantity', header: false, footer: true)
                 ->searchable(),
 
-            Column::make('Created at', 'created_at')->bodyAttribute('gr-nowrap')
+            Column::make('Date', 'created_at')->bodyAttribute('gr-nowrap')
                 ->searchable()
                 ->visibleInExport(false),
 

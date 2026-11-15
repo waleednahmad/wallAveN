@@ -553,7 +553,7 @@ div:has(> .power-grid-table) { border-radius: var(--brand-radius-card); }
 
 /* Header */
 .power-grid-table > thead > tr > th {
-  padding: 12px 14px !important;
+  padding: 12px !important;
   background: var(--brand-bg) !important;
   border-bottom: 1px solid var(--brand-line) !important;
   vertical-align: middle;
@@ -579,11 +579,11 @@ div:has(> .power-grid-table) { border-radius: var(--brand-radius-card); }
   font-size: 13px !important;
   padding-top: 4px; padding-bottom: 4px;
   border-radius: 8px !important;
-  max-width: 170px;
+  max-width: 140px;
 }
 
 /* Data rows */
-.power-grid-table > tbody > tr > td { padding: 12px 14px !important; font-size: 14px; vertical-align: middle; line-height: 1.4; }
+.power-grid-table > tbody > tr > td { padding: 12px !important; font-size: 14px; vertical-align: middle; line-height: 1.4; }
 .power-grid-table > tbody > tr:last-child > td { border-bottom: 0 !important; }
 .power-grid-table > tbody > tr > td:has(> .form-check:only-child), .power-grid-table > thead > tr > th:first-child { width: 44px; }
 .power-grid-table > tbody > tr:nth-of-type(odd):not(:has(> td[wire\:key^="column-filter"])) > td { --bs-table-accent-bg: transparent; }
@@ -638,3 +638,7 @@ footer:has(.pagination), .power-grid-table ~ footer, div:has(> .table-responsive
 footer:has(.pagination) label, footer:has(.pagination) small, footer:has(.pagination) span { font-size: 13px; color: var(--brand-muted); font-weight: 400; }
 footer:has(.pagination) .form-select { min-height: 34px; height: 34px; padding-top: 4px; padding-bottom: 4px; font-size: 13px; width: auto; }
 footer:has(.pagination) .pagination { margin: 0; }
+
+/* Two-line cells: main value with a muted line under it (Dealer / Representative columns) */
+.adm-cell-main { font-weight: 500; color: var(--brand-ink); }
+.adm-cell-sub { font-size: 13px; color: var(--brand-muted); margin-top: 2px; overflow-wrap: anywhere; }
