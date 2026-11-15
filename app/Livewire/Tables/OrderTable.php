@@ -182,9 +182,9 @@ final class OrderTable extends PowerGridComponent
             // Company with email and phone under it, so the table fits the screen. The column keeps
             // its field name, so the Company filter, search and sorting work as before.
             ->add('company_name', function (Order $order) {
-                $sub = array_filter([$order->dealer_email, $order->dealer_phone]);
+                $sub = array_map(fn ($v) => '<span class="adm-nowrap">' . e($v) . '</span>', array_filter([$order->dealer_email, $order->dealer_phone]));
                 return '<div class="adm-cell-main">' . e($order->company_name ?: '-') . '</div>'
-                    . ($sub ? '<div class="adm-cell-sub">' . e(implode(' · ', $sub)) . '</div>' : '');
+                    . ($sub ? '<div class="adm-cell-sub">' . implode(' · ', $sub) . '</div>' : '');
             })
             ->add('company_name_plain', fn (Order $order) => $order->company_name)
             ->add('status', function (Order $order) {
@@ -217,7 +217,9 @@ final class OrderTable extends PowerGridComponent
             })
 
 
-            ->add('created_at', fn (Order $order) => $order->created_at?->format('M j, Y'));
+            // Display copy under its own name: assigning text to created_at itself gets cast back to a date
+            ->add('created_at')
+            ->add('placed_on', fn (Order $order) => $order->created_at?->format('M j, Y · g:i A'));
     }
 
     public function columns(): array
@@ -261,7 +263,7 @@ final class OrderTable extends PowerGridComponent
                 ->withSum('quantity', header: false, footer: true)
                 ->searchable(),
 
-            Column::make('Date', 'created_at')->bodyAttribute('gr-nowrap')
+            Column::make('Date', 'placed_on', 'orders.created_at')->bodyAttribute('gr-nowrap')
                 ->searchable()
                 ->visibleInExport(false),
 
@@ -285,7 +287,7 @@ final class OrderTable extends PowerGridComponent
     public function filters(): array
     {
         return [
-            Filter::datepicker('created_at', 'orders.created_at'),
+            Filter::datepicker('placed_on', 'orders.created_at'),
 
             Filter::select('status', 'orders.status') // Specify table name to avoid ambiguity
                 ->dataSource([
