@@ -1156,3 +1156,22 @@ form .img-thumbnail { padding: 3px; border-radius: 10px; background: var(--brand
   .adm-pagehead-actions .btn { flex: 1 1 auto; justify-content: center; }
   .offcanvas.offcanvas-end { width: 100vw !important; }
 }
+
+/* Reports: ranked lists (rank number, sortable headers, product photo, share of sales) */
+.adm-seg-sm .adm-seg-btn { padding: 4px 10px; font-size: 12.5px; }
+.adm-rank-table td { vertical-align: middle; }
+.adm-rank { width: 44px; text-align: center !important; color: var(--brand-muted); font-variant-numeric: tabular-nums; font-weight: 600; }
+.adm-rank-table tbody tr:nth-child(-n+3) .adm-rank { color: var(--brand-primary); }
+.adm-sort { border: 0; background: none; padding: 0; font: inherit; color: inherit; text-transform: inherit; letter-spacing: inherit; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; white-space: nowrap; }
+.adm-sort i { font-size: 11px; opacity: .35; }
+.adm-sort:hover i, .adm-sort.is-on i { opacity: 1; color: var(--brand-primary); }
+.adm-sort.is-on { color: var(--brand-ink); }
+.text-right .adm-sort { justify-content: flex-end; }
+.adm-rank-product { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.adm-rank-product img { width: 40px; height: 40px; flex: none; object-fit: cover; border-radius: 8px; border: 1px solid var(--brand-line); background: var(--brand-bg); }
+.adm-share { height: 4px; margin-top: 5px; margin-left: auto; width: 72px; border-radius: 2px; background: var(--brand-line-soft); overflow: hidden; }
+.adm-share > span { display: block; height: 100%; background: var(--brand-primary); border-radius: 2px; }
+.adm-trend { display: inline-flex; align-items: center; gap: 3px; font-weight: 700; }
+.adm-trend i { font-size: 10px; }
+.adm-trend.is-up { color: var(--brand-success); }
+.adm-trend.is-down { color: var(--brand-danger); }

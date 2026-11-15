@@ -141,16 +141,17 @@
             <div class="card h-100 mb-0">
                 <div class="card-header"><h3 class="card-title mb-0">Top dealers in {{ $monthLabel }}</h3></div>
                 <div class="card-body p-0">
-                    <table class="table mb-0">
+                    <table class="table mb-0 adm-rank-table">
                         <tbody>
                             @forelse ($topDealers as $row)
                                 <tr>
+                                    <td class="adm-rank">{{ $loop->iteration }}</td>
                                     <td>{{ $dealerName($row->dealer) }}</td>
                                     <td class="text-right text-muted adm-num">{{ $row->orders }} {{ $row->orders == 1 ? 'order' : 'orders' }}</td>
                                     <td class="text-right adm-num"><strong>${{ number_format($row->amount, 2) }}</strong></td>
                                 </tr>
                             @empty
-                                <tr><td class="text-center text-muted py-4">No orders this month yet.</td></tr>
+                                <tr><td colspan="4" class="text-center text-muted py-4">No orders this month yet.</td></tr>
                             @endforelse
                         </tbody>
                     </table>

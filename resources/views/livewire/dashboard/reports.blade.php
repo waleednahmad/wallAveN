@@ -28,9 +28,16 @@
     <div wire:loading.class="adm-rep-busy" wire:target="setRange,from,to">
         {{-- KPIs --}}
         <div class="adm-rep-kpis">
-            <div class="adm-rep-kpi"><p class="adm-kpi-label">Sales</p><p class="adm-kpi-value">{{ $money($kpi->sales) }}</p><p class="adm-kpi-sub">not counting canceled or declined</p></div>
+            @php
+                $trend = function ($pct, $label) {
+                    if ($pct === null) return '<p class="adm-kpi-sub">no orders in ' . e($label) . '</p>';
+                    $up = $pct >= 0;
+                    return '<p class="adm-kpi-sub"><span class="adm-trend ' . ($up ? 'is-up' : 'is-down') . '"><i class="fas fa-arrow-' . ($up ? 'up' : 'down') . '" aria-hidden="true"></i> ' . abs($pct) . '%</span> vs ' . e($label) . '</p>';
+                };
+            @endphp
+            <div class="adm-rep-kpi"><p class="adm-kpi-label">Sales</p><p class="adm-kpi-value">{{ $money($kpi->sales) }}</p>@if ($previous){!! $trend($salesChange, $previous->label) !!}@else<p class="adm-kpi-sub">not counting canceled or declined</p>@endif</div>
             <div class="adm-rep-kpi"><p class="adm-kpi-label">Completed</p><p class="adm-kpi-value">{{ $money($completed) }}</p><p class="adm-kpi-sub">{{ $kpi->sales > 0 ? round($completed / $kpi->sales * 100) : 0 }}% of sales marked completed</p></div>
-            <div class="adm-rep-kpi"><p class="adm-kpi-label">Orders</p><p class="adm-kpi-value">{{ number_format($kpi->orders) }}</p><p class="adm-kpi-sub">{{ number_format($kpi->items) }} items</p></div>
+            <div class="adm-rep-kpi"><p class="adm-kpi-label">Orders</p><p class="adm-kpi-value">{{ number_format($kpi->orders) }}</p>@if ($previous){!! $trend($ordersChange, $previous->label) !!}@else<p class="adm-kpi-sub">{{ number_format($kpi->items) }} items</p>@endif</div>
             <div class="adm-rep-kpi"><p class="adm-kpi-label">Average order</p><p class="adm-kpi-value">{{ $money($avgOrder) }}</p><p class="adm-kpi-sub">per order</p></div>
             <div class="adm-rep-kpi"><p class="adm-kpi-label">Ordering dealers</p><p class="adm-kpi-value">{{ number_format($kpi->dealers) }}</p><p class="adm-kpi-sub">{{ number_format($newDealers) }} newly approved</p></div>
         </div>
@@ -52,23 +59,59 @@
         </section>
 
         <div class="row">
+            @php
+                // Clickable header: shows which column the list is ranked by and in which direction
+                $th = function (string $label, string $col, string $current, string $dir, string $method, string $align = '') {
+                    $on = $col === $current;
+                    $icon = $on ? ($dir === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort';
+                    $aria = $on ? ($dir === 'asc' ? 'ascending' : 'descending') : 'none';
+                    return '<th class="' . $align . '" aria-sort="' . $aria . '"><button type="button" class="adm-sort' . ($on ? ' is-on' : '') . '" wire:click="' . $method . '(\'' . $col . '\')">'
+                        . e($label) . ' <i class="fas ' . $icon . '" aria-hidden="true"></i></button></th>';
+                };
+                $periodSales = max(0.01, (float) $kpi->sales);
+            @endphp
+
+            {{-- How many rows the two ranked lists show --}}
+            <div class="col-12 mb-2 d-flex align-items-center justify-content-end gap-2">
+                <span class="small text-muted mr-2">Show</span>
+                <div class="adm-seg adm-seg-sm" role="group" aria-label="Rows in top lists">
+                    @foreach ([10, 25, 50] as $n)
+                        <button type="button" @class(['adm-seg-btn', 'is-on' => $topLimit === $n]) wire:click="setTopLimit({{ $n }})">Top {{ $n }}</button>
+                    @endforeach
+                </div>
+            </div>
+
             {{-- Top dealers --}}
             <div class="col-xl-6 mb-3">
                 <section class="card h-100 mb-0">
                     <div class="card-header"><h3 class="card-title mb-0">Top dealers</h3></div>
-                    <div class="card-body p-0 table-responsive">
-                        <table class="table mb-0">
-                            <thead><tr><th>Dealer</th><th class="text-right">Orders</th><th class="text-right">Sales</th><th class="text-right">Last order</th></tr></thead>
+                    <div class="card-body p-0 table-responsive" wire:loading.class="adm-rep-busy" wire:target="sortDealers,setTopLimit">
+                        <table class="table mb-0 adm-rank-table">
+                            <thead>
+                                <tr>
+                                    <th class="adm-rank" scope="col">#</th>
+                                    {!! $th('Dealer', 'name', $dealerSort, $dealerDir, 'sortDealers') !!}
+                                    {!! $th('Orders', 'orders', $dealerSort, $dealerDir, 'sortDealers', 'text-right') !!}
+                                    {!! $th('Sales', 'sales', $dealerSort, $dealerDir, 'sortDealers', 'text-right') !!}
+                                    {!! $th('Avg. order', 'avg', $dealerSort, $dealerDir, 'sortDealers', 'text-right') !!}
+                                    {!! $th('Last order', 'last', $dealerSort, $dealerDir, 'sortDealers', 'text-right') !!}
+                                </tr>
+                            </thead>
                             <tbody>
                                 @forelse ($topDealers as $row)
                                     <tr>
-                                        <td><a href="{{ route('dashboard.dealers.index', ['dealer' => $row->dealer_id]) }}">{{ $row->company_name ?: $row->name }}</a></td>
-                                        <td class="text-right adm-num">{{ $row->orders }}</td>
-                                        <td class="text-right adm-num"><strong>{{ $money($row->sales, 2) }}</strong></td>
+                                        <td class="adm-rank">{{ $loop->iteration }}</td>
+                                        <td><a href="{{ route('dashboard.dealers.index', ['dealer' => $row->dealer_id]) }}">{{ $row->name }}</a></td>
+                                        <td class="text-right adm-num">{{ number_format($row->orders) }}</td>
+                                        <td class="text-right adm-num">
+                                            <strong>{{ $money($row->sales, 2) }}</strong>
+                                            <div class="adm-share" title="{{ round($row->sales / $periodSales * 100, 1) }}% of sales in this period"><span style="width: {{ min(100, round($row->sales / $periodSales * 100, 1)) }}%"></span></div>
+                                        </td>
+                                        <td class="text-right adm-num">{{ $money($row->avg_order) }}</td>
                                         <td class="text-right adm-num text-muted">{{ \Illuminate\Support\Carbon::parse($row->last_order)->format('M j, Y') }}</td>
                                     </tr>
                                 @empty
-                                    <tr><td colspan="4" class="text-center text-muted py-4">No orders in this period.</td></tr>
+                                    <tr><td colspan="6" class="text-center text-muted py-4">No orders in this period.</td></tr>
                                 @endforelse
                             </tbody>
                         </table>
@@ -80,24 +123,43 @@
             <div class="col-xl-6 mb-3">
                 <section class="card h-100 mb-0">
                     <div class="card-header"><h3 class="card-title mb-0">Top products</h3></div>
-                    <div class="card-body p-0 table-responsive">
-                        <table class="table mb-0">
-                            <thead><tr><th>Product</th><th class="text-right">Units</th><th class="text-right">Sales</th></tr></thead>
+                    <div class="card-body p-0 table-responsive" wire:loading.class="adm-rep-busy" wire:target="sortProducts,setTopLimit">
+                        <table class="table mb-0 adm-rank-table">
+                            <thead>
+                                <tr>
+                                    <th class="adm-rank" scope="col">#</th>
+                                    {!! $th('Product', 'name', $productSort, $productDir, 'sortProducts') !!}
+                                    {!! $th('Units', 'units', $productSort, $productDir, 'sortProducts', 'text-right') !!}
+                                    {!! $th('Orders', 'orders', $productSort, $productDir, 'sortProducts', 'text-right') !!}
+                                    {!! $th('Sales', 'sales', $productSort, $productDir, 'sortProducts', 'text-right') !!}
+                                </tr>
+                            </thead>
                             <tbody>
                                 @forelse ($topProducts as $row)
+                                    @php $img = $row->image && file_exists($row->image) ? thumb($row->image, 240) : asset('dashboard/images/default.webp'); @endphp
                                     <tr>
+                                        <td class="adm-rank">{{ $loop->iteration }}</td>
                                         <td>
-                                            @if ($row->product_id)
-                                                <a href="{{ route('dashboard.products.edit', $row->product_id) }}">{{ $row->name }}</a>
-                                            @else
-                                                {{ $row->name }}
-                                            @endif
+                                            <div class="adm-rank-product">
+                                                <img src="{{ $img }}" alt="" loading="lazy">
+                                                <span>
+                                                    @if ($row->product_id && !$row->deleted_at)
+                                                        <a href="{{ route('dashboard.products.edit', $row->product_id) }}">{{ $row->name }}</a>
+                                                    @else
+                                                        {{ $row->name }} <span class="badge badge-secondary">Removed</span>
+                                                    @endif
+                                                </span>
+                                            </div>
                                         </td>
                                         <td class="text-right adm-num">{{ number_format($row->qty) }}</td>
-                                        <td class="text-right adm-num"><strong>{{ $money($row->sales, 2) }}</strong></td>
+                                        <td class="text-right adm-num">{{ number_format($row->orders) }}</td>
+                                        <td class="text-right adm-num">
+                                            <strong>{{ $money($row->sales, 2) }}</strong>
+                                            <div class="adm-share" title="{{ round($row->sales / $periodSales * 100, 1) }}% of sales in this period"><span style="width: {{ min(100, round($row->sales / $periodSales * 100, 1)) }}%"></span></div>
+                                        </td>
                                     </tr>
                                 @empty
-                                    <tr><td colspan="3" class="text-center text-muted py-4">No items sold in this period.</td></tr>
+                                    <tr><td colspan="5" class="text-center text-muted py-4">No items sold in this period.</td></tr>
                                 @endforelse
                             </tbody>
                         </table>

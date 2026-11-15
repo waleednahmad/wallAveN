@@ -19,14 +19,48 @@ class Reports extends Component
 {
     private const SALE_STATUSES = ['pending', 'processing', 'completed'];
 
-    #[Url(except: '90d')]
-    public string $range = '90d';
+    #[Url(except: 'month')]
+    public string $range = 'month';
 
     #[Url(except: '')]
     public string $from = '';
 
     #[Url(except: '')]
     public string $to = '';
+
+    /** Top dealers / top products: which column they are ranked by, and how many rows */
+    public string $dealerSort = 'sales';
+    public string $dealerDir = 'desc';
+    public string $productSort = 'sales';
+    public string $productDir = 'desc';
+    public int $topLimit = 10;
+
+    private const DEALER_SORTS = ['name' => 'name', 'orders' => 'orders', 'sales' => 'sales', 'avg' => 'avg_order', 'last' => 'last_order'];
+    private const PRODUCT_SORTS = ['name' => 'order_items.name', 'units' => 'qty', 'orders' => 'orders', 'sales' => 'sales'];
+
+    /** Click a header: same column flips the direction, a new column starts high-to-low (A–Z for names). */
+    public function sortDealers(string $col): void
+    {
+        if (!isset(self::DEALER_SORTS[$col])) {
+            return;
+        }
+        $this->dealerDir = $this->dealerSort === $col ? ($this->dealerDir === 'desc' ? 'asc' : 'desc') : ($col === 'name' ? 'asc' : 'desc');
+        $this->dealerSort = $col;
+    }
+
+    public function sortProducts(string $col): void
+    {
+        if (!isset(self::PRODUCT_SORTS[$col])) {
+            return;
+        }
+        $this->productDir = $this->productSort === $col ? ($this->productDir === 'desc' ? 'asc' : 'desc') : ($col === 'name' ? 'asc' : 'desc');
+        $this->productSort = $col;
+    }
+
+    public function setTopLimit(int $n): void
+    {
+        $this->topLimit = in_array($n, [10, 25, 50], true) ? $n : 10;
+    }
 
     public const RANGES = [
         'month' => 'This month',
@@ -119,6 +153,34 @@ class Reports extends Component
 
         $completed = (float) (clone $this->salesQuery())->where('orders.status', 'completed')->sum('total');
 
+        // Same length of time just before this period, to show whether things went up or down
+        $previous = null;
+        if ($start) {
+            if ($this->range === 'month') {
+                // 1st of last month up to the same day and time
+                $prevStart = $start->copy()->subMonthNoOverflow();
+                $prevEnd = $prevStart->copy()->addSeconds($start->diffInSeconds($end));
+                $prevEnd = $prevEnd->min($prevStart->copy()->endOfMonth());
+                $label = 'last month to the same day';
+            } elseif ($this->range === 'year') {
+                $prevStart = $start->copy()->subYear();
+                $prevEnd = $end->copy()->subYear();
+                $label = 'the same time last year';
+            } else {
+                $prevEnd = $start->copy();
+                $prevStart = $start->copy()->subSeconds($start->diffInSeconds($end));
+                $label = 'the ' . max(1, (int) round($prevStart->diffInDays($prevEnd))) . ' days before';
+            }
+            $previous = Order::query()
+                ->whereIn('status', self::SALE_STATUSES)
+                ->where('created_at', '>=', $prevStart)
+                ->where('created_at', '<', $prevEnd)
+                ->selectRaw('COUNT(*) as orders, COALESCE(SUM(total),0) as sales')
+                ->first();
+            $previous->label = $label;
+        }
+        $change = fn ($now, $before) => $before > 0 ? round(($now - $before) / $before * 100) : null;
+
         $newDealers = Dealer::where('is_approved', true)
             ->when($start, fn ($q) => $q->where('approved_at', '>=', $start))
             ->where('approved_at', '<=', $end)
@@ -138,20 +200,27 @@ class Reports extends Component
         }
         $maxMonth = max(1, max(array_column($months, 'sales')));
 
+        $dealerCol = self::DEALER_SORTS[$this->dealerSort] ?? 'sales';
+        $dealerDir = $this->dealerDir === 'asc' ? 'asc' : 'desc';
         $topDealers = (clone $this->salesQuery())
             ->join('dealers', 'dealers.id', '=', 'orders.dealer_id')
             ->groupBy('orders.dealer_id', 'dealers.company_name', 'dealers.name')
-            ->selectRaw('orders.dealer_id, dealers.company_name, dealers.name, COUNT(*) as orders, SUM(orders.total) as sales, MAX(orders.created_at) as last_order')
+            ->selectRaw("orders.dealer_id, COALESCE(NULLIF(dealers.company_name, ''), dealers.name) as name, COUNT(*) as orders, SUM(orders.total) as sales, SUM(orders.total) / COUNT(*) as avg_order, MAX(orders.created_at) as last_order")
+            ->orderBy($dealerCol, $dealerDir)
             ->orderByDesc('sales')
-            ->take(10)
+            ->take($this->topLimit)
             ->get();
 
+        $productCol = self::PRODUCT_SORTS[$this->productSort] ?? 'sales';
+        $productDir = $this->productDir === 'asc' ? 'asc' : 'desc';
         $topProducts = OrderItem::query()
             ->joinSub($this->salesQuery()->select('orders.id'), 'o', 'o.id', '=', 'order_items.order_id')
+            ->leftJoin('products', 'products.id', '=', 'order_items.product_id')
             ->groupBy('order_items.product_id', 'order_items.name')
-            ->selectRaw('order_items.product_id, order_items.name, SUM(order_items.quantity) as qty, SUM(order_items.total) as sales')
+            ->selectRaw('order_items.product_id, order_items.name, SUM(order_items.quantity) as qty, COUNT(DISTINCT order_items.order_id) as orders, SUM(order_items.total) as sales, MAX(products.image) as image, MAX(products.deleted_at) as deleted_at')
+            ->orderBy($productCol, $productDir)
             ->orderByDesc('sales')
-            ->take(10)
+            ->take($this->topLimit)
             ->get();
 
         $channels = (clone $this->salesQuery())
@@ -179,6 +248,9 @@ class Reports extends Component
             'ranges' => self::RANGES,
             'periodLabel' => ($start ? $start->format('M j, Y') : 'The beginning') . ' – ' . $end->format('M j, Y'),
             'kpi' => $kpi,
+            'previous' => $previous,
+            'salesChange' => $previous ? $change((float) $kpi->sales, (float) $previous->sales) : null,
+            'ordersChange' => $previous ? $change((int) $kpi->orders, (int) $previous->orders) : null,
             'avgOrder' => $kpi->orders ? $kpi->sales / $kpi->orders : 0,
             'completed' => $completed,
             'newDealers' => $newDealers,
