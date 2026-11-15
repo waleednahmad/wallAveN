@@ -10,7 +10,7 @@
     @stack('styles')
 </head>
 
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini layout-fixed">
     {{-- Loading Screen --}}
     <div class="preloader flex-column justify-content-center align-items-center">
         <img class="animation__shake" src="{{ getMainImage() }}" alt="Golden Rugs" width="200">

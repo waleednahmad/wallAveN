@@ -84,7 +84,11 @@ hr { border-color: var(--brand-line-soft); opacity: 1; }
 
 /* Signed-in admin at the bottom of the sidebar */
 /* AdminLTE sizes the menu for its 57px logo bar; the workspace block is 84px tall (40 + 2x10 padding + 24 margin) */
-.main-sidebar .sidebar { display: flex; flex-direction: column; height: calc(100% - 84px); overflow-y: auto; }
+.main-sidebar .sidebar { display: flex; flex-direction: column; overflow-y: auto; }
+/* Fixed sidebar (body.layout-fixed): full screen height, so the signed-in admin sits at the bottom */
+body.layout-fixed .main-sidebar .sidebar { height: calc(100vh - 84px) !important; }
+body.layout-fixed .main-sidebar .sidebar::-webkit-scrollbar { width: 6px; }
+body.layout-fixed .main-sidebar .sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .15); border-radius: 3px; }
 .sidebar > nav { flex: 1 0 auto; }
 .adm-me {
   display: flex; align-items: center; gap: 10px;
