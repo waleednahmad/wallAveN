@@ -289,31 +289,7 @@ final class OrderTable extends PowerGridComponent
         return [
             Filter::datepicker('placed_on', 'orders.created_at'),
 
-            Filter::select('status', 'orders.status') // Specify table name to avoid ambiguity
-                ->dataSource([
-                    [
-                        'label' => 'Pending',
-                        'value' => 'pending',
-                    ],
-                    [
-                        'label' => 'Processing',
-                        'value' => 'processing',
-                    ],
-                    [
-                        'label' => 'Completed',
-                        'value' => 'completed',
-                    ],
-                    [
-                        'label' => 'Declined',
-                        'value' => 'declined',
-                    ],
-                    [
-                        'label' => 'Canceled',
-                        'value' => 'canceled',
-                    ],
-                ])
-                ->optionLabel('label')
-                ->optionValue('value'),
+            // Status is picked with the tabs above the table, so it has no filter here
 
             Filter::select('company_name', 'company_name')
                 ->dataSource(
