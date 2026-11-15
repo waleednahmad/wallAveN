@@ -146,16 +146,12 @@ class FrontController extends Controller
         $dealer = Dealer::create($data);
 
         // =================== Send Emails ===================
-        // Send a welcome email to the dealer
-        Mail::to($dealer->email)->send(new DealerApplicationReceived());
-
-        // Verify the dealer's email address (from the laravel auth)
-        // event(new Registered($dealer));
-
-        // Send a notification email to the admin
-        $admins = User::get();
-        foreach ($admins as $admin) {
-            Mail::to($admin->email)->send(new NewDealerApplicationReceived($dealer));
+        // Confirmation to the applicant. The admins are told by DealerObserver::created (one place only).
+        // A mail problem must not turn a saved application into an error page.
+        try {
+            Mail::to($dealer->email)->send(new DealerApplicationReceived());
+        } catch (\Throwable $e) {
+            report($e);
         }
         return redirect()->route('frontend.home')->with('success', 'Your registration has been submitted successfully, we will contact you soon.');
     }
