@@ -602,7 +602,7 @@ a.adm-kpi:hover { color: var(--brand-ink); text-decoration: none; box-shadow: 0 
 .adm-fpanel { margin: -4px 0 14px; padding: 16px 16px 12px; border: 1px solid var(--brand-line); border-radius: var(--brand-radius-card); background: var(--brand-surface); }
 .adm-fpanel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 4px 16px; }
 .adm-fpanel-item label::first-letter { text-transform: uppercase; }
-.adm-fpanel-item label, .adm-fpanel-item .form-label { display: block; margin-bottom: 5px !important; font-size: 12px; font-weight: 600 !important; color: var(--brand-muted); text-transform: none; }
+.adm-fpanel-item label, .adm-fpanel-item .form-label { display: block; margin-bottom: 5px !important; font-size: 12px !important; line-height: 18px !important; font-weight: 600 !important; color: var(--brand-muted) !important; text-transform: none; }
 .adm-fpanel-item .form-control, .adm-fpanel-item .form-select, .adm-fpanel-item select { width: 100%; min-height: 36px; font-size: 13.5px; }
 .adm-fpanel-item .mb-2 { margin-bottom: 8px !important; }
 .adm-fpanel-item .ts-wrapper { margin-bottom: 8px; }
