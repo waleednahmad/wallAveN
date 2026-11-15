@@ -24,8 +24,11 @@ window.uploadResized = async function (event, wire) {
     const original = Array.from(input.files || []);
     if (!original.length) return;
     const label = document.querySelector('label[for="' + input.id + '"]');
-    const oldText = label ? label.textContent : '';
-    const setLabel = function (t) { if (label) label.textContent = t; };
+    // Write progress into the label's [data-upload-status] element when it has one (keeps the
+    // label's own markup intact); otherwise fall back to the whole label as before.
+    const status = label ? (label.querySelector('[data-upload-status]') || label) : null;
+    const oldHtml = status ? status.innerHTML : '';
+    const setLabel = function (t) { if (status) status.textContent = t; };
     input.disabled = true;
     try {
         const files = [];
@@ -44,6 +47,6 @@ window.uploadResized = async function (event, wire) {
     } finally {
         input.disabled = false;
         input.value = '';
-        setLabel(oldText);
+        if (status) status.innerHTML = oldHtml;
     }
 };

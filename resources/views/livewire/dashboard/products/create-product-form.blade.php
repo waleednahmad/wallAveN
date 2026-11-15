@@ -308,62 +308,48 @@
                     </h6>
                 </div>
                 <div class="card-body">
-                    {{-- Image --}}
+                    {{-- Photos: upload, drag to reorder (the first photo is the main one), remove --}}
                     <div class="col-12">
-                        <div class="form-group">
-                            <div class="form-group">
-                                <label for="images">Upload images</label>
-                                <input type="file" @class([
-                                    'form-control customized',
-                                    'is-invalid' => $errors->has('uploadedImages'),
-                                ]) id="images"
-                                    x-data x-on:change="window.uploadResized($event, $wire)" accept="image/*" multiple><script src="{{ asset("js/resize-upload.js") }}?v=1"></script>
-
+                        <div class="form-group mb-0">
+                            <div class="adm-photos">
+                                <label @class(['adm-dropzone', 'is-invalid' => $errors->has('uploadedImages')]) for="images">
+                                    <span class="adm-dropzone-ico"><i class="fas fa-cloud-upload-alt" aria-hidden="true"></i></span>
+                                    <span class="adm-dropzone-text"><strong>Add photos</strong><small data-upload-status>JPG, PNG or WebP · you can pick several at once</small></span>
+                                    <span class="btn btn-secondary btn-sm">Choose files</span>
+                                </label>
+                                <input type="file" class="adm-file-input" id="images"
+                                    x-data x-on:change="window.uploadResized($event, $wire)" accept="image/*" multiple><script src="{{ asset("js/resize-upload.js") }}?v={{ filemtime(public_path("js/resize-upload.js")) }}"></script>
                                 @error('uploadedImages')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
+                                    <span class="text-danger small">{{ $message }}</span>
                                 @enderror
-                            </div>
 
-                            <!-- Preview the images -->
-
-                            @if (isset($imagesWithOrders) && count($imagesWithOrders))
-                                @php
-                                    $imagesWithOrders = collect($imagesWithOrders)->sortBy('order')->values()->all();
-                                @endphp
-
-                                <div class="image-preview-container">
-                                    <div class="images-container" wire:sortable="updateImagesOrder"
+                                @if (isset($imagesWithOrders) && count($imagesWithOrders))
+                                    @php
+                                        $imagesWithOrders = collect($imagesWithOrders)->sortBy('order')->values()->all();
+                                    @endphp
+                                    <div class="adm-photos-head">
+                                        <span class="adm-photos-title">Photos ({{ count($imagesWithOrders) }})</span>
+                                        <span class="adm-photos-hint">Drag to reorder · the first photo is the main one</span>
+                                    </div>
+                                    <div class="adm-photo-grid" wire:sortable="updateImagesOrder"
                                         wire:sortable.options="{ animation: 300 ,removeCloneOnHide: true}">
                                         @foreach ($imagesWithOrders as $index => $imageItem)
-                                            <!-- Skip the current main image -->
-                                            <div wire:sortable.item="{{ $imageItem['order'] }}"
-                                                @class(['single-file-card', 'active' => $loop->first])
-                                                wire:key="task-{{ $imageItem['order'] }}" wire:sortable.handle>
-
-                                                <img src="{{ $imageItem['file']->temporaryUrl() }}" class="img-fluid"
-                                                    alt="file"
-                                                    style="height: 100%; width: 100%; object-fit: contain;">
-
+                                            <div wire:sortable.item="{{ $imageItem['order'] }}" wire:key="task-{{ $imageItem['order'] }}"
+                                                wire:sortable.handle @class(['adm-photo', 'is-main' => $loop->first])>
+                                                <img src="{{ $imageItem['file']->temporaryUrl() }}" alt="">
                                                 @if ($loop->first)
-                                                    {{-- Checked icon --}}
-                                                    <div class="checked-icon">
-                                                        <i class="fas fa-check"></i>
-                                                    </div>
+                                                    <span class="adm-photo-badge">Main</span>
                                                 @endif
-
-                                                {{-- bellete btn --}}
-                                                <button class="btn btn-sm btn-danger"
-                                                    style="position: absolute; top: 5px; right: 5px;"
-                                                    wire:click.prevent="removeImage({{ $index }})">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
+                                                <div class="adm-photo-actions">
+                                                    <button type="button" class="adm-photo-btn is-danger" title="Remove" aria-label="Remove photo"
+                                                        wire:click.prevent="removeImage({{ $index }})">
+                                                        <i class="fas fa-times" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                         @endforeach
                                     </div>
-                                </div>
-                            @endif
+                                @endif
 
                             <div x-show="isUploading">
                                 <span max="100" x-text="`${progress}%`"></span>
