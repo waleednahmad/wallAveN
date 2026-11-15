@@ -42,7 +42,8 @@ class Invoice
                 'isHtml5ParserEnabled' => true,
                 'isFontSubsettingEnabled' => true,
                 'dpi' => 150,
-                'chroot' => public_path(),
+                // Product photos live in public/storage, a link to storage/app/public: allow both real folders
+                'chroot' => [public_path(), storage_path('app/public')],
             ]);
 
         $name = Str::slug(getWebsiteTitle() ?: config('app.name')) . '-invoice-' . $order->id . '.pdf';
