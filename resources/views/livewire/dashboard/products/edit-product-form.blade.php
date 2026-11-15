@@ -1,4 +1,4 @@
-<form wire:submit="save">
+<form wire:submit="save" x-data="admUnsaved({ calls: ['toggleCategory', 'toggleSubCategory', 'toggleProductType', 'toggleAttribute', 'updateNewImagesOrder', 'removeImage'], ignore: ['searchCategory', 'searchSubCategory', 'searchProductType'] })">
     <div class="row">
         {{-- -------------------- Main Product Info -------------------- --}}
         <div class="col-md-6">
@@ -133,7 +133,7 @@
                         </span>
 
                         {{-- seach category --}}
-                        <input type="text" wire:model.live="searchCategory" class="form-control"
+                        <input type="text" wire:model.live="searchCategory" data-unsaved-ignore class="form-control"
                             placeholder="Search Category" style="width: 200px;">
                     </h5>
                     <div class="category-container">
@@ -161,7 +161,7 @@
                                 </small>
                             </span>
                             {{-- seach category --}}
-                            <input type="text" wire:model.live="searchSubCategory" class="form-control"
+                            <input type="text" wire:model.live="searchSubCategory" data-unsaved-ignore class="form-control"
                                 placeholder="Search Sub Category" style="width: 200px;">
                         </h5>
                         <div class="category-container w-100">
@@ -193,7 +193,7 @@
                                 </small>
                             </span>
                             {{-- seach category --}}
-                            <input type="text" wire:model.live="searchProductType" class="form-control"
+                            <input type="text" wire:model.live="searchProductType" data-unsaved-ignore class="form-control"
                                 placeholder="Search Product Type" style="width: 200px;">
                         </h5>
                         <div class="category-container w-100">
@@ -280,7 +280,7 @@
                                 @if (isset($images) && count($images))
                                     <div class="adm-photos-head">
                                         <span class="adm-photos-title">Photos ({{ count($images) }})</span>
-                                        <span class="adm-photos-hint">Drag to reorder · the first photo is the main one</span>
+                                        <span class="adm-photos-hint">Drag to reorder · the first photo is the main one · order and deletions save right away</span>
                                     </div>
                                     <div class="adm-photo-grid" wire:sortable="updateImagesOrder"
                                         wire:sortable.options="{ animation: 300 ,removeCloneOnHide: true}">
@@ -350,8 +350,8 @@
 
 
 
-            <div class="adm-savebar">
-                <span class="adm-savebar-text"><i class="fas fa-info-circle" aria-hidden="true"></i> Changes are applied when you click <strong>Save</strong></span>
+            <div class="adm-savebar" x-bind:class="{ 'is-dirty': dirty }">
+                <span class="adm-savebar-text" x-show="dirty" x-cloak role="status"><span class="adm-savebar-dot" aria-hidden="true"></span> You have unsaved changes</span>
                 <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:loading.remove
                     wire:target="save, uploadedImages" x-bind:disabled="isUploading"
                     x-bind:class="{ 'btn-secondary': isUploading }" x-text="isUploading ? 'Uploading...' : 'Save'">

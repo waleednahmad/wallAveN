@@ -25,6 +25,7 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <script src="{{ asset('assets/js/gr-toast.js') }}?v={{ filemtime(public_path('assets/js/gr-toast.js')) }}"></script>
+<script src="{{ asset('assets/js/adm-unsaved.js') }}?v={{ filemtime(public_path('assets/js/adm-unsaved.js')) }}"></script>
 <script>
     $(function() {
         //Initialize Select2 Elements
