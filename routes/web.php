@@ -71,7 +71,10 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 
     return redirect()->route('frontend.home')
         ->with('success', 'Email verified successfully.');
-})->middleware(['auth:web,dealer,representative', 'signed'])->name('verification.verify');
+})->middleware(['auth:web,dealer,representative', 'signed'])
+    // Renamed: routes/auth.php registers 'verification.verify' later and that one is used; one name per route
+    // keeps `php artisan route:cache` working
+    ->name('verification.verify.multi-guard');
 
 // preview-email test route removed
 

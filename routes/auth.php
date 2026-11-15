@@ -55,5 +55,7 @@ Route::middleware('auth:web,dealer,representative')->group(function () {
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-        ->name('logout');
+        // Renamed: the admin logout (routes/dashboard.php) is the 'logout' the app uses; two routes with one
+        // name stop `php artisan route:cache`
+        ->name('breeze.logout');
 });
