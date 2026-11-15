@@ -169,7 +169,7 @@ class Reports extends Component
             } else {
                 $prevEnd = $start->copy();
                 $prevStart = $start->copy()->subSeconds($start->diffInSeconds($end));
-                $label = 'the ' . max(1, (int) round($prevStart->diffInDays($prevEnd))) . ' days before';
+                $label = 'the ' . max(1, (int) floor($prevStart->diffInDays($prevEnd))) . ' days before';
             }
             $previous = Order::query()
                 ->whereIn('status', self::SALE_STATUSES)

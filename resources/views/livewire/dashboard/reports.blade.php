@@ -81,8 +81,8 @@
                 </div>
             </div>
 
-            {{-- Top dealers --}}
-            <div class="col-xl-6 mb-3">
+            {{-- Top dealers (full width: six columns don't fit half a screen) --}}
+            <div class="col-12 mb-3">
                 <section class="card h-100 mb-0">
                     <div class="card-header"><h3 class="card-title mb-0">Top dealers</h3></div>
                     <div class="card-body p-0 table-responsive" wire:loading.class="adm-rep-busy" wire:target="sortDealers,setTopLimit">
@@ -119,8 +119,8 @@
                 </section>
             </div>
 
-            {{-- Top products --}}
-            <div class="col-xl-6 mb-3">
+            {{-- Top products (full width: six columns don't fit half a screen) --}}
+            <div class="col-12 mb-3">
                 <section class="card h-100 mb-0">
                     <div class="card-header"><h3 class="card-title mb-0">Top products</h3></div>
                     <div class="card-body p-0 table-responsive" wire:loading.class="adm-rep-busy" wire:target="sortProducts,setTopLimit">
