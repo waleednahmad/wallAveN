@@ -46,6 +46,8 @@ final class RepresentativeDealersAbandonedCartsTable extends PowerGridComponent
                 DB::raw('MAX(cart_temps.created_at) as last_cart_temp_date')
             ])
             ->groupBy('dealers.id')
+            // Newest carts first (by the last item added)
+            ->orderByRaw('MAX(cart_temps.created_at) DESC')
             ->distinct();
     }
 
@@ -59,7 +61,8 @@ final class RepresentativeDealersAbandonedCartsTable extends PowerGridComponent
             ->add('total_cart_amount', function ($row) {
                 return "$" . number_format($row->total_cart_amount, 2);
             })
-            ->add('created_at');
+            ->add('created_at')
+            ->add('last_activity', fn ($row) => $row->last_cart_temp_date ? \Illuminate\Support\Carbon::parse($row->last_cart_temp_date)->format('M j, Y · g:i A') : '');
     }
 
     public function columns(): array
@@ -67,9 +70,9 @@ final class RepresentativeDealersAbandonedCartsTable extends PowerGridComponent
         return [
             Column::make('#', 'row_num'),
             Column::make('Name', 'company_name')->bodyAttribute('gr-wrap')->searchable(),
-            Column::make('Quantity', 'total_cart_quantity')->sortable(),
-            Column::make('Total', 'total_cart_amount')->bodyAttribute('gr-nowrap')->sortable(),
-            Column::make('Added At', 'created_at')->bodyAttribute('gr-nowrap')->sortable()->searchable(),
+            Column::make('Items', 'total_cart_quantity')->headerAttribute('text-end')->bodyAttribute('text-end')->sortable(),
+            Column::make('Total', 'total_cart_amount')->headerAttribute('text-end')->bodyAttribute('gr-nowrap text-end')->sortable(),
+            Column::make('Last item added', 'last_activity', 'last_cart_temp_date')->bodyAttribute('gr-nowrap')->sortable(),
             Column::action('Action')
         ];
     }
