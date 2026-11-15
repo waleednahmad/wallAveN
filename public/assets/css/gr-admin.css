@@ -676,3 +676,64 @@ footer:has(.pagination) .pagination { margin: 0; }
 .power-grid-table td.text-end, .power-grid-table th.text-end { text-align: right !important; }
 .adm-nowrap { white-space: nowrap; }
 .adm-cell-sub .adm-nowrap { overflow-wrap: normal; }
+
+/* --------------------------------------------------------------------------
+   Order side panel (offcanvas #orderDrawer, OrderDrawer component)
+   -------------------------------------------------------------------------- */
+.adm-drawer-panel.offcanvas { --bs-offcanvas-width: 460px; width: min(460px, 100vw) !important; padding: 0; }
+.adm-drawer-close { position: absolute; top: 18px; right: 18px; z-index: 2; }
+.adm-drawer { display: flex; flex-direction: column; min-height: 100%; overflow-y: auto; }
+.adm-drawer-empty { padding: 40px 24px; color: var(--brand-muted); display: flex; gap: 10px; align-items: center; }
+.adm-drawer-head { padding: 22px 56px 18px 24px; border-bottom: 1px solid var(--brand-line-soft); }
+.adm-drawer-meta { margin: 0; font-size: 13px; color: var(--brand-muted); }
+.adm-drawer-title { margin: 4px 0 0; font-family: var(--brand-font-display); font-weight: 400 !important; font-size: 26px; line-height: 1.15; }
+.adm-drawer-sec { padding: 18px 24px; border-bottom: 1px solid var(--brand-line-soft); }
+.adm-drawer-grow { flex: 1; }
+.adm-drawer-label { margin: 0 0 12px; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--brand-muted); }
+.adm-drawer-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+.adm-drawer-actions .btn { min-height: 40px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.adm-drawer-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+.adm-drawer-row .btn-link { font-size: 13px; font-weight: 600; text-decoration: none; }
+.adm-check { display: inline-flex; align-items: center; gap: 8px; margin: 0; font-size: 13px; font-weight: 500; color: var(--brand-muted); cursor: pointer; }
+.adm-check input { width: 16px; height: 16px; accent-color: var(--brand-primary); }
+
+/* Status steps */
+.adm-steps { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: 8px; }
+.adm-step { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--brand-muted); flex: 1; white-space: nowrap; }
+.adm-step:not(:last-child)::after { content: ""; flex: 1; height: 2px; background: var(--brand-line); min-width: 12px; }
+.adm-step.is-done:not(:last-child)::after { background: var(--brand-primary); }
+.adm-step:last-child { flex: 0 0 auto; }
+.adm-step-dot {
+  width: 24px; height: 24px; border-radius: 50%; flex: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 12px; border: 1.5px solid #C9BEB0; background: var(--brand-surface); color: var(--brand-muted);
+}
+.adm-step.is-on { color: var(--brand-ink); }
+.adm-step.is-on .adm-step-dot, .adm-step.is-done .adm-step-dot { background: var(--brand-primary); border-color: var(--brand-primary); color: var(--brand-on-primary); }
+.adm-closed { padding: 10px 12px; border-radius: 10px; font-size: 14px; font-weight: 600; }
+.adm-closed-declined { background: var(--brand-danger-tint); color: var(--brand-danger); }
+.adm-closed-canceled { background: var(--brand-neutral-tint); color: var(--brand-neutral); }
+
+/* Dealer details */
+.adm-dl { margin: 0; display: grid; gap: 10px; }
+.adm-dl > div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; }
+.adm-dl dt { font-size: 13px; font-weight: 500; color: var(--brand-muted); }
+.adm-dl dd { margin: 0; font-size: 14px; overflow-wrap: anywhere; }
+.adm-dl dd a { text-decoration: none; }
+.adm-pre { white-space: pre-line; }
+
+/* Items */
+.adm-items { list-style: none; margin: 0; padding: 0; }
+.adm-item { display: flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--brand-line-soft); }
+.adm-item:last-child { border-bottom: 0; }
+.adm-item img { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; flex: none; background: var(--brand-bg); border: 1px solid var(--brand-line-soft); }
+.adm-item-body { flex: 1; min-width: 0; }
+.adm-item-name { font-size: 14px; font-weight: 500; }
+.adm-item-sub { font-size: 12.5px; color: var(--brand-muted); margin-top: 2px; }
+.adm-item-price { text-align: right; font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.adm-drawer-foot { padding: 18px 24px 22px; background: var(--brand-bg); border-top: 1px solid var(--brand-line); position: sticky; bottom: 0; }
+.adm-drawer-total { font-family: var(--brand-font-display); font-size: 28px; font-variant-numeric: tabular-nums; }
+
+/* "Open" button in the orders table */
+.power-grid-table td .btn span { font-weight: 600; }

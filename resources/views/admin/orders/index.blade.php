@@ -25,7 +25,13 @@
         </div>
     </div>
 
-    {{-- Preview Order Modal --}}
+    {{-- Order side panel: details, status steps, items, print/PDF (App\Livewire\Dashboard\Orders\OrderDrawer) --}}
+    <div class="offcanvas offcanvas-end adm-drawer-panel" tabindex="-1" id="orderDrawer" aria-label="Order details">
+        <button type="button" class="btn-close adm-drawer-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <livewire:dashboard.orders.order-drawer />
+    </div>
+
+    {{-- Preview Order Modal (kept; the table now opens the side panel) --}}
     <div class="modal fade" id="previewOrder" tabindex="-1" aria-labelledby="previewOrderLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
@@ -96,6 +102,11 @@
         }
 
         document.addEventListener('livewire:init', () => {
+            // ============== Order side panel ==============
+            Livewire.on('showOrderDrawer', () => {
+                bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('orderDrawer')).show();
+            });
+
             // ============== Open Preview Modal ==============
             Livewire.on('showOrderDetails', (event) => {
                 new bootstrap.Modal(document.getElementById('previewOrder')).show();

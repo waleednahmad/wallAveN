@@ -335,7 +335,8 @@ final class OrderTable extends PowerGridComponent
     #[\Livewire\Attributes\On('show')]
     public function show($rowId): void
     {
-        $this->dispatch('showOrderDetails', ['order' => $rowId]);
+        // Order details + status changes now live in the side panel (OrderDrawer)
+        $this->dispatch('openOrderDrawer', orderId: $rowId);
     }
 
     #[\Livewire\Attributes\On('editStatus')]
@@ -348,23 +349,21 @@ final class OrderTable extends PowerGridComponent
     {
         return [
             Button::make('show')
-                ->slot('<i class="fas fa-eye"></i>')
+                ->slot('<i class="fas fa-eye"></i> <span>Open</span>')
                 ->class('btn btn-info btn-sm rounded')
                 ->dispatch('show', ['rowId' => $row->id]),
 
-            Button::make('editStatus')
-                ->slot('<i class="fas fa-edit"></i>')
-                ->class('btn btn-primary btn-sm rounded')
-                ->dispatch('editStatus', ['rowId' => $row->id]),
 
             Button::make('print')
                 ->slot('<i class="fas fa-print"></i>')
+                ->attributes(['title' => 'Print invoice', 'aria-label' => 'Print invoice'])
                 ->class('btn btn-secondary btn-sm rounded')
                 ->route('dashboard.orders.print', ['order' => $row->id], '_blank'),
 
             // New PDF action button
             Button::make('pdf')
                 ->slot('<i class="fas fa-file-pdf"></i>')
+                ->attributes(['title' => 'Download PDF', 'aria-label' => 'Download PDF'])
                 ->class('btn btn-danger btn-sm rounded')
                 ->route('dashboard.orders.pdf', ['order' => $row->id]),
         ];
