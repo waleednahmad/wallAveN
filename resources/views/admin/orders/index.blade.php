@@ -106,6 +106,14 @@
             Livewire.on('showOrderDrawer', () => {
                 bootstrap.Offcanvas.getOrCreateInstance(document.getElementById('orderDrawer')).show();
             });
+        });
+
+        // Deep link from the global search: /super_admin/orders?order=403 opens that order's panel
+        document.addEventListener('livewire:initialized', () => {
+            const orderId = parseInt(new URLSearchParams(location.search).get('order'), 10);
+            if (orderId) {
+                Livewire.dispatch('openOrderDrawer', { orderId });
+            }
 
             // ============== Open Preview Modal ==============
             Livewire.on('showOrderDetails', (event) => {

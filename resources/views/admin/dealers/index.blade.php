@@ -116,6 +116,15 @@
                 bootstrap.Offcanvas.getInstance(document.getElementById('updatePassword')).hide();
             });
 
+            // ============== Deep link: /super_admin/dealers?dealer=12 opens the dealer details ==============
+            document.addEventListener('livewire:initialized', () => {
+                const dealerId = parseInt(new URLSearchParams(location.search).get('dealer'), 10);
+                if (dealerId) {
+                    new bootstrap.Offcanvas(document.getElementById('showDealer')).show();
+                    Livewire.dispatch('setDealer', { dealer: { id: dealerId } });
+                }
+            });
+
             // ============== Open openShowOffcanvas ==============
             Livewire.on('openShowOffcanvas', (event) => {
                 let offcanvas = new bootstrap.Offcanvas(document.getElementById('showDealer'));

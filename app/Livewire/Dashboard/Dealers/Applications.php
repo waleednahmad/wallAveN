@@ -108,7 +108,8 @@ class Applications extends Component
     /** Opens the existing "Dealer Details" panel on the dealers page. */
     public function details(int $id): void
     {
-        $this->dispatch('openShowOffcanvas', ['id' => $id]);
+        // Same payload shape as DealerTable::show(): the page JS passes it on to ShowDealer::setDealer($dealer)
+        $this->dispatch('openShowOffcanvas', ['dealer' => ['id' => $id]]);
     }
 
     /** Re-query the cards and tell the page tabs to move one from "Applications" to $result. */
