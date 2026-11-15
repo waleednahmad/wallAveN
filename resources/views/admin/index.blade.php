@@ -35,7 +35,7 @@
             <a href="{{ route('dashboard.orders.index') }}" @class(['adm-kpi', 'is-alert' => $pendingOrders > 0])>
                 <p class="adm-kpi-label"><i class="fas fa-inbox"></i> Pending orders</p>
                 <p class="adm-kpi-value">{{ number_format($pendingOrders) }}</p>
-                <p class="adm-kpi-sub">{{ $money($pendingOrdersAmount) }} waiting to be processed</p>
+                <p class="adm-kpi-sub">{{ $money($pendingOrdersAmount) }} waiting to be processed{{ $stalePending ? ' · ' . number_format($stalePending) . ' older than 2 weeks' : '' }}</p>
             </a>
         </div>
         <div class="col-lg-3 col-sm-6 mb-3">
@@ -178,6 +178,65 @@
                         </div>
                     @endforeach
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        {{-- ============= Dealers gone quiet ============= --}}
+        <div class="col-lg-7 mb-3">
+            <div class="card h-100 mb-0">
+                <div class="card-header d-flex align-items-center">
+                    <h3 class="card-title mb-0">Dealers gone quiet</h3>
+                    <span class="ml-auto small text-muted">{{ number_format($quietDealersCount) }} with no order in 90+ days</span>
+                </div>
+                <div class="card-body p-0 table-responsive">
+                    <table class="table mb-0">
+                        <thead><tr><th>Dealer</th><th>Phone</th><th class="text-right">Bought before</th><th class="text-right">Last order</th></tr></thead>
+                        <tbody>
+                            @forelse ($quietDealers as $row)
+                                <tr>
+                                    <td><a href="{{ route('dashboard.dealers.index', ['dealer' => $row->dealer_id]) }}">{{ $row->company_name ?: $row->name }}</a></td>
+                                    <td class="adm-num">@if ($row->phone)<a href="tel:{{ $row->phone }}">{{ $row->phone }}</a>@else — @endif</td>
+                                    <td class="text-right adm-num">${{ number_format((float) $row->sales, 0) }}</td>
+                                    <td class="text-right adm-num text-muted">{{ \Illuminate\Support\Carbon::parse($row->last_order)->diffForHumans() }}</td>
+                                </tr>
+                            @empty
+                                <tr><td colspan="4" class="text-center text-muted py-4">Every ordering dealer has bought in the last 90 days.</td></tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        {{-- ============= Catalog health ============= --}}
+        <div class="col-lg-5 mb-3">
+            <div class="card h-100 mb-0">
+                <div class="card-header d-flex align-items-center">
+                    <h3 class="card-title mb-0">Catalog health</h3>
+                    <a href="{{ route('dashboard.products.index') }}" class="ml-auto small">Products →</a>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex align-items-center">
+                        <span><strong>Active products without a photo</strong><br><small class="text-muted">They show a blank card in the shop</small></span>
+                        <span @class(['ml-auto badge', 'badge-warning' => $catalogNoImage, 'badge-success' => !$catalogNoImage])>{{ number_format($catalogNoImage) }}</span>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center">
+                        <span><strong>Active products without variants</strong><br><small class="text-muted">Dealers can't add them to the cart</small></span>
+                        <span @class(['ml-auto badge', 'badge-warning' => $catalogNoVariants, 'badge-success' => !$catalogNoVariants])>{{ number_format($catalogNoVariants) }}</span>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center">
+                        <span><strong>Hidden products</strong><br><small class="text-muted">Switched off, not visible to dealers</small></span>
+                        <span class="ml-auto badge badge-secondary">{{ number_format($catalogHidden) }}</span>
+                    </li>
+                    @if (\Illuminate\Support\Facades\Route::has('dashboard.reports'))
+                    <li class="list-group-item d-flex align-items-center">
+                        <span><strong>Want the full picture?</strong><br><small class="text-muted">Sales by month, top products and dealers</small></span>
+                        <a class="ml-auto btn btn-secondary btn-sm" href="{{ route('dashboard.reports') }}">Open reports</a>
+                    </li>
+                    @endif
+                </ul>
             </div>
         </div>
     </div>

@@ -62,7 +62,34 @@ class DashboardController extends Controller
             ->with('dealer:id,name,company_name')
             ->get();
 
+        // Approved dealers who used to order but haven't in 90 days: worth a call
+        $quietCutoff = $now->copy()->subDays(90);
+        $quietBase = Order::whereIn('orders.status', self::SALE_STATUSES)
+            ->join('dealers', 'dealers.id', '=', 'orders.dealer_id')
+            ->where('dealers.is_approved', true)
+            ->groupBy('orders.dealer_id', 'dealers.company_name', 'dealers.name', 'dealers.phone')
+            ->havingRaw('MAX(orders.created_at) < ?', [$quietCutoff]);
+        $quietDealersCount = \Illuminate\Support\Facades\DB::query()->fromSub((clone $quietBase)->selectRaw('orders.dealer_id'), 'q')->count();
+        $quietDealers = (clone $quietBase)
+            ->selectRaw('orders.dealer_id, dealers.company_name, dealers.name, dealers.phone, SUM(orders.total) as sales, MAX(orders.created_at) as last_order')
+            ->orderByDesc('sales')
+            ->take(5)
+            ->get();
+
+        // Catalog health: active products that can't sell well as they are
+        $catalogNoImage = Product::where('status', 1)->where(fn ($q) => $q->whereNull('image')->orWhere('image', ''))->count();
+        $catalogNoVariants = Product::where('status', 1)->doesntHave('variants')->count();
+        $catalogHidden = Product::where('status', 0)->count();
+
+        $stalePending = Order::where('status', 'pending')->where('created_at', '<', $now->copy()->subDays(14))->count();
+
         return view('admin.index', [
+            'quietDealers' => $quietDealers,
+            'quietDealersCount' => $quietDealersCount,
+            'catalogNoImage' => $catalogNoImage,
+            'catalogNoVariants' => $catalogNoVariants,
+            'catalogHidden' => $catalogHidden,
+            'stalePending' => $stalePending,
             'statusCounts' => $statusCounts,
             'pendingOrders' => (int) ($statusCounts['pending']->n ?? 0),
             'pendingOrdersAmount' => (float) ($statusCounts['pending']->amount ?? 0),
