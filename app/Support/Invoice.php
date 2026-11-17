@@ -15,7 +15,7 @@ class Invoice
 {
     public static function page(Order $order, ?string $pdfUrl = null, ?string $backUrl = null)
     {
-        $order->loadMissing('dealer', 'orderItems');
+        $order->loadMissing('dealer', 'orderItems.variant', 'orderItems.product');
 
         return view('prints.invoice', [
             'order' => $order,
@@ -27,7 +27,7 @@ class Invoice
 
     public static function download(Order $order)
     {
-        $order->loadMissing('dealer', 'orderItems');
+        $order->loadMissing('dealer', 'orderItems.variant', 'orderItems.product');
 
         $pdf = Pdf::loadView('prints.invoice', [
             'order' => $order,

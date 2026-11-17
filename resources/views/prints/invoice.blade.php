@@ -257,7 +257,7 @@
             </thead>
             <tbody>
                 @foreach ($items as $item)
-                    @php $src = $img($item->image); $spec = $specs($item); @endphp
+                    @php $src = $img($item->displayImage()); $spec = $specs($item); @endphp
                     <tr @class(['alt' => $loop->even])>
                         <td class="idx">{{ $loop->iteration }}</td>
                         <td class="thumb">

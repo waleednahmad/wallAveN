@@ -270,7 +270,8 @@ class QuickAddOffCanva extends Component
                 'variant_id' => $variant->id,
                 'item_type' => 'variant',
                 'name' => $this->product->name,
-                'image' => $variant->image ?? $this->product->image,
+                // Variants without their own photo use the product's main photo (?: also catches an empty string)
+                'image' => $variant->image ?: $this->product->image,
                 'vendor' => $this->product->vendor ? $this->product->vendor->name : null,
                 'sku' => $variant->sku,
                 'price' => $this->price,
